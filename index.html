@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23161a21'/%3E%3Cpath d='M6 24V8h4v16zm6-8h14v-4H12zm0 8h10v-4H12z' fill='%2358a6ff'/%3E%3C/svg%3E">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+
+  :root {
+    --bg: #0f1115; --card: #181b22; --line: #2a2f3a; --text: #e8eaed; --muted: #9aa0aa;
+    --ok: #3fb950; --warn: #d29922; --bad: #f85149; --accent: #58a6ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: #0b0d10; border-bottom: 1px solid var(--line);
+           padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  header h1 { font-size: 16px; margin: 0; letter-spacing: .3px; }
+  .pill { font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); }
+  .pill.ok { color: var(--ok); border-color: #23452c; } .pill.bad { color: var(--bad); border-color: #5a2a28; }
+  .pill.warn { color: var(--warn); border-color: #5a4614; }
+  main { padding: 12px 16px 40px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); max-width: 1300px; margin: 0 auto; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+  section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+  .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .row { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border-bottom: 1px dashed #232833; }
+  .row:last-child { border-bottom: 0; }
+  .row span:first-child { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+  .tyres { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tyre { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; text-align: center; }
+  .tyre b { display: block; font-size: 20px; }
+  .bar { height: 8px; background: #232833; border-radius: 99px; overflow: hidden; margin: 6px 0; }
+  .bar i { display: block; height: 100%; background: var(--ok); }
+  .note { color: var(--muted); font-size: 13px; }
+  .advice { margin-top: 6px; padding: 8px; border-radius: 8px; background: #11161d; border-left: 3px solid var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  td, th { padding: 5px 4px; border-bottom: 1px solid #232833; text-align: left; font-variant-numeric: tabular-nums; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  tr.cur td { color: var(--accent); font-weight: 600; }
+  .wide { grid-column: 1 / -1; }
+  .msgs { max-height: 260px; overflow-y: auto; }
+  .msg { padding: 6px 0; border-bottom: 1px solid #232833; }
+  .msg small { color: var(--muted); }
+  form { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  input, select, button { font: inherit; border-radius: 8px; border: 1px solid var(--line); background: #0f1115; color: var(--text); padding: 8px 10px; }
+  input { flex: 1 1 200px; min-width: 0; }
+  button { cursor: pointer; background: #1f6feb; border-color: #1f6feb; }
+  button.second { background: #21262d; border-color: var(--line); }
+  .delta-pos { color: var(--warn); } .delta-neg { color: var(--ok); }
+  @media (max-width: 420px) { .big { font-size: 24px; } main { padding: 10px 12px 30px; } }
+  @media (max-width: 560px) { .hide-sm { display: none; } td, th { font-size: 13px; padding: 5px 3px; } }
+
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+  .tabs button { background: transparent; border: 1px solid transparent; color: var(--muted); padding: 5px 10px; font-size: 14px; }
+  .tabs button.on { color: var(--text); border-color: var(--line); background: #161a21; }
+  .view { display: none; } .view.on { display: block; }
+  .page { padding: 12px 16px 40px; max-width: 1300px; margin: 0 auto; display: grid; gap: 12px; }
+  .login { max-width: 420px; margin: 8vh auto; padding: 0 16px; }
+  .login section { padding: 18px; }
+  .login h2 { font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--text); }
+  .stack { display: grid; gap: 8px; }
+  .stack input { flex: none; width: 100%; }
+  .err { color: var(--bad); min-height: 1.2em; font-size: 14px; }
+  .ok-txt { color: var(--ok); font-size: 14px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px 14px; }
+  .grid2 label { display: grid; gap: 3px; font-size: 13px; color: var(--muted); }
+  .grid2 input { flex: none; width: 100%; }
+  table.edit input { padding: 4px 6px; width: 100%; min-width: 0; }
+  table.edit td { padding: 3px 3px; }
+  textarea { width: 100%; min-height: 110px; font: 13px/1.35 ui-monospace, Consolas, monospace; background: #0f1115; color: var(--text);
+             border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  .qr { background: #fff; padding: 10px; border-radius: 8px; display: inline-block; }
+  .code { font: 700 26px/1.2 ui-monospace, Consolas, monospace; letter-spacing: 3px; }
+  .scroll { overflow-x: auto; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+  main.view.on { display: grid; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Pit Wall Crew</h1>
+  <span class="pill" id="st-live">łączę…</span>
+  <span class="pill" id="st-driver">—</span>
+  <span class="pill" id="st-laptop">—</span>
+  <select id="feed" style="display:none" aria-label="Auto / sesja"></select>
+  <nav class="tabs" id="tabs" style="display:none">
+    <button data-v="live" class="on">Na żywo</button>
+    <button data-v="plan">Grafik i plan</button>
+    <button data-v="team">Zespół</button>
+    <button data-v="laps">Okrążenia</button>
+    <button data-v="mem">Pamięć</button>
+  </nav>
+</header>
+
+<div id="v-login" class="login" style="display:none">
+  <section>
+    <h2>Dołącz do zespołu</h2>
+    <form class="stack" id="f-login" onsubmit="return false">
+      <input id="l-code" placeholder="Kod zespołu" autocomplete="username" autocapitalize="none" spellcheck="false">
+      <input id="l-pass" type="password" placeholder="Hasło zespołu" autocomplete="current-password">
+      <button id="b-login" type="submit">Wejdź</button>
+      <div class="err" id="l-err"></div>
+    </form>
+  </section>
+  <section style="margin-top:12px">
+    <h2>Nowy zespół</h2>
+    <form class="stack" id="f-new" onsubmit="return false">
+      <input id="n-name" placeholder="Nazwa zespołu (np. Ferrari 296 #51)" maxlength="40">
+      <input id="n-pass" type="password" placeholder="Hasło zespołu (min. 6 znaków)" autocomplete="new-password">
+      <button id="b-new" type="submit" class="second">Utwórz zespół</button>
+      <div class="err" id="n-err"></div>
+      <p class="note">Dostaniesz kod zespołu. Kod i hasło podajcie sobie prywatnie – to one wpuszczają na ścianę boksów i do programu.</p>
+    </form>
+  </section>
+</div>
+<main id="v-live" class="view on">
+  <section>
+    <h2>Wyścig</h2>
+    <div class="big" id="pos">—</div>
+    <div class="row"><span>Okrążenie</span><span class="num" id="lap">—</span></div>
+    <div class="row"><span>Ostatnie / średnia</span><span class="num" id="laptimes">—</span></div>
+    <div class="row"><span>Do mety</span><span class="num" id="remain">—</span></div>
+    <div class="row"><span>Flaga</span><span id="phase">—</span></div>
+  </section>
+  <section>
+    <h2>Odstępy w klasie</h2>
+    <div class="row"><span>Przed nami</span><span class="num" id="ahead">—</span></div>
+    <div class="row"><span>Za nami</span><span class="num" id="behind">—</span></div>
+    <p class="note">Trend: ile sekund na okrążenie odstęp rośnie (+) lub maleje (−).</p>
+  </section>
+  <section>
+    <h2>Następny postój</h2>
+    <div class="big" id="stop">—</div>
+    <div class="row"><span>Zużycie energii</span><span class="num" id="ve">—</span></div>
+    <div class="row"><span>Zużycie paliwa</span><span class="num" id="fuel">—</span></div>
+    <div class="row"><span>Postój wg gry (menu boksu)</span><span class="num" id="pitest">—</span></div>
+    <div class="advice" id="plan">—</div>
+  </section>
+  <section>
+    <h2>Opony i auto</h2>
+    <div class="tyres" id="tyres"></div>
+    <div class="row"><span>Mieszanka</span><span id="compound">—</span></div>
+    <div class="row"><span>Uszkodzenia</span><span id="damage">—</span></div>
+    <div class="row"><span>Woda / olej</span><span class="num" id="engine">—</span></div>
+    <div class="row"><span>Hamulce (zostało)</span><span class="num" id="brakes">—</span></div>
+    <div class="note" id="grille"></div>
+  </section>
+  <section>
+    <h2>Pogoda i tor</h2>
+    <div class="row"><span>Deszcz / wilgotność</span><span class="num" id="wet">—</span></div>
+    <div class="row"><span>Trend</span><span class="num" id="wettrend">—</span></div>
+    <div class="row"><span>Chmury</span><span class="num" id="cloud">—</span></div>
+    <div class="row"><span>Temperatura toru</span><span class="num" id="ttemp">—</span></div>
+    <div class="advice" id="weather">—</div>
+  </section>
+  <section>
+    <h2>Kierowca</h2>
+    <div class="row"><span>Za kierownicą</span><span class="num" id="mins">—</span></div>
+    <div class="bar"><i id="fatbar" style="width:0"></i></div>
+    <div class="note" id="fatigue">—</div>
+  </section>
+  <section class="wide">
+    <h2>Rywale w klasie <span class="note">· 4 przed i 4 za · „zjazd za” i opony to szacunek</span></h2>
+    <table>
+      <thead><tr><th>Poz.</th><th>Kierowca</th><th>Odstęp</th><th class="hide-sm">Ostatnie</th><th>Tempo</th><th class="hide-sm">Dogoni / dogonisz</th><th>Zjazd za</th><th class="hide-sm">Postoje</th><th>Opony</th></tr></thead>
+      <tbody id="rivals"></tbody>
+    </table>
+  </section>
+  <section class="wide">
+    <h2>Grafik stintów <span class="note" id="src"></span></h2>
+    <table>
+      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th class="hide-sm">Zjazd</th><th class="hide-sm">Okr.</th><th>Na postoju</th><th>vs plan</th></tr></thead>
+      <tbody id="grafik"></tbody>
+    </table>
+  </section>
+  <section class="wide" id="obs-box" style="display:none">
+    <h2>Link dla obserwatorów</h2>
+    <p class="note">Tylko do oglądania: bez radia zespołu, bez wysyłania wiadomości i bez Waszego planu. Możesz go dać każdemu.</p>
+    <form onsubmit="return false"><input id="obs-link" readonly><button id="obs-copy" type="button" class="second">Kopiuj</button></form>
+  </section>
+  <section class="wide" id="radio-box">
+    <h2>Radio zespołu</h2>
+    <div class="msgs" id="msgs"></div>
+    <form id="f" onsubmit="return false">
+      <select id="kto" aria-label="Kto pisze"></select>
+      <input id="txt" maxlength="300" placeholder="Wiadomość do kierowcy albo pytanie do inżyniera" autocomplete="off">
+      <button id="send" type="button">Do kierowcy</button>
+      <button id="ask" type="button" class="second">Zapytaj inżyniera</button>
+      <button id="quiet" type="button" class="second" title="Odpowiedź tylko tutaj, kierowca jej nie usłyszy">Zapytaj (tylko tekst)</button>
+      <button id="note" type="button" class="second" title="Notatka, którą AI inżyniera będzie brać pod uwagę (zakładka „Pamięć zespołu”)">Do pamięci</button>
+    </form>
+    <p class="note">„Do kierowcy”: inżynier przeczyta wiadomość głosem. „Zapytaj inżyniera”: odpowiedź usłyszycie na Discordzie. „Zapytaj (tylko tekst)”: odpowiedź pojawi się tylko tutaj, kierowca jej nie usłyszy. „Do pamięci”: notatka dla AI inżyniera (np. „ABS 9 za mocny w deszczu”), widoczna w zakładce „Pamięć zespołu”.</p>
+  </section>
+</main>
+
+<div id="v-plan" class="view"><div class="page">
+  <section>
+    <h2>Grafik na żywo <span class="note" id="src2"></span></h2>
+    <div class="scroll"><table>
+      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th>Zjazd</th><th>Okr.</th><th>Na postoju</th><th>vs plan</th></tr></thead>
+      <tbody id="grafik2"></tbody>
+    </table></div>
+  </section>
+  <section>
+    <h2>Wyścig i ustawienia</h2>
+    <div class="grid2" id="settings"></div>
+    <div class="btnrow"><button id="b-set">Zapisz ustawienia</button><span id="set-ok" class="ok-txt"></span></div>
+    <p class="note">Start wyścigu wpisz w czasie polskim. „Korekta stintu” przesuwa numer stintu, jeśli w grze był dodatkowy postój (np. kara).</p>
+  </section>
+  <section>
+    <h2>Plan stintów</h2>
+    <div class="scroll"><table class="edit">
+      <thead><tr><th>Stint</th><th>Okr. plan</th><th>Przesunięcie (min)</th><th>Kierowca</th><th>Postój (s)</th><th>Na postoju</th><th>Okr. faktycznie</th><th></th></tr></thead>
+      <tbody id="plan-rows"></tbody>
+    </table></div><datalist id="drvlist"></datalist>
+    <div class="btnrow">
+      <button id="b-addrow" class="second">+ stint</button>
+      <button id="b-plan">Zapisz plan</button><span id="plan-ok" class="ok-txt"></span>
+    </div>
+    <details style="margin-top:10px">
+      <summary class="note">Wklej plan z arkusza Google</summary>
+      <p class="note">W starym arkuszu w zakładce „Plan” zaznacz wiersze stintów (kolumny A–W), skopiuj (Ctrl+C) i wklej tutaj (Ctrl+V). Potem „Wczytaj” i „Zapisz plan”.</p>
+      <textarea id="tsv" placeholder="1	11	0	Maciej	…"></textarea>
+      <div class="btnrow"><button id="b-tsv" class="second">Wczytaj</button><span id="tsv-ok" class="note"></span></div>
+    </details>
+  </section>
+</div></div>
+
+<div id="v-team" class="view"><div class="page">
+  <section>
+    <h2>Zespół</h2>
+    <div id="t-name" style="font-size:18px;font-weight:600">—</div>
+    <div class="row"><span>Kod zespołu</span><span class="code" id="t-code">—</span></div>
+    <div class="row"><span>Serwer AI zespołu</span><span id="t-worker">—</span></div>
+    <p class="note">Do programu kierowcy (okno ustawień → Zespół) i serwera AI wpisuje się ten kod i hasło zespołu. Hasła nie ma w kodzie QR – podajcie je sobie prywatnie.</p>
+    <div class="qr" id="qr"></div>
+    <form onsubmit="return false"><input id="join-link" readonly><button id="b-copyjoin" type="button" class="second">Kopiuj link</button></form>
+    <form onsubmit="return false"><input id="obs-link2" readonly><button id="b-copyobs" type="button" class="second">Kopiuj link dla obserwatorów</button></form>
+    <div class="btnrow"><button id="b-logout" class="second">Wyloguj na tym urządzeniu</button></div>
+  </section>
+  <section>
+    <h2>Kierowcy i powiadomienia</h2>
+    <p class="note">Temat ntfy to dowolna, trudna do zgadnięcia nazwa (np. pwc-maciej-7k2p). Kierowca instaluje aplikację ntfy na telefonie i subskrybuje ten temat – dostaje powiadomienie przed swoją zmianą i gdy zacznie padać.</p>
+    <div class="scroll"><table class="edit">
+      <thead><tr><th>Kierowca</th><th>Temat ntfy</th><th></th><th></th></tr></thead>
+      <tbody id="drivers"></tbody>
+    </table></div>
+    <div class="btnrow">
+      <button id="b-adddrv" class="second">+ kierowca</button>
+      <button id="b-drv">Zapisz kierowców</button><span id="drv-ok" class="ok-txt"></span>
+    </div>
+  </section>
+</div></div>
+
+<div id="v-laps" class="view"><div class="page">
+  <section>
+    <h2>Okrążenia <span class="note" id="laps-n"></span></h2>
+    <div class="btnrow" style="margin:0 0 8px"><button id="b-laps" class="second">Odśwież</button><button id="b-csv" class="second">Pobierz CSV</button></div>
+    <div class="scroll"><table>
+      <thead><tr><th>Stint</th><th>Okr.</th><th>Kierowca</th><th>Czas</th><th>Paliwo</th><th>Energia %</th><th>Woda %</th><th>Tor °C</th><th>Opony</th><th>Uwagi</th></tr></thead>
+      <tbody id="laps"></tbody>
+    </table></div>
+  </section>
+</div></div>
+
+<div id="v-mem" class="view"><div class="page">
+  <section>
+    <h2>Pamięć zespołu</h2>
+    <p class="note">Notatki, które AI inżyniera bierze pod uwagę przy odpowiedziach (np. „ABS 9 za mocny w deszczu”). Tor można zostawić pusty – wtedy notatka dotyczy każdego toru.</p>
+    <form onsubmit="return false">
+      <input id="m-text" maxlength="300" placeholder="Notatka">
+      <input id="m-track" maxlength="40" placeholder="Tor (opcjonalnie)" style="flex:0 1 180px">
+      <button id="b-mem" type="button">Dodaj</button>
+    </form>
+    <div class="scroll" style="margin-top:8px"><table>
+      <thead><tr><th>Kiedy</th><th>Kto</th><th>Tor</th><th>Notatka</th><th></th></tr></thead>
+      <tbody id="mem"></tbody>
+    </table></div>
+  </section>
+</div></div>
+
+<script>
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+function n1(x) { return x == null ? '—' : Number(x).toFixed(1).replace('.', ','); }
+function lapTxt(s) {
+  if (!s || s <= 0) return '—';
+  var m = Math.floor(s / 60), r = s - m * 60;
+  return m + ':' + (r < 10 ? '0' : '') + r.toFixed(3).replace('.', ',');
+}
+function clockTxt(s) {
+  if (s == null) return '—';
+  s = Math.max(0, Math.round(s));
+  var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60);
+  return h + ' h ' + (m < 10 ? '0' : '') + m + ' min';
+}
+function gapTxt(g) {
+  if (!g) return '—';
+  var t = g.trend == null ? '' : ' (' + (g.trend > 0 ? '+' : '−') + n1(Math.abs(g.trend)) + '/okr.)';
+  return esc(g.name) + ' ' + n1(Math.abs(g.gap)) + ' s' + t;
+}
+function pill(el, txt, cls) { el.textContent = txt; el.className = 'pill ' + (cls || ''); }
+
+function render(v) {
+  if (!v || !v.ok) { pill($('st-live'), 'brak dostępu', 'bad'); return; }
+  if (v.widz || TRYB === 'widz') {
+    $('radio-box').style.display = 'none';
+    $('st-laptop').style.display = 'none';
+    document.querySelector('header h1').textContent = 'Pit Wall Crew · na żywo'; $('tabs').style.display = 'none';
+  } else if (v.obs) {
+    $('obs-link').value = location.origin + location.pathname + '?obs=' + v.obs;
+    $('obs-box').style.display = '';
+  }
+  var live = v.live, st = live ? live.state || {} : {};
+  if (!live) pill($('st-live'), 'brak danych z gry', 'warn');
+  else if (v.age > 30) pill($('st-live'), 'dane sprzed ' + v.age + ' s', 'warn');
+  else pill($('st-live'), 'na żywo', 'ok');
+  pill($('st-driver'), live ? (live.driving ? 'jedzie: ' : 'widz: ') + live.who +
+       (live.state && live.state.version ? ' · v' + live.state.version : '') : '—', live && live.driving ? 'ok' : '');
+  var lp = v.laptop || {};
+  pill($('st-laptop'), lp.online ? ('serwer AI: ' + (lp.discord ? 'Discord ✓' : 'bez Discorda') + (lp.ai ? ', AI ✓' : '')) : 'serwer AI: offline',
+       lp.online ? 'ok' : 'warn');
+
+  $('pos').textContent = st.pos_class ? 'P' + st.pos_class + ' / ' + st.n_class + ' ' + (st.cls || '') : '—';
+  $('lap').textContent = st.laps_done != null ? (st.laps_done + 1) + (st.stint_laps != null ? ' (w stincie ' + st.stint_laps + ')' : '') : '—';
+  $('laptimes').textContent = lapTxt(st.last_lap) + ' / ' + lapTxt(st.avg_lap);
+  $('remain').textContent = clockTxt(st.time_remaining);
+  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : (st.phase === 'fcy' ? 'FCY / neutralizacja' : (st.phase === 'green' ? 'zielona' : (st.phase || '—')));
+  $('ahead').innerHTML = gapTxt(st.ahead);
+  $('behind').innerHTML = gapTxt(st.behind);
+
+  var ns = st.next_stop_laps != null ? st.next_stop_laps : (st.laps_left != null ? Math.floor(st.laps_left) : null);
+  $('stop').textContent = ns == null ? '—' : (ns <= 0 ? 'w tym okrążeniu' : 'za ' + ns + ' okr.');
+  var t = st.targets || {};
+  $('ve').textContent = st.ve_per_lap != null ? n1(st.ve_per_lap) + '% / okr.' + (t.ve_per_lap ? ' (plan ' + n1(t.ve_per_lap) + '%)' : '') : '—';
+  $('fuel').textContent = st.fuel_per_lap != null ? n1(st.fuel_per_lap) + ' l / okr.' + (t.fuel_per_lap ? ' (plan ' + n1(t.fuel_per_lap) + ')' : '') : '—';
+  $('plan').textContent = st.plan_text || (t.service ? 'Plan zespołu: ' + t.service : '—');
+  $('pitest').textContent = st.pit_estimate_game ? n1(st.pit_estimate_game) + ' s' : '—';
+  $('brakes').textContent = st.brakes_left ? st.brakes_left.join(' / ') + ' %' : '—';
+  $('brakes').style.color = st.brakes_left && Math.min.apply(null, st.brakes_left) < 30 ? 'var(--bad)' : '';
+
+  // wybór auta / sesji (gdy jeden jedzie wyścig, a drugi trenuje)
+  var fs = $('feed'), feeds = v.feeds || [];
+  fs.innerHTML = '<option value="">auto (wyścig najpierw)</option>' + feeds.map(function (f) {
+    return '<option value="' + esc(f.key) + '"' + (f.key === FEED ? ' selected' : '') + '>' + esc(f.label) + '</option>';
+  }).join('');
+  fs.style.display = feeds.length > 1 || FEED ? '' : 'none';
+
+  $('rivals').innerHTML = (st.rivals_table || []).map(function (r) {
+    var gap = r.me ? '—' : (r.gap == null ? (r.laps > 0 ? '+' + r.laps + ' okr.' : (r.laps < 0 ? r.laps + ' okr.' : '—'))
+                                         : (r.gap > 0 ? '+' : '−') + n1(Math.abs(r.gap)) + ' s');
+    var pit = r.in_pits ? '<b style="color:var(--warn)">w boksie</b>' :
+              (r.pit_in == null ? '—' : (r.pit_in < 1 ? 'teraz' : '~' + Math.round(r.pit_in) + ' okr.'));
+    var mine = (st.rivals_table || []).filter(function (x) { return x.me; })[0] || {};
+    var pace = r.pace ? lapTxt(r.pace) : '—';
+    if (r.pace && mine.pace && !r.me) {
+      var d = r.pace - mine.pace;
+      pace += ' <span class="note" style="color:' + (d < 0 ? 'var(--bad)' : 'var(--good, #3fb950)') + '">' +
+              (d > 0 ? '+' : '−') + n1(Math.abs(d)) + '</span>';
+    }
+    var who = (r.drivers || []).filter(function (x) { return x.pace; });
+    var tip = who.map(function (x) { return x.name + ' ' + lapTxt(x.pace) + ' (' + x.laps + ' okr.)'; }).join('\n');
+    var catchTxt = r.catch ? (r.gap > 0 ? 'dogoni Cię za ~' : 'dogonisz za ~') + Math.round(r.catch) + ' okr.' : '—';
+    var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (postój ' + r.tyres.stop + ')' : 'bez zmiany (postój ' + r.tyres.stop + ')') : '—';
+    return '<tr' + (r.me ? ' class="cur"' : '') + '><td>P' + r.pos + '</td><td title="' + esc(tip) + '">' + esc(r.name) +
+           (who.length > 1 ? ' <span class="note">(' + who.length + ' kier.)</span>' : '') + '</td><td>' + gap +
+           '</td><td class="hide-sm">' + lapTxt(r.last) + '</td><td>' + pace + '</td><td class="hide-sm">' + catchTxt +
+           '</td><td>' + pit + '</td><td class="hide-sm">' + (r.stops || 0) +
+           '</td><td>' + ty + '</td></tr>';
+  }).join('') || '<tr><td colspan="9" class="note">Brak danych o rywalach (tylko w wyścigu, z inżynierem w nowej wersji).</td></tr>';
+
+  // kolor temperatury płynnie: niebieski (za zimna) → zielony (optimum) → czerwony (za gorąca)
+  function tempColor(t, opt) {
+    var o = opt || 90, span = 25;                     // ±25°C od optimum = pełny niebieski / czerwony
+    var x = Math.max(-1, Math.min(1, (t - o) / span));
+    var hue = x < 0 ? 120 + (-x) * 100 : 120 - x * 120; // 220 niebieski, 120 zielony, 0 czerwony
+    return 'hsl(' + Math.round(hue) + ',75%,48%)';
+  }
+  function tyreTemp(st, i) {
+    var tt = st.tyre_temps ? st.tyre_temps[i] : null;
+    if (!tt) return '';
+    var avg = Math.round((tt[0] + tt[1] + tt[2]) / 3), opt = st.tyre_opt;
+    var zones = tt.map(function (v) {
+      return '<span style="display:inline-block;min-width:2.2em;padding:1px 3px;border-radius:4px;color:#fff;background:' +
+             tempColor(v, opt) + '">' + v + '</span>';
+    }).join(' ');
+    var c = st.tyre_carcass ? st.tyre_carcass[i] : null, pr = st.tyre_press ? st.tyre_press[i] : null;
+    return '<span class="note"><b style="color:' + tempColor(avg, opt) + '">' + avg + '°C</b> ' + zones +
+           '<br>' + (c != null ? 'karkas <span style="color:' + tempColor(c, opt) + '">' + c + '°</span>' : '') +
+           (pr ? ', ' + pr + ' kPa' : '') + (opt ? ', optimum ' + opt + '°' : '') + '</span>';
+  }
+  var names = ['LP', 'PP', 'LT', 'PT'], html = '';
+  for (var i = 0; i < 4; i++) {
+    var w = st.tyres ? st.tyres[i] : null, r = st.tyre_rates ? st.tyre_rates[i] : null;
+    var left = w == null ? null : 100 - w;
+    var col = left == null ? '' : (left < 50 ? 'color:var(--bad)' : left < 70 ? 'color:var(--warn)' : '');
+    html += '<div class="tyre"><span class="note">' + names[i] + '</span><b style="' + col + '">' + (left == null ? '—' : Math.round(left) + '%') +
+            '</b><span class="note">' + (r == null ? '' : n1(r) + '%/okr.') + '</span>' + tyreTemp(st, i) + '</div>';
+  }
+  $('tyres').innerHTML = html;
+  $('compound').textContent = st.compound || '—';
+  $('damage').textContent = st.damage ? ((st.damage_text || ('poziom ' + st.damage)) + (st.damage_loss != null ? ', strata ' + n1(st.damage_loss) + ' s/okr.' : ', mierzę stratę')) : (live ? 'brak' : '—');
+
+  var en = st.engine || null;
+  $('engine').textContent = en ? Math.round(en.water) + ' / ' + Math.round(en.oil) + ' °C' +
+    (en.trend != null && Math.abs(en.trend) >= 0.3 ? ' (' + (en.trend > 0 ? '+' : '−') + n1(Math.abs(en.trend)) + '/okr.)' : '') : '—';
+  $('engine').style.color = en && en.water_max_lap != null && en.water_max_lap >= en.water_warn ? 'var(--bad)' :
+    (en && en.water_max_lap != null && en.water_max_lap >= en.water_warn - 3 ? 'var(--warn)' : '');
+  $('grille').textContent = en && en.grille ? (en.grille === 'otwórz' ? 'Na postoju: otwórz grill o stopień (za gorąco).' :
+    'Na postoju: można przymknąć grill o stopień (silnik chłodny).') : '';
+
+  var wx = st.weather || {};
+  $('wet').textContent = wx.rain != null ? Math.round(wx.rain * 100) + '% / ' + Math.round(wx.wetness * 100) + '%' : '—';
+  $('wettrend').textContent = wx.trend_per_lap != null ? (wx.trend_per_lap >= 0 ? '+' : '−') + n1(Math.abs(wx.trend_per_lap * 100)) + ' pkt / okr.' : '—';
+  $('cloud').textContent = wx.cloud != null ? Math.round(wx.cloud * 100) + '%' +
+    (wx.cloud_trend_10min ? ' (' + (wx.cloud_trend_10min > 0 ? '+' : '−') + Math.abs(Math.round(wx.cloud_trend_10min * 100)) + ' pkt / 10 min)' : '') : '—';
+  $('cloud').style.color = wx.cloud_trend_10min >= 0.15 && wx.cloud >= 0.6 && wx.rain < 0.05 ? 'var(--warn)' : '';
+  $('ttemp').textContent = wx.track_temp != null ? Math.round(wx.track_temp) + ' °C' + (wx.track_temp_trend_h != null ? ' (' + (wx.track_temp_trend_h >= 0 ? '+' : '−') + Math.abs(Math.round(wx.track_temp_trend_h)) + ' °C/h)' : '') : '—';
+  $('weather').textContent = wx.text || 'Bez uwag.';
+
+  var f = st.fatigue || {};
+  $('mins').textContent = f.minutes != null ? f.minutes + ' min' : '—';
+  $('fatbar').style.width = (f.score || 0) + '%';
+  $('fatbar').style.background = f.score >= 60 ? 'var(--bad)' : f.score >= 35 ? 'var(--warn)' : 'var(--ok)';
+  $('fatigue').textContent = f.text || '—';
+
+  $('src').textContent = '(' + (v.zrodlo || '') + (v.raceEnd ? ', meta ok. ' + v.raceEnd : '') + ')';
+  $('grafik').innerHTML = (v.grafik || []).map(function (s) {
+    var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + s.delta + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + s.delta + ' min</span>' : '0');
+    return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + s.n + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
+           '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + (s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
+  }).join('') || '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza program kierowcy albo serwer AI co minutę.</td></tr>';
+
+  $('msgs').innerHTML = (v.msgs || []).map(function (m) {
+    var d = new Date(m.t);
+    var hh = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    return '<div class="msg"><small>' + hh + ' · ' + esc(m.from) + ' · ' + esc(m.kind) + (m.delivered ? ' · ' + esc(m.delivered) : '') + '</small><br>' + esc(m.text) + '</div>';
+  }).join('') || '<p class="note">Brak wiadomości.</p>';
+
+  var sel = $('kto');
+  if (v.kierowcy && sel.options.length !== v.kierowcy.length + 1) {
+    sel.innerHTML = '';
+    var saved = KTO;
+    try { saved = saved || localStorage.getItem('kto') || ''; } catch (e) {}
+    v.kierowcy.concat(['zespół']).forEach(function (n) {
+      var o = document.createElement('option'); o.textContent = n; o.value = n; if (n === saved) o.selected = true; sel.appendChild(o);
+    });
+  }
+}
+
+
+// ===================================================================== Pit Wall Crew – ściana boksów na Firebase
+var FB_CONFIG = /*FIREBASE_CONFIG*/{"apiKey": "AIzaSyCZm6iCtxxxg-Gkp19WlY8e1pnPoAyRbFM", "authDomain": "pit-wall-crew.firebaseapp.com", "databaseURL": "https://pit-wall-crew-default-rtdb.europe-west1.firebasedatabase.app", "projectId": "pit-wall-crew", "appId": "1:435938873001:web:24d1f4189656cd1ab0e3b8"}/*END*/;
+var DOMAIN = 'pitwallcrew.team', ALPHA = 'abcdefghjkmnpqrstuvwxyz23456789';
+var Q = new URLSearchParams(location.search);
+var TRYB = Q.get('obs') ? 'widz' : 'zespol', FEED = '', KTO = '';
+var CODE = '', db = null, T = null;
+var S = { meta: {}, settings: {}, plan: [], worker: {}, grafik: {}, feeds: {}, live: null, msgs: [], obs: null };
+var liveRef = null, liveKey = null;
+
+function now() { return Date.now(); }
+function rnd(n) { var s = ''; var a = new Uint32Array(n); crypto.getRandomValues(a); for (var i = 0; i < n; i++) s += ALPHA[a[i] % ALPHA.length]; return s; }
+function lsGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function lsSet(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+function flash(id, txt) { var el = $(id); el.textContent = txt; setTimeout(function () { el.textContent = ''; }, 3000); }
+function num(x) { if (x == null || x === '') return null; var v = parseFloat(String(x).replace(',', '.').replace(/\s/g, '')); return isNaN(v) ? null : v; }
+function stamp() { var d = new Date(), p = function (x) { return (x < 10 ? '0' : '') + x; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+function hhmm(t) { var d = new Date(t); return (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(); }
+function authErr(e) {
+  var c = (e && (e.code || e.message)) || '';
+  if (/email-already-in-use/.test(c)) return 'taki zespół już istnieje';
+  if (/user-not-found|invalid-credential|wrong-password|invalid-login/.test(c)) return 'zły kod albo hasło zespołu';
+  if (/weak-password/.test(c)) return 'hasło musi mieć co najmniej 6 znaków';
+  if (/too-many-requests/.test(c)) return 'za dużo prób, spróbuj za kilka minut';
+  if (/operation-not-allowed/.test(c)) return 'w Firebase nie włączono logowania e-mail/hasło';
+  if (/network/.test(c)) return 'brak połączenia z internetem';
+  if (/PERMISSION_DENIED|permission/i.test(c)) return 'baza odmówiła dostępu – sprawdź reguły bazy';
+  return String(c);
+}
+function genitive(n) {
+  n = String(n || '').trim(); if (!n || /^zesp[oó]ł$/i.test(n)) return 'zespołu';
+  var p = n.split(/\s+/), f = p[0], l = f.toLowerCase();
+  if (/(ia|ja)$/.test(l)) f = f.slice(0, -2) + 'i';
+  else if (/(ka|ga)$/.test(l)) f = f.slice(0, -1) + 'i';
+  else if (/a$/.test(l)) f = f.slice(0, -1) + 'y';
+  else if (/ek$/.test(l) && l.length > 3) f = f.slice(0, -2) + 'ka';
+  else if (/[a-ząćęłńóśźż]$/.test(l) && !/[aeiouyąęó]$/.test(l)) f = f + 'a';
+  p[0] = f; return p.join(' ');
+}
+
+// ------------------------------------------------------------------ start
+function boot() {
+  if (!FB_CONFIG || !FB_CONFIG.apiKey) {
+    document.body.insertAdjacentHTML('beforeend', '<div class="login"><section><h2>Brak konfiguracji Firebase</h2><p class="note">Ta strona nie ma jeszcze wpisanej konfiguracji projektu.</p></section></div>');
+    pill($('st-live'), 'brak konfiguracji', 'bad'); return;
+  }
+  firebase.initializeApp(FB_CONFIG);
+  db = firebase.database();
+  if (TRYB === 'widz') return startObs(Q.get('obs'));
+  if (Q.get('team')) $('l-code').value = Q.get('team');
+  firebase.auth().onAuthStateChanged(function (u) {
+    if (u && /@pitwallcrew\.team$/.test(u.email || '')) startTeam(u.email.split('@')[0]);
+    else showLogin();
+  });
+}
+
+function showLogin() {
+  $('v-login').style.display = ''; $('tabs').style.display = 'none';
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('on'); });
+  ['st-live', 'st-driver', 'st-laptop'].forEach(function (id) { $(id).style.display = 'none'; });
+}
+
+$('f-login').onsubmit = function () {
+  var code = $('l-code').value.trim().toLowerCase(), pass = $('l-pass').value;
+  if (!code || !pass) { $('l-err').textContent = 'wpisz kod i hasło zespołu'; return false; }
+  $('l-err').textContent = 'loguję…';
+  firebase.auth().signInWithEmailAndPassword(code + '@' + DOMAIN, pass)
+    .then(function () { $('l-err').textContent = ''; $('l-pass').value = ''; })
+    .catch(function (e) { $('l-err').textContent = authErr(e); });
+  return false;
+};
+
+$('f-new').onsubmit = function () {
+  var pass = $('n-pass').value, name = $('n-name').value.trim();
+  if (pass.length < 6) { $('n-err').textContent = 'hasło musi mieć co najmniej 6 znaków'; return false; }
+  $('n-err').textContent = 'tworzę zespół…';
+  var tries = 0;
+  (function attempt() {
+    var code = rnd(6);
+    firebase.auth().createUserWithEmailAndPassword(code + '@' + DOMAIN, pass).then(function () {
+      var obs = 'o' + rnd(15);
+      return db.ref('teams/' + code + '/meta').set({ name: name || code.toUpperCase(), created: now(), obs: obs })
+        .then(function () { return db.ref('obs/' + obs + '/team').set(code); })
+        .then(function () {
+          return db.ref('teams/' + code + '/settings').set({ raceHours: 24, notifyMin: 30, lapTime: 245, drivers: [] });
+        })
+        .then(function () { $('n-err').textContent = ''; $('n-pass').value = ''; setTimeout(function () { tab('team'); }, 300); });
+    }).catch(function (e) {
+      if (/email-already-in-use/.test(e.code || '') && ++tries < 5) return attempt();
+      $('n-err').textContent = authErr(e);
+    });
+  })();
+  return false;
+};
+
+// ------------------------------------------------------------------ zespół
+function startTeam(code) {
+  CODE = code; T = function (p) { return db.ref('teams/' + code + (p ? '/' + p : '')); };
+  $('v-login').style.display = 'none'; $('tabs').style.display = '';
+  ['st-live', 'st-driver', 'st-laptop'].forEach(function (id) { $(id).style.display = ''; });
+  if (Q.get('team')) history.replaceState(null, '', location.pathname);
+  tab(lsGet('tab') || 'live');
+  var onErr = function (e) { pill($('st-live'), authErr(e), 'bad'); };
+  T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
+  T('settings').on('value', function (s) { S.settings = s.val() || {}; editSettings(); editDrivers(); draw(); }, onErr);
+  T('plan').on('value', function (s) { S.plan = s.val() || []; editPlan(); }, onErr);
+  T('worker').on('value', function (s) { S.worker = s.val() || {}; teamInfo(); draw(); });
+  T('grafik').on('value', function (s) { S.grafik = s.val() || {}; draw(); });
+  T('feeds').on('value', function (s) { S.feeds = s.val() || {}; pickFeed(); });
+  T('msgs').orderByChild('t').limitToLast(25).on('value', function (s) {
+    var a = []; s.forEach(function (c) { var m = c.val(); m.id = c.key; a.push(m); }); a.reverse(); S.msgs = a; draw();
+  });
+  T('memory').on('value', function (s) { drawMem(s.val() || {}); });
+  setInterval(draw, 5000);
+}
+
+function curFeed() {
+  if (FEED && S.feeds[FEED]) return FEED;
+  var best = null, bk = null, t = now();
+  Object.keys(S.feeds).forEach(function (k) {
+    var f = S.feeds[k] || {}, sc = (f.session === 'race' && t - (f.t || 0) < 120000 ? 1e15 : 0) + (f.t || 0);
+    if (best === null || sc > best) { best = sc; bk = k; }
+  });
+  return bk;
+}
+
+function pickFeed() {
+  var k = curFeed();
+  if (k === liveKey) return draw();
+  if (liveRef) liveRef.off();
+  liveKey = k; S.live = null;
+  if (!k) return draw();
+  liveRef = T('live/' + k);
+  liveRef.on('value', function (s) { S.live = s.val(); draw(); });
+}
+
+function feedLabel(k, f) {
+  if (k === 'race') return 'wyścig' + (f.who ? ' (' + f.who + ')' : '');
+  var s = { practice: 'trening', qualy: 'kwalifikacje', warmup: 'rozgrzewka' }[f.session] || f.session || k;
+  return s + ' – ' + (f.who || '?');
+}
+
+function botOnline() { var w = S.worker || {}; return !!(w.t && now() - w.t < 45000 && w.discord); }
+
+function draw() {
+  if (TRYB === 'widz') return;
+  var w = S.worker || {}, on = !!(w.t && now() - w.t < 45000);
+  var live = S.live, g = S.grafik || {};
+  var feeds = Object.keys(S.feeds).filter(function (k) { return now() - (S.feeds[k].t || 0) < 6 * 3600000; })
+    .map(function (k) { return { key: k, label: feedLabel(k, S.feeds[k]) }; });
+  var drv = ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean);
+  render({
+    ok: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
+    laptop: { online: on, discord: on && w.discord, ai: on && w.ai },
+    feeds: feeds, grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '',
+    msgs: S.msgs, kierowcy: drv, obs: S.meta.obs
+  });
+  drawGrafik2(g);
+}
+
+// ------------------------------------------------------------------ obserwator
+function startObs(tok) {
+  $('tabs').style.display = 'none';
+  db.ref('obs/' + tok).on('value', function (s) {
+    var o = s.val();
+    if (!o) { pill($('st-live'), 'zły link', 'bad'); return; }
+    S.obs = o; drawObs();
+  }, function (e) { pill($('st-live'), authErr(e), 'bad'); });
+  setInterval(drawObs, 5000);
+}
+function drawObs() {
+  var o = S.obs; if (!o) return;
+  var g = o.grafik || {}, live = o.live || null;
+  render({ ok: true, widz: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
+           laptop: {}, feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
+}
+
+// ------------------------------------------------------------------ zakładki
+function tab(v) {
+  document.querySelectorAll('.view').forEach(function (x) { x.classList.toggle('on', x.id === 'v-' + v); });
+  document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); });
+  lsSet('tab', v);
+  if (v === 'laps') loadLaps();
+}
+document.querySelectorAll('#tabs button').forEach(function (b) { b.onclick = function () { tab(b.dataset.v); }; });
+$('feed').onchange = function () { FEED = this.value; pickFeed(); };
+
+// ------------------------------------------------------------------ radio zespołu
+function who() { var v = $('kto').value || 'zespół'; KTO = v; lsSet('kto', v); return v; }
+function teamMessage(frm, text, kind, silent) {
+  var feed = curFeed() || 'race', t = now(), delivered = '', p = Promise.resolve();
+  text = String(text || '').slice(0, 300);
+  if (kind === 'wiadomość' && botOnline()) {
+    p = T('jobs').push({ kind: 'say', who: frm, t: t, payload: { text: 'Wiadomość od ' + genitive(frm) + ': ' + text, nolog: true } });
+    delivered = 'discord';
+  }
+  if (kind === 'pytanie' && silent) delivered = 'tylko na ścianie';
+  var ref = T('msgs').push();
+  return p.then(function () { return ref.set({ t: t, from: frm, text: text, kind: kind, delivered: delivered, feed: feed }); })
+    .then(function () {
+      if (kind === 'pytanie' || !delivered)
+        return T('pending/' + feed + '/' + ref.key).set({ t: t, from: frm, text: text, kind: kind, silent: !!silent });
+    });
+}
+function sendWith(kind, silent) {
+  var txt = $('txt').value.trim(); if (!txt) return;
+  $('txt').value = '';
+  var p = kind === 'notatka'
+    ? T('memory').push({ t: now(), when: stamp(), who: who(), track: '', car: '', text: txt.slice(0, 300) })
+    : teamMessage(who(), txt, kind, silent);
+  p.catch(function (e) { alert('Nie wysłano: ' + authErr(e)); $('txt').value = txt; });
+}
+$('send').onclick = function () { sendWith('wiadomość'); };
+$('ask').onclick = function () { sendWith('pytanie', false); };
+$('quiet').onclick = function () { sendWith('pytanie', true); };
+$('note').onclick = function () { sendWith('notatka'); };
+$('txt').onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); sendWith('wiadomość'); } };
+$('obs-copy').onclick = function () { copy($('obs-link').value); };
+function copy(s) { try { navigator.clipboard.writeText(s); } catch (e) {} }
+
+// ------------------------------------------------------------------ grafik i plan
+function drawGrafik2(g) {
+  $('src2').textContent = '(' + (g.source || 'brak') + (g.raceEnd ? ', meta ok. ' + g.raceEnd : '') + (g.t ? ', przeliczony ' + hhmm(g.t) : '') + ')';
+  $('grafik2').innerHTML = $('grafik').innerHTML;
+}
+
+var SET_FIELDS = [
+  ['raceStartMs', 'Start wyścigu', 'dt'], ['raceHours', 'Długość wyścigu (h)'], ['lapTime', 'Czas okrążenia z planu (s)'],
+  ['notifyMin', 'Powiadomienie przed zmianą (min)'], ['vePerLap', 'Plan energii (% / okr.)'], ['fuelPerLap', 'Plan paliwa (l / okr.)'],
+  ['pitCallS', 'Wezwanie do boksu (s przed wjazdem)'], ['stintCorr', 'Korekta numeru stintu'],
+  ['wear', 'Plan zużycia opon LP,PP,LT,PT (% / okr.)', 'list'],
+  ['rainSlickK', 'Deszcz: strata slicków (współczynnik)'], ['rainWetBase', 'Deszcz: strata deszczówek (bazowa)'],
+  ['rainPitCost', 'Deszcz: koszt postoju na zmianę opon (s)']
+];
+function dtLocal(ms) { if (!ms) return ''; var d = new Date(ms - new Date(ms).getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); }
+function editSettings() {
+  if (document.activeElement && $('settings').contains(document.activeElement)) return;
+  var s = S.settings || {};
+  $('settings').innerHTML = '<label>Nazwa zespołu<input id="s-name" maxlength="40" value="' + esc(S.meta.name || '') + '"></label>' +
+    SET_FIELDS.map(function (f) {
+      var v = s[f[0]];
+      if (f[2] === 'dt') return '<label>' + f[1] + '<input type="datetime-local" id="s-' + f[0] + '" value="' + dtLocal(v) + '"></label>';
+      if (f[2] === 'list') v = (v || []).join(', ');
+      return '<label>' + f[1] + '<input id="s-' + f[0] + '" inputmode="decimal" value="' + esc(v == null ? '' : String(v).replace('.', ',')) + '"></label>';
+    }).join('');
+  var st = s.raceStartMs ? new Date(s.raceStartMs) : null;
+  if (st && Math.abs(st - now()) > 180 * 86400000)
+    $('settings').insertAdjacentHTML('beforeend', '<p class="note" style="color:var(--warn);grid-column:1/-1">Uwaga: data startu jest daleko od dzisiaj (' + st.toLocaleDateString('pl-PL') + ') – sprawdź rok.</p>');
+}
+$('b-set').onclick = function () {
+  var upd = {};
+  SET_FIELDS.forEach(function (f) {
+    var raw = $('s-' + f[0]).value;
+    if (f[2] === 'dt') upd[f[0]] = raw ? new Date(raw).getTime() : null;
+    else if (f[2] === 'list') { var a = raw.split(/[;,]\s*|\s+/).map(num).filter(function (x) { return x != null; }); upd[f[0]] = a.length === 4 ? a : null; }
+    else upd[f[0]] = num(raw);
+  });
+  Promise.all([T('settings').update(upd), T('meta/name').set($('s-name').value.trim() || CODE.toUpperCase())])
+    .then(function () { flash('set-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
+};
+
+var PLAN_COLS = [['n', 3], ['laps', 4], ['offsetMin', 4], ['driver', 9], ['stopS', 4], ['service', 14], ['lapsActual', 4]];
+function planRows() { var r = S.plan; return (Array.isArray(r) ? r : Object.values(r || {})).filter(Boolean).sort(function (a, b) { return (a.n || 0) - (b.n || 0); }); }
+function editPlan(rows) {
+  if (!rows && document.activeElement && $('plan-rows').contains(document.activeElement)) return;
+  rows = rows || planRows();
+  var drv = ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean);
+  $('plan-rows').innerHTML = rows.map(function (r) {
+    return '<tr>' + PLAN_COLS.map(function (c) {
+      var v = r[c[0]] == null ? '' : r[c[0]];
+      var list = c[0] === 'driver' ? ' list="drvlist"' : '';
+      return '<td><input data-k="' + c[0] + '" size="' + c[1] + '"' + list + ' value="' + esc(typeof v === 'number' ? String(v).replace('.', ',') : v) + '"></td>';
+    }).join('') + '<td><button class="second" data-del title="Usuń stint">×</button></td></tr>';
+  }).join('');
+  $('drvlist').innerHTML = drv.map(function (d) { return '<option value="' + esc(d) + '">'; }).join('');
+  $('plan-rows').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); }; });
+}
+function readPlan() {
+  var out = [];
+  $('plan-rows').querySelectorAll('tr').forEach(function (tr) {
+    var r = {};
+    tr.querySelectorAll('input').forEach(function (i) {
+      var k = i.dataset.k, v = i.value.trim();
+      r[k] = (k === 'driver' || k === 'service') ? v : num(v);
+    });
+    if (r.n) out.push(r);
+  });
+  return out.sort(function (a, b) { return a.n - b.n; });
+}
+$('b-addrow').onclick = function () {
+  var rows = readPlan(), last = rows[rows.length - 1] || { n: 0, laps: 11, stopS: 60, service: 'Paliwo' };
+  rows.push({ n: last.n + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: last.stopS, service: last.service });
+  editPlan(rows);
+};
+$('b-plan').onclick = function () {
+  T('plan').set(readPlan()).then(function () { flash('plan-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
+};
+$('b-tsv').onclick = function () {
+  var rows = [];
+  $('tsv').value.split(/\r?\n/).forEach(function (line) {
+    var c = line.split('\t'); var n = num(c[0]);
+    if (!n || n <= 0 || n > 200) return;
+    rows.push({ n: n, laps: num(c[1]) || 0, offsetMin: num(c[2]) || 0, driver: (c[3] || '').trim(), lapsActual: num(c[6]),
+                stopS: num(c[16]) || 60, service: /META/i.test(c[7] || '') ? 'META' : (c[22] || '').trim() });
+  });
+  $('tsv-ok').textContent = rows.length ? 'Wczytano ' + rows.length + ' stintów – sprawdź i kliknij „Zapisz plan”.' : 'Nie znalazłem stintów (pierwsza kolumna = numer stintu).';
+  if (rows.length) editPlan(rows);
+};
+
+// ------------------------------------------------------------------ zespół: kierowcy, kod, QR
+function teamInfo() {
+  $('t-name').textContent = S.meta.name || '—';
+  $('t-code').textContent = CODE || '—';
+  var w = S.worker || {}, on = w.t && now() - w.t < 45000;
+  $('t-worker').textContent = on ? 'online' + (w.discord ? ', Discord' : '') + (w.ai ? ', AI' : '') + (w.stt ? ', mowa' : '') :
+    (w.t ? 'offline (ostatnio ' + hhmm(w.t) + ')' : 'jeszcze nie łączył się');
+  var join = location.origin + location.pathname + '?team=' + CODE;
+  if ($('join-link').value !== join) {
+    $('join-link').value = join;
+    $('qr').innerHTML = '';
+    if (window.QRCode) new QRCode($('qr'), { text: join, width: 168, height: 168 });
+  }
+  $('obs-link2').value = S.meta.obs ? location.origin + location.pathname + '?obs=' + S.meta.obs : '';
+}
+$('b-copyjoin').onclick = function () { copy($('join-link').value); };
+$('b-copyobs').onclick = function () { copy($('obs-link2').value); };
+$('b-logout').onclick = function () { lsSet('tab', null); firebase.auth().signOut().then(function () { location.reload(); }); };
+
+function editDrivers(rows) {
+  if (!rows && document.activeElement && $('drivers').contains(document.activeElement)) return;
+  rows = rows || ((S.settings || {}).drivers || []).filter(Boolean);
+  $('drivers').innerHTML = rows.map(function (d) {
+    return '<tr><td><input data-k="name" value="' + esc(d.name || '') + '"></td><td><input data-k="topic" value="' + esc(d.topic || '') +
+      '" placeholder="np. pwc-' + rnd(4) + '"></td><td><button class="second" data-test>Test</button></td><td><button class="second" data-del>×</button></td></tr>';
+  }).join('');
+  $('drivers').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); }; });
+  $('drivers').querySelectorAll('[data-test]').forEach(function (b) {
+    b.onclick = function () {
+      var tr = b.closest('tr'), topic = tr.querySelector('[data-k=topic]').value.trim(), name = tr.querySelector('[data-k=name]').value.trim();
+      if (!topic) return alert('Wpisz temat ntfy.');
+      fetch('https://ntfy.sh/', { method: 'POST', body: JSON.stringify({ topic: topic, title: 'Pit Wall Crew – test', message: 'Działa! Tak przyjdzie powiadomienie przed zmianą, ' + (name || 'kierowco') + '.', tags: ['checkered_flag'] }) })
+        .then(function (r) { b.textContent = r.ok ? 'Wysłano ✓' : 'Błąd'; }).catch(function () { b.textContent = 'Błąd'; });
+    };
+  });
+}
+function readDrivers() {
+  var out = [];
+  $('drivers').querySelectorAll('tr').forEach(function (tr) {
+    var n = tr.querySelector('[data-k=name]').value.trim(), t = tr.querySelector('[data-k=topic]').value.trim();
+    if (n) out.push({ name: n, topic: t });
+  });
+  return out;
+}
+$('b-adddrv').onclick = function () { var r = readDrivers(); r.push({ name: '', topic: 'pwc-' + rnd(6) }); editDrivers(r); };
+$('b-drv').onclick = function () {
+  T('settings/drivers').set(readDrivers()).then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; draw(); })
+    .catch(function (e) { alert(authErr(e)); });
+};
+
+// ------------------------------------------------------------------ okrążenia
+var LAPS = [];
+function loadLaps() {
+  if (!T) return;
+  T('laps').orderByChild('t').limitToLast(600).once('value').then(function (s) {
+    LAPS = []; s.forEach(function (c) { LAPS.push(c.val()); });
+    LAPS.sort(function (a, b) { return (a.stint || 0) - (b.stint || 0) || (a.lap || 0) - (b.lap || 0); });
+    $('laps-n').textContent = '(' + LAPS.length + ')';
+    $('laps').innerHTML = LAPS.slice().reverse().map(function (l) {
+      return '<tr><td>' + esc(l.stint) + '</td><td>' + esc(l.lap) + '</td><td>' + esc(l.who) + '</td><td>' + esc(l.time_txt || lapTxt(l.time)) +
+        '</td><td>' + n1(l.fuel) + '</td><td>' + esc(l.ve) + '</td><td>' + esc(l.wet) + '</td><td>' + esc(l.track_temp) +
+        '</td><td>' + esc(l.compound) + '</td><td class="note">' + esc(l.notes) + '</td></tr>';
+    }).join('') || '<tr><td colspan="10" class="note">Brak okrążeń.</td></tr>';
+  }).catch(function (e) { $('laps').innerHTML = '<tr><td colspan="10" class="err">' + esc(authErr(e)) + '</td></tr>'; });
+}
+$('b-laps').onclick = loadLaps;
+$('b-csv').onclick = function () {
+  var cols = ['stint', 'lap', 'who', 'time', 'time_txt', 'fuel', 've', 'wet', 'track_temp', 'compound', 'notes'];
+  var csv = cols.join(';') + '\n' + LAPS.map(function (l) {
+    return cols.map(function (c) { var v = l[c] == null ? '' : String(l[c]); if (typeof l[c] === 'number') v = v.replace('.', ','); return '"' + v.replace(/"/g, '""') + '"'; }).join(';');
+  }).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
+  a.download = 'okrazenia_' + CODE + '.csv'; a.click();
+};
+
+// ------------------------------------------------------------------ pamięć
+function drawMem(obj) {
+  var rows = Object.keys(obj).map(function (k) { var r = obj[k]; r.id = k; return r; }).sort(function (a, b) { return (b.t || 0) - (a.t || 0); });
+  $('mem').innerHTML = rows.map(function (r) {
+    return '<tr><td>' + esc(r.when || '') + '</td><td>' + esc(r.who) + '</td><td>' + esc(r.track || 'każdy') + '</td><td>' + esc(r.text) +
+      '</td><td><button class="second" data-id="' + esc(r.id) + '" title="Usuń">×</button></td></tr>';
+  }).join('') || '<tr><td colspan="5" class="note">Brak notatek.</td></tr>';
+  $('mem').querySelectorAll('[data-id]').forEach(function (b) {
+    b.onclick = function () { if (confirm('Usunąć notatkę?')) T('memory/' + b.dataset.id).remove(); };
+  });
+}
+$('b-mem').onclick = function () {
+  var txt = $('m-text').value.trim(); if (!txt) return;
+  T('memory').push({ t: now(), when: stamp(), who: $('kto').value || 'zespół',
+                     track: $('m-track').value.trim(), car: '', text: txt.slice(0, 300) })
+    .then(function () { $('m-text').value = ''; }).catch(function (e) { alert(authErr(e)); });
+};
+
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "teams": {
+      "$code": {
+        ".read": "auth != null && auth.token.email == $code + '@pitwallcrew.team'",
+        ".write": "auth != null && auth.token.email == $code + '@pitwallcrew.team'",
+        "msgs": { ".indexOn": ["t"] },
+        "laps": { ".indexOn": ["t"] },
+        "memory": { ".indexOn": ["t"] }
+      }
+    },
+    "obs": {
+      "$tok": {
+        ".read": true,
+        ".write": "auth != null && auth.token.email.endsWith('@pitwallcrew.team') && (!data.exists() || data.child('team').val() + '@pitwallcrew.team' == auth.token.email)"
+      }
+    }
+  }
+}
