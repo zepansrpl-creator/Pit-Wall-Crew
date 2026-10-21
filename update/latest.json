@@ -1,7 +1,7 @@
 {
- "version": "3.7.4",
- "sha256": "0210776e4f058047b13b29635a36f092567337c9fd70656851155cd2bc88c4a6",
- "size": 552132,
+ "version": "3.7.5",
+ "sha256": "a49352750671d81886cc1b71186f661a489820db32e141d4368e32ea3d46a539",
+ "size": 552812,
  "url": "PitWallCrew.zip",
- "notes": "- Zjazd do boksu bez dużego zapasu: inżynier wskazuje ostatnie okrążenie, na które starczy energii (paliwa),\n  tak żeby przy wjeździe do boksu zostało cokolwiek (0,2% energii albo 0,3 l paliwa). Wcześniej zostawiał ok. 0,3\n  okrążenia zapasu, przez co zjazd wypadał często o okrążenie za wcześnie."
+ "notes": "- Gdy do planowanej długości stintu brakuje energii (paliwa) tylko trochę (oszczędzanie do 3%), inżynier i ściana\n  boksów trzymają się zjazdu z planu i podają cel zużycia, np. „za 10 okr. – wg planu zużycie max 9,07% / okr.”,\n  zamiast skracać stint o okrążenie."
 }
