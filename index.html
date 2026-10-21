@@ -136,7 +136,11 @@
   .scroll { overflow-x: auto; }
   .btnrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
   details summary { cursor: pointer; }
-  #obs-box { display: none !important; }   /* link dla obserwatorów jest w zakładce Zespół */
+  #obs-box { display: none !important; }
+  #map { width: 100%; height: clamp(260px, 40vw, 480px); display: block; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  button.mini { padding: 3px 9px; font-size: 11px; margin-left: 8px; text-transform: none; letter-spacing: 0; vertical-align: 1px; }   /* link dla obserwatorów jest w zakładce Zespół */
   ::-webkit-scrollbar { width: 10px; height: 10px; } ::-webkit-scrollbar-thumb { background: #2a2f3a; border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
 </style>
 </head>
@@ -233,6 +237,12 @@
   </section>
    </div>
   </div>
+  <section class="wide" id="map-box" style="display:none">
+    <h2>Mapa toru <span class="note" id="map-note"></span>
+      <button class="second mini" id="map-flip" type="button" title="Odbij mapę, jeśli tor wygląda jak w lustrze">⇋ odbij</button></h2>
+    <svg id="map" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="map-legend" class="legend"></div>
+  </section>
   <section class="wide">
     <h2>Rywale w klasie <span class="note">· 4 przed i 4 za · „zjazd za” i opony to szacunek</span></h2>
     <table>
@@ -680,6 +690,7 @@ function draw() {
     msgs: S.msgs, kierowcy: drv, obs: S.meta.obs
   });
   drawGrafik2(g);
+  mapData(live);
 }
 
 // ------------------------------------------------------------------ obserwator
@@ -697,6 +708,7 @@ function drawObs() {
   var g = o.grafik || {}, live = o.live || null;
   render({ ok: true, widz: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
            laptop: {}, feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
+  mapData(live);
 }
 
 // ------------------------------------------------------------------ zakładki
@@ -924,6 +936,77 @@ $('b-mem').onclick = function () {
                      track: $('m-track').value.trim(), car: '', text: txt.slice(0, 300) })
     .then(function () { $('m-text').value = ''; }).catch(function (e) { alert(authErr(e)); });
 };
+
+// ------------------------------------------------------------------ mapa toru
+var MAP = { key: '', pts: null, live: null, recv: 0, flip: lsGet('mapflip') === '1', loading: '' };
+var MAP_COLORS = ['#f5b83d', '#5fb3ff', '#b99cff', '#3ddc84', '#ff8a3d', '#ff6fb5'];
+function mapData(live) {
+  var m = live && live.state && live.state.map;
+  if (!m || !m.key || !m.cars) { $('map-box').style.display = 'none'; return; }
+  if (MAP.live !== m) { MAP.live = m; MAP.recv = now(); }
+  if (m.key !== MAP.key) {
+    MAP.key = m.key; MAP.pts = null;
+    var src = TRYB === 'widz' ? ((S.obs && S.obs.tracks) || {})[m.key] : null;
+    if (src) mapSetTrack(src);
+    else if (T && MAP.loading !== m.key) {
+      MAP.loading = m.key;
+      T('tracks/' + m.key).once('value').then(function (s) { if (s.val()) mapSetTrack(s.val()); });
+    }
+  } else if (!MAP.pts && TRYB === 'widz') {
+    var src2 = ((S.obs && S.obs.tracks) || {})[m.key]; if (src2) mapSetTrack(src2);
+  }
+  $('map-box').style.display = MAP.pts ? '' : 'none';
+}
+function mapSetTrack(rec) {
+  var p = (rec.points || []).map(function (q) { return [q[0], -q[1]]; });
+  if (p.length < 50) return;
+  MAP.raw = p; MAP.name = rec.track || '';
+  mapBuild();
+}
+function mapBuild() {
+  var p = MAP.raw; if (!p) return;
+  if (MAP.flip) p = p.map(function (q) { return [-q[0], q[1]]; });
+  var xs = p.map(function (q) { return q[0]; }), ys = p.map(function (q) { return q[1]; });
+  var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  var w = x1 - x0, h = y1 - y0, pad = Math.max(w, h) * 0.06;
+  MAP.k = Math.max(w, h) / 1000;
+  var svg = $('map');
+  svg.setAttribute('viewBox', [x0 - pad, y0 - pad, w + 2 * pad, h + 2 * pad].join(' '));
+  MAP.pts = p;
+  var d = 'M' + p.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('L') + 'Z';
+  var a = MAP.pts[0], b = MAP.pts[2], dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1, L = 18 * MAP.k;
+  var s = [a[0] - dy / dl * L, a[1] + dx / dl * L], s2 = [a[0] + dy / dl * L, a[1] - dx / dl * L];
+  svg.innerHTML = '<path d="' + d + '" fill="none" stroke="#2a2f3a" stroke-width="' + (22 * MAP.k) + '" stroke-linejoin="round"/>' +
+    '<path d="' + d + '" fill="none" stroke="#4a515f" stroke-width="' + (6 * MAP.k) + '" stroke-linejoin="round"/>' +
+    '<line x1="' + s[0] + '" y1="' + s[1] + '" x2="' + s2[0] + '" y2="' + s2[1] + '" stroke="#fff" stroke-width="' + (5 * MAP.k) + '"/>' +
+    '<g id="map-cars"></g>';
+  $('map-note').textContent = MAP.name ? '· ' + MAP.name : '';
+  $('map-box').style.display = '';
+  mapTick();
+}
+function mapAt(f) {
+  var n = MAP.pts.length, x = ((f % 1) + 1) % 1 * n, i = Math.floor(x) % n, j = (i + 1) % n, t = x - Math.floor(x);
+  return [MAP.pts[i][0] + (MAP.pts[j][0] - MAP.pts[i][0]) * t, MAP.pts[i][1] + (MAP.pts[j][1] - MAP.pts[i][1]) * t];
+}
+function mapTick() {
+  if (!MAP.pts || !MAP.live || $('map-box').style.display === 'none') return;
+  var m = MAP.live, k = MAP.k, dt = Math.min(8, (now() - MAP.recv) / 1000);
+  var cars = m.cars.slice().sort(function (a, b) { return (a[5] - b[5]) || (b[1] - a[1]); });   // my na wierzchu
+  var html = '';
+  cars.forEach(function (c) {
+    var f = c[0] + (!c[3] && c[4] > 0 ? dt / c[4] : 0), xy = mapAt(f), own = c[1] === 0, me = c[5] === 1;
+    var col = MAP_COLORS[c[1] % MAP_COLORS.length], r = (me ? 17 : own ? 13 : 7) * k, op = c[3] ? 0.35 : 1;
+    if (me) html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + (r + 6 * k) + '" fill="none" stroke="#ff3b30" stroke-width="' + (4 * k) + '"/>';
+    html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + r + '" fill="' + (me ? '#ff3b30' : col) + '" opacity="' + op + '" stroke="#0b0c0f" stroke-width="' + (2 * k) + '"/>';
+    if (own) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="' + (me ? '#fff' : '#111') + '" opacity="' + op + '">' + c[2] + '</text>';
+  });
+  var g = $('map-cars'); if (g) g.innerHTML = html;
+  $('map-legend').innerHTML = (m.cls || []).map(function (c, i) {
+    return '<span><i style="background:' + (i === 0 ? MAP_COLORS[0] : MAP_COLORS[i % MAP_COLORS.length]) + '"></i>' + esc(c) + (i === 0 ? ' (nasza klasa, numer = pozycja)' : '') + '</span>';
+  }).join('') + '<span><i style="background:#ff3b30"></i>my</span><span class="note">półprzezroczyste = w alei</span>';
+}
+setInterval(mapTick, 250);
+$('map-flip').onclick = function () { MAP.flip = !MAP.flip; lsSet('mapflip', MAP.flip ? '1' : null); mapBuild(); };
 
 boot();
 </script>
