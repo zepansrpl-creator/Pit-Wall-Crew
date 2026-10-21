@@ -1,7 +1,7 @@
 {
- "version": "3.7.0",
- "sha256": "c8e70637fe79220eea7e5b1b5435d2e0cadd827785d30dc1836d965773e41e11",
- "size": 549642,
+ "version": "3.7.1",
+ "sha256": "0e85225932c9db3affd9bfa18a1d3788be713d9ce48a8e311afbfb45822c8f4e",
+ "size": 550325,
  "url": "PitWallCrew.zip",
- "notes": "- Prędkość maksymalna innych aut: „jaka prędkość maksymalna innych aut?”, „ile ma na prostej auto przede mną / za mną?”,\n  „vmax hypercarów?”, „moja prędkość maksymalna?”. Inżynier mierzy maksimum każdego auta na każdym okrążeniu\n  i porównuje z Twoim („o 6 szybciej od Ciebie”)."
+ "notes": "- „Za ile pierwszy hypercar będzie dublował?” / „kiedy dogoni mnie LMP2?”: szacunek bez limitu czasu – pierwsze\n  auto szybszej klasy, za ile dojedzie, ile jest za Tobą na torze, i następne (wcześniej tylko najbliższe 12 sekund)."
 }
