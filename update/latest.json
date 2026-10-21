@@ -1,7 +1,7 @@
 {
- "version": "3.7.5",
- "sha256": "a49352750671d81886cc1b71186f661a489820db32e141d4368e32ea3d46a539",
- "size": 552812,
+ "version": "3.7.6",
+ "sha256": "3c2606e44d731701842e787b15eee4dacd561f9071814cf5f2a2bb4d6939cef1",
+ "size": 553989,
  "url": "PitWallCrew.zip",
- "notes": "- Gdy do planowanej długości stintu brakuje energii (paliwa) tylko trochę (oszczędzanie do 3%), inżynier i ściana\n  boksów trzymają się zjazdu z planu i podają cel zużycia, np. „za 10 okr. – wg planu zużycie max 9,07% / okr.”,\n  zamiast skracać stint o okrążenie."
+ "notes": "- Naprawione: zapytania do wewnętrznego interfejsu gry szły na „localhost” – Windows najpierw próbował IPv6\n  i każde zapytanie czekało 1,5–2 s (część się nie udawała). Teraz 127.0.0.1, jak w menu gry: dane z gry\n  (hamulce, energia rywali, menu boksu) są pewniejsze.\n- Dziennik przycięć: przy każdym zdarzeniu także programy, które najbardziej zajmują procesor, i auta w promieniu\n  150 m (sprawdzenie, czy przycina, gdy dojeżdża szybsze auto). Doinstaluje się mała biblioteka psutil."
 }
