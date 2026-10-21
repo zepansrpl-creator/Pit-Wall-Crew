@@ -803,6 +803,16 @@ function startObs(tok) {
 function drawObs() {
   var o = S.obs; if (!o || document.hidden) return;
   var g = o.grafik || {}, live = o.live || null;
+  // stary wyścig (nikt nie jedzie od 3 min): nie pokazujemy go jako „na żywo”
+  var stale = !live || now() - (live._t || 0) > 180000;
+  if (stale) {
+    var last = live && live._t ? new Date(live._t) : null;
+    render({ ok: true, widz: true, live: null, age: null, laptop: {}, feeds: [], grafik: [], zrodlo: '', raceEnd: '', msgs: [] });
+    mapData(null);
+    pill($('st-live'), 'brak wyścigu na żywo' + (last ? ' · ostatnio ' + last.toLocaleDateString('pl-PL') + ' ' +
+         last.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : ''), 'warn');
+    return;
+  }
   render({ ok: true, widz: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
            laptop: {}, feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
   mapData(live);

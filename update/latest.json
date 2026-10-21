@@ -1,7 +1,7 @@
 {
- "version": "3.8.9",
- "sha256": "58d6582c861b297443bdd9b23e48c7142c7a34f21e46d37a52ae134ebdccc633",
- "size": 564617,
+ "version": "3.9.0",
+ "sha256": "c7e73fde2210fbe3b02b6c78479f75295c5317ac75e6449b6c02fc8814e43271",
+ "size": 565123,
  "url": "PitWallCrew.zip",
- "notes": "- Szybsze odpowiedzi głosem: długie pierwsze zdanie zaczyna się krótkim fragmentem (do pierwszego przecinka),\n  a kolejne zdania są przygotowywane od razu równolegle, nie dopiero w trakcie mówienia poprzedniego.\n- „Radiotest” (pisane łącznie przez rozpoznawanie mowy) rozpoznawany jako test radia.\n- Dziennik: czas przygotowania każdego zdania (synteza głosu)."
+ "notes": "- Link dla obserwatorów: gdy nie ma wyścigu, pokazuje trening / kwalifikacje kierowcy, który jedzie (wcześniej\n  stary wyścig). Gdy nikt nie jedzie od 3 minut – „brak wyścigu na żywo · ostatnio …” zamiast starych danych."
 }
