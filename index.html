@@ -142,7 +142,7 @@
   .btnrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
   details summary { cursor: pointer; }
   #obs-box { display: none !important; }
-  #map { width: 100%; height: clamp(260px, 40vw, 480px); display: block; }
+  #map { width: 100%; height: auto; max-height: 80vh; display: block; }
   .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin-top: 6px; }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
   button.mini { padding: 3px 9px; font-size: 11px; margin-left: 8px; text-transform: none; letter-spacing: 0; vertical-align: 1px; }   /* link dla obserwatorów jest w zakładce Zespół */
@@ -243,12 +243,6 @@
   </section>
    </div>
   </div>
-  <section class="wide" id="map-box" style="display:none">
-    <h2>Mapa toru <span class="note" id="map-note"></span>
-      <button class="second mini" id="map-flip" type="button" title="Odbij mapę, jeśli tor wygląda jak w lustrze">⇋ odbij</button></h2>
-    <svg id="map" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="map-legend" class="legend"></div>
-  </section>
   <section class="wide">
     <h2>Rywale w klasie <span class="note">· 4 przed i 4 za · „zjazd za” i opony to szacunek</span></h2>
     <table>
@@ -279,7 +273,13 @@
       <button id="quiet" type="button" class="second" title="Odpowiedź tylko tutaj, kierowca jej nie usłyszy">Zapytaj (tylko tekst)</button>
       <button id="note" type="button" class="second" title="Notatka, którą AI inżyniera będzie brać pod uwagę (zakładka „Pamięć zespołu”)">Do pamięci</button>
     </form>
-    <p class="note">„Do kierowcy”: inżynier przeczyta wiadomość głosem. „Zapytaj inżyniera”: odpowiedź usłyszycie na Discordzie. „Zapytaj (tylko tekst)”: odpowiedź pojawi się tylko tutaj, kierowca jej nie usłyszy. „Do pamięci”: notatka dla AI inżyniera (np. „ABS 9 za mocny w deszczu”), widoczna w zakładce „Pamięć zespołu”.</p>
+    <p class="note">„Do kierowcy”: inżynier przeczyta wiadomość głosem. „Zapytaj inżyniera”: odpowiedź usłyszycie w radiu zespołu (aplikacje i „🔊 Słuchaj inżyniera”). „Zapytaj (tylko tekst)”: odpowiedź pojawi się tylko tutaj, kierowca jej nie usłyszy. „Do pamięci”: notatka dla AI inżyniera (np. „ABS 9 za mocny w deszczu”), widoczna w zakładce „Pamięć zespołu”.</p>
+  </section>
+  <section class="wide" id="map-box" style="display:none">
+    <h2>Mapa toru <span class="note" id="map-note"></span>
+      <button class="second mini" id="map-flip" type="button" title="Odbij mapę, jeśli tor wygląda jak w lustrze">⇋ odbij</button></h2>
+    <svg id="map" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="map-legend" class="legend"></div>
   </section>
 </main>
 
@@ -344,6 +344,7 @@
     <p class="note">Do programu kierowcy (okno ustawień → Zespół) i serwera AI wpisuje się ten kod i hasło zespołu. Hasła nie ma w kodzie QR – podajcie je sobie prywatnie.</p>
     <div class="qr" id="qr"></div>
     <form onsubmit="return false"><input id="join-link" readonly><button id="b-copyjoin" type="button" class="second">Kopiuj link</button></form>
+    <p class="note" style="margin:12px 0 4px"><b>Link dla widzów</b> – tylko podgląd na żywo (bez radia, planu i hasła). Możesz go dać każdemu.</p>
     <form onsubmit="return false"><input id="obs-link2" readonly><button id="b-copyobs" type="button" class="second">Kopiuj link dla obserwatorów</button></form>
     <div class="btnrow"><button id="b-logout" class="second">Wyloguj na tym urządzeniu</button></div>
   </section>
@@ -1125,9 +1126,18 @@ function mapSetTrack(rec) {
 function mapBuild() {
   var p = MAP.raw; if (!p) return;
   if (MAP.flip) p = p.map(function (q) { return [-q[0], q[1]]; });
+  // obrót: dłuższa oś toru poziomo na szerokim ekranie, pionowo na wąskim (telefon) – bez pustych pól
+  var mx = 0, my = 0; p.forEach(function (q) { mx += q[0]; my += q[1]; }); mx /= p.length; my /= p.length;
+  var sxx = 0, syy = 0, sxy = 0;
+  p.forEach(function (q) { var a = q[0] - mx, b = q[1] - my; sxx += a * a; syy += b * b; sxy += a * b; });
+  var ang = 0.5 * Math.atan2(2 * sxy, sxx - syy);            // kierunek dłuższej osi
+  var wide = ($('map-box').clientWidth || window.innerWidth) > 640;
+  var rot = (wide ? 0 : Math.PI / 2) - ang, cr = Math.cos(rot), sr = Math.sin(rot);
+  p = p.map(function (q) { var a = q[0] - mx, b = q[1] - my; return [a * cr - b * sr, a * sr + b * cr]; });
+  MAP.wide = wide;
   var xs = p.map(function (q) { return q[0]; }), ys = p.map(function (q) { return q[1]; });
   var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
-  var w = x1 - x0, h = y1 - y0, pad = Math.max(w, h) * 0.06;
+  var w = x1 - x0, h = y1 - y0, pad = Math.max(w, h) * 0.035;
   MAP.k = Math.max(w, h) / 1000;
   var svg = $('map');
   svg.setAttribute('viewBox', [x0 - pad, y0 - pad, w + 2 * pad, h + 2 * pad].join(' '));
@@ -1168,6 +1178,11 @@ function mapTick() {
   }).join('') + '<span><i style="background:#ff3b30"></i>my</span><span class="note">półprzezroczyste = w alei</span>';
 }
 setInterval(mapTick, 250);
+window.addEventListener('resize', function () {
+  if (!MAP.raw) return;
+  var wide = ($('map-box').clientWidth || window.innerWidth) > 640;
+  if (wide !== MAP.wide) mapBuild();
+});
 $('map-flip').onclick = function () { MAP.flip = !MAP.flip; lsSet('mapflip', MAP.flip ? '1' : null); mapBuild(); };
 
 boot();
