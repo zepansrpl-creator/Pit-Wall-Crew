@@ -1,7 +1,7 @@
 {
- "version": "3.8.3",
- "sha256": "ce7f93a65f7130911606221972767aa4eb77844902109b9f816a8ffb8760dd6f",
- "size": 559301,
+ "version": "3.8.4",
+ "sha256": "ffe7cc8d80ce6d1a5e8c96e6a1838f1360d6e38b89e8b6778a34d781ab3dfd95",
+ "size": 559701,
  "url": "PitWallCrew.zip",
- "notes": "- Naprawione: błąd „[głos] WinError 32 – plik używany przez inny proces” przy zapisie gotowego komunikatu\n  (gdy ten sam komunikat był właśnie odtwarzany) – teraz program po prostu używa gotowego pliku."
+ "notes": "- Gdy nagranie z przycisku mówienia jest ciszą (mikrofon wyciszony na słuchawkach albo wybrany inny),\n  inżynier mówi „Nie słyszę Cię. Sprawdź, czy mikrofon nie jest wyciszony.” zamiast odpowiadać na zmyślone\n  przez rozpoznawanie mowy „Dziękuję.”."
 }
