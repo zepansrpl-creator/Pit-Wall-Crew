@@ -1,7 +1,7 @@
 {
- "version": "3.4.0",
- "sha256": "9163aa617b93319e4ec726051877d318786c788328f3690301741966c7b8c9f4",
- "size": 521819,
+ "version": "3.5.0",
+ "sha256": "af9b08b9fd35c8a82a5b653471efa5ff0c813523835912f485e556090ec69916",
+ "size": 532789,
  "url": "PitWallCrew.zip",
- "notes": "- Automatyczne aktualizacje: aplikacja przy starcie (zanim uruchomi inżyniera, nigdy w trakcie jazdy) sprawdza nową wersję\n  na stronie ściany boksów, pobiera ją, sprawdza sumę kontrolną, podmienia pliki i uruchamia się ponownie. Ustawienia,\n  dane i nagrania zostają, poprzednie pliki w folderze backup. Serwer AI aktualizuje się przy uruchomieniu.\n  Wyłączenie i „Sprawdź aktualizacje teraz”: Zaawansowane."
+ "notes": "- AI w chmurze Groq (darmowe): rozpoznawanie mowy (Whisper) i odpowiedzi AI prosto z programu kierowcy – bez serwera AI\n  i bez obciążania komputera gracza, szybciej niż przez serwer. Klucz wkleja się raz na ścianie boksów (Zespół → AI zespołu).\n  Gdy Groq nie odpowiada: serwer AI zespołu (jeśli działa), potem Google.\n- Radio zespołu zamiast bota Discord: kto nie jedzie, słyszy komunikaty inżyniera we własnej aplikacji (tym samym głosem);\n  pilne ostrzeżenia słyszy tylko kierowca. Na ścianie boksów „🔊 Słuchaj inżyniera” (głos przeglądarki, też na telefonie).\n- Grafik i powiadomienia liczy jedna z włączonych aplikacji zespołu – serwer AI nie jest potrzebny nawet przed startem.\n- Bot Discord i serwer AI zostają jako opcja (domyślnie wyłączone).\n- Na pulpicie tylko jeden skrót „Pit Wall Crew” (test bez gry i ustawienia są w aplikacji)."
 }
