@@ -1,7 +1,7 @@
 {
- "version": "3.5.1",
- "sha256": "eb03ebc9c5e82b1a27d9e1652c777a846051b4946609b5c20695ec709f5cd0df",
- "size": 533442,
+ "version": "3.5.2",
+ "sha256": "e11284867a23ce4c780de678da983b116cf9cd125515898ce9441fa2d3640304",
+ "size": 533713,
  "url": "PitWallCrew.zip",
- "notes": "- Groq: aktualne darmowe modele (gpt-oss-120b, Qwen, gpt-oss-20b…). Gdy jeden model wyczerpie dzienny limit,\n  AI przechodzi na następny (każdy ma osobny limit) – więcej pytań dziennie."
+ "notes": "- Każdy kierowca może mieć własny klucz Groq (Zaawansowane → Własny klucz Groq) = własny limit. Ma pierwszeństwo,\n  a po wyczerpaniu limitu program sam przechodzi na klucz zespołu ze ściany boksów."
 }
