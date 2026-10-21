@@ -487,6 +487,8 @@ function render(v) {
 
   var ns = st.next_stop_laps != null ? st.next_stop_laps : (st.laps_left != null ? Math.floor(st.laps_left) : null);
   $('stop').textContent = ns == null ? '—' : (ns <= 0 ? 'w tym okrążeniu' : 'za ' + ns + ' okr.');
+  if (st.save_to_plan && ns != null) $('stop').innerHTML = esc($('stop').textContent) +
+    '<div class="note" style="font-size:13px;font-family:inherit">wg planu – zużycie max ' + esc(st.save_to_plan) + ' / okr.</div>';
   var t = st.targets || {};
   $('ve').textContent = st.ve_per_lap != null ? n1(st.ve_per_lap) + '% / okr.' + (t.ve_per_lap ? ' (plan ' + n1(t.ve_per_lap) + '%)' : '') : '—';
   $('fuel').textContent = st.fuel_per_lap != null ? n1(st.fuel_per_lap) + ' l / okr.' + (t.fuel_per_lap ? ' (plan ' + n1(t.fuel_per_lap) + ')' : '') : '—';
