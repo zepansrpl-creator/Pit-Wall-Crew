@@ -1,7 +1,7 @@
 {
- "version": "3.6.6",
- "sha256": "1d3c4528fcf783fe954a102847e3081364b7509807f8feb099b5372749513e1c",
- "size": 546124,
+ "version": "3.6.7",
+ "sha256": "5f6add723f0842d5abd11307b7264e5b990c52d89389994873e62053f16deab0",
+ "size": 546597,
  "url": "PitWallCrew.zip",
- "notes": "- AI odpowiada też na pytania niezwiązane z wyścigiem (wiedza ogólna, historia, luźna rozmowa) zamiast\n  „nie mam danych o bieżącym stanie wyścigu”. Liczby o aucie i wyścigu dalej tylko z danych gry."
+ "notes": "- „Cisza”, „cicho”, „bądź cicho”, „nie gadaj” (także bez imienia inżyniera) = „Ok.” i całkowita cisza, także bez\n  ostrzeżeń o dublowaniu, aż do następnego naciśnięcia przycisku. Tryb „tylko pilne ostrzeżenia i odpowiedzi”\n  włącza teraz komenda „tylko pilne” / „mów tylko, gdy pytam”.\n- Krótkie potwierdzenia komend bez wtrąceń typu „Słuchaj, dobra, …”."
 }
