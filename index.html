@@ -676,8 +676,11 @@ function feedLabel(k, f) {
 
 function botOnline() { var w = S.worker || {}; return !!(w.t && now() - w.t < 45000 && w.discord); }
 
+document.addEventListener('visibilitychange', function () {   // ukryta karta: nic nie rysujemy (bateria telefonu)
+  if (!document.hidden) { if (TRYB === 'widz') drawObs(); else draw(); }
+});
 function draw() {
-  if (TRYB === 'widz') return;
+  if (TRYB === 'widz' || document.hidden) return;
   var w = S.worker || {}, on = !!(w.t && now() - w.t < 45000);
   var live = S.live, g = S.grafik || {};
   var feeds = Object.keys(S.feeds).filter(function (k) { return now() - (S.feeds[k].t || 0) < 6 * 3600000; })
@@ -704,7 +707,7 @@ function startObs(tok) {
   setInterval(drawObs, 5000);
 }
 function drawObs() {
-  var o = S.obs; if (!o) return;
+  var o = S.obs; if (!o || document.hidden) return;
   var g = o.grafik || {}, live = o.live || null;
   render({ ok: true, widz: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
            laptop: {}, feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
@@ -989,7 +992,7 @@ function mapAt(f) {
   return [MAP.pts[i][0] + (MAP.pts[j][0] - MAP.pts[i][0]) * t, MAP.pts[i][1] + (MAP.pts[j][1] - MAP.pts[i][1]) * t];
 }
 function mapTick() {
-  if (!MAP.pts || !MAP.live || $('map-box').style.display === 'none') return;
+  if (document.hidden || !MAP.pts || !MAP.live || $('map-box').style.display === 'none') return;
   var m = MAP.live, k = MAP.k, dt = Math.min(8, (now() - MAP.recv) / 1000);
   var cars = m.cars.slice().sort(function (a, b) { return (a[5] - b[5]) || (b[1] - a[1]); });   // my na wierzchu
   var html = '';
@@ -1001,6 +1004,9 @@ function mapTick() {
     if (own) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="' + (me ? '#fff' : '#111') + '" opacity="' + op + '">' + c[2] + '</text>';
   });
   var g = $('map-cars'); if (g) g.innerHTML = html;
+  var lk = (m.cls || []).join('|');
+  if (lk === MAP.legend) return;
+  MAP.legend = lk;
   $('map-legend').innerHTML = (m.cls || []).map(function (c, i) {
     return '<span><i style="background:' + (i === 0 ? MAP_COLORS[0] : MAP_COLORS[i % MAP_COLORS.length]) + '"></i>' + esc(c) + (i === 0 ? ' (nasza klasa, numer = pozycja)' : '') + '</span>';
   }).join('') + '<span><i style="background:#ff3b30"></i>my</span><span class="note">półprzezroczyste = w alei</span>';
