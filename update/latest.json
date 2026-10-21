@@ -1,7 +1,7 @@
 {
- "version": "3.7.2",
- "sha256": "2b17c7237e2c19cf0817baebe5678104f3cd84c913c197b4d0597a3426bf9ce8",
- "size": 551636,
+ "version": "3.7.3",
+ "sha256": "cf3ef210a5766fb534c82dd53fd16ba483f7b668b0f1343e2d7b0310794b0ec3",
+ "size": 551827,
  "url": "PitWallCrew.zip",
- "notes": "- „Porównaj temperatury opon i hamulców z tego okrążenia i 4. okrążenia po pitstopie” (także „… z poprzednim stintem”,\n  „… z okrążeniem 12”): hamulce przód/tył i opony przód/tył teraz wobec wskazanego okrążenia oraz rada,\n  czy przymknąć chłodzenie hamulców. Po zmianie chłodzenia na postoju to samo pytanie porówna z poprzednim stintem."
+ "notes": "- Ściana boksów, „Rywale w klasie”: nowa kolumna „Energia” – energia wirtualna rywali i nasza w %,\n  przy rywalu różnica do nas (np. „42% (+4)”)."
 }

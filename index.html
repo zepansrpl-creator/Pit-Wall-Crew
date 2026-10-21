@@ -246,7 +246,7 @@
   <section class="wide">
     <h2>Rywale w klasie <span class="note">· 4 przed i 4 za · „zjazd za” i opony to szacunek</span></h2>
     <table>
-      <thead><tr><th>Poz.</th><th>Kierowca</th><th>Odstęp</th><th class="hide-sm">Ostatnie</th><th>Tempo</th><th class="hide-sm">Dogoni / dogonisz</th><th>Zjazd za</th><th class="hide-sm">Postoje</th><th>Opony</th></tr></thead>
+      <thead><tr><th>Poz.</th><th>Kierowca</th><th>Odstęp</th><th class="hide-sm">Ostatnie</th><th>Tempo</th><th class="hide-sm">Dogoni / dogonisz</th><th>Energia</th><th>Zjazd za</th><th class="hide-sm">Postoje</th><th>Opony</th></tr></thead>
       <tbody id="rivals"></tbody>
     </table>
   </section>
@@ -517,13 +517,18 @@ function render(v) {
     var who = (r.drivers || []).filter(function (x) { return x.pace; });
     var tip = who.map(function (x) { return x.name + ' ' + lapTxt(x.pace) + ' (' + x.laps + ' okr.)'; }).join('\n');
     var catchTxt = r.catch ? (r.gap > 0 ? 'dogoni Cię za ~' : 'dogonisz za ~') + Math.round(r.catch) + ' okr.' : '—';
+    var veTxt = r.ve == null ? '—' : Math.round(r.ve) + '%';
+    if (r.ve != null && mine.ve != null && !r.me) {
+      var dv = r.ve - mine.ve;
+      if (Math.abs(dv) >= 1) veTxt += ' <span class="note">(' + (dv > 0 ? '+' : '−') + Math.round(Math.abs(dv)) + ')</span>';
+    }
     var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (postój ' + r.tyres.stop + ')' : 'bez zmiany (postój ' + r.tyres.stop + ')') : '—';
     return '<tr' + (r.me ? ' class="cur"' : '') + '><td>P' + r.pos + '</td><td title="' + esc(tip) + '">' + esc(r.name) +
            (who.length > 1 ? ' <span class="note">(' + who.length + ' kier.)</span>' : '') + '</td><td>' + gap +
            '</td><td class="hide-sm">' + lapTxt(r.last) + '</td><td>' + pace + '</td><td class="hide-sm">' + catchTxt +
-           '</td><td>' + pit + '</td><td class="hide-sm">' + (r.stops || 0) +
+           '</td><td>' + veTxt + '</td><td>' + pit + '</td><td class="hide-sm">' + (r.stops || 0) +
            '</td><td>' + ty + '</td></tr>';
-  }).join('') || '<tr><td colspan="9" class="note">Brak danych o rywalach (tylko w wyścigu, z inżynierem w nowej wersji).</td></tr>';
+  }).join('') || '<tr><td colspan="10" class="note">Brak danych o rywalach (tylko w wyścigu, z inżynierem w nowej wersji).</td></tr>';
 
   // kolor temperatury płynnie: niebieski (za zimna) → zielony (optimum) → czerwony (za gorąca)
   function tempColor(t, opt) {
