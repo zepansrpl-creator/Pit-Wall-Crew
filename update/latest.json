@@ -1,7 +1,7 @@
 {
- "version": "3.8.6",
- "sha256": "20e151aba7855bcb7e014c39f9a39b86a22915efc6fc1a5b641e9a87e4fa3588",
- "size": 562618,
+ "version": "3.8.7",
+ "sha256": "3a31a7f97c53c4f12b22ff9cb8bf4b95332c220570b35cf36c5bb05d4693194d",
+ "size": 562760,
  "url": "PitWallCrew.zip",
- "notes": "- Dublowanie: brak ostrzeżenia „LMP 2, 1 sekunda” o aucie szybszej klasy, które stoi albo wlecze się na torze\n  (wypadek, poza torem) i które właśnie minąłeś. Ostrzeżenie wraca, gdy to auto znów jedzie szybko i dojeżdża."
+ "notes": "- Wymowa: „hajperkar” zamiast angielskiego „hypercar” (w mowie; na ekranie bez zmian)."
 }
