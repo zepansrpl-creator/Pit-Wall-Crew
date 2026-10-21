@@ -1,7 +1,7 @@
 {
- "version": "3.7.7",
- "sha256": "8a0d66b4f68456f4e175988605bbe2d054ac3f1bfdf936be7e440197e5ad918a",
- "size": 555618,
+ "version": "3.8.0",
+ "sha256": "df77e3bbbdab8ed8774e76e1eb68059e2d8a67fe947a2c9c56f82fca94e86815",
+ "size": 557572,
  "url": "PitWallCrew.zip",
- "notes": "- Pytania wymagające analizy („jaka różnica vmax aut przede mną”, „porównaj…”, „dlaczego…”, „kto najszybszy…”,\n  „o ile…”) – gdy Groq działa, odpowiada AI z pełnymi danymi, a odpowiedź programu dostaje jako pewne liczby.\n  Gdy Groq nie odpowie, zostaje odpowiedź programu. Proste pytania („ile paliwa”) dalej od razu z programu.\n- AI dostaje więcej danych: auta w klasie (4 przed, 4 za) z pozycją, odstępem, prędkością maksymalną, energią\n  i ostatnim okrążeniem, najwyższą vmax w innych klasach i kiedy dojadą auta szybszej klasy."
+ "notes": "- AI odpowiada na (prawie) wszystkie pytania o wyścig, także te, których program nie przewidział. Gdy Groq działa,\n  każde pytanie (poza komendami: cisza, powtórz, zapamiętaj, przełączniki…) trafia do AI z pełnymi danymi,\n  a odpowiedź programu AI dostaje jako pewne liczby. Gdy AI nie zdąży w ok. 4 s – inżynier mówi odpowiedź programu.\n  Wyłączysz to w Zaawansowanych („AI odpowiada na wszystkie pytania”).\n- AI widzi znacznie więcej: całą stawkę (pozycje, odstępy, najlepsze czasy, postoje, boks, kary), postoje rywali,\n  szczegóły ostatnich 10 okrążeń (paliwo, energia, zużycie opon, wyjazdy, uderzenia, kierowca), flagi i kary,\n  uszkodzenia, zużycie hamulców i prognozę pogody z gry."
 }
