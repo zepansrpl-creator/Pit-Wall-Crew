@@ -1,7 +1,7 @@
 {
- "version": "3.7.3",
- "sha256": "cf3ef210a5766fb534c82dd53fd16ba483f7b668b0f1343e2d7b0310794b0ec3",
- "size": 551827,
+ "version": "3.7.4",
+ "sha256": "0210776e4f058047b13b29635a36f092567337c9fd70656851155cd2bc88c4a6",
+ "size": 552132,
  "url": "PitWallCrew.zip",
- "notes": "- Ściana boksów, „Rywale w klasie”: nowa kolumna „Energia” – energia wirtualna rywali i nasza w %,\n  przy rywalu różnica do nas (np. „42% (+4)”)."
+ "notes": "- Zjazd do boksu bez dużego zapasu: inżynier wskazuje ostatnie okrążenie, na które starczy energii (paliwa),\n  tak żeby przy wjeździe do boksu zostało cokolwiek (0,2% energii albo 0,3 l paliwa). Wcześniej zostawiał ok. 0,3\n  okrążenia zapasu, przez co zjazd wypadał często o okrążenie za wcześnie."
 }
