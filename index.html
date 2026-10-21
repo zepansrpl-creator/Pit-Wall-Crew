@@ -263,7 +263,7 @@
     <form onsubmit="return false"><input id="obs-link" readonly><button id="obs-copy" type="button" class="second">Kopiuj</button></form>
   </section>
   <section class="wide" id="radio-box">
-    <h2>Radio zespołu</h2>
+    <h2>Radio zespołu <button class="second mini" id="b-listen" type="button" title="Przeglądarka czyta komunikaty inżyniera na głos (bez pilnych – te słyszy tylko kierowca)">🔊 Słuchaj inżyniera</button></h2>
     <div class="msgs" id="msgs"></div>
     <form id="f" onsubmit="return false">
       <select id="kto" aria-label="Kto pisze"></select>
@@ -321,6 +321,17 @@
     <form onsubmit="return false"><input id="join-link" readonly><button id="b-copyjoin" type="button" class="second">Kopiuj link</button></form>
     <form onsubmit="return false"><input id="obs-link2" readonly><button id="b-copyobs" type="button" class="second">Kopiuj link dla obserwatorów</button></form>
     <div class="btnrow"><button id="b-logout" class="second">Wyloguj na tym urządzeniu</button></div>
+  </section>
+  <section>
+    <h2>AI zespołu (Groq)</h2>
+    <p class="note">Darmowe rozpoznawanie mowy i AI w chmurze – bez serwera i bez obciążania komputerów graczy.
+      Załóż darmowe konto na <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a>,
+      utwórz klucz (Create API Key) i wklej go tutaj. Klucz widzą tylko członkowie zespołu.</p>
+    <form onsubmit="return false">
+      <input id="groq-key" type="password" placeholder="gsk_…" autocomplete="off" spellcheck="false">
+      <button id="b-groq" type="button">Zapisz klucz</button>
+    </form>
+    <div class="note" id="groq-st"></div>
   </section>
   <section>
     <h2>Kierowcy i powiadomienia</h2>
@@ -636,13 +647,14 @@ function startTeam(code) {
   tab(lsGet('tab') || 'live');
   var onErr = function (e) { pill($('st-live'), authErr(e), 'bad'); };
   T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
-  T('settings').on('value', function (s) { S.settings = s.val() || {}; editSettings(); editDrivers(); draw(); }, onErr);
+  T('settings').on('value', function (s) { S.settings = s.val() || {}; editSettings(); editDrivers(); groqInfo(); draw(); }, onErr);
   T('plan').on('value', function (s) { S.plan = s.val() || []; editPlan(); }, onErr);
   T('worker').on('value', function (s) { S.worker = s.val() || {}; teamInfo(); draw(); });
   T('grafik').on('value', function (s) { S.grafik = s.val() || {}; draw(); });
   T('feeds').on('value', function (s) { S.feeds = s.val() || {}; pickFeed(); });
   T('msgs').orderByChild('t').limitToLast(25).on('value', function (s) {
     var a = []; s.forEach(function (c) { var m = c.val(); m.id = c.key; a.push(m); }); a.reverse(); S.msgs = a; draw();
+    speakNew(a);
   });
   T('memory').on('value', function (s) { drawMem(s.val() || {}); });
   setInterval(draw, 5000);
@@ -890,6 +902,44 @@ function readDrivers() {
   });
   return out;
 }
+function groqInfo() {
+  var k = (S.settings || {}).groqKey || '';
+  $('groq-st').innerHTML = k ? '<span class="ok-txt">Klucz zapisany (…' + esc(k.slice(-4)) + ')</span> – aplikacje zespołu użyją go same po kilku sekundach.'
+                             : 'Brak klucza – mowę rozpoznaje Google, a pytania spoza reguł zostają bez odpowiedzi AI.';
+}
+$('b-groq').onclick = function () {
+  var k = $('groq-key').value.trim();
+  if (k && !/^gsk_[A-Za-z0-9]{20,}$/.test(k)) { alert('To nie wygląda na klucz Groq (zaczyna się od gsk_).'); return; }
+  T('settings/groqKey').set(k || null).then(function () { $('groq-key').value = ''; groqInfo(); })
+    .catch(function (e) { alert(authErr(e)); });
+};
+// ------------------------------------------------------------------ głos inżyniera w przeglądarce
+var VOICE = { on: lsGet('listen') === '1', seen: {}, t0: Date.now() };
+function voiceBtn() { $('b-listen').textContent = VOICE.on ? '🔊 Słucham (wyłącz)' : '🔇 Słuchaj inżyniera';
+                      $('b-listen').classList.toggle('on', VOICE.on); }
+$('b-listen').onclick = function () {
+  VOICE.on = !VOICE.on; lsSet('listen', VOICE.on ? '1' : null); voiceBtn();
+  if (VOICE.on && window.speechSynthesis) say('Radio zespołu włączone.');
+};
+function say(text) {
+  if (!window.speechSynthesis) return;
+  var u = new SpeechSynthesisUtterance(text); u.lang = 'pl-PL'; u.rate = 1.05;
+  var v = speechSynthesis.getVoices().filter(function (x) { return /^pl/i.test(x.lang); });
+  if (v.length) u.voice = v.filter(function (x) { return /natural|online|neural/i.test(x.name); })[0] || v[0];
+  speechSynthesis.speak(u);
+}
+function speakNew(list) {
+  list.slice().reverse().forEach(function (m) {
+    if (VOICE.seen[m.id]) return;
+    VOICE.seen[m.id] = 1;
+    if (!VOICE.on || (m.t || 0) < VOICE.t0 || Date.now() - (m.t || 0) > 30000) return;
+    if (m.kind === 'ostrzeżenie' || m.delivered === 'tylko na ścianie') return;
+    if (m.voice) say(m.text);
+    else if (m.kind === 'wiadomość' && m.from !== $('kto').value) say('Wiadomość od ' + m.from + ': ' + m.text);
+    else if (m.kind === 'odpowiedź') say(m.text);
+  });
+}
+voiceBtn();
 $('b-adddrv').onclick = function () { var r = readDrivers(); r.push({ name: '', topic: 'pwc-' + rnd(6) }); editDrivers(r); };
 $('b-drv').onclick = function () {
   T('settings/drivers').set(readDrivers()).then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; draw(); })
