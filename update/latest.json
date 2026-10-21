@@ -1,7 +1,7 @@
 {
- "version": "3.8.0",
- "sha256": "df77e3bbbdab8ed8774e76e1eb68059e2d8a67fe947a2c9c56f82fca94e86815",
- "size": 557572,
+ "version": "3.8.2",
+ "sha256": "40d19848aa68b4d9fcbea22ac3ce71f83b673b7e095e261e5fe20170148bff0f",
+ "size": 559074,
  "url": "PitWallCrew.zip",
- "notes": "- AI odpowiada na (prawie) wszystkie pytania o wyścig, także te, których program nie przewidział. Gdy Groq działa,\n  każde pytanie (poza komendami: cisza, powtórz, zapamiętaj, przełączniki…) trafia do AI z pełnymi danymi,\n  a odpowiedź programu AI dostaje jako pewne liczby. Gdy AI nie zdąży w ok. 4 s – inżynier mówi odpowiedź programu.\n  Wyłączysz to w Zaawansowanych („AI odpowiada na wszystkie pytania”).\n- AI widzi znacznie więcej: całą stawkę (pozycje, odstępy, najlepsze czasy, postoje, boks, kary), postoje rywali,\n  szczegóły ostatnich 10 okrążeń (paliwo, energia, zużycie opon, wyjazdy, uderzenia, kierowca), flagi i kary,\n  uszkodzenia, zużycie hamulców i prognozę pogody z gry."
+ "notes": "- Naprawione: dwa inżyniery naraz (np. drugie uruchomienie aplikacji, gdy pierwsza działała w tle) – każdy komunikat\n  było słychać podwójnie. Teraz działa tylko jedna aplikacja (drugie uruchomienie pokazuje okno już otwartej),\n  a nowy inżynier zamyka poprzedniego, jeśli ten jeszcze działa."
 }
