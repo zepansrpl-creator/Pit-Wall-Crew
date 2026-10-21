@@ -1,7 +1,7 @@
 {
- "version": "3.6.1",
- "sha256": "223a27d43670517a47cf1a96c337c92e2104ebde3fc9650617962dd18d923642",
- "size": 538216,
+ "version": "3.6.2",
+ "sha256": "3f8577cb2fdfbbebd97558fbe0653a58243e0290e510e1e08f23d72ca6e1a1e8",
+ "size": 541791,
  "url": "PitWallCrew.zip",
- "notes": "- Odprawa przy zmianie kierowcy mówi też, ile wyjazdów poza tor i uderzeń miał poprzedni kierowca i czy auto zjechało uszkodzone.\n- Nowa komenda „powiedz następnemu, że …” (też „przekaż zmiennikowi …”, „notatka dla następnego kierowcy …”):\n  inżynier przeczyta ją następnemu kierowcy na odprawie, np. „Odprawa od Patryka: Notatka dla Ciebie: uważajcie na T5 podczas dublowania przez hypercary.”"
+ "notes": "- Komenda „powiadomienie na telefon <imię>: <treść>” – kolega od razu dostaje powiadomienie ntfy, np.\n  „Powiadomienie na telefon Amadeusz: wstawaj, zaraz wsiadasz”. Działa też „powiadom Amadeusza, że …”,\n  „wyślij Patrykowi powiadomienie: …” i „powiadomienie dla wszystkich: …”. Inżynier potwierdza, komu wysłał."
 }
