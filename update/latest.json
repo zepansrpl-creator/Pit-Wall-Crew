@@ -1,7 +1,7 @@
 {
- "version": "3.8.5",
- "sha256": "b22a1f42ed7f80e21a8ed9936bf568a70cd0f544f315f59bb7f24cceec0735b1",
- "size": 561385,
+ "version": "3.8.6",
+ "sha256": "20e151aba7855bcb7e014c39f9a39b86a22915efc6fc1a5b641e9a87e4fa3588",
+ "size": 562618,
  "url": "PitWallCrew.zip",
- "notes": "- Poprawna odmiana liczb w mowie, także w odpowiedziach AI: „524 stopni” czytane jako „pięćset dwadzieścia cztery\n  stopnie”, „od 3 do 5 okrążeń” jako „od trzech do pięciu”, „ponad 5 sekund” jako „ponad pięć”; zakresy „11-12”,\n  skróty (ok., okr., km/h, %, pit stop) i nawiasy czytane naturalnie.\n- AI: odpowiada dokładnie na pytanie, bez doklejanej rady „trzymaj tempo, obserwuj temperatury opon”;\n  przy niezrozumiałym pytaniu prosi o powtórzenie zamiast zgadywać; zna liczbę okrążeń w stincie.\n- Odpowiedzi bez wtrąceń „Hmm, dobra,”. „Uderzenie, mierzę stratę” raz zamiast dwa razy.\n- „Temperatura toru?” – krótko: tor i powietrze (bez całej prognozy). Hamulce: „zużycie klocków jeszcze niewielkie”\n  zamiast „zostało najmniej 100 procent”.\n- Prędkość maksymalna rywala nie liczy okrążenia z postojem (wcześniej np. 201 km/h zamiast 280).\n- Lepsze rozpoznawanie słów: zużycie, temperatura toru, prędkość maksymalna, flat spot."
+ "notes": "- Dublowanie: brak ostrzeżenia „LMP 2, 1 sekunda” o aucie szybszej klasy, które stoi albo wlecze się na torze\n  (wypadek, poza torem) i które właśnie minąłeś. Ostrzeżenie wraca, gdy to auto znów jedzie szybko i dojeżdża."
 }
