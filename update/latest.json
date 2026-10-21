@@ -1,7 +1,7 @@
 {
- "version": "3.6.2",
- "sha256": "3f8577cb2fdfbbebd97558fbe0653a58243e0290e510e1e08f23d72ca6e1a1e8",
- "size": 541791,
+ "version": "3.6.3",
+ "sha256": "024d8448f8111fe21225b4f458db7eb8dfe080cb01dc13b798f689e3fd3beb51",
+ "size": 544882,
  "url": "PitWallCrew.zip",
- "notes": "- Komenda „powiadomienie na telefon <imię>: <treść>” – kolega od razu dostaje powiadomienie ntfy, np.\n  „Powiadomienie na telefon Amadeusz: wstawaj, zaraz wsiadasz”. Działa też „powiadom Amadeusza, że …”,\n  „wyślij Patrykowi powiadomienie: …” i „powiadomienie dla wszystkich: …”. Inżynier potwierdza, komu wysłał."
+ "notes": "- Po aktualizacji (automatycznej albo ręcznej) aplikacja pokazuje okno „Co nowego” ze wszystkimi zmianami\n  od Twojej poprzedniej wersji – także gdy kilka wersji zostało pominiętych. Lista jest też w Pomoc → Co nowego."
 }
