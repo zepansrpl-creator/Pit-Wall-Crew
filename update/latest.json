@@ -1,7 +1,7 @@
 {
- "version": "3.6.9",
- "sha256": "da5168c78885ae65266eb5fce7b069b33ea9a8c5c5f408b5ca567c2786435cdf",
- "size": 548092,
+ "version": "3.7.0",
+ "sha256": "c8e70637fe79220eea7e5b1b5435d2e0cadd827785d30dc1836d965773e41e11",
+ "size": 549642,
  "url": "PitWallCrew.zip",
- "notes": "- Nowa komenda „jakie mam mieć TC?” / „traction control?” / „ile ABS?”: obecne ustawienie i rada z pomiaru\n  (TC pracuje dużo → TC Cut niżej, buksowanie → TC wyżej, blokowanie → ABS wyżej). Działa też bez AI.\n- Gdy inżynier nie zna odpowiedzi, a AI nie działa, mówi dlaczego (brak klucza Groq, zły klucz, limit albo\n  brak internetu) zamiast samego „Nie zrozumiałem”."
+ "notes": "- Prędkość maksymalna innych aut: „jaka prędkość maksymalna innych aut?”, „ile ma na prostej auto przede mną / za mną?”,\n  „vmax hypercarów?”, „moja prędkość maksymalna?”. Inżynier mierzy maksimum każdego auta na każdym okrążeniu\n  i porównuje z Twoim („o 6 szybciej od Ciebie”)."
 }
