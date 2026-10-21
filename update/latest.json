@@ -1,7 +1,7 @@
 {
- "version": "3.6.5",
- "sha256": "04396f9f2f004f275fffc56e05f22b92497e91bbf2186d4fa56c484ca4092e21",
- "size": 545888,
+ "version": "3.6.6",
+ "sha256": "1d3c4528fcf783fe954a102847e3081364b7509807f8feb099b5372749513e1c",
+ "size": 546124,
  "url": "PitWallCrew.zip",
- "notes": "- Naprawione: przed wejściem do sesji połączenie z zespołem zgłaszało błąd „append .json to your request URI”\n  (znak „?” w nazwie podglądu) i aplikacja nie odbierała wiadomości ani pytań ze ściany boksów.\n- Pytania i wiadomości ze ściany boksów działają też poza wyścigiem (trening, garaż, menu) – odpowiada aplikacja\n  osoby, której podgląd jest wybrany na ścianie. W wyścigu jak dotąd odpowiada inżynier kierowcy, który jedzie."
+ "notes": "- AI odpowiada też na pytania niezwiązane z wyścigiem (wiedza ogólna, historia, luźna rozmowa) zamiast\n  „nie mam danych o bieżącym stanie wyścigu”. Liczby o aucie i wyścigu dalej tylko z danych gry."
 }
