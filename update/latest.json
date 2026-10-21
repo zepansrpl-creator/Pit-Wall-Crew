@@ -1,0 +1,7 @@
+{
+ "version": "3.4.0",
+ "sha256": "9163aa617b93319e4ec726051877d318786c788328f3690301741966c7b8c9f4",
+ "size": 521819,
+ "url": "PitWallCrew.zip",
+ "notes": "- Automatyczne aktualizacje: aplikacja przy starcie (zanim uruchomi inżyniera, nigdy w trakcie jazdy) sprawdza nową wersję\n  na stronie ściany boksów, pobiera ją, sprawdza sumę kontrolną, podmienia pliki i uruchamia się ponownie. Ustawienia,\n  dane i nagrania zostają, poprzednie pliki w folderze backup. Serwer AI aktualizuje się przy uruchomieniu.\n  Wyłączenie i „Sprawdź aktualizacje teraz”: Zaawansowane."
+}
