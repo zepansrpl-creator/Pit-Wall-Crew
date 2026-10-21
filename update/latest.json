@@ -1,7 +1,7 @@
 {
- "version": "3.7.6",
- "sha256": "3c2606e44d731701842e787b15eee4dacd561f9071814cf5f2a2bb4d6939cef1",
- "size": 553989,
+ "version": "3.7.7",
+ "sha256": "8a0d66b4f68456f4e175988605bbe2d054ac3f1bfdf936be7e440197e5ad918a",
+ "size": 555618,
  "url": "PitWallCrew.zip",
- "notes": "- Naprawione: zapytania do wewnętrznego interfejsu gry szły na „localhost” – Windows najpierw próbował IPv6\n  i każde zapytanie czekało 1,5–2 s (część się nie udawała). Teraz 127.0.0.1, jak w menu gry: dane z gry\n  (hamulce, energia rywali, menu boksu) są pewniejsze.\n- Dziennik przycięć: przy każdym zdarzeniu także programy, które najbardziej zajmują procesor, i auta w promieniu\n  150 m (sprawdzenie, czy przycina, gdy dojeżdża szybsze auto). Doinstaluje się mała biblioteka psutil."
+ "notes": "- Pytania wymagające analizy („jaka różnica vmax aut przede mną”, „porównaj…”, „dlaczego…”, „kto najszybszy…”,\n  „o ile…”) – gdy Groq działa, odpowiada AI z pełnymi danymi, a odpowiedź programu dostaje jako pewne liczby.\n  Gdy Groq nie odpowie, zostaje odpowiedź programu. Proste pytania („ile paliwa”) dalej od razu z programu.\n- AI dostaje więcej danych: auta w klasie (4 przed, 4 za) z pozycją, odstępem, prędkością maksymalną, energią\n  i ostatnim okrążeniem, najwyższą vmax w innych klasach i kiedy dojadą auta szybszej klasy."
 }
