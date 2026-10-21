@@ -1,7 +1,7 @@
 {
- "version": "3.6.4",
- "sha256": "86eb4ea0a59f962df0f3e3732e1b63ef30834b953739e6f3a9f8f6a5d6027984",
- "size": 545455,
+ "version": "3.6.5",
+ "sha256": "04396f9f2f004f275fffc56e05f22b92497e91bbf2186d4fa56c484ca4092e21",
+ "size": 545888,
  "url": "PitWallCrew.zip",
- "notes": "- Ściana boksów: mapa toru na samym dole, większa i bez pustego miejsca – tor obraca się dłuższą osią wzdłuż ekranu\n  (na komputerze poziomo, na telefonie pionowo).\n- Zakładka Zespół: podpisany „Link dla widzów”.\n- Poprawione opisy: pytania spoza reguł trafiają do AI Groq, odpowiedzi ze ściany słychać w radiu zespołu."
+ "notes": "- Naprawione: przed wejściem do sesji połączenie z zespołem zgłaszało błąd „append .json to your request URI”\n  (znak „?” w nazwie podglądu) i aplikacja nie odbierała wiadomości ani pytań ze ściany boksów.\n- Pytania i wiadomości ze ściany boksów działają też poza wyścigiem (trening, garaż, menu) – odpowiada aplikacja\n  osoby, której podgląd jest wybrany na ścianie. W wyścigu jak dotąd odpowiada inżynier kierowcy, który jedzie."
 }
