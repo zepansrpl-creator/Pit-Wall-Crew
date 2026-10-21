@@ -1,7 +1,7 @@
 {
- "version": "3.6.7",
- "sha256": "5f6add723f0842d5abd11307b7264e5b990c52d89389994873e62053f16deab0",
- "size": 546597,
+ "version": "3.6.8",
+ "sha256": "fce44ab4200d7f7e7e13ed42abf36dcb410506f727c276cbf8f38277b494f1a7",
+ "size": 546902,
  "url": "PitWallCrew.zip",
- "notes": "- „Cisza”, „cicho”, „bądź cicho”, „nie gadaj” (także bez imienia inżyniera) = „Ok.” i całkowita cisza, także bez\n  ostrzeżeń o dublowaniu, aż do następnego naciśnięcia przycisku. Tryb „tylko pilne ostrzeżenia i odpowiedzi”\n  włącza teraz komenda „tylko pilne” / „mów tylko, gdy pytam”.\n- Krótkie potwierdzenia komend bez wtrąceń typu „Słuchaj, dobra, …”."
+ "notes": "- Ściana boksów: dane nie znikają i nie przeskakują – automatyczny wybór podglądu trzyma się jednego\n  (wyścig > ktoś jedzie > ktoś w sesji > aplikacja w menu) zamiast przełączać się na ostatnio zapisany."
 }
