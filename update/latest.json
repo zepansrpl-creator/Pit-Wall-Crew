@@ -1,7 +1,7 @@
 {
- "version": "3.5.0",
- "sha256": "af9b08b9fd35c8a82a5b653471efa5ff0c813523835912f485e556090ec69916",
- "size": 532789,
+ "version": "3.5.1",
+ "sha256": "eb03ebc9c5e82b1a27d9e1652c777a846051b4946609b5c20695ec709f5cd0df",
+ "size": 533442,
  "url": "PitWallCrew.zip",
- "notes": "- AI w chmurze Groq (darmowe): rozpoznawanie mowy (Whisper) i odpowiedzi AI prosto z programu kierowcy – bez serwera AI\n  i bez obciążania komputera gracza, szybciej niż przez serwer. Klucz wkleja się raz na ścianie boksów (Zespół → AI zespołu).\n  Gdy Groq nie odpowiada: serwer AI zespołu (jeśli działa), potem Google.\n- Radio zespołu zamiast bota Discord: kto nie jedzie, słyszy komunikaty inżyniera we własnej aplikacji (tym samym głosem);\n  pilne ostrzeżenia słyszy tylko kierowca. Na ścianie boksów „🔊 Słuchaj inżyniera” (głos przeglądarki, też na telefonie).\n- Grafik i powiadomienia liczy jedna z włączonych aplikacji zespołu – serwer AI nie jest potrzebny nawet przed startem.\n- Bot Discord i serwer AI zostają jako opcja (domyślnie wyłączone).\n- Na pulpicie tylko jeden skrót „Pit Wall Crew” (test bez gry i ustawienia są w aplikacji)."
+ "notes": "- Groq: aktualne darmowe modele (gpt-oss-120b, Qwen, gpt-oss-20b…). Gdy jeden model wyczerpie dzienny limit,\n  AI przechodzi na następny (każdy ma osobny limit) – więcej pytań dziennie."
 }
