@@ -1,7 +1,7 @@
 {
- "version": "3.5.2",
- "sha256": "e11284867a23ce4c780de678da983b116cf9cd125515898ce9441fa2d3640304",
- "size": 533713,
+ "version": "3.6.0",
+ "sha256": "ffda662a963c64009097c198ed3005b15b7ab537cd92de42b5be4bf4513da632",
+ "size": 536899,
  "url": "PitWallCrew.zip",
- "notes": "- Każdy kierowca może mieć własny klucz Groq (Zaawansowane → Własny klucz Groq) = własny limit. Ma pierwszeństwo,\n  a po wyczerpaniu limitu program sam przechodzi na klucz zespołu ze ściany boksów."
+ "notes": "- Ściana boksów, „Grafik i plan”: prostsze ustawienia wyścigu (start, długość, czas okrążenia jako 3:58), strategia schowana;\n  „Szybki plan” rozpisuje cały wyścig sam (okrążeń w stincie, kierowcy po kolei, podwójne stinty, opony co ile stintów).\n- Powiadomienia na telefon dla nowych osób: temat tworzy się sam, przycisk 📱 przy kierowcy pokazuje 3 kroki i kod QR.\n- Nowa zakładka „Pomoc” na ścianie boksów: pierwsze kroki, powiadomienia, grafik."
 }

@@ -134,6 +134,11 @@
   .qr { background: #fff; padding: 12px; border-radius: 12px; display: inline-block; margin-top: 8px; }
   .code { font: 700 28px/1.2 var(--mono); letter-spacing: .18em; color: var(--text); }
   .scroll { overflow-x: auto; }
+  a { color: var(--blue); }
+  .steps { margin: 0; padding-left: 22px; } .steps li { margin: 0 0 8px; line-height: 1.5; }
+  .phonebox { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; padding: 12px; margin-top: 8px;
+              border: 1px solid var(--line2); border-radius: 12px; background: rgba(0,0,0,.2); }
+  @media (max-width: 560px) { .phonebox { grid-template-columns: 1fr; } }
   .btnrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
   details summary { cursor: pointer; }
   #obs-box { display: none !important; }
@@ -157,6 +162,7 @@
     <button data-v="team">Zespół</button>
     <button data-v="laps">Okrążenia</button>
     <button data-v="mem">Pamięć</button>
+    <button data-v="help">Pomoc</button>
   </nav>
 </header>
 
@@ -286,15 +292,33 @@
     </table></div>
   </section>
   <section>
-    <h2>Wyścig i ustawienia</h2>
+    <h2>1. Wyścig</h2>
     <div class="grid2" id="settings"></div>
-    <div class="btnrow"><button id="b-set">Zapisz ustawienia</button><span id="set-ok" class="ok-txt"></span></div>
-    <p class="note">Start wyścigu wpisz w czasie polskim. „Korekta stintu” przesuwa numer stintu, jeśli w grze był dodatkowy postój (np. kara).</p>
+    <details style="margin-top:10px">
+      <summary class="note">Strategia (opcjonalnie – inżynier sam mierzy zużycie)</summary>
+      <div class="grid2" id="settings-adv" style="margin-top:10px"></div>
+    </details>
+    <div class="btnrow"><button id="b-set">Zapisz</button><span id="set-ok" class="ok-txt"></span></div>
   </section>
   <section>
-    <h2>Plan stintów</h2>
+    <h2>2. Szybki plan stintów</h2>
+    <p class="note">Wpisz, jak chcecie jeździć – plan rozpisze się sam do końca wyścigu. Potem możesz go poprawić w tabeli niżej.</p>
+    <div class="grid2">
+      <label>Okrążeń w jednym stincie<input id="g-laps" inputmode="numeric" value="11"></label>
+      <label>Kierowcy po kolei (przecinkami)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
+      <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
+      <label>Nowe opony co ile stintów<select id="g-tyres"><option value="1">co stint</option><option value="2" selected>co 2 stinty</option><option value="3">co 3 stinty</option><option value="0">bez zmiany opon</option></select></label>
+      <label>Czas postoju (s)<input id="g-stop" inputmode="numeric" value="60"></label>
+    </div>
+    <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
+  </section>
+  <section>
+    <h2>3. Plan stintów</h2>
     <div class="scroll"><table class="edit">
-      <thead><tr><th>Stint</th><th>Okr. plan</th><th>Przesunięcie (min)</th><th>Kierowca</th><th>Postój (s)</th><th>Na postoju</th><th>Okr. faktycznie</th><th></th></tr></thead>
+      <thead><tr><th title="Numer stintu">Stint</th><th title="Ile okrążeń ma trwać stint">Okrążeń</th>
+        <th title="Jeśli stint ma zacząć się później (np. po naprawie) – o ile minut">Przesunięcie (min)</th>
+        <th>Kierowca</th><th title="Ile trwa postój na końcu stintu">Postój (s)</th><th title="Co robimy na postoju">Na postoju</th>
+        <th title="Uzupełnij po fakcie – ile okrążeń stint faktycznie trwał">Przejechane okr.</th><th></th></tr></thead>
       <tbody id="plan-rows"></tbody>
     </table></div><datalist id="drvlist"></datalist>
     <div class="btnrow">
@@ -307,6 +331,7 @@
       <textarea id="tsv" placeholder="1	11	0	Maciej	…"></textarea>
       <div class="btnrow"><button id="b-tsv" class="second">Wczytaj</button><span id="tsv-ok" class="note"></span></div>
     </details>
+    <p class="note">Grafik na górze przelicza się sam co minutę z prawdziwego tempa w wyścigu. Każdy kierowca dostaje powiadomienie na telefon przed swoją zmianą (zakładka Zespół → 📱).</p>
   </section>
 </div></div>
 
@@ -335,9 +360,11 @@
   </section>
   <section>
     <h2>Kierowcy i powiadomienia</h2>
-    <p class="note">Temat ntfy to dowolna, trudna do zgadnięcia nazwa (np. pwc-maciej-7k2p). Kierowca instaluje aplikację ntfy na telefonie i subskrybuje ten temat – dostaje powiadomienie przed swoją zmianą i gdy zacznie padać.</p>
+    <p class="note">Każdy kierowca dostaje na telefon powiadomienie ok. 30 min przed swoją zmianą i gdy zacznie padać.
+      Dodaj kierowców i zapisz – temat utworzy się sam. Potem każdy klika <b>📱</b> przy swoim imieniu i robi 3 kroki na telefonie.</p>
+    <div id="phone"></div>
     <div class="scroll"><table class="edit">
-      <thead><tr><th>Kierowca</th><th>Temat ntfy</th><th></th><th></th></tr></thead>
+      <thead><tr><th>Kierowca</th><th>Temat powiadomień (ntfy)</th><th></th><th></th><th></th></tr></thead>
       <tbody id="drivers"></tbody>
     </table></div>
     <div class="btnrow">
@@ -355,6 +382,39 @@
       <thead><tr><th>Stint</th><th>Okr.</th><th>Kierowca</th><th>Czas</th><th>Paliwo</th><th>Energia %</th><th>Woda %</th><th>Tor °C</th><th>Opony</th><th>Uwagi</th></tr></thead>
       <tbody id="laps"></tbody>
     </table></div>
+  </section>
+</div></div>
+
+<div id="v-help" class="view"><div class="page">
+  <section>
+    <h2>Pierwsze kroki</h2>
+    <ol class="steps">
+      <li><b>Program na komputerze.</b> Rozpakuj paczkę Pit Wall Crew, uruchom <b>INSTALUJ_KIEROWCA.bat</b>, w aplikacji (zakładka Zespół) wpisz <b>kod i hasło zespołu</b> i wybierz swoje imię. W LMU raz: Ustawienia → Rozgrywka → Enable Plugins = ON.</li>
+      <li><b>Ta strona.</b> Wejdź kodem i hasłem zespołu – na telefonie zeskanuj kod QR z zakładki Zespół. Strona zapamięta logowanie.</li>
+      <li><b>Powiadomienia na telefon</b> – patrz niżej (2 minuty, raz).</li>
+      <li><b>W dniu wyścigu</b> każdy ma włączoną aplikację Pit Wall Crew – także gdy nie jedzie (wtedy słyszy inżyniera z auta zespołu).</li>
+    </ol>
+  </section>
+  <section>
+    <h2>Powiadomienia na telefon (każdy kierowca, raz)</h2>
+    <ol class="steps">
+      <li>Zainstaluj darmową aplikację <b>ntfy</b> (Android: Sklep Play, iPhone: App Store).</li>
+      <li>Tu na stronie: zakładka <b>Zespół</b> → przy swoim imieniu kliknij <b>📱</b>. Pokaże się Twój <b>temat</b> (np. pwc-k7m2qp7x) i kod QR.</li>
+      <li>W aplikacji ntfy dotknij <b>+</b> i wpisz ten temat → <b>Subskrybuj</b>. (Albo zeskanuj kod QR aparatem i otwórz link.)</li>
+      <li>Wróć na stronę i kliknij <b>Test</b> przy swoim imieniu – na telefonie powinno przyjść „Pit Wall Crew – test”.</li>
+      <li>Zezwól ntfy na powiadomienia i (na Androidzie) wyłącz dla niej oszczędzanie baterii, żeby przychodziły od razu.</li>
+    </ol>
+    <p class="note">Powiadomienie przychodzi ok. 30 minut przed Twoją zmianą (godzina wg grafiku na żywo), a gdy zmiana przesunie się o 10 minut lub więcej – drugie z nową godziną. Także gdy zacznie padać.</p>
+  </section>
+  <section>
+    <h2>Grafik stintów (jedna osoba, przed wyścigiem)</h2>
+    <ol class="steps">
+      <li>Zakładka <b>Zespół</b>: dodaj kierowców (<b>+ kierowca</b>, imię) i <b>Zapisz kierowców</b>. Temat powiadomień utworzy się sam.</li>
+      <li>Zakładka <b>Grafik i plan</b> → <b>1. Wyścig</b>: data i godzina startu (czas polski), długość wyścigu, czas okrążenia (np. 3:58) → <b>Zapisz</b>.</li>
+      <li><b>2. Szybki plan</b>: ile okrążeń w stincie, kierowcy po kolei, podwójne stinty, opony → <b>Rozpisz plan</b>.</li>
+      <li><b>3. Plan stintów</b>: popraw, jeśli trzeba (np. kto jedzie start), i <b>Zapisz plan</b>.</li>
+      <li>W wyścigu grafik przelicza się sam z prawdziwego tempa. Gdy numery stintów się rozjadą (np. kara drive-through), w „Strategia” wpisz korektę numeru stintu (+1 albo −1).</li>
+    </ol>
   </section>
 </div></div>
 
@@ -776,38 +836,64 @@ function drawGrafik2(g) {
 }
 
 var SET_FIELDS = [
-  ['raceStartMs', 'Start wyścigu', 'dt'], ['raceHours', 'Długość wyścigu (h)'], ['lapTime', 'Czas okrążenia z planu (s)'],
-  ['notifyMin', 'Powiadomienie przed zmianą (min)'], ['vePerLap', 'Plan energii (% / okr.)'], ['fuelPerLap', 'Plan paliwa (l / okr.)'],
-  ['pitCallS', 'Wezwanie do boksu (s przed wjazdem)'], ['stintCorr', 'Korekta numeru stintu'],
+  ['raceStartMs', 'Start wyścigu (data i godzina, czas polski)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
+  ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30']
+];
+var ADV_FIELDS = [
+  ['vePerLap', 'Plan energii (% / okr.)'], ['fuelPerLap', 'Plan paliwa (l / okr.)'],
+  ['pitCallS', 'Wezwanie do boksu (s przed wjazdem)'], ['stintCorr', 'Korekta numeru stintu (+1 / −1)'],
   ['wear', 'Plan zużycia opon LP,PP,LT,PT (% / okr.)', 'list'],
   ['rainSlickK', 'Deszcz: strata slicków (współczynnik)'], ['rainWetBase', 'Deszcz: strata deszczówek (bazowa)'],
   ['rainPitCost', 'Deszcz: koszt postoju na zmianę opon (s)']
 ];
+function lapFmt(s) { if (!s) return ''; var m = Math.floor(s / 60), r = s - m * 60; return m + ':' + (r < 10 ? '0' : '') + (Math.round(r * 10) / 10).toString().replace('.', ','); }
+function lapParse(t) { t = String(t || '').trim().replace(',', '.'); var m = t.match(/^(\d+):(\d+(?:\.\d+)?)$/); return m ? +m[1] * 60 + +m[2] : num(t); }
 function dtLocal(ms) { if (!ms) return ''; var d = new Date(ms - new Date(ms).getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); }
+function fieldHtml(f, s) {
+  var v = s[f[0]];
+  if (f[2] === 'dt') return '<label>' + f[1] + '<input type="datetime-local" id="s-' + f[0] + '" value="' + dtLocal(v) + '"></label>';
+  if (f[2] === 'lap') return '<label>' + f[1] + '<input id="s-' + f[0] + '" value="' + esc(lapFmt(v)) + '" placeholder="3:58"></label>';
+  if (f[2] === 'list') v = (v || []).join(', ');
+  return '<label>' + f[1] + '<input id="s-' + f[0] + '" inputmode="decimal" placeholder="' + (f[3] || '') + '" value="' + esc(v == null ? '' : String(v).replace('.', ',')) + '"></label>';
+}
 function editSettings() {
-  if (document.activeElement && $('settings').contains(document.activeElement)) return;
+  if (document.activeElement && ($('settings').contains(document.activeElement) || $('settings-adv').contains(document.activeElement))) return;
   var s = S.settings || {};
   $('settings').innerHTML = '<label>Nazwa zespołu<input id="s-name" maxlength="40" value="' + esc(S.meta.name || '') + '"></label>' +
-    SET_FIELDS.map(function (f) {
-      var v = s[f[0]];
-      if (f[2] === 'dt') return '<label>' + f[1] + '<input type="datetime-local" id="s-' + f[0] + '" value="' + dtLocal(v) + '"></label>';
-      if (f[2] === 'list') v = (v || []).join(', ');
-      return '<label>' + f[1] + '<input id="s-' + f[0] + '" inputmode="decimal" value="' + esc(v == null ? '' : String(v).replace('.', ',')) + '"></label>';
-    }).join('');
+    SET_FIELDS.map(function (f) { return fieldHtml(f, s); }).join('');
+  $('settings-adv').innerHTML = ADV_FIELDS.map(function (f) { return fieldHtml(f, s); }).join('');
   var st = s.raceStartMs ? new Date(s.raceStartMs) : null;
   if (st && Math.abs(st - now()) > 180 * 86400000)
     $('settings').insertAdjacentHTML('beforeend', '<p class="note" style="color:var(--warn);grid-column:1/-1">Uwaga: data startu jest daleko od dzisiaj (' + st.toLocaleDateString('pl-PL') + ') – sprawdź rok.</p>');
+  if (!$('g-order').value) $('g-order').value = ((s.drivers || []).map(function (d) { return d && d.name; }).filter(Boolean)).join(', ');
 }
 $('b-set').onclick = function () {
   var upd = {};
-  SET_FIELDS.forEach(function (f) {
+  SET_FIELDS.concat(ADV_FIELDS).forEach(function (f) {
     var raw = $('s-' + f[0]).value;
     if (f[2] === 'dt') upd[f[0]] = raw ? new Date(raw).getTime() : null;
+    else if (f[2] === 'lap') upd[f[0]] = lapParse(raw);
     else if (f[2] === 'list') { var a = raw.split(/[;,]\s*|\s+/).map(num).filter(function (x) { return x != null; }); upd[f[0]] = a.length === 4 ? a : null; }
     else upd[f[0]] = num(raw);
   });
+  if (!upd.raceStartMs) { alert('Wpisz datę i godzinę startu wyścigu – bez niej nie będzie grafiku ani powiadomień.'); }
   Promise.all([T('settings').update(upd), T('meta/name').set($('s-name').value.trim() || CODE.toUpperCase())])
     .then(function () { flash('set-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
+};
+$('b-gen').onclick = function () {
+  var s = S.settings || {}, laps = num($('g-laps').value), stop = num($('g-stop').value) || 60;
+  var lap = lapParse(($('s-lapTime') || {}).value) || s.lapTime, hours = num(($('s-raceHours') || {}).value) || s.raceHours;
+  var order = $('g-order').value.split(/[,;]+/).map(function (x) { return x.trim(); }).filter(Boolean);
+  var rep = +$('g-rep').value || 1, tyres = +$('g-tyres').value;
+  if (!laps || !lap || !hours) { alert('Uzupełnij w „1. Wyścig” długość wyścigu i czas okrążenia oraz liczbę okrążeń w stincie.'); return; }
+  if (!order.length) { alert('Wpisz kierowców po kolei, np. Maciej, Patryk, Amadeusz.'); return; }
+  var n = Math.ceil(hours * 3600 / (laps * lap + stop)), rows = [];
+  for (var i = 0; i < n; i++) {
+    rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: stop,
+                service: i === n - 1 ? 'META' : (tyres && (i + 1) % tyres === 0 ? 'Paliwo + 4 opony' : 'Paliwo') });
+  }
+  editPlan(rows);
+  $('gen-ok').textContent = 'Rozpisano ' + n + ' stintów (' + hours + ' h, okrążenie ' + lapFmt(lap) + '). Sprawdź tabelę niżej i kliknij „Zapisz plan”.';
 };
 
 var PLAN_COLS = [['n', 3], ['laps', 4], ['offsetMin', 4], ['driver', 9], ['stopS', 4], ['service', 14], ['lapsActual', 4]];
@@ -881,24 +967,44 @@ function editDrivers(rows) {
   if (!rows && document.activeElement && $('drivers').contains(document.activeElement)) return;
   rows = rows || ((S.settings || {}).drivers || []).filter(Boolean);
   $('drivers').innerHTML = rows.map(function (d) {
-    return '<tr><td><input data-k="name" value="' + esc(d.name || '') + '"></td><td><input data-k="topic" value="' + esc(d.topic || '') +
-      '" placeholder="np. pwc-' + rnd(4) + '"></td><td><button class="second" data-test>Test</button></td><td><button class="second" data-del>×</button></td></tr>';
+    return '<tr><td><input data-k="name" value="' + esc(d.name || '') + '" placeholder="Imię"></td><td><input data-k="topic" value="' + esc(d.topic || '') +
+      '" placeholder="utworzy się sam"></td><td><button class="second" data-phone title="Jak dostawać powiadomienia na telefon">📱</button></td>' +
+      '<td><button class="second" data-test>Test</button></td><td><button class="second" data-del>×</button></td></tr>';
   }).join('');
   $('drivers').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); }; });
+  $('drivers').querySelectorAll('[data-phone]').forEach(function (b) {
+    b.onclick = function () {
+      var tr = b.closest('tr'), ti = tr.querySelector('[data-k=topic]'), name = tr.querySelector('[data-k=name]').value.trim();
+      if (!ti.value.trim()) { alert('Najpierw kliknij „Zapisz kierowców” – temat utworzy się sam.'); return; }
+      phoneBox(name, ti.value.trim());
+    };
+  });
   $('drivers').querySelectorAll('[data-test]').forEach(function (b) {
     b.onclick = function () {
       var tr = b.closest('tr'), topic = tr.querySelector('[data-k=topic]').value.trim(), name = tr.querySelector('[data-k=name]').value.trim();
-      if (!topic) return alert('Wpisz temat ntfy.');
+      if (!topic) return alert('Najpierw kliknij „Zapisz kierowców” – temat utworzy się sam.');
       fetch('https://ntfy.sh/', { method: 'POST', body: JSON.stringify({ topic: topic, title: 'Pit Wall Crew – test', message: 'Działa! Tak przyjdzie powiadomienie przed zmianą, ' + (name || 'kierowco') + '.', tags: ['checkered_flag'] }) })
         .then(function (r) { b.textContent = r.ok ? 'Wysłano ✓' : 'Błąd'; }).catch(function () { b.textContent = 'Błąd'; });
     };
   });
 }
+function phoneBox(name, topic) {
+  var url = 'https://ntfy.sh/' + topic;
+  $('phone').innerHTML = '<div class="phonebox"><div class="qr" id="phone-qr"></div><div>' +
+    '<b>' + esc(name || 'Kierowca') + ' – powiadomienia na telefon</b>' +
+    '<ol class="steps" style="margin-top:6px"><li>Zainstaluj aplikację <b>ntfy</b> (Sklep Play / App Store).</li>' +
+    '<li>W ntfy dotknij <b>+</b>, wpisz temat <b class="code" style="font-size:16px;letter-spacing:1px">' + esc(topic) + '</b> i <b>Subskrybuj</b>.<br>' +
+    '<span class="note">Albo zeskanuj kod aparatem i otwórz link w ntfy.</span></li>' +
+    '<li>Kliknij tu <b>Test</b> przy swoim imieniu – na telefonie przyjdzie „Pit Wall Crew – test”.</li></ol>' +
+    '<span class="note">Android: zezwól ntfy na powiadomienia i wyłącz dla niej oszczędzanie baterii.</span></div></div>';
+  if (window.QRCode) new QRCode($('phone-qr'), { text: url, width: 132, height: 132 });
+  $('phone').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 function readDrivers() {
   var out = [];
   $('drivers').querySelectorAll('tr').forEach(function (tr) {
     var n = tr.querySelector('[data-k=name]').value.trim(), t = tr.querySelector('[data-k=topic]').value.trim();
-    if (n) out.push({ name: n, topic: t });
+    if (n) out.push({ name: n, topic: t || ('pwc-' + rnd(8)) });   // temat powiadomień tworzy się sam
   });
   return out;
 }
