@@ -1,7 +1,7 @@
 {
- "version": "3.8.7",
- "sha256": "bcdf3ebbcdcf82eca9f2e0c199d23ac7ec7ed269f032b495c29ae856e6361511",
- "size": 562764,
+ "version": "3.8.8",
+ "sha256": "6086cd26f03116e54ec3dc847a9fc8632f0e7ac72f35d552efc84be2e5d1ecf9",
+ "size": 564130,
  "url": "PitWallCrew.zip",
- "notes": "- Wymowa: „hajperkar” zamiast angielskiego „hypercar” (w mowie; na ekranie bez zmian)."
+ "notes": "- Dziennik przycięć: obciążenie karty graficznej (3D %, maksimum z 5 s, zajęta pamięć karty i które programy\n  najbardziej ją używają) przy każdym zdarzeniu i w podsumowaniu co 5 minut – z liczników Windows, bez instalacji."
 }
