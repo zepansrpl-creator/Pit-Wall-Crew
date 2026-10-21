@@ -1,7 +1,7 @@
 {
- "version": "3.7.1",
- "sha256": "0e85225932c9db3affd9bfa18a1d3788be713d9ce48a8e311afbfb45822c8f4e",
- "size": 550325,
+ "version": "3.7.2",
+ "sha256": "2b17c7237e2c19cf0817baebe5678104f3cd84c913c197b4d0597a3426bf9ce8",
+ "size": 551636,
  "url": "PitWallCrew.zip",
- "notes": "- „Za ile pierwszy hypercar będzie dublował?” / „kiedy dogoni mnie LMP2?”: szacunek bez limitu czasu – pierwsze\n  auto szybszej klasy, za ile dojedzie, ile jest za Tobą na torze, i następne (wcześniej tylko najbliższe 12 sekund)."
+ "notes": "- „Porównaj temperatury opon i hamulców z tego okrążenia i 4. okrążenia po pitstopie” (także „… z poprzednim stintem”,\n  „… z okrążeniem 12”): hamulce przód/tył i opony przód/tył teraz wobec wskazanego okrążenia oraz rada,\n  czy przymknąć chłodzenie hamulców. Po zmianie chłodzenia na postoju to samo pytanie porówna z poprzednim stintem."
 }
