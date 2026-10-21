@@ -721,13 +721,27 @@ function startTeam(code) {
   setInterval(draw, 5000);
 }
 
+var AUTO_FEED = null;
+function feedTier(f, t) {
+  // ważniejszy podgląd: wyścig na żywo > ktoś jedzie > ktoś jest w sesji > aplikacja w menu („?”)
+  var fresh = t - (f.t || 0) < 60000;
+  if (!fresh) return 0;
+  if (f.session === 'race') return 4;
+  if (f.driving) return 3;
+  if (f.session && f.session !== '?') return 2;
+  return 1;
+}
 function curFeed() {
   if (FEED && S.feeds[FEED]) return FEED;
-  var best = null, bk = null, t = now();
+  var t = now(), best = null, bk = null;
   Object.keys(S.feeds).forEach(function (k) {
-    var f = S.feeds[k] || {}, sc = (f.session === 'race' && t - (f.t || 0) < 120000 ? 1e15 : 0) + (f.t || 0);
+    var f = S.feeds[k] || {}, sc = feedTier(f, t) * 1e15 + (f.t || 0);
     if (best === null || sc > best) { best = sc; bk = k; }
   });
+  // bez skakania: zostań przy wybranym podglądzie, dopóki żyje i nie pojawi się ważniejszy
+  var a = AUTO_FEED && S.feeds[AUTO_FEED];
+  if (a && bk && feedTier(a, t) >= feedTier(S.feeds[bk], t) && feedTier(a, t) > 0) return AUTO_FEED;
+  AUTO_FEED = bk;
   return bk;
 }
 
@@ -743,7 +757,7 @@ function pickFeed() {
 
 function feedLabel(k, f) {
   if (k === 'race') return 'wyścig' + (f.who ? ' (' + f.who + ')' : '');
-  var s = { practice: 'trening', qualy: 'kwalifikacje', warmup: 'rozgrzewka' }[f.session] || f.session || k;
+  var s = { practice: 'trening', qualy: 'kwalifikacje', warmup: 'rozgrzewka', '?': 'poza sesją' }[f.session] || f.session || k;
   return s + ' – ' + (f.who || '?');
 }
 
