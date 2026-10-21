@@ -1,7 +1,7 @@
 {
- "version": "3.8.8",
- "sha256": "6086cd26f03116e54ec3dc847a9fc8632f0e7ac72f35d552efc84be2e5d1ecf9",
- "size": 564130,
+ "version": "3.8.9",
+ "sha256": "58d6582c861b297443bdd9b23e48c7142c7a34f21e46d37a52ae134ebdccc633",
+ "size": 564617,
  "url": "PitWallCrew.zip",
- "notes": "- Dziennik przycięć: obciążenie karty graficznej (3D %, maksimum z 5 s, zajęta pamięć karty i które programy\n  najbardziej ją używają) przy każdym zdarzeniu i w podsumowaniu co 5 minut – z liczników Windows, bez instalacji."
+ "notes": "- Szybsze odpowiedzi głosem: długie pierwsze zdanie zaczyna się krótkim fragmentem (do pierwszego przecinka),\n  a kolejne zdania są przygotowywane od razu równolegle, nie dopiero w trakcie mówienia poprzedniego.\n- „Radiotest” (pisane łącznie przez rozpoznawanie mowy) rozpoznawany jako test radia.\n- Dziennik: czas przygotowania każdego zdania (synteza głosu)."
 }
