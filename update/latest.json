@@ -1,7 +1,7 @@
 {
- "version": "3.6.0",
- "sha256": "ffda662a963c64009097c198ed3005b15b7ab537cd92de42b5be4bf4513da632",
- "size": 536899,
+ "version": "3.6.1",
+ "sha256": "223a27d43670517a47cf1a96c337c92e2104ebde3fc9650617962dd18d923642",
+ "size": 538216,
  "url": "PitWallCrew.zip",
- "notes": "- Ściana boksów, „Grafik i plan”: prostsze ustawienia wyścigu (start, długość, czas okrążenia jako 3:58), strategia schowana;\n  „Szybki plan” rozpisuje cały wyścig sam (okrążeń w stincie, kierowcy po kolei, podwójne stinty, opony co ile stintów).\n- Powiadomienia na telefon dla nowych osób: temat tworzy się sam, przycisk 📱 przy kierowcy pokazuje 3 kroki i kod QR.\n- Nowa zakładka „Pomoc” na ścianie boksów: pierwsze kroki, powiadomienia, grafik."
+ "notes": "- Odprawa przy zmianie kierowcy mówi też, ile wyjazdów poza tor i uderzeń miał poprzedni kierowca i czy auto zjechało uszkodzone.\n- Nowa komenda „powiedz następnemu, że …” (też „przekaż zmiennikowi …”, „notatka dla następnego kierowcy …”):\n  inżynier przeczyta ją następnemu kierowcy na odprawie, np. „Odprawa od Patryka: Notatka dla Ciebie: uważajcie na T5 podczas dublowania przez hypercary.”"
 }
