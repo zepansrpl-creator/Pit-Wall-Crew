@@ -1,7 +1,7 @@
 {
- "version": "3.9.3",
- "sha256": "ac29b29c41b54bc5bf937f309c56c6f42105ead08374b7dc19d4be099534f274",
- "size": 571715,
+ "version": "3.9.4",
+ "sha256": "e5d3b6fe715c906df955e8a83aede8877163749f8243b0c5090f6e5cea37c848",
+ "size": 572075,
  "url": "PitWallCrew.zip",
- "notes": "- Zużycie energii (i paliwa, gdy gra je podaje) liczone zawsze tak jak w grze – z zapisu okrążeń gry.\n  Własny pomiar tylko zapasowo: zanim gra poda dane (pierwsze okrążenia stintu nowego kierowcy) albo gdy\n  interfejs gry jest wyłączony. Bez komunikatu „ja liczę…, gra…”."
+ "notes": "- Pełny dziennik (tylko wersja testowa): co 5 s zapis tego, co trafia na ścianę boksów (stan auta, plan postoju,\n  rywale, mapa, grafik) – do odtworzenia ściany po jeździe i sprawdzenia, czy wszystko się zgadza."
 }
