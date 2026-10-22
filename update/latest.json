@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.7",
- "display": "0.4.0.7",
- "sha256": "3a609e881356be32ede264f78c1ba1c92dc94a0f56669ce38a1f0196492e5d0e",
- "size": 637406,
+ "version": "10.0.4.0.8",
+ "display": "0.4.0.8",
+ "sha256": "c5d483bee661029b69758d83e9c67b146b52a158913493b6e3a41d0ad8d029ee",
+ "size": 637633,
  "url": "PitWallCrew.zip",
- "notes": "- „Wyjedziesz na …” uwzględnia auta za Tobą, które też muszą zjechać na tym okrążeniu – one Cię na postoju nie wyprzedzą (w wyścigu 2,4 h inżynier mówił P23, a wyjazd był na P17). Dodatkowo: „(3 auta za Tobą też zjeżdżają na tym okrążeniu)”. Gdy gra nie podaje zużycia rywala, liczymy je jak nasze."
+ "notes": "- Dziennik przycięć: przy uruchomionych programach także ich parametry i kto je uruchomił (np. zadanie aktualizacji w tle)."
 }
