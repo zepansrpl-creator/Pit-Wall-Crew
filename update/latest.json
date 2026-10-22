@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.10",
- "display": "0.4.0.10",
- "sha256": "0e4629ffea12aab5eca11b3c614c46ebf0b179375514d0605323ccbaae0ab7a5",
- "size": 638928,
+ "version": "10.0.4.0.11",
+ "display": "0.4.0.11",
+ "sha256": "f7308b958f19cfd46052687377a8eedc331bb89f3c3be4526dede3718b302bff",
+ "size": 639368,
  "url": "PitWallCrew.zip",
- "notes": "- Dziennik przycięć obserwuje wszystkie programy i procesy (co sekundę: procesor, dysk, pamięć, ostatnie 90 s). Przy każdym przycięciu zapisuje osobny plik recordings\\procesy_*.txt: kto najbardziej zajmuje procesor, kto nagle więcej niż zwykle, kto czyta/pisze dysk, komu przybyło pamięci, co się uruchomiło lub zakończyło."
+ "notes": "- Dziennik przycięć: procesy obserwowane cały czas (także bez gry), więc porównanie „nagle więcej niż zwykle” nie pokazuje już fałszywych skoków od zera. W zrzucie procesy_*.txt dochodzi: ile wolnej pamięci i pliku wymiany, łączny ruch na dysku, programy zajmujące najwięcej pamięci. „System Idle Process” pominięty."
 }
