@@ -1,7 +1,7 @@
 {
- "version": "3.9.8",
- "sha256": "0f294023fb208d8f110b748aeca1063689f28a37a39213af80aafe7063fe9907",
- "size": 589910,
+ "version": "3.9.9",
+ "sha256": "4c1f85fab191d11b7e9a79b55da2bba9379916528f83d8f7e1680a032ad5fd55",
+ "size": 589973,
  "url": "PitWallCrew.zip",
- "notes": "- Ściana boksów otwarta z aplikacji (przycisk „Ściana boksów”) ma od razu wybrane Twoje imię przy wiadomościach, więc inżynier mówi „Wiadomość od Macieja…”. Imię bierze się z ustawień (Zespół → Twoje imię). Ręczny wybór zapamiętuje się na tym urządzeniu."
+ "notes": "- Poprawka: porównanie z kolegą z zespołu działało dopiero po kilku minutach od włączenia komputera."
 }
