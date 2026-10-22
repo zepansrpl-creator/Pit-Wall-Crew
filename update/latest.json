@@ -1,7 +1,7 @@
 {
- "version": "3.9.7",
- "sha256": "27ab1be92bfb949cdcbceb09dece0cca09d50cb059b2815a149612aa9e6a53f3",
- "size": 589273,
+ "version": "3.9.8",
+ "sha256": "0f294023fb208d8f110b748aeca1063689f28a37a39213af80aafe7063fe9907",
+ "size": 589910,
  "url": "PitWallCrew.zip",
- "notes": "- Porównanie z kolegą z zespołu: najszybsze okrążenia każdego kierowcy w danych warunkach zapisują się same w bazie zespołu. Inżynier wybiera okrążenie kolegi na tej samej mieszance, przy podobnym zużyciu opon, paliwie i temperaturze toru i mówi przed zakrętem, co kolega robi inaczej i co zmienić („T5: Patryk hamuje 15 metrów później. Spróbuj hamować później.”). Pytania: „porównaj mnie z Patrykiem”, „co Amadeusz robi inaczej?”, „gdzie kolega jest szybszy?”. Komendy: „porównanie z zespołem” / „bez porównania z zespołem”.\n- Naprawione porównanie z rywalem w zakrętach („w jakich zakrętach Wieczorek jest wolniejszy ode mnie?”): wcześniej odpowiedź porównywała Twoje okrążenie z Twoim najlepszym. Teraz czas przejazdu każdego zakrętu i prędkość w zakręcie rywala z jego pozycji na torze."
+ "notes": "- Ściana boksów otwarta z aplikacji (przycisk „Ściana boksów”) ma od razu wybrane Twoje imię przy wiadomościach, więc inżynier mówi „Wiadomość od Macieja…”. Imię bierze się z ustawień (Zespół → Twoje imię). Ręczny wybór zapamiętuje się na tym urządzeniu."
 }

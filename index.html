@@ -601,13 +601,23 @@ function render(v) {
   }).join('') || '<p class="note">Brak wiadomości.</p>';
 
   var sel = $('kto');
-  if (v.kierowcy && sel.options.length !== v.kierowcy.length + 1) {
-    sel.innerHTML = '';
+  if (v.kierowcy) {
+    // domyślnie: ten, kto otworzył ścianę (z aplikacji: ?kto=imię), potem ostatni wybór na tym urządzeniu
     var saved = KTO;
     try { saved = saved || localStorage.getItem('kto') || ''; } catch (e) {}
-    v.kierowcy.concat(['zespół']).forEach(function (n) {
-      var o = document.createElement('option'); o.textContent = n; o.value = n; if (n === saved) o.selected = true; sel.appendChild(o);
-    });
+    var names = v.kierowcy.slice();
+    var hit = ktoMatch(saved, names);
+    if (saved && !hit && saved !== 'zespół') { names.push(saved); hit = saved; }
+    names.push('zespół');
+    var sig = names.join('|');
+    if (sel.getAttribute('data-sig') !== sig) {
+      sel.innerHTML = '';
+      names.forEach(function (n) {
+        var o = document.createElement('option'); o.textContent = n; o.value = n;
+        if (n === (hit || saved)) o.selected = true; sel.appendChild(o);
+      });
+      sel.setAttribute('data-sig', sig);
+    }
   }
 }
 
@@ -661,6 +671,7 @@ function boot() {
   db = firebase.database();
   if (TRYB === 'widz') return startObs(Q.get('obs'));
   if (Q.get('team')) $('l-code').value = Q.get('team');
+  if (Q.get('kto')) { KTO = Q.get('kto'); lsSet('kto', KTO); }
   firebase.auth().onAuthStateChanged(function (u) {
     if (u && /@pitwallcrew\.team$/.test(u.email || '')) startTeam(u.email.split('@')[0]);
     else showLogin();
@@ -829,7 +840,17 @@ document.querySelectorAll('#tabs button').forEach(function (b) { b.onclick = fun
 $('feed').onchange = function () { FEED = this.value; pickFeed(); };
 
 // ------------------------------------------------------------------ radio zespołu
+$('kto').onchange = function () { who(); };
 function who() { var v = $('kto').value || 'zespół'; KTO = v; lsSet('kto', v); return v; }
+function ktoFold(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').trim(); }
+function ktoMatch(name, list) {   // „Maciej” = „Maciej Szczepaniak” na liście kierowców
+  var a = ktoFold(name); if (!a) return '';
+  for (var i = 0; i < list.length; i++) {
+    var b = ktoFold(list[i]);
+    if (a === b || b.split(' ')[0] === a.split(' ')[0]) return list[i];
+  }
+  return '';
+}
 function teamMessage(frm, text, kind, silent) {
   var feed = curFeed() || 'race', t = now(), delivered = '', p = Promise.resolve();
   text = String(text || '').slice(0, 300);
@@ -1080,7 +1101,7 @@ function speakNew(list) {
 voiceBtn();
 $('b-adddrv').onclick = function () { var r = readDrivers(); r.push({ name: '', topic: 'pwc-' + rnd(6) }); editDrivers(r); };
 $('b-drv').onclick = function () {
-  T('settings/drivers').set(readDrivers()).then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; draw(); })
+  T('settings/drivers').set(readDrivers()).then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; $('kto').removeAttribute('data-sig'); draw(); })
     .catch(function (e) { alert(authErr(e)); });
 };
 
