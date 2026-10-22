@@ -1,7 +1,7 @@
 {
- "version": "3.9.2",
- "sha256": "46ecb969008a0fbac938c50ded623256e7da537b9d701ef62fd4bc9642260c33",
- "size": 571642,
+ "version": "3.9.3",
+ "sha256": "ac29b29c41b54bc5bf937f309c56c6f42105ead08374b7dc19d4be099534f274",
+ "size": 571715,
  "url": "PitWallCrew.zip",
- "notes": "- Rozpoznawanie mowy: niepewnie rozpoznane pytanie (np. „Lepki małto mnie ci late”) – inżynier od razu prosi\n  „Nie zrozumiałem, powtórz.” zamiast odpowiadać na coś innego. Nazwiska rywali z Twojej klasy są podpowiedzią\n  dla rozpoznawania („Mateo”, „Wieczorek”). Dziennik zapisuje poziom mikrofonu przed podgłośnieniem i pewność rozpoznania.\n- Postoje: do planów nie trafiają postoje dłuższe niż sam serwis (naprawa, kara, powrót do garażu); dotychczasowe\n  takie wpisy są usuwane (np. 133 s i 97 s). Inżynier mówi wtedy „nie biorę go do planów”.\n- Długie listy zakrętów: „Podsterowność na wejściu w 6 zakrętach, najbardziej T3 i T11”, „Tracisz w 8 zakrętach,\n  najwięcej…”. Pełna lista na dopytanie „w których?”. AI też podaje ile i dwa najważniejsze.\n- Postoje rywali: wyjazd z garażu na start nie liczy się jako postój („postój na okrążeniu zero”).\n- Szybsze odpowiedzi: częste krótkie odpowiedzi („Nie zrozumiałem, powtórz.”, „Ok.”, „Radio sprawdzone.”…)\n  przygotowane z góry i zapamiętywane – odtwarzają się od razu.\n- Kontrola energii: po każdym okrążeniu porównanie naszego zużycia z wyliczeniem gry. Gdy się rozjeżdżają –\n  ostrzeżenie („ja liczę 9,1% na okrążenie, gra 9,5%”) i do planu brana jest wyższa wartość.\n- Dziennik: klucze i hasła zamazane (***)."
+ "notes": "- Zużycie energii (i paliwa, gdy gra je podaje) liczone zawsze tak jak w grze – z zapisu okrążeń gry.\n  Własny pomiar tylko zapasowo: zanim gra poda dane (pierwsze okrążenia stintu nowego kierowcy) albo gdy\n  interfejs gry jest wyłączony. Bez komunikatu „ja liczę…, gra…”."
 }
