@@ -1196,9 +1196,15 @@ function mapTick() {
   cars.forEach(function (c) {
     var f = c[0] + (!c[3] && c[4] > 0 ? dt / c[4] : 0), xy = mapAt(f), own = c[1] === 0, me = c[5] === 1;
     var col = MAP_COLORS[c[1] % MAP_COLORS.length], r = (me ? 17 : own ? 13 : 7) * k, op = c[3] ? 0.35 : 1;
+    var hyperLead = !own && c[2] === 1 && /hyper/i.test((m.cls || [])[c[1]] || '');
+    if (hyperLead) {      // lider wyścigu w klasie Hypercar: złota obwódka i „1”
+      r = 13 * k;
+      html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + (r + 6 * k) + '" fill="none" stroke="#ffd34d" stroke-width="' + (4 * k) + '" opacity="' + op + '"/>';
+    }
     if (me) html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + (r + 6 * k) + '" fill="none" stroke="#ff3b30" stroke-width="' + (4 * k) + '"/>';
     html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + r + '" fill="' + (me ? '#ff3b30' : col) + '" opacity="' + op + '" stroke="#0b0c0f" stroke-width="' + (2 * k) + '"/>';
     if (own) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="' + (me ? '#fff' : '#111') + '" opacity="' + op + '">' + c[2] + '</text>';
+    if (hyperLead) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="#111" opacity="' + op + '">1</text>';
   });
   var g = $('map-cars'); if (g) g.innerHTML = html;
   var lk = (m.cls || []).join('|');
@@ -1206,7 +1212,9 @@ function mapTick() {
   MAP.legend = lk;
   $('map-legend').innerHTML = (m.cls || []).map(function (c, i) {
     return '<span><i style="background:' + (i === 0 ? MAP_COLORS[0] : MAP_COLORS[i % MAP_COLORS.length]) + '"></i>' + esc(c) + (i === 0 ? ' (nasza klasa, numer = pozycja)' : '') + '</span>';
-  }).join('') + '<span><i style="background:#ff3b30"></i>my</span><span class="note">półprzezroczyste = w alei</span>';
+  }).join('') + '<span><i style="background:#ff3b30"></i>my</span>' +
+    ((m.cls || []).some(function (c) { return /hyper/i.test(c); }) ? '<span><i style="background:transparent;border:2px solid #ffd34d"></i>lider Hypercar</span>' : '') +
+    '<span class="note">półprzezroczyste = w alei</span>';
 }
 setInterval(mapTick, 250);
 window.addEventListener('resize', function () {

@@ -1,7 +1,7 @@
 {
- "version": "3.9.0",
- "sha256": "c7e73fde2210fbe3b02b6c78479f75295c5317ac75e6449b6c02fc8814e43271",
- "size": 565123,
+ "version": "3.9.1",
+ "sha256": "f63d6d629fc68d92da8d5209f146e9904721ee3876eb96a0b7277ad8fe6cd116",
+ "size": 567944,
  "url": "PitWallCrew.zip",
- "notes": "- Link dla obserwatorów: gdy nie ma wyścigu, pokazuje trening / kwalifikacje kierowcy, który jedzie (wcześniej\n  stary wyścig). Gdy nikt nie jedzie od 3 minut – „brak wyścigu na żywo · ostatnio …” zamiast starych danych."
+ "notes": "- Naprawione (główna przyczyna wielu błędów): zapisane „najlepsze okrążenie” z poprzednich sesji było uszkodzone\n  (dziura w danych – 177 s na Le Mans). Przez nie: fałszywe „Hypercar, 1 sekunda” o autach kilkaset metrów z tyłu,\n  „Wolne auto” o autach daleko przed Tobą, „Box, box” w połowie okrążenia i „302 sekundy do znalezienia”.\n  Teraz okrążenie wzorcowe jest sprawdzane (czas rośnie wzdłuż toru, nigdzie ponad 420 km/h); uszkodzone jest\n  odkładane (best_lap_uszkodzone.json) razem z zakrętami, a czasy dojazdu mają zabezpieczenie.\n- „Wolne auto”: nie ostrzega o autach zjeżdżających do boksu ani o autach w wolnym zakręcie (szykana Forda) –\n  wolne to dopiero poniżej 55% typowej prędkości w tym miejscu.\n- Koniec wyścigu: brak „zjedź na tym okrążeniu”, gdy energii starczy do mety (wcześniej zapas +0,2 okrążenia),\n  i żadnych komunikatów o postoju po fladze w szachownicę („Box, box”, „Nie było zjazdu”).\n- Przelicznik paliwa: komunikat tylko gdy paliwa naprawdę starczy na nie więcej okrążeń niż energii, z liczbami\n  („Paliwa starczy na 2,0 okrążenia, energii na 1,9…”). Wcześniej mówił „paliwo skończy się przed energią”,\n  gdy paliwa było więcej.\n- „Pięć hypercarów” (zamiast „pięć hypercary”).\n- AI: modele aut w danych („Jakim autem jedzie Light?”); do AI trafiają też pytania z nazwiskiem rywala\n  („Czy Mateo był w boksie?”), o grill i chłodzenie, „jakie muszę mieć zużycie, żeby…”.\n- Ściana boksów: lider klasy Hypercar na mapie toru (złota obwódka i „1”).\n- Dziennik przycięć: bez"
 }
