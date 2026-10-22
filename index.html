@@ -128,8 +128,18 @@
   .grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px 16px; }
   .grid2 label { display: grid; gap: 5px; font-size: 12px; color: var(--muted); }
   .grid2 input { flex: none; width: 100%; }
+  .grid2 select { width: 100%; min-width: 0; }
   table.edit input { padding: 6px 8px; width: 100%; min-width: 0; font-family: var(--mono); font-size: 13px; }
   table.edit td { padding: 4px 3px; }
+  table.plan td { white-space: nowrap; font-family: var(--mono); font-size: 13px; }
+  table.plan select { padding: 5px 6px; font-size: 13px; }
+  table.plan input[type=checkbox] { width: 18px; height: 18px; }
+  table.plan tr.night td { background: rgba(110,130,255,.10); }
+  table.plan tr.after td { opacity: .45; }
+  table.plan tr.final td { background: rgba(80,200,120,.12); }
+  .pair { display: flex; gap: 6px; min-width: 0; } .grid2 .pair input { width: auto; flex: 1 1 0; min-width: 0; }
+  table.plan input:not([type=checkbox]) { width: 64px; }
+  details.gen > summary { cursor: pointer; font-weight: 600; }
   textarea { width: 100%; min-height: 110px; font: 13px/1.4 var(--mono); }
   .qr { background: #fff; padding: 12px; border-radius: 12px; display: inline-block; margin-top: 8px; }
   .code { font: 700 28px/1.2 var(--mono); letter-spacing: .18em; color: var(--text); }
@@ -301,37 +311,41 @@
     <div class="btnrow"><button id="b-set">Zapisz</button><span id="set-ok" class="ok-txt"></span></div>
   </section>
   <section>
-    <h2>2. Szybki plan stintów</h2>
-    <p class="note">Wpisz, jak chcecie jeździć – plan rozpisze się sam do końca wyścigu. Potem możesz go poprawić w tabeli niżej.</p>
-    <div class="grid2">
-      <label>Okrążeń w jednym stincie<input id="g-laps" inputmode="numeric" value="11"></label>
-      <label>Kierowcy po kolei (przecinkami)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
-      <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
-      <label>Nowe opony co ile stintów<select id="g-tyres"><option value="1">co stint</option><option value="2" selected>co 2 stinty</option><option value="3">co 3 stinty</option><option value="0">bez zmiany opon</option></select></label>
-      <label>Czas postoju (s)<input id="g-stop" inputmode="numeric" value="60"></label>
-    </div>
-    <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
-  </section>
-  <section>
-    <h2>3. Plan stintów</h2>
-    <div class="scroll"><table class="edit">
-      <thead><tr><th title="Numer stintu">Stint</th><th title="Ile okrążeń ma trwać stint">Okrążeń</th>
-        <th title="Jeśli stint ma zacząć się później (np. po naprawie) – o ile minut">Przesunięcie (min)</th>
-        <th>Kierowca</th><th title="Ile trwa postój na końcu stintu">Postój (s)</th><th title="Co robimy na postoju">Na postoju</th>
-        <th title="Uzupełnij po fakcie – ile okrążeń stint faktycznie trwał">Przejechane okr.</th><th></th></tr></thead>
+    <h2>2. Plan stintów</h2>
+    <details id="gen-box" class="gen">
+      <summary>Rozpisz plan automatycznie</summary>
+      <div class="grid2" style="margin-top:10px">
+        <label>Okrążeń w stincie<input id="g-laps" inputmode="numeric" value="11"></label>
+        <label>Kierowcy po kolei (z zakładki Zespół)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
+        <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
+        <label>Opony<select id="g-tyres">
+          <option value="mix" selected>w dzień 4 co 2 stinty, w nocy jedna strona</option>
+          <option value="4x2">4 opony co 2 stinty</option><option value="4x1">4 opony co stint</option>
+          <option value="side">jedna strona co stint (na zmianę)</option><option value="0">bez zmiany opon</option></select></label>
+        <label>Noc od – do<span class="pair"><input id="g-n1" value="18:45"><input id="g-n2" value="03:15"></span></label>
+        <label>Postój (s): bez opon / 2 opony / 4 opony<span class="pair"><input id="g-s0" inputmode="numeric" value="60"><input id="g-s2" inputmode="numeric" value="65"><input id="g-s4" inputmode="numeric" value="72"></span></label>
+      </div>
+      <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
+    </details>
+    <p class="note" id="tyre-sum"></p>
+    <div class="scroll"><table class="edit plan">
+      <thead><tr><th>Stint</th><th>Kierowca</th><th title="Ile okrążeń ma trwać stint">Okr.</th><th>Start</th><th>Zjazd</th><th>Pora</th>
+        <th title="Zmiana lewych opon (LP + LT) na postoju po tym stincie">Lewe</th><th title="Zmiana prawych opon (PP + PT)">Prawe</th>
+        <th title="Ile trwa postój po tym stincie">Postój (s)</th>
+        <th title="Jeśli stint ma zacząć się później (np. po naprawie) – o ile minut">Przesun. (min)</th><th></th></tr></thead>
       <tbody id="plan-rows"></tbody>
-    </table></div><datalist id="drvlist"></datalist>
+    </table></div>
     <div class="btnrow">
       <button id="b-addrow" class="second">+ stint</button>
       <button id="b-plan">Zapisz plan</button><span id="plan-ok" class="ok-txt"></span>
     </div>
     <details style="margin-top:10px">
       <summary class="note">Wklej plan z arkusza Google</summary>
-      <p class="note">W starym arkuszu w zakładce „Plan” zaznacz wiersze stintów (kolumny A–W), skopiuj (Ctrl+C) i wklej tutaj (Ctrl+V). Potem „Wczytaj” i „Zapisz plan”.</p>
-      <textarea id="tsv" placeholder="1	11	0	Maciej	…"></textarea>
+      <p class="note">W arkuszu stintów zaznacz wiersze od kolumny „Planowane okrążenia” do „Wyjazd z boksu” (albo stary arkusz: kolumny A–W), skopiuj (Ctrl+C) i wklej tutaj (Ctrl+V). Potem „Wczytaj” i „Zapisz plan”.</p>
+      <textarea id="tsv" placeholder="11	0	Maciej	13:30	…"></textarea>
       <div class="btnrow"><button id="b-tsv" class="second">Wczytaj</button><span id="tsv-ok" class="note"></span></div>
     </details>
-    <p class="note">Grafik na górze przelicza się sam co minutę z prawdziwego tempa w wyścigu. Każdy kierowca dostaje powiadomienie na telefon przed swoją zmianą (zakładka Zespół → 📱).</p>
+    <p class="note">Godziny w tabeli liczą się z planu (start wyścigu i czas okrążenia). Grafik na górze przelicza się co minutę z prawdziwego tempa. Kierowca dostaje powiadomienie na telefon przed swoją zmianą (zakładka Zespół → 📱) – dlatego wybierasz go z listy. Inżynier na postoju zmienia opony według planu, chyba że któraś nie dojedzie do końca następnego stintu.</p>
   </section>
 </div></div>
 
@@ -890,7 +904,8 @@ function drawGrafik2(g) {
 
 var SET_FIELDS = [
   ['raceStartMs', 'Start wyścigu (data i godzina, czas polski)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
-  ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30']
+  ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30'],
+  ['tyreBudget', 'Opon na wyścig (sztuk, z kompletem na start)', 'num', 'np. 58']
 ];
 var ADV_FIELDS = [
   ['vePerLap', 'Plan energii (% / okr.)'], ['fuelPerLap', 'Plan paliwa (l / okr.)'],
@@ -919,6 +934,11 @@ function editSettings() {
   if (st && Math.abs(st - now()) > 180 * 86400000)
     $('settings').insertAdjacentHTML('beforeend', '<p class="note" style="color:var(--warn);grid-column:1/-1">Uwaga: data startu jest daleko od dzisiaj (' + st.toLocaleDateString('pl-PL') + ') – sprawdź rok.</p>');
   if (!$('g-order').value) $('g-order').value = ((s.drivers || []).map(function (d) { return d && d.name; }).filter(Boolean)).join(', ');
+  [['g-n1', 'nightFrom'], ['g-n2', 'nightTo'], ['g-s0', 'stopBase'], ['g-s2', 'stop2'], ['g-s4', 'stop4']].forEach(function (x) {
+    if (s[x[1]] != null && document.activeElement !== $(x[0])) $(x[0]).value = s[x[1]];
+  });
+  if (!planRows().length) $('gen-box').open = true;
+  editPlan();
 }
 $('b-set').onclick = function () {
   var upd = {};
@@ -933,68 +953,185 @@ $('b-set').onclick = function () {
   Promise.all([T('settings').update(upd), T('meta/name').set($('s-name').value.trim() || CODE.toUpperCase())])
     .then(function () { flash('set-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
 };
-$('b-gen').onclick = function () {
-  var s = S.settings || {}, laps = num($('g-laps').value), stop = num($('g-stop').value) || 60;
-  var lap = lapParse(($('s-lapTime') || {}).value) || s.lapTime, hours = num(($('s-raceHours') || {}).value) || s.raceHours;
-  var order = $('g-order').value.split(/[,;]+/).map(function (x) { return x.trim(); }).filter(Boolean);
-  var rep = +$('g-rep').value || 1, tyres = +$('g-tyres').value;
-  if (!laps || !lap || !hours) { alert('Uzupełnij w „1. Wyścig” długość wyścigu i czas okrążenia oraz liczbę okrążeń w stincie.'); return; }
-  if (!order.length) { alert('Wpisz kierowców po kolei, np. Maciej, Patryk, Amadeusz.'); return; }
-  var n = Math.ceil(hours * 3600 / (laps * lap + stop)), rows = [];
-  for (var i = 0; i < n; i++) {
-    rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: stop,
-                service: i === n - 1 ? 'META' : (tyres && (i + 1) % tyres === 0 ? 'Paliwo + 4 opony' : 'Paliwo') });
-  }
-  editPlan(rows);
-  $('gen-ok').textContent = 'Rozpisano ' + n + ' stintów (' + hours + ' h, okrążenie ' + lapFmt(lap) + '). Sprawdź tabelę niżej i kliknij „Zapisz plan”.';
-};
-
-var PLAN_COLS = [['n', 3], ['laps', 4], ['offsetMin', 4], ['driver', 9], ['stopS', 4], ['service', 14], ['lapsActual', 4]];
-function planRows() { var r = S.plan; return (Array.isArray(r) ? r : Object.values(r || {})).filter(Boolean).sort(function (a, b) { return (a.n || 0) - (b.n || 0); }); }
+var PLAN_DIRTY = false;
+function hm(t) { var m = String(t || '').match(/^(\d{1,2}):(\d{2})$/); return m ? +m[1] * 60 + +m[2] : null; }
+function isNight(ms, s) {
+  var a = hm(s.nightFrom || '18:45'), b = hm(s.nightTo || '03:15'); if (a == null || b == null) return false;
+  var d = new Date(ms), x = d.getHours() * 60 + d.getMinutes();
+  return a <= b ? (x >= a && x < b) : (x >= a || x < b);
+}
+function drvNames() { return ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean); }
+function tyreN(r) { return (r.tyreL ? 2 : 0) + (r.tyreR ? 2 : 0); }
+function serviceOf(r, fin) {
+  if (fin) return 'META';
+  var t = r.tyreL && r.tyreR ? ' + 4 opony' : r.tyreL ? ' + lewe opony' : r.tyreR ? ' + prawe opony' : '';
+  return 'Tankowanie' + t;
+}
+function legacyTyres(r) {   // stare plany: opony tylko w opisie „Na postoju”
+  if (r.tyreL != null || r.tyreR != null) return r;
+  var sv = String(r.service || '').toLowerCase();
+  r.tyreL = /4 opony|komplet|lewe/.test(sv); r.tyreR = /4 opony|komplet|prawe/.test(sv);
+  return r;
+}
+function stopTimes() {
+  var s = S.settings || {};
+  return [num($('g-s0').value) || s.stopBase || 60, num($('g-s2').value) || s.stop2 || 65, num($('g-s4').value) || s.stop4 || 72];
+}
+// godziny, pora, meta i licznik opon – liczone z planu jak w arkuszu
+function planTimes(rows) {
+  var s = S.settings || {}, lap = s.lapTime || 240, t = s.raceStartMs, end = t ? t + (s.raceHours || 24) * 3600000 : null;
+  var used = 4, fin = false;
+  rows.forEach(function (r) {
+    r._after = fin; r._final = false;
+    if (!t || fin) { r._start = r._end = null; r._night = false; return; }
+    t += (r.offsetMin || 0) * 60000; r._start = t;
+    var e = t + (r.laps || 0) * lap * 1000;
+    if (e >= end) { fin = true; r._final = true; r._lapsFin = Math.ceil((end - t) / (lap * 1000)); e = t + r._lapsFin * lap * 1000; }
+    r._end = e; r._night = isNight(t, s);
+    if (!r._final) used += tyreN(r);
+    t = e + (r.stopS || 60) * 1000;
+  });
+  return { used: used, end: end };
+}
+function rowsFromTable() {
+  var out = [];
+  $('plan-rows').querySelectorAll('tr').forEach(function (tr, i) {
+    var r = JSON.parse(tr.dataset.keep || '{}');
+    r.n = i + 1;
+    r.driver = tr.querySelector('[data-k=driver]').value;
+    r.laps = num(tr.querySelector('[data-k=laps]').value) || 0;
+    r.stopS = num(tr.querySelector('[data-k=stopS]').value) || 60;
+    r.offsetMin = num(tr.querySelector('[data-k=offsetMin]').value) || 0;
+    r.tyreL = tr.querySelector('[data-k=tyreL]').checked; r.tyreR = tr.querySelector('[data-k=tyreR]').checked;
+    out.push(r);
+  });
+  return out;
+}
+function tyreSummary(info) {
+  var b = (S.settings || {}).tyreBudget, txt = 'Opony: 4 na start + ' + (info.used - 4) + ' na postojach = ' + info.used;
+  if (b) txt += ' z ' + b + (info.used > b ? ' – za dużo o ' + (info.used - b) + '!' : info.used < b ? ' (zapas ' + (b - info.used) + ')' : ' ✓');
+  else txt += ' (wpisz w „1. Wyścig”, ile opon macie na wyścig)';
+  $('tyre-sum').textContent = txt;
+  $('tyre-sum').style.color = b && info.used > b ? 'var(--bad)' : '';
+}
+function refreshTimes() {   // po każdej zmianie w tabeli: przelicz godziny bez przerysowania pól
+  var rows = rowsFromTable(), info = planTimes(rows);
+  $('plan-rows').querySelectorAll('tr').forEach(function (tr, i) {
+    var r = rows[i], c = tr.querySelectorAll('td');
+    c[0].textContent = r.n;
+    c[3].textContent = r._start ? hhmm(r._start) : '';
+    c[4].textContent = r._final ? 'META (' + r._lapsFin + ' okr.)' : (r._end ? hhmm(r._end) : '');
+    c[5].textContent = r._start ? (r._night ? 'noc' : 'dzień') : '';
+    tr.className = (r._night ? 'night ' : '') + (r._after ? 'after ' : '') + (r._final ? 'final' : '');
+  });
+  tyreSummary(info);
+}
+function planRows() { var r = S.plan; return (Array.isArray(r) ? r : Object.values(r || {})).filter(Boolean).sort(function (a, b) { return (a.n || 0) - (b.n || 0); }).map(legacyTyres); }
 function editPlan(rows) {
-  if (!rows && document.activeElement && $('plan-rows').contains(document.activeElement)) return;
+  if (!rows && (PLAN_DIRTY || (document.activeElement && $('plan-rows').contains(document.activeElement)))) { refreshTimes(); return; }
   rows = rows || planRows();
-  var drv = ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean);
+  var drv = drvNames();
   $('plan-rows').innerHTML = rows.map(function (r) {
-    return '<tr>' + PLAN_COLS.map(function (c) {
-      var v = r[c[0]] == null ? '' : r[c[0]];
-      var list = c[0] === 'driver' ? ' list="drvlist"' : '';
-      return '<td><input data-k="' + c[0] + '" size="' + c[1] + '"' + list + ' value="' + esc(typeof v === 'number' ? String(v).replace('.', ',') : v) + '"></td>';
-    }).join('') + '<td><button class="second" data-del title="Usuń stint">×</button></td></tr>';
+    var keep = { lapsActual: r.lapsActual || 0 };
+    var names = drv.slice(); if (r.driver && names.indexOf(r.driver) < 0) names.push(r.driver);
+    var sel = '<select data-k="driver"><option value="">—</option>' + names.map(function (d) {
+      return '<option' + (d === r.driver ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('') + '</select>';
+    var inp = function (k, v, w) { return '<input data-k="' + k + '" size="' + w + '" inputmode="numeric" value="' + esc(String(v == null ? '' : v).replace('.', ',')) + '">'; };
+    var cb = function (k) { return '<input type="checkbox" data-k="' + k + '"' + (r[k] ? ' checked' : '') + '>'; };
+    return '<tr data-keep="' + esc(JSON.stringify(keep)) + '"><td></td><td>' + sel + '</td><td>' + inp('laps', r.laps, 3) +
+      '</td><td></td><td></td><td></td><td>' + cb('tyreL') + '</td><td>' + cb('tyreR') + '</td><td>' + inp('stopS', r.stopS, 3) +
+      '</td><td>' + inp('offsetMin', r.offsetMin || 0, 3) + '</td><td><button class="second" data-del title="Usuń stint">×</button></td></tr>';
   }).join('');
-  $('drvlist').innerHTML = drv.map(function (d) { return '<option value="' + esc(d) + '">'; }).join('');
-  $('plan-rows').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); }; });
+  $('plan-rows').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); PLAN_DIRTY = true; refreshTimes(); }; });
+  $('plan-rows').querySelectorAll('input, select').forEach(function (el) {
+    el.addEventListener(el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input', function () {
+      PLAN_DIRTY = true;
+      if (el.type === 'checkbox') {   // czas postoju z liczby zmienianych opon
+        var tr = el.closest('tr'), n = (tr.querySelector('[data-k=tyreL]').checked ? 2 : 0) + (tr.querySelector('[data-k=tyreR]').checked ? 2 : 0);
+        var st = stopTimes(); tr.querySelector('[data-k=stopS]').value = n === 4 ? st[2] : n === 2 ? st[1] : st[0];
+      }
+      refreshTimes();
+    });
+  });
+  refreshTimes();
 }
 function readPlan() {
-  var out = [];
-  $('plan-rows').querySelectorAll('tr').forEach(function (tr) {
-    var r = {};
-    tr.querySelectorAll('input').forEach(function (i) {
-      var k = i.dataset.k, v = i.value.trim();
-      r[k] = (k === 'driver' || k === 'service') ? v : num(v);
-    });
-    if (r.n) out.push(r);
+  var rows = rowsFromTable(); planTimes(rows);
+  return rows.filter(function (r) { return !r._after; }).map(function (r) {
+    return { n: r.n, laps: r._final ? r._lapsFin || r.laps : r.laps, offsetMin: r.offsetMin, driver: r.driver, stopS: r.stopS,
+             tyreL: !!r.tyreL, tyreR: !!r.tyreR, service: serviceOf(r, r._final), lapsActual: r.lapsActual || 0 };
   });
-  return out.sort(function (a, b) { return a.n - b.n; });
 }
-$('b-addrow').onclick = function () {
-  var rows = readPlan(), last = rows[rows.length - 1] || { n: 0, laps: 11, stopS: 60, service: 'Paliwo' };
-  rows.push({ n: last.n + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: last.stopS, service: last.service });
+$('b-gen').onclick = function () {
+  var s = S.settings || {}, laps = num($('g-laps').value);
+  var lap = lapParse(($('s-lapTime') || {}).value) || s.lapTime, hours = num(($('s-raceHours') || {}).value) || s.raceHours;
+  var order = $('g-order').value.split(/[,;]+/).map(function (x) { return x.trim(); }).filter(Boolean);
+  var rep = +$('g-rep').value || 1, mode = $('g-tyres').value, st = stopTimes();
+  if (!laps || !lap || !hours || !s.raceStartMs) { alert('Uzupełnij w „1. Wyścig” start, długość wyścigu i czas okrążenia (i zapisz), oraz liczbę okrążeń w stincie.'); return; }
+  if (!order.length) { alert('Wpisz kierowców po kolei, np. Maciej, Patryk, Amadeusz.'); return; }
+  var drv = drvNames();
+  order = order.map(function (o) { return ktoMatch(o, drv) || o; });
+  var sv = { nightFrom: $('g-n1').value.trim(), nightTo: $('g-n2').value.trim(), stopBase: st[0], stop2: st[1], stop4: st[2] };
+  S.settings = Object.assign({}, s, sv);
+  var n = Math.ceil(hours * 3600 / (laps * lap + st[0])) + 1, rows = [], nightK = 0, dayK = 0, sideK = 0;
+  var NIGHT = [[1, 0], [0, 1], [1, 0], [0, 0], [1, 1]];
+  for (var i = 0; i < n; i++) rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: st[0], tyreL: false, tyreR: false });
+  planTimes(rows);
+  rows.forEach(function (r) {
+    if (r._final || r._after) return;
+    var L = false, R = false;
+    if (mode === '4x1') L = R = true;
+    else if (mode === '4x2') L = R = r.n % 2 === 0;
+    else if (mode === 'side') { L = sideK % 2 === 0; R = !L; sideK++; }
+    else if (mode === 'mix') {
+      if (r._night) { var p = NIGHT[nightK % NIGHT.length]; L = !!p[0]; R = !!p[1]; nightK++; dayK = 1; }
+      else { L = R = dayK % 2 === 1; dayK++; }
+    }
+    r.tyreL = L; r.tyreR = R;
+  });
+  // limit opon: od końca wyścigu zmniejszamy zmiany (4 → 2 → 0), aż się zmieści
+  var budget = s.tyreBudget, info = planTimes(rows), cut = 0;
+  for (var k = rows.length - 1; budget && info.used > budget && k >= 0; k--) {
+    var r = rows[k]; if (r._final || r._after || !tyreN(r)) continue;
+    if (r.tyreL && r.tyreR) r.tyreR = false; else { r.tyreL = r.tyreR = false; }
+    cut++; info = planTimes(rows); if (info.used > budget) k++;
+  }
+  rows.forEach(function (r) { var t = tyreN(r); r.stopS = t === 4 ? st[2] : t === 2 ? st[1] : st[0]; });
+  rows = rows.filter(function (r) { return !r._after; });
+  T('settings').update(sv).catch(function () {});
+  PLAN_DIRTY = true;
   editPlan(rows);
+  $('gen-ok').textContent = 'Rozpisano ' + rows.length + ' stintów (' + hours + ' h, okrążenie ' + lapFmt(lap) + ')' +
+    (cut ? ', zmniejszone zmiany opon na końcu, żeby zmieścić się w ' + budget + ' oponach' : '') + '. Sprawdź tabelę i kliknij „Zapisz plan”.';
+};
+$('b-addrow').onclick = function () {
+  var rows = rowsFromTable(), last = rows[rows.length - 1] || { laps: 11, stopS: 60 };
+  rows.push({ n: rows.length + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: stopTimes()[0], tyreL: false, tyreR: false });
+  PLAN_DIRTY = true; editPlan(rows);
 };
 $('b-plan').onclick = function () {
-  T('plan').set(readPlan()).then(function () { flash('plan-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
+  T('plan').set(readPlan()).then(function () { PLAN_DIRTY = false; flash('plan-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
 };
 $('b-tsv').onclick = function () {
-  var rows = [];
+  var rows = [], drv = drvNames(), timeRe = /^\d{1,2}:\d{2}$/;
   $('tsv').value.split(/\r?\n/).forEach(function (line) {
-    var c = line.split('\t'); var n = num(c[0]);
+    var c = line.split('\t').map(function (x) { return x.trim(); });
+    // arkusz stintów (kolumny od „Planowane okrążenia”, opcjonalnie z numerem stintu przed nimi)
+    var o = timeRe.test(c[3] || '') ? 0 : (timeRe.test(c[4] || '') ? 1 : -1);
+    if (o >= 0 && c.length >= o + 16) {
+      var laps = num(c[o]); if (!laps) return;
+      var drvName = c[o + 2] ? (ktoMatch(c[o + 2], drv) || c[o + 2]) : '';
+      rows.push({ n: rows.length + 1, laps: laps, offsetMin: num(c[o + 1]) || 0, driver: drvName,
+                  tyreL: c[o + 9] === '1', tyreR: c[o + 10] === '1', stopS: num(c[o + 15]) || 60 });
+      return;
+    }
+    var n = num(c[0]);   // stary arkusz (A–W)
     if (!n || n <= 0 || n > 200) return;
-    rows.push({ n: n, laps: num(c[1]) || 0, offsetMin: num(c[2]) || 0, driver: (c[3] || '').trim(), lapsActual: num(c[6]),
-                stopS: num(c[16]) || 60, service: /META/i.test(c[7] || '') ? 'META' : (c[22] || '').trim() });
+    rows.push(legacyTyres({ n: n, laps: num(c[1]) || 0, offsetMin: num(c[2]) || 0, driver: (c[3] || '').trim(), lapsActual: num(c[6]),
+                stopS: num(c[16]) || 60, service: /META/i.test(c[7] || '') ? 'META' : (c[22] || '').trim() }));
   });
-  $('tsv-ok').textContent = rows.length ? 'Wczytano ' + rows.length + ' stintów – sprawdź i kliknij „Zapisz plan”.' : 'Nie znalazłem stintów (pierwsza kolumna = numer stintu).';
-  if (rows.length) editPlan(rows);
+  $('tsv-ok').textContent = rows.length ? 'Wczytano ' + rows.length + ' stintów – sprawdź i kliknij „Zapisz plan”.' : 'Nie znalazłem stintów.';
+  if (rows.length) { PLAN_DIRTY = true; editPlan(rows); }
 };
 
 // ------------------------------------------------------------------ zespół: kierowcy, kod, QR
@@ -1036,8 +1173,11 @@ function editDrivers(rows) {
     b.onclick = function () {
       var tr = b.closest('tr'), topic = tr.querySelector('[data-k=topic]').value.trim(), name = tr.querySelector('[data-k=name]').value.trim();
       if (!topic) return alert('Najpierw kliknij „Zapisz kierowców” – temat utworzy się sam.');
-      fetch('https://ntfy.sh/', { method: 'POST', body: JSON.stringify({ topic: topic, title: 'Pit Wall Crew – test', message: 'Działa! Tak przyjdzie powiadomienie przed zmianą, ' + (name || 'kierowco') + '.', tags: ['checkered_flag'] }) })
-        .then(function (r) { b.textContent = r.ok ? 'Wysłano ✓' : 'Błąd'; }).catch(function () { b.textContent = 'Błąd'; });
+      // każdy test osobno (numer i godzina): można wysyłać dowolnie wiele razy
+      var nr = (+b.dataset.nr || 0) + 1; b.dataset.nr = nr; b.disabled = true; b.textContent = 'Wysyłam…';
+      fetch('https://ntfy.sh/', { method: 'POST', body: JSON.stringify({ topic: topic, title: 'Pit Wall Crew – test ' + nr, message: 'Działa! Tak przyjdzie powiadomienie przed zmianą, ' + (name || 'kierowco') + '. (' + hhmm(now()) + ')', tags: ['checkered_flag'] }) })
+        .then(function (r) { b.textContent = r.ok ? 'Wysłano ✓' : 'Błąd'; }).catch(function () { b.textContent = 'Błąd'; })
+        .then(function () { setTimeout(function () { b.disabled = false; b.textContent = 'Test'; }, 2500); });
     };
   });
 }
