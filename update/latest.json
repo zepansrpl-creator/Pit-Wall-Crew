@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.0",
- "display": "0.4.0.0",
- "sha256": "02d60dd7e800dbccabe764faec4845e60aaf092447b21f6863f109548cc2ea44",
- "size": 590445,
+ "version": "10.0.4.0.1",
+ "display": "0.4.0.1",
+ "sha256": "8536062288bd558e51252d34f3186bc90f9ee5a9d41414329be78cdbd64e2262",
+ "size": 595950,
  "url": "PitWallCrew.zip",
- "notes": "- Nowa numeracja wersji: od teraz 0.4.0.0, kolejne 0.4.0.1 itd. Automatyczna aktualizacja działa jak dotąd (nowa numeracja jest zawsze nowsza niż stare 3.x)."
+ "notes": "- Prostszy „Grafik i plan”: kierowca na stint wybierany z listy (powiadomienia na telefon idą do właściwej osoby), zmiana opon jako Lewe / Prawe, godziny, pora dnia (noc) i meta liczą się same w tabeli.\n- Nowe pole „Opon na wyścig” (np. 58) i licznik „4 na start + 54 na postojach = 58 z 58”. Automatyczny plan opon: w dzień 4 opony co 2 stinty, w nocy jedna strona – i sam mieści się w limicie.\n- Wklejanie planu z arkusza stintów (kolumny od „Planowane okrążenia” do „Wyjazd z boksu”).\n- Inżynier na postoju zmienia opony według planu zespołu, chyba że któraś nie dojedzie do końca następnego stintu.\n- Przycisk „Test” powiadomienia można klikać wiele razy (każdy test z numerem i godziną)."
 }
