@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.3",
- "display": "0.4.0.3",
- "sha256": "a6dfbbe43dbdbea62f23a2f5b5346e8b1810ac8f63e0ae5c872fdec8bb236419",
- "size": 603793,
+ "version": "10.0.4.0.4",
+ "display": "0.4.0.4",
+ "sha256": "dd31c99abb6e3e3c35f7fe3b26bc15d247c8c65847503f23b1526db3e69894ea",
+ "size": 582819,
  "url": "PitWallCrew.zip",
- "notes": "- Plan opon „optymalnie w limicie opon”: program dzieli wszystkie opony z limitu tak, żeby najbardziej zużyta opona była jak najmniej zużyta (równe zużycie przez cały wyścig); tam, gdzie zużycie musi być największe – w nocy i po prawej stronie.\n- W tabeli planu: przewidywany bieżnik LP / PP / LT / PT na koniec każdego stintu (kolory jak w arkuszu) i ile nowych opon zostało.\n- Zużycie opon z pomiarów: program kierowcy po każdym czystym okrążeniu (od 3 w stincie, także w treningu, nie na mokrym) zapisuje zużycie każdej opony na okrążenie dla tego toru i auta. Przycisk „z pomiarów” wpisuje średnią i o ile mniej opony zużywają się w chłodzie (noc)."
+ "notes": "- Usunięty serwer AI zespołu i bot Discord. AI i rozpoznawanie mowy tylko przez Groq (klucz zespołu na ścianie boksów), komunikaty inżyniera słychać w aplikacji każdego z Was (radio zespołu), wiadomości ze ściany zawsze czyta inżynier u kierowcy.\n- Na ścianie boksów zamiast „serwer AI” wskaźnik „AI: Groq ✓” (albo brak klucza).\n- Instrukcja: nowy punkt „Wyścig 24 h: kto musi mieć włączony program”.\n- Po automatycznej aktualizacji numer wersji w komunikacie jest poprawny."
 }
