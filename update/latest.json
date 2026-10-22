@@ -1,7 +1,7 @@
 {
- "version": "3.9.5",
- "sha256": "58167b66aeac1ab5eda09cd8c30b31b33302c980f795d556218e08b502aedbc5",
- "size": 574285,
+ "version": "3.9.6",
+ "sha256": "eae60879727ec38975ddcb98a0c5233bf309249642fae07606ee748bb0b8aed7",
+ "size": 575106,
  "url": "PitWallCrew.zip",
- "notes": "- Zapas przy zjeździe i na mecie wszędzie 0,2% energii (0,3 l paliwa): także przy decyzji, czy postój jest potrzebny, i przy wyliczaniu energii na ostatni postój (wcześniej pół okrążenia zapasu, np. 58% zamiast 54%).\n- Uaktualniona instrukcja, lista komend i opis funkcji (m.in. „w których?”, rozwiązywanie problemów: mikrofon, podwójne uruchomienie, blokada Windows, przycięcia)."
+ "notes": "- Usunięta opcja „AI odpowiada na wszystkie pytania” (oszczędzanie limitu Groq). AI odpowiada tylko na pytania, których program nie zna, analityczne i o rywali.\n- Lepsze rozpoznawanie mowy: dokładniejszy model Whisper (large-v3) jako pierwszy; gdy rozpoznanie jest niepewne, druga próba drugim modelem zamiast od razu „Nie zrozumiałem”; nagranie trwa 0,35 s po puszczeniu przycisku (końcówki słów nie są ucinane); przycinana cisza na początku i końcu oraz odfiltrowane dudnienie."
 }
