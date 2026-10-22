@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.4",
- "display": "0.4.0.4",
- "sha256": "dd31c99abb6e3e3c35f7fe3b26bc15d247c8c65847503f23b1526db3e69894ea",
- "size": 582819,
+ "version": "10.0.4.0.5",
+ "display": "0.4.0.5",
+ "sha256": "f2bdc6a456815112fb57b91214c6d3cfb926de9577abf8eaaff66795ceb758aa",
+ "size": 636785,
  "url": "PitWallCrew.zip",
- "notes": "- Usunięty serwer AI zespołu i bot Discord. AI i rozpoznawanie mowy tylko przez Groq (klucz zespołu na ścianie boksów), komunikaty inżyniera słychać w aplikacji każdego z Was (radio zespołu), wiadomości ze ściany zawsze czyta inżynier u kierowcy.\n- Na ścianie boksów zamiast „serwer AI” wskaźnik „AI: Groq ✓” (albo brak klucza).\n- Instrukcja: nowy punkt „Wyścig 24 h: kto musi mieć włączony program”.\n- Po automatycznej aktualizacji numer wersji w komunikacie jest poprawny."
+ "notes": "- Nowe logo i ikona Pit Wall Crew (aplikacja, skrót na pulpicie, ściana boksów).\n- Ściana boksów: gdy dwie osoby z zespołu jadą naraz różne wyścigi (np. trening w dwóch serwerach), każda ma osobny podgląd („wyścig – Maciej”) – dane się nie mieszają. Zmiana kierowcy w tym samym aucie dalej w jednym podglądzie.\n- Wyścig innej długości niż plan (np. 1 h albo 2,4 h przy planie na 24 h): grafik na ścianie bez stintów z planu, bez „vs plan” i bez powiadomień o zmianach kierowców.\n- „Zjazd za N okrążeń” liczony tak jak kierowca: razem z okrążeniem zjazdowym („energii na 5 okrążeń” = „zjazd za 5 okrążeń”), tak samo na ścianie boksów. Energia musi starczyć tylko do wjazdu do alei, nie do linii mety – zjazd o okrążenie później, gdy się mieści (w wyścigu 2,4 h inżynier mówił o okrążenie za wcześnie).\n- Gdy zużycie się zmieni i okrążenie zjazdowe przesunie się po zapowiedzi: „Zjazd o okrążenie później: za 4 okrążenia.”\n- „Box, box” we właściwym miejscu: wjazd do alei z gry bierzemy tylko, gdy jest wiarygodny (pod koniec okrążenia, zgodny ze zmierzonym na postoju). W wyścigu 2,4 h gra podawała ok. 7 km na Le Mans i „box, box” padało w połowie okrążenia. Wjazd do alei mierzony na każdym postoju.\n- Sprawdzanie czasu postoju z planem tylko w wyścigu, do którego jest plan (bez porównań z planem 24 h w wyścigu 2,4 h).\n- „Szybciej na gaz” – głos czytał „gaz.” jak skrót („gazowa”); nowe zdania: „wcześniej dodawaj gazu”, „bez toczenia, szybciej dodawaj gazu”.\n- „Temperatura homulców / amulce” – r"
 }
