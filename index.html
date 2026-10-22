@@ -360,8 +360,7 @@
     <h2>Zespół</h2>
     <div id="t-name" style="font-size:18px;font-weight:600">—</div>
     <div class="row"><span>Kod zespołu</span><span class="code" id="t-code">—</span></div>
-    <div class="row"><span>Serwer AI zespołu</span><span id="t-worker">—</span></div>
-    <p class="note">Do programu kierowcy (okno ustawień → Zespół) i serwera AI wpisuje się ten kod i hasło zespołu. Hasła nie ma w kodzie QR – podajcie je sobie prywatnie.</p>
+    <p class="note">Do programu kierowcy (okno ustawień → Zespół) wpisuje się ten kod i hasło zespołu. Hasła nie ma w kodzie QR – podajcie je sobie prywatnie.</p>
     <div class="qr" id="qr"></div>
     <form onsubmit="return false"><input id="join-link" readonly><button id="b-copyjoin" type="button" class="second">Kopiuj link</button></form>
     <p class="note" style="margin:12px 0 4px"><b>Link dla widzów</b> – tylko podgląd na żywo (bez radia, planu i hasła). Możesz go dać każdemu.</p>
@@ -493,9 +492,8 @@ function render(v) {
   else pill($('st-live'), 'na żywo', 'ok');
   pill($('st-driver'), live ? (live.driving ? 'jedzie: ' : 'widz: ') + live.who +
        (live.state && live.state.version ? ' · v' + live.state.version : '') : '—', live && live.driving ? 'ok' : '');
-  var lp = v.laptop || {};
-  pill($('st-laptop'), lp.online ? ('serwer AI: ' + (lp.discord ? 'Discord ✓' : 'bez Discorda') + (lp.ai ? ', AI ✓' : '')) : 'serwer AI: offline',
-       lp.online ? 'ok' : 'warn');
+  var gk = !!((S.settings || {}).groqKey);   // AI i rozpoznawanie mowy: Groq (klucz zespołu, zakładka Zespół)
+  pill($('st-laptop'), gk ? 'AI: Groq ✓' : 'AI: brak klucza Groq', gk ? 'ok' : 'warn');
 
   $('pos').textContent = st.pos_class ? 'P' + st.pos_class + ' / ' + st.n_class + ' ' + (st.cls || '') : '—';
   $('lap').textContent = st.laps_done != null ? (st.laps_done + 1) + (st.stint_laps != null ? ' (w stincie ' + st.stint_laps + ')' : '') : '—';
@@ -612,7 +610,7 @@ function render(v) {
     var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + s.delta + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + s.delta + ' min</span>' : '0');
     return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + s.n + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
            '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + (s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
-  }).join('') || '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza program kierowcy albo serwer AI co minutę.</td></tr>';
+  }).join('') || '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza co minutę program Pit Wall Crew (wystarczy, że jest włączony u kogokolwiek z zespołu).</td></tr>';
 
   $('msgs').innerHTML = (v.msgs || []).map(function (m) {
     var d = new Date(m.t);
@@ -648,7 +646,7 @@ var DOMAIN = 'pitwallcrew.team', ALPHA = 'abcdefghjkmnpqrstuvwxyz23456789';
 var Q = new URLSearchParams(location.search);
 var TRYB = Q.get('obs') ? 'widz' : 'zespol', FEED = '', KTO = '';
 var CODE = '', db = null, T = null;
-var S = { meta: {}, settings: {}, plan: [], worker: {}, grafik: {}, feeds: {}, live: null, msgs: [], obs: null };
+var S = { meta: {}, settings: {}, plan: [], grafik: {}, feeds: {}, live: null, msgs: [], obs: null };
 var liveRef = null, liveKey = null;
 
 function now() { return Date.now(); }
@@ -748,7 +746,6 @@ function startTeam(code) {
   T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
   T('settings').on('value', function (s) { S.settings = s.val() || {}; editSettings(); editDrivers(); groqInfo(); draw(); }, onErr);
   T('plan').on('value', function (s) { S.plan = s.val() || []; editPlan(); }, onErr);
-  T('worker').on('value', function (s) { S.worker = s.val() || {}; teamInfo(); draw(); });
   T('grafik').on('value', function (s) { S.grafik = s.val() || {}; draw(); });
   T('feeds').on('value', function (s) { S.feeds = s.val() || {}; pickFeed(); });
   T('msgs').orderByChild('t').limitToLast(25).on('value', function (s) {
@@ -799,21 +796,18 @@ function feedLabel(k, f) {
   return s + ' – ' + (f.who || '?');
 }
 
-function botOnline() { var w = S.worker || {}; return !!(w.t && now() - w.t < 45000 && w.discord); }
 
 document.addEventListener('visibilitychange', function () {   // ukryta karta: nic nie rysujemy (bateria telefonu)
   if (!document.hidden) { if (TRYB === 'widz') drawObs(); else draw(); }
 });
 function draw() {
   if (TRYB === 'widz' || document.hidden) return;
-  var w = S.worker || {}, on = !!(w.t && now() - w.t < 45000);
   var live = S.live, g = S.grafik || {};
   var feeds = Object.keys(S.feeds).filter(function (k) { return now() - (S.feeds[k].t || 0) < 6 * 3600000; })
     .map(function (k) { return { key: k, label: feedLabel(k, S.feeds[k]) }; });
   var drv = ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean);
   render({
     ok: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
-    laptop: { online: on, discord: on && w.discord, ai: on && w.ai },
     feeds: feeds, grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '',
     msgs: S.msgs, kierowcy: drv, obs: S.meta.obs
   });
@@ -838,14 +832,14 @@ function drawObs() {
   var stale = !live || now() - (live._t || 0) > 180000;
   if (stale) {
     var last = live && live._t ? new Date(live._t) : null;
-    render({ ok: true, widz: true, live: null, age: null, laptop: {}, feeds: [], grafik: [], zrodlo: '', raceEnd: '', msgs: [] });
+    render({ ok: true, widz: true, live: null, age: null, feeds: [], grafik: [], zrodlo: '', raceEnd: '', msgs: [] });
     mapData(null);
     pill($('st-live'), 'brak wyścigu na żywo' + (last ? ' · ostatnio ' + last.toLocaleDateString('pl-PL') + ' ' +
          last.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : ''), 'warn');
     return;
   }
   render({ ok: true, widz: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
-           laptop: {}, feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
+           feeds: [], grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', msgs: [] });
   mapData(live);
 }
 
@@ -874,10 +868,6 @@ function ktoMatch(name, list) {   // „Maciej” = „Maciej Szczepaniak” na 
 function teamMessage(frm, text, kind, silent) {
   var feed = curFeed() || 'race', t = now(), delivered = '', p = Promise.resolve();
   text = String(text || '').slice(0, 300);
-  if (kind === 'wiadomość' && botOnline()) {
-    p = T('jobs').push({ kind: 'say', who: frm, t: t, payload: { text: 'Wiadomość od ' + genitive(frm) + ': ' + text, nolog: true } });
-    delivered = 'discord';
-  }
   if (kind === 'pytanie' && silent) delivered = 'tylko na ścianie';
   var ref = T('msgs').push();
   return p.then(function () { return ref.set({ t: t, from: frm, text: text, kind: kind, delivered: delivered, feed: feed }); })
@@ -1278,9 +1268,6 @@ $('b-tsv').onclick = function () {
 function teamInfo() {
   $('t-name').textContent = S.meta.name || '—';
   $('t-code').textContent = CODE || '—';
-  var w = S.worker || {}, on = w.t && now() - w.t < 45000;
-  $('t-worker').textContent = on ? 'online' + (w.discord ? ', Discord' : '') + (w.ai ? ', AI' : '') + (w.stt ? ', mowa' : '') :
-    (w.t ? 'offline (ostatnio ' + hhmm(w.t) + ')' : 'jeszcze nie łączył się');
   var join = location.origin + location.pathname + '?team=' + CODE;
   if ($('join-link').value !== join) {
     $('join-link').value = join;
