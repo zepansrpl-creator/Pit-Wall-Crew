@@ -1,7 +1,8 @@
 {
- "version": "3.9.9",
- "sha256": "4c1f85fab191d11b7e9a79b55da2bba9379916528f83d8f7e1680a032ad5fd55",
- "size": 589973,
+ "version": "10.0.4.0.0",
+ "display": "0.4.0.0",
+ "sha256": "02d60dd7e800dbccabe764faec4845e60aaf092447b21f6863f109548cc2ea44",
+ "size": 590445,
  "url": "PitWallCrew.zip",
- "notes": "- Poprawka: porównanie z kolegą z zespołu działało dopiero po kilku minutach od włączenia komputera."
+ "notes": "- Nowa numeracja wersji: od teraz 0.4.0.0, kolejne 0.4.0.1 itd. Automatyczna aktualizacja działa jak dotąd (nowa numeracja jest zawsze nowsza niż stare 3.x)."
 }
