@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.1",
- "display": "0.4.0.1",
- "sha256": "8536062288bd558e51252d34f3186bc90f9ee5a9d41414329be78cdbd64e2262",
- "size": 595950,
+ "version": "10.0.4.0.2",
+ "display": "0.4.0.2",
+ "sha256": "cf9b97e02de5cd7253fcb969bb35aa66203e2061d0d0ce534ee0675dca9efaba",
+ "size": 598228,
  "url": "PitWallCrew.zip",
- "notes": "- Prostszy „Grafik i plan”: kierowca na stint wybierany z listy (powiadomienia na telefon idą do właściwej osoby), zmiana opon jako Lewe / Prawe, godziny, pora dnia (noc) i meta liczą się same w tabeli.\n- Nowe pole „Opon na wyścig” (np. 58) i licznik „4 na start + 54 na postojach = 58 z 58”. Automatyczny plan opon: w dzień 4 opony co 2 stinty, w nocy jedna strona – i sam mieści się w limicie.\n- Wklejanie planu z arkusza stintów (kolumny od „Planowane okrążenia” do „Wyjazd z boksu”).\n- Inżynier na postoju zmienia opony według planu zespołu, chyba że któraś nie dojedzie do końca następnego stintu.\n- Przycisk „Test” powiadomienia można klikać wiele razy (każdy test z numerem i godziną)."
+ "notes": "- Inżynier korzysta z planu zespołu w wyścigu każdej długości – takiej, jaka jest wpisana na ścianie boksów (wcześniej tylko w wyścigach od 12 h). W wyścigu innej długości liczy strategię sam.\n- Sprawdzanie czasu postoju: po każdym postoju na ścianie boksów „Postój po stincie 5: 74 s (4 opony), w planie 72 s – zgadza się” albo o ile dłużej / krócej. W zakładce Grafik i plan zmierzone czasy postoju dla 0 / 2 / 4 opon i przycisk „Użyj zmierzonych w planie”."
 }

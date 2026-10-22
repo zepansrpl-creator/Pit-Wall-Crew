@@ -328,6 +328,7 @@
       <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
     </details>
     <p class="note" id="tyre-sum"></p>
+    <div id="pit-meas" class="note" style="display:none"></div>
     <div class="scroll"><table class="edit plan">
       <thead><tr><th>Stint</th><th>Kierowca</th><th title="Ile okrążeń ma trwać stint">Okr.</th><th>Start</th><th>Zjazd</th><th>Pora</th>
         <th title="Zmiana lewych opon (LP + LT) na postoju po tym stincie">Lewe</th><th title="Zmiana prawych opon (PP + PT)">Prawe</th>
@@ -784,7 +785,7 @@ function pickFeed() {
   liveKey = k; S.live = null;
   if (!k) return draw();
   liveRef = T('live/' + k);
-  liveRef.on('value', function (s) { S.live = s.val(); draw(); });
+  liveRef.on('value', function (s) { S.live = s.val(); draw(); try { pitMeas(); } catch (e) {} });
 }
 
 function feedLabel(k, f) {
@@ -1104,6 +1105,29 @@ $('b-gen').onclick = function () {
   $('gen-ok').textContent = 'Rozpisano ' + rows.length + ' stintów (' + hours + ' h, okrążenie ' + lapFmt(lap) + ')' +
     (cut ? ', zmniejszone zmiany opon na końcu, żeby zmieścić się w ' + budget + ' oponach' : '') + '. Sprawdź tabelę i kliknij „Zapisz plan”.';
 };
+function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) i porównanie z planem
+  var st = (S.live || {}).state || {}, pt = st.pit_times, el = $('pit-meas');
+  if (!pt && !st.pit_check) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  var h = '';
+  if (st.pit_check) h += '<div>' + esc(st.pit_check) + '</div>';
+  if (pt) h += '<div>Zmierzone w wyścigu (stanie w boksie, energia ' + Math.round(pt.ve || 0) + '%): bez opon <b>' + pt['0'] + ' s</b>, 2 opony <b>' + pt['2'] +
+    ' s</b>, 4 opony <b>' + pt['4'] + ' s</b> <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
+  if (el.innerHTML !== h) {
+    el.innerHTML = h;
+    var b = $('b-usepit');
+    if (b) b.onclick = function () {
+      PLAN_DIRTY = true;
+      $('g-s0').value = pt['0']; $('g-s2').value = pt['2']; $('g-s4').value = pt['4'];
+      $('plan-rows').querySelectorAll('tr').forEach(function (tr) {
+        var n = (tr.querySelector('[data-k=tyreL]').checked ? 2 : 0) + (tr.querySelector('[data-k=tyreR]').checked ? 2 : 0);
+        tr.querySelector('[data-k=stopS]').value = pt[String(n)];
+      });
+      T('settings').update({ stopBase: pt['0'], stop2: pt['2'], stop4: pt['4'] }).catch(function () {});
+      PLAN_DIRTY = true; refreshTimes(); flash('plan-ok', 'Czasy postoju zmienione – kliknij „Zapisz plan”.');
+    };
+  }
+}
 $('b-addrow').onclick = function () {
   var rows = rowsFromTable(), last = rows[rows.length - 1] || { laps: 11, stopS: 60 };
   rows.push({ n: rows.length + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: stopTimes()[0], tyreL: false, tyreR: false });
