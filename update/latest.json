@@ -1,7 +1,7 @@
 {
- "version": "3.9.4",
- "sha256": "e5d3b6fe715c906df955e8a83aede8877163749f8243b0c5090f6e5cea37c848",
- "size": 572075,
+ "version": "3.9.5",
+ "sha256": "58167b66aeac1ab5eda09cd8c30b31b33302c980f795d556218e08b502aedbc5",
+ "size": 574285,
  "url": "PitWallCrew.zip",
- "notes": "- Pełny dziennik (tylko wersja testowa): co 5 s zapis tego, co trafia na ścianę boksów (stan auta, plan postoju,\n  rywale, mapa, grafik) – do odtworzenia ściany po jeździe i sprawdzenia, czy wszystko się zgadza."
+ "notes": "- Zapas przy zjeździe i na mecie wszędzie 0,2% energii (0,3 l paliwa): także przy decyzji, czy postój jest potrzebny, i przy wyliczaniu energii na ostatni postój (wcześniej pół okrążenia zapasu, np. 58% zamiast 54%).\n- Uaktualniona instrukcja, lista komend i opis funkcji (m.in. „w których?”, rozwiązywanie problemów: mikrofon, podwójne uruchomienie, blokada Windows, przycięcia)."
 }
