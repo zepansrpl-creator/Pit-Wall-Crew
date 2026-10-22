@@ -319,10 +319,13 @@
         <label>Kierowcy po kolei (z zakładki Zespół)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
         <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
         <label>Opony<select id="g-tyres">
-          <option value="mix" selected>w dzień 4 co 2 stinty, w nocy jedna strona</option>
+          <option value="opt" selected>optymalnie w limicie opon (równe zużycie)</option>
+          <option value="mix">w dzień 4 co 2 stinty, w nocy jedna strona</option>
           <option value="4x2">4 opony co 2 stinty</option><option value="4x1">4 opony co stint</option>
           <option value="side">jedna strona co stint (na zmianę)</option><option value="0">bez zmiany opon</option></select></label>
         <label>Noc od – do<span class="pair"><input id="g-n1" value="18:45"><input id="g-n2" value="03:15"></span></label>
+        <label>Zużycie na okrążenie (%): LP / PP / LT / PT<span class="pair"><input id="g-w0" inputmode="decimal"><input id="g-w1" inputmode="decimal"><input id="g-w2" inputmode="decimal"><input id="g-w3" inputmode="decimal"></span></label>
+        <label>W nocy zużycie mniejsze o (%)<span class="pair"><input id="g-nw" inputmode="numeric" value="15"><button class="second mini" id="b-wmeas" type="button" title="Zużycie zmierzone przez programy kierowców na tym torze tym autem (zapisuje się samo, także w treningu)">z pomiarów</button></span></label>
         <label>Postój (s): bez opon / 2 opony / 4 opony<span class="pair"><input id="g-s0" inputmode="numeric" value="60"><input id="g-s2" inputmode="numeric" value="65"><input id="g-s4" inputmode="numeric" value="72"></span></label>
       </div>
       <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
@@ -333,6 +336,8 @@
       <thead><tr><th>Stint</th><th>Kierowca</th><th title="Ile okrążeń ma trwać stint">Okr.</th><th>Start</th><th>Zjazd</th><th>Pora</th>
         <th title="Zmiana lewych opon (LP + LT) na postoju po tym stincie">Lewe</th><th title="Zmiana prawych opon (PP + PT)">Prawe</th>
         <th title="Ile trwa postój po tym stincie">Postój (s)</th>
+        <th title="Bieżnik na koniec stintu (%): lewa przednia">LP</th><th title="prawa przednia">PP</th><th title="lewa tylna">LT</th><th title="prawa tylna">PT</th>
+        <th title="Ile nowych opon zostanie po tym postoju">Zostało</th>
         <th title="Jeśli stint ma zacząć się później (np. po naprawie) – o ile minut">Przesun. (min)</th><th></th></tr></thead>
       <tbody id="plan-rows"></tbody>
     </table></div>
@@ -935,7 +940,9 @@ function editSettings() {
   if (st && Math.abs(st - now()) > 180 * 86400000)
     $('settings').insertAdjacentHTML('beforeend', '<p class="note" style="color:var(--warn);grid-column:1/-1">Uwaga: data startu jest daleko od dzisiaj (' + st.toLocaleDateString('pl-PL') + ') – sprawdź rok.</p>');
   if (!$('g-order').value) $('g-order').value = ((s.drivers || []).map(function (d) { return d && d.name; }).filter(Boolean)).join(', ');
-  [['g-n1', 'nightFrom'], ['g-n2', 'nightTo'], ['g-s0', 'stopBase'], ['g-s2', 'stop2'], ['g-s4', 'stop4']].forEach(function (x) {
+  for (var wk = 0; wk < 4; wk++) if (document.activeElement !== $('g-w' + wk) && !$('g-w' + wk).value)
+    $('g-w' + wk).value = String((s.wear || [])[wk] || WEAR_DEF[wk]).replace('.', ',');
+  [['g-n1', 'nightFrom'], ['g-n2', 'nightTo'], ['g-s0', 'stopBase'], ['g-s2', 'stop2'], ['g-s4', 'stop4'], ['g-nw', 'nightWear']].forEach(function (x) {
     if (s[x[1]] != null && document.activeElement !== $(x[0])) $(x[0]).value = s[x[1]];
   });
   if (!planRows().length) $('gen-box').open = true;
@@ -974,6 +981,62 @@ function legacyTyres(r) {   // stare plany: opony tylko w opisie „Na postoju�
   r.tyreL = /4 opony|komplet|lewe/.test(sv); r.tyreR = /4 opony|komplet|prawe/.test(sv);
   return r;
 }
+var WEAR_DEF = [1.73, 1.64, 1.36, 1.36];   // % bieżnika na okrążenie (Le Mans, GT3) – z arkusza strategii
+function wearRates() {
+  var s = S.settings || {}, w = [];
+  for (var k = 0; k < 4; k++) { var el = $('g-w' + k); w.push(el && num(el.value) ? num(el.value) : ((s.wear || [])[k] || WEAR_DEF[k])); }
+  return w;
+}
+// Opony optymalnie: limit opon → ile zmian po każdej stronie i gdzie, żeby najbardziej zużyta opona była jak najmniej
+// zużyta (równo); tam, gdzie zużycie musi być największe – w nocy i po prawej stronie.
+function optimizeTyres(rows, budget, rates, nf) {
+  var st = rows.filter(function (r) { return !r._after; }), N = st.length;
+  if (N < 2) return;
+  var K = budget ? Math.max(0, Math.floor((budget - 4) / 2)) : N - 1;   // zmian jednej strony (po 2 opony)
+  var side = [Math.max(rates[0], rates[2]), Math.max(rates[1], rates[3])];   // lewa / prawa: decyduje szybciej zużywana
+  function wearOf(i, sd) { var r = st[i]; return (r._final ? r._lapsFin : r.laps) * side[sd] * (r._night ? nf : 1); }
+  function runW(a, b, sd) { var x = 0; for (var i = a; i <= b; i++) x += wearOf(i, sd); return x; }
+  function changesFor(T, sd) {   // najmniej zmian, żeby żadna opona nie zużyła się bardziej niż T
+    var c = 0, cum = 0;
+    for (var i = 0; i < N; i++) { var w = wearOf(i, sd); if (w > T + 1e-9) return 1e9; if (cum + w > T + 1e-9) { c++; cum = w; } else cum += w; }
+    return c;
+  }
+  function bestMax(k, sd) {      // najmniejsze możliwe maksymalne zużycie przy k zmianach
+    var lo = 0, hi = runW(0, N - 1, sd);
+    for (var it = 0; it < 40; it++) { var m = (lo + hi) / 2; if (changesFor(m, sd) <= k) hi = m; else lo = m; }
+    return hi;
+  }
+  var maxK = N - 1, best = null;
+  for (var kL = 0; kL <= Math.min(K, maxK); kL++) {
+    var kR = Math.min(K - kL, maxK);
+    var fL = bestMax(kL, 0), fR = bestMax(kR, 1), f = Math.max(fL, fR);
+    // remis (do 0,5 pkt %): wolimy, żeby większe zużycie było po prawej
+    if (!best || f < best.f - 0.5 || (Math.abs(f - best.f) <= 0.5 && fR >= fL && !(best.fR >= best.fL))) best = { f: f, kL: kL, kR: kR, fL: fL, fR: fR };
+  }
+  [[0, best.kL], [1, best.kR]].forEach(function (x) {
+    var sd = x[0], k = x[1], T = Math.max(best.f, bestMax(k, sd)) + 1e-6;
+    // DP: dokładnie k zmian, każdy odcinek ≤ T; kara: kwadrat zużycia (równo), w dzień ×1,3 (duże zużycie w nocy)
+    var INF = 1e18, dp = [], from = [];
+    for (var i = 0; i <= N; i++) { dp.push([]); from.push([]); for (var c = 0; c <= k; c++) { dp[i].push(INF); from[i].push(-1); } }
+    dp[0][0] = 0;
+    for (var e = 1; e <= N; e++) for (var c2 = 0; c2 <= k; c2++) for (var a = 0; a < e; a++) {
+      var cPrev = a === 0 ? 0 : c2 - 1;
+      if (cPrev < 0 || (a === 0 && c2 !== 0) || dp[a][cPrev] >= INF) continue;
+      var w = runW(a, e - 1, sd); if (w > T) continue;
+      var nights = 0; for (var q = a; q < e; q++) if (st[q]._night) nights++;
+      var pen = w * w * (nights * 2 >= e - a ? 1 : 1.3);
+      if (dp[a][cPrev] + pen < dp[e][c2]) { dp[e][c2] = dp[a][cPrev] + pen; from[e][c2] = a; }
+    }
+    var cc = k; while (cc > 0 && dp[N][cc] >= INF) cc--;
+    st.forEach(function (r) { if (sd === 0) r.tyreL = false; else r.tyreR = false; });
+    var e2 = N, guard = 0;
+    while (e2 > 0 && from[e2][cc] >= 0 && guard++ < 200) {
+      var a2 = from[e2][cc];
+      if (a2 > 0) { if (sd === 0) st[a2 - 1].tyreL = true; else st[a2 - 1].tyreR = true; cc--; }
+      e2 = a2;
+    }
+  });
+}
 function stopTimes() {
   var s = S.settings || {};
   return [num($('g-s0').value) || s.stopBase || 60, num($('g-s2').value) || s.stop2 || 65, num($('g-s4').value) || s.stop4 || 72];
@@ -981,15 +1044,23 @@ function stopTimes() {
 // godziny, pora, meta i licznik opon – liczone z planu jak w arkuszu
 function planTimes(rows) {
   var s = S.settings || {}, lap = s.lapTime || 240, t = s.raceStartMs, end = t ? t + (s.raceHours || 24) * 3600000 : null;
-  var used = 4, fin = false;
+  var used = 4, fin = false, rates = wearRates(), nf = 1 - (num(($('g-nw') || {}).value) || 0) / 100, wear = [0, 0, 0, 0];
+  var budget = s.tyreBudget;
   rows.forEach(function (r) {
-    r._after = fin; r._final = false;
+    r._after = fin; r._final = false; r._tread = null; r._left = null;
     if (!t || fin) { r._start = r._end = null; r._night = false; return; }
     t += (r.offsetMin || 0) * 60000; r._start = t;
     var e = t + (r.laps || 0) * lap * 1000;
     if (e >= end) { fin = true; r._final = true; r._lapsFin = Math.ceil((end - t) / (lap * 1000)); e = t + r._lapsFin * lap * 1000; }
     r._end = e; r._night = isNight(t, s);
+    var lp = r._final ? r._lapsFin : (r.laps || 0);
+    if (rates) {
+      for (var k = 0; k < 4; k++) wear[k] += lp * rates[k] * (r._night ? nf : 1);
+      r._tread = wear.map(function (w) { return Math.max(0, 100 - w); });
+      if (!r._final) { if (r.tyreL) wear[0] = wear[2] = 0; if (r.tyreR) wear[1] = wear[3] = 0; }
+    }
     if (!r._final) used += tyreN(r);
+    if (budget) r._left = budget - used;
     t = e + (r.stopS || 60) * 1000;
   });
   return { used: used, end: end };
@@ -1024,6 +1095,11 @@ function refreshTimes() {   // po każdej zmianie w tabeli: przelicz godziny bez
     c[4].textContent = r._final ? 'META (' + r._lapsFin + ' okr.)' : (r._end ? hhmm(r._end) : '');
     c[5].textContent = r._start ? (r._night ? 'noc' : 'dzień') : '';
     tr.className = (r._night ? 'night ' : '') + (r._after ? 'after ' : '') + (r._final ? 'final' : '');
+    for (var k = 0; k < 4; k++) {
+      var td = c[9 + k], v = r._tread ? Math.round(r._tread[k]) : '';
+      td.textContent = v; td.style.background = v === '' ? '' : v >= 75 ? 'rgba(80,200,120,.25)' : v >= 65 ? 'rgba(230,200,60,.28)' : 'rgba(240,120,60,.35)';
+    }
+    c[13].textContent = r._left == null ? '' : r._left;
   });
   tyreSummary(info);
 }
@@ -1041,7 +1117,7 @@ function editPlan(rows) {
     var cb = function (k) { return '<input type="checkbox" data-k="' + k + '"' + (r[k] ? ' checked' : '') + '>'; };
     return '<tr data-keep="' + esc(JSON.stringify(keep)) + '"><td></td><td>' + sel + '</td><td>' + inp('laps', r.laps, 3) +
       '</td><td></td><td></td><td></td><td>' + cb('tyreL') + '</td><td>' + cb('tyreR') + '</td><td>' + inp('stopS', r.stopS, 3) +
-      '</td><td>' + inp('offsetMin', r.offsetMin || 0, 3) + '</td><td><button class="second" data-del title="Usuń stint">×</button></td></tr>';
+      '</td><td class="tr"></td><td class="tr"></td><td class="tr"></td><td class="tr"></td><td></td><td>' + inp('offsetMin', r.offsetMin || 0, 3) + '</td><td><button class="second" data-del title="Usuń stint">×</button></td></tr>';
   }).join('');
   $('plan-rows').querySelectorAll('[data-del]').forEach(function (b) { b.onclick = function () { b.closest('tr').remove(); PLAN_DIRTY = true; refreshTimes(); }; });
   $('plan-rows').querySelectorAll('input, select').forEach(function (el) {
@@ -1076,6 +1152,7 @@ $('b-gen').onclick = function () {
   S.settings = Object.assign({}, s, sv);
   var n = Math.ceil(hours * 3600 / (laps * lap + st[0])) + 1, rows = [], nightK = 0, dayK = 0, sideK = 0;
   var NIGHT = [[1, 0], [0, 1], [1, 0], [0, 0], [1, 1]];
+  var wr = wearRates(); sv.wear = wr; sv.nightWear = num($('g-nw').value) || 0; S.settings.wear = wr; S.settings.nightWear = sv.nightWear;
   for (var i = 0; i < n; i++) rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: st[0], tyreL: false, tyreR: false });
   planTimes(rows);
   rows.forEach(function (r) {
@@ -1084,12 +1161,14 @@ $('b-gen').onclick = function () {
     if (mode === '4x1') L = R = true;
     else if (mode === '4x2') L = R = r.n % 2 === 0;
     else if (mode === 'side') { L = sideK % 2 === 0; R = !L; sideK++; }
+    else if (mode === 'opt') return;
     else if (mode === 'mix') {
       if (r._night) { var p = NIGHT[nightK % NIGHT.length]; L = !!p[0]; R = !!p[1]; nightK++; dayK = 1; }
       else { L = R = dayK % 2 === 1; dayK++; }
     }
     r.tyreL = L; r.tyreR = R;
   });
+  if (mode === 'opt') optimizeTyres(rows, s.tyreBudget, wr, 1 - sv.nightWear / 100);
   // limit opon: od końca wyścigu zmniejszamy zmiany (4 → 2 → 0), aż się zmieści
   var budget = s.tyreBudget, info = planTimes(rows), cut = 0;
   for (var k = rows.length - 1; budget && info.used > budget && k >= 0; k--) {
@@ -1128,6 +1207,43 @@ function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) 
     };
   }
 }
+function wearKey(s) {
+  var pl = 'ąćęłńóśźżĄĆĘŁŃÓŚŹŻ', en = 'acelnoszzACELNOSZZ';
+  s = String(s || '').replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, function (c) { return en[pl.indexOf(c)]; });
+  return s.replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 50) || 'x';
+}
+// zużycie opon z pomiarów (programy kierowców zapisują je po każdym czystym okrążeniu, także w treningu)
+$('b-wmeas').onclick = function () {
+  T('wear').once('value').then(function (snap) {
+    var all = snap.val() || {}, st = (S.live || {}).state || {}, keys = Object.keys(all);
+    if (!keys.length) { alert('Nie ma jeszcze pomiarów zużycia opon. Program kierowcy zapisuje je sam po 3 czystych okrążeniach stintu (także w treningu) – pojeździjcie tym autem na tym torze.'); return; }
+    var want = st.track && st.car ? wearKey(st.track) + '__' + wearKey(st.car) : '';
+    var key = all[want] ? want : keys.sort(function (a, b) {
+      var la = Math.max.apply(null, Object.values(all[a]).map(function (x) { return x.t || 0; }));
+      var lb = Math.max.apply(null, Object.values(all[b]).map(function (x) { return x.t || 0; }));
+      return lb - la; })[0];
+    var smp = Object.values(all[key]).filter(function (x) { return x && x.rates && x.laps; });
+    var avg = function (list) {
+      var w = [0, 0, 0, 0], n = 0;
+      list.forEach(function (x) { for (var k = 0; k < 4; k++) w[k] += x.rates[k] * x.laps; n += x.laps; });
+      return n ? w.map(function (v) { return v / n; }) : null;
+    };
+    var temps = smp.map(function (x) { return x.temp; }).filter(function (x) { return x != null; });
+    var lo = Math.min.apply(null, temps), hi = Math.max.apply(null, temps), nfTxt = '';
+    var warm = temps.length && hi - lo >= 8 ? smp.filter(function (x) { return x.temp >= hi - 4; }) : smp;
+    var rates = avg(warm);
+    if (temps.length && hi - lo >= 8) {   // chłodniejszy tor (noc): o ile mniejsze zużycie
+      var cold = avg(smp.filter(function (x) { return x.temp != null && x.temp <= lo + 4; }));
+      var f = cold ? 1 - (cold[0] + cold[1] + cold[2] + cold[3]) / (rates[0] + rates[1] + rates[2] + rates[3]) : 0;
+      if (f > 0 && f < 0.5) { $('g-nw').value = Math.round(f * 100); nfTxt = ', w chłodzie (' + Math.round(lo) + '°C) zużycie mniejsze o ' + Math.round(f * 100) + '%'; }
+    }
+    for (var k = 0; k < 4; k++) $('g-w' + k).value = String(Math.round(rates[k] * 100) / 100).replace('.', ',');
+    var laps = smp.reduce(function (a, x) { return a + x.laps; }, 0), s0 = smp[0] || {};
+    $('gen-ok').textContent = 'Zużycie z pomiarów: ' + (s0.track || key) + (s0.car ? ', ' + s0.car : '') + ' – ' + smp.length + (smp.length === 1 ? ' stint, ' : (smp.length % 10 >= 2 && smp.length % 10 <= 4 && (smp.length % 100 < 12 || smp.length % 100 > 14) ? ' stinty, ' : ' stintów, ')) + laps + ' okr.' + nfTxt + '. Kliknij „Rozpisz plan”.';
+    refreshTimes();
+  }).catch(function (e) { alert(authErr(e)); });
+};
+['g-w0', 'g-w1', 'g-w2', 'g-w3', 'g-nw'].forEach(function (id) { $(id).addEventListener('input', function () { refreshTimes(); }); });
 $('b-addrow').onclick = function () {
   var rows = rowsFromTable(), last = rows[rows.length - 1] || { laps: 11, stopS: 60 };
   rows.push({ n: rows.length + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: stopTimes()[0], tyreL: false, tyreR: false });

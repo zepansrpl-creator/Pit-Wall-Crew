@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.2",
- "display": "0.4.0.2",
- "sha256": "cf9b97e02de5cd7253fcb969bb35aa66203e2061d0d0ce534ee0675dca9efaba",
- "size": 598228,
+ "version": "10.0.4.0.3",
+ "display": "0.4.0.3",
+ "sha256": "a6dfbbe43dbdbea62f23a2f5b5346e8b1810ac8f63e0ae5c872fdec8bb236419",
+ "size": 603793,
  "url": "PitWallCrew.zip",
- "notes": "- Inżynier korzysta z planu zespołu w wyścigu każdej długości – takiej, jaka jest wpisana na ścianie boksów (wcześniej tylko w wyścigach od 12 h). W wyścigu innej długości liczy strategię sam.\n- Sprawdzanie czasu postoju: po każdym postoju na ścianie boksów „Postój po stincie 5: 74 s (4 opony), w planie 72 s – zgadza się” albo o ile dłużej / krócej. W zakładce Grafik i plan zmierzone czasy postoju dla 0 / 2 / 4 opon i przycisk „Użyj zmierzonych w planie”."
+ "notes": "- Plan opon „optymalnie w limicie opon”: program dzieli wszystkie opony z limitu tak, żeby najbardziej zużyta opona była jak najmniej zużyta (równe zużycie przez cały wyścig); tam, gdzie zużycie musi być największe – w nocy i po prawej stronie.\n- W tabeli planu: przewidywany bieżnik LP / PP / LT / PT na koniec każdego stintu (kolory jak w arkuszu) i ile nowych opon zostało.\n- Zużycie opon z pomiarów: program kierowcy po każdym czystym okrążeniu (od 3 w stincie, także w treningu, nie na mokrym) zapisuje zużycie każdej opony na okrążenie dla tego toru i auta. Przycisk „z pomiarów” wpisuje średnią i o ile mniej opony zużywają się w chłodzie (noc)."
 }
