@@ -1,7 +1,7 @@
 {
- "version": "3.9.6",
- "sha256": "eae60879727ec38975ddcb98a0c5233bf309249642fae07606ee748bb0b8aed7",
- "size": 575106,
+ "version": "3.9.7",
+ "sha256": "27ab1be92bfb949cdcbceb09dece0cca09d50cb059b2815a149612aa9e6a53f3",
+ "size": 589273,
  "url": "PitWallCrew.zip",
- "notes": "- Usunięta opcja „AI odpowiada na wszystkie pytania” (oszczędzanie limitu Groq). AI odpowiada tylko na pytania, których program nie zna, analityczne i o rywali.\n- Lepsze rozpoznawanie mowy: dokładniejszy model Whisper (large-v3) jako pierwszy; gdy rozpoznanie jest niepewne, druga próba drugim modelem zamiast od razu „Nie zrozumiałem”; nagranie trwa 0,35 s po puszczeniu przycisku (końcówki słów nie są ucinane); przycinana cisza na początku i końcu oraz odfiltrowane dudnienie."
+ "notes": "- Porównanie z kolegą z zespołu: najszybsze okrążenia każdego kierowcy w danych warunkach zapisują się same w bazie zespołu. Inżynier wybiera okrążenie kolegi na tej samej mieszance, przy podobnym zużyciu opon, paliwie i temperaturze toru i mówi przed zakrętem, co kolega robi inaczej i co zmienić („T5: Patryk hamuje 15 metrów później. Spróbuj hamować później.”). Pytania: „porównaj mnie z Patrykiem”, „co Amadeusz robi inaczej?”, „gdzie kolega jest szybszy?”. Komendy: „porównanie z zespołem” / „bez porównania z zespołem”.\n- Naprawione porównanie z rywalem w zakrętach („w jakich zakrętach Wieczorek jest wolniejszy ode mnie?”): wcześniej odpowiedź porównywała Twoje okrążenie z Twoim najlepszym. Teraz czas przejazdu każdego zakrętu i prędkość w zakręcie rywala z jego pozycji na torze."
 }
