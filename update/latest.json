@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.8",
- "display": "0.4.0.8",
- "sha256": "c5d483bee661029b69758d83e9c67b146b52a158913493b6e3a41d0ad8d029ee",
- "size": 637633,
+ "version": "10.0.4.0.10",
+ "display": "0.4.0.10",
+ "sha256": "0e4629ffea12aab5eca11b3c614c46ebf0b179375514d0605323ccbaae0ab7a5",
+ "size": 638928,
  "url": "PitWallCrew.zip",
- "notes": "- Dziennik przycięć: przy uruchomionych programach także ich parametry i kto je uruchomił (np. zadanie aktualizacji w tle)."
+ "notes": "- Dziennik przycięć obserwuje wszystkie programy i procesy (co sekundę: procesor, dysk, pamięć, ostatnie 90 s). Przy każdym przycięciu zapisuje osobny plik recordings\\procesy_*.txt: kto najbardziej zajmuje procesor, kto nagle więcej niż zwykle, kto czyta/pisze dysk, komu przybyło pamięci, co się uruchomiło lub zakończyło."
 }
