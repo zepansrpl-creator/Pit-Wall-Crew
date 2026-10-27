@@ -683,7 +683,9 @@ function render(v) {
     var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + s.delta + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + s.delta + ' min</span>' : '0');
     return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + s.n + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
            '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + (s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
-  }).join('') || '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza co minutę program Pit Wall Crew (wystarczy, że jest włączony u kogokolwiek z zespołu).</td></tr>';
+  }).join('') || (v.noPlan
+    ? '<tr><td colspan="7" class="note">Na dziś nie ma wyścigu w „Grafik i plan”. Gdy kierowca wyjedzie w wyścigu, grafik i strategia ułożą się same – z długości wyścigu i liczby opon odczytanych z gry.</td></tr>'
+    : '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza co minutę program Pit Wall Crew (wystarczy, że jest włączony u kogokolwiek z zespołu).</td></tr>');
 
   $('msgs').innerHTML = (v.msgs || []).map(function (m) {
     var d = new Date(m.t);
@@ -879,9 +881,12 @@ function draw() {
   var feeds = Object.keys(S.feeds).filter(function (k) { return now() - (S.feeds[k].t || 0) < 6 * 3600000; })
     .map(function (k) { return { key: k, label: feedLabel(k, S.feeds[k]) }; });
   var drv = ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean);
+  // bez wyścigu na dziś w „Grafik i plan”: tylko grafik ułożony automatycznie z gry (u kierowcy, który jedzie)
+  var auto = /automatycznie/.test(g.source || '');
+  if (!planToday(S.settings) && !auto) g = { rows: [], source: 'brak wyścigu na dziś w planie', noPlan: true };
   render({
     ok: true, live: live, age: live ? Math.round((now() - (live._t || 0)) / 1000) : null,
-    feeds: feeds, grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '',
+    feeds: feeds, grafik: g.rows || [], zrodlo: g.source || '', raceEnd: g.raceEnd || '', noPlan: !!g.noPlan,
     msgs: S.msgs, kierowcy: drv, obs: S.meta.obs
   });
   drawGrafik2(g);
@@ -966,6 +971,11 @@ $('obs-copy').onclick = function () { copy($('obs-link').value); };
 function copy(s) { try { navigator.clipboard.writeText(s); } catch (e) {} }
 
 // ------------------------------------------------------------------ grafik i plan
+function planToday(st) {     // jak team/planning.py plan_today(): start najwyżej 12 h temu … koniec wyścigu + 2 h
+  var t = Number((st || {}).raceStartMs || 0); if (!t) return false;
+  var h = Number((st || {}).raceHours || 24) || 24, n = now();
+  return t - 12 * 3600000 <= n && n <= t + (h + 2) * 3600000;
+}
 function drawGrafik2(g) {
   $('src2').textContent = '(' + (g.source || 'brak') + (g.raceEnd ? ', meta ok. ' + g.raceEnd : '') + (g.t ? ', przeliczony ' + hhmm(g.t) : '') + ')';
   $('grafik2').innerHTML = $('grafik').innerHTML;
