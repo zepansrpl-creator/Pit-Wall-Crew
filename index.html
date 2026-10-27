@@ -49,7 +49,7 @@
   @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(61,220,132,0); } }
   header select { padding: 5px 8px; font-size: 13px; }
 
-  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-left: 12px; }
   .tabs button { background: transparent; border: 0; border-bottom: 3px solid transparent; color: var(--muted); padding: 6px 10px;
                  font: 600 16px/1.2 var(--cond); border-radius: 0; white-space: nowrap; }
   .tabs button:hover { color: var(--text); background: transparent; filter: none; }
@@ -119,7 +119,7 @@
   button.second:hover { background: var(--line); filter: none; }
 
   @media (max-width: 560px) {
-    header { padding: 10px 12px; } .tabs { margin-left: 0; width: 100%; overflow-x: auto; flex-wrap: nowrap; }
+    header { padding: 10px 12px; } .tabs { margin-left: 0; width: 100%; overflow-x: auto; flex-wrap: nowrap; order: 9; }
     main, .page { padding: 12px 12px 36px; } .big { font-size: 36px; }
     .hide-sm { display: none; } td, th { font-size: 12px; padding: 6px 4px; }
   }
@@ -209,14 +209,6 @@
 <body>
 <header>
   <h1>Pit Wall Crew</h1>
-  <span class="pill" id="st-live">łączę…</span>
-  <span class="pill" id="st-driver">—</span>
-  <span class="pill" id="st-laptop">—</span>
-  <select id="feed" style="display:none" aria-label="Auto / sesja"></select>
-  <button type="button" id="theme-btn" data-notr onclick="pwcTheme()" title="Jasny / ciemny" aria-label="Jasny / ciemny" style="margin-left:auto">☀ / ☾</button>
-  <select id="langsel" data-notr aria-label="Language" onchange="PWC_SET_LANG(this.value)">
-    <option value="pl">PL</option><option value="en">EN</option><option value="de">DE</option><option value="fr">FR</option>
-  </select>
   <nav class="tabs" id="tabs" style="display:none">
     <button data-v="live" class="on">Na żywo</button>
     <button data-v="plan">Grafik i plan</button>
@@ -225,6 +217,14 @@
     <button data-v="mem">Pamięć</button>
     <button data-v="help">Pomoc</button>
   </nav>
+  <span class="pill" id="st-live" style="margin-left:auto">łączę…</span>
+  <span class="pill" id="st-driver">—</span>
+  <span class="pill" id="st-laptop">—</span>
+  <select id="feed" style="display:none" aria-label="Auto / sesja"></select>
+  <button type="button" id="theme-btn" data-notr onclick="pwcTheme()" title="Jasny / ciemny" aria-label="Jasny / ciemny">☀ / ☾</button>
+  <select id="langsel" data-notr aria-label="Language" onchange="PWC_SET_LANG(this.value)">
+    <option value="pl">PL</option><option value="en">EN</option><option value="de">DE</option><option value="fr">FR</option>
+  </select>
 </header>
 <div id="lang-note" class="note" style="display:none;margin:8px 16px;padding:8px 12px;border:1px solid var(--line, #333);border-radius:10px">
   Tłumaczenia na inne języki mogą zawierać błędy językowe. Autor prosi o zgłoszenie każdego z nich (Pomoc → Zgłoś problem).
