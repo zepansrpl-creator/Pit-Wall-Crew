@@ -42,7 +42,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#co">Co to jest</a><a href="#inst">Instalacja</a><a href="#app">Aplikacja</a><a href="#ust">Ustawienia</a>
-  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
+  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
   <a href="#tel">Powiadomienia</a><a href="#wyscig">Długi wyścig</a><a href="#problemy">Problemy</a>
 </nav>
 <main>
@@ -60,18 +60,18 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Windows 10 lub 11 i Le Mans Ultimate.</li>
     <li>Słuchawki z mikrofonem i wolny przycisk na kierownicy (albo klawisz na klawiaturze).</li>
     <li>Internet (głos inżyniera, rozpoznawanie mowy i pit wall działają przez internet).</li>
-    <li>Opcjonalnie: darmowy klucz Groq – rozpoznawanie mowy i odpowiedzi AI (rozdział <a href="#ai">AI</a>).</li>
+    <li>Darmowy klucz Groq – <b>bez niego nie działa AI</b> (lepsze rozpoznawanie mowy, odpowiedzi AI); jak go zdobyć: rozdział <a href="#ai">AI</a>.</li>
   </ul>
 </section>
 
 <section id="inst">
   <h2>Instalacja (5 minut)</h2>
   <ol>
-    <li>Pobierz paczkę <code>PitWallCrew_….zip</code>. <b>Zanim ją rozpakujesz:</b> prawy przycisk na pliku → Właściwości →
+    <li>Pobierz paczkę <code>PitWallCrew_….zip</code> z posta na Patreonie FR Mods. <b>Zanim ją rozpakujesz:</b> prawy przycisk na pliku → Właściwości →
       zaznacz <b>Odblokuj</b> → OK (inaczej Windows może blokować pliki).</li>
-    <li>Rozpakuj do folderu, np. <code>Dokumenty\Pit Wall Crew</code>.</li>
-    <li>Kliknij dwa razy <b>INSTALUJ_KIEROWCA.bat</b>. Instalator pobierze potrzebne składniki (kilka minut), zapyta o zespół,
-      mikrofon i przycisk mówienia i utworzy ikonę <b>Pit Wall Crew</b> na pulpicie.</li>
+    <li>Rozpakuj np. do <code>Dokumenty</code> – powstanie folder <code>Pit Wall Crew</code>, a w nim <b>INSTALL.bat</b> i folder <code>Program</code> (pliki programu, nie trzeba tam zaglądać).</li>
+    <li>Kliknij dwa razy <b>INSTALL.bat</b>. Instalator pobierze potrzebne składniki (kilka minut), zapyta o zespół,
+      mikrofon i przycisk mówienia i utworzy ikonę <b>Pit Wall Crew</b> na pulpicie. Pierwszym krokiem w oknie ustawień jest <b>wybór języka</b>.</li>
     <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry).</li>
   </ol>
   <div class="tip">Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Twoje ustawienia zostają.</div>
@@ -145,14 +145,32 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </section>
 
 <section id="ai">
-  <h2>AI – darmowy klucz Groq (2 minuty, jedna osoba)</h2>
+  <h2>AI – darmowy klucz Groq (raz, 3 minuty)</h2>
+  <div class="tip"><b>Bez klucza Groq nie działa AI</b>: odpowiedzi na pytania spoza listy komend, lepsze rozpoznawanie mowy
+  (Whisper – bez klucza zostaje słabsze rozpoznawanie Google) i tłumaczenie rzadszych komunikatów po angielsku, niemiecku i francusku.
+  Ostrzeżenia, strategia i komendy działają także bez klucza.</div>
   <ol>
-    <li>Załóż darmowe konto na <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → skopiuj klucz.</li>
-    <li>Na pit wallu: zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>. Klucz widzą tylko członkowie zespołu.
-      Jeździsz sam? Wklej go w aplikacji: <b>Zaawansowane → Własny klucz Groq</b>.</li>
-    <li>W aplikacji pojawi się zielone <b>AI: Groq</b>.</li>
+    <li>Wejdź na <a href="https://console.groq.com">console.groq.com</a> i zaloguj się – najprościej kontem Google. Konto jest darmowe.</li>
+    <li>Z lewej <b>API Keys → Create API Key</b>, wpisz nazwę (np. <code>PWC</code>) → <b>Submit</b>.</li>
+    <li><b>Od razu skopiuj klucz</b> (zaczyna się od <code>gsk_</code>) – Groq pokazuje go tylko raz. Klucz jest darmowy, z dziennym limitem.</li>
+    <li><b>Zespół</b> (wystarczy jedna osoba): pit wall → zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>.
+      Klucz trafia do wszystkich w zespole i widzą go tylko członkowie zespołu.</li>
+    <li><b>Jeździsz sam albo chcesz własny limit</b>: aplikacja → <b>Zaawansowane → Własny klucz Groq</b> → wklej → <b>Zapisz i uruchom ponownie</b>.</li>
+    <li>Gotowe, gdy na stronie <b>Inżynier</b> jest zielone <b>AI: Groq</b>.</li>
   </ol>
   <p>Klucza nikomu nie wysyłaj na czacie – wklej go sam.</p>
+</section>
+
+<section id="patreon">
+  <h2>Aktualizacje i Patreon</h2>
+  <ol>
+    <li>Nowe wersje dostają <b>płacący patroni FR Mods</b> na Patreonie.</li>
+    <li>W aplikacji na stronie <b>Inżynier</b> kliknij <b>Zaloguj przez Patreon</b>. W przeglądarce zaloguj się do Patreona i kliknij <b>Allow</b>,
+      potem wróć do aplikacji. Zostanie tylko przycisk <b>Wyloguj z Patreona</b>.</li>
+    <li>Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Ustawienia zostają.</li>
+    <li><b>Testerzy</b> zamiast Patreona wpisują kod od autora: <b>Zaawansowane → Kod testera → Zapisz i uruchom ponownie</b>.</li>
+  </ol>
+  <p>Bez Patreona i kodu testera program działa dalej, tylko bez nowych wersji.</p>
 </section>
 
 <section id="sciana">

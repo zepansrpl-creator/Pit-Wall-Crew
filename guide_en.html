@@ -42,7 +42,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">What it is</a><a href="#inst">Installation</a><a href="#app">The app</a><a href="#set">Settings</a>
-  <a href="#talk">Talking</a><a href="#ai">AI (Groq)</a><a href="#wall">Pit wall</a><a href="#plan">Schedule &amp; plan</a>
+  <a href="#talk">Talking</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit wall</a><a href="#plan">Schedule &amp; plan</a>
   <a href="#phone">Notifications</a><a href="#race">Long race</a><a href="#help">Problems</a>
 </nav>
 <main>
@@ -61,22 +61,22 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Windows 10 or 11 and Le Mans Ultimate.</li>
     <li>A headset with a microphone and a free button on your wheel (or a keyboard key).</li>
     <li>Internet (the voice, speech recognition and the pit wall work online).</li>
-    <li>A free Groq key – speech recognition, AI answers and translation of less common messages (see <a href="#ai">AI</a>).</li>
+    <li>A free Groq key – <b>without it the AI doesn't work</b> (better speech recognition, AI answers, translation of less common messages); how to get it: <a href="#ai">AI</a>.</li>
   </ul>
 </section>
 
 <section id="inst">
   <h2>Installation (5 minutes)</h2>
   <ol>
-    <li>Download the <code>PitWallCrew_….zip</code> package. <b>Before unpacking:</b> right-click the file → Properties →
+    <li>Download the <code>PitWallCrew_….zip</code> package from the FR Mods post on Patreon. <b>Before unpacking:</b> right-click the file → Properties →
       tick <b>Unblock</b> → OK (otherwise Windows may block the files).</li>
-    <li>Unpack it to a folder, e.g. <code>Documents\Pit Wall Crew</code>.</li>
-    <li>Double-click <b>INSTALUJ_KIEROWCA.bat</b> (the installer). It downloads what's needed (a few minutes), asks about your team,
+    <li>Unpack it, e.g. to <code>Documents</code> – you get a <code>Pit Wall Crew</code> folder with <b>INSTALL.bat</b> and a <code>Program</code> folder (program files, no need to open it).</li>
+    <li>Double-click <b>INSTALL.bat</b> (the installer). It downloads what's needed (a few minutes), asks about your team,
       microphone and radio button, and creates a <b>Pit Wall Crew</b> desktop icon.</li>
     <li>In LMU once: <b>Settings → Gameplay → Enable Plugins = ON</b> (without it the program can't see the game data).</li>
   </ol>
   <div class="tip">Updates install themselves when the app starts – never while you drive. Your settings are kept.
-  The language is chosen automatically from Windows; you can change it under Settings → Voice → Język / Language.</div>
+  On first start you choose the language; you can change it later under Settings → Voice → Język / Language.</div>
 </section>
 
 <section id="app">
@@ -141,14 +141,32 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </section>
 
 <section id="ai">
-  <h2>AI – free Groq key (2 minutes, one person)</h2>
+  <h2>AI – free Groq key (once, 3 minutes)</h2>
+  <div class="tip"><b>Without a Groq key the AI doesn't work</b>: answers to questions outside the command list, better speech recognition
+  (Whisper – without a key the weaker Google recognition is used) and translation of less common messages in English, German and French.
+  Warnings, strategy and commands work without a key too.</div>
   <ol>
-    <li>Create a free account at <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → copy the key.</li>
-    <li>On the pit wall: <b>Team → Team AI (Groq)</b> → paste → <b>Save key</b>. Only team members can see it.
-      Driving solo? Paste it in the app: <b>Advanced → Your own Groq key</b>.</li>
-    <li>A green <b>AI: Groq</b> appears in the app.</li>
+    <li>Go to <a href="https://console.groq.com">console.groq.com</a> and log in – a Google account is easiest. The account is free.</li>
+    <li>On the left: <b>API Keys → Create API Key</b>, enter a name (e.g. <code>PWC</code>) → <b>Submit</b>.</li>
+    <li><b>Copy the key right away</b> (it starts with <code>gsk_</code>) – Groq shows it only once. The key is free, with a daily limit.</li>
+    <li><b>Team</b> (one person is enough): pit wall → <b>Team → Team AI (Groq)</b> → paste → <b>Save key</b>.
+      The key reaches everyone in the team and only team members can see it.</li>
+    <li><b>Driving solo or want your own limit</b>: app → <b>Advanced → Your own Groq key</b> → paste → <b>Save and restart</b>.</li>
+    <li>Done when the <b>Engineer</b> page shows a green <b>AI: Groq</b>.</li>
   </ol>
   <p>Never send the key in a chat – paste it yourself.</p>
+</section>
+
+<section id="patreon">
+  <h2>Updates and Patreon</h2>
+  <ol>
+    <li>New versions go to <b>paying FR Mods patrons</b> on Patreon.</li>
+    <li>In the app, on the <b>Engineer</b> page click <b>Log in with Patreon</b>. Log in to Patreon in the browser and click <b>Allow</b>,
+      then go back to the app. Only the <b>Log out of Patreon</b> button stays.</li>
+    <li>Updates install themselves when the app starts – never while you drive. Your settings are kept.</li>
+    <li><b>Testers</b> enter a code from the author instead: <b>Advanced → Tester code → Save and restart</b>.</li>
+  </ol>
+  <p>Without Patreon or a tester code the program keeps working, just without new versions.</p>
 </section>
 
 <section id="wall">
