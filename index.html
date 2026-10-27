@@ -346,8 +346,7 @@
     <p class="note">„Do kierowcy”: inżynier przeczyta wiadomość głosem. „Zapytaj inżyniera”: odpowiedź usłyszycie w radiu zespołu (aplikacje i „🔊 Słuchaj inżyniera”). „Zapytaj (tylko tekst)”: odpowiedź pojawi się tylko tutaj, kierowca jej nie usłyszy. „Do pamięci”: notatka dla AI inżyniera (np. „ABS 9 za mocny w deszczu”), widoczna w zakładce „Pamięć zespołu”.</p>
   </section>
   <section class="wide" id="map-box" style="display:none">
-    <h2>Mapa toru <span class="note" id="map-note"></span>
-      <button class="second mini" id="map-flip" type="button" title="Odbij mapę, jeśli tor wygląda jak w lustrze">⇋ odbij</button></h2>
+    <h2>Mapa toru <span class="note" id="map-note"></span></h2>
     <svg id="map" preserveAspectRatio="xMidYMid meet"></svg>
     <div id="map-legend" class="legend"></div>
   </section>
@@ -1502,7 +1501,7 @@ $('b-mem').onclick = function () {
 };
 
 // ------------------------------------------------------------------ mapa toru
-var MAP = { key: '', pts: null, live: null, recv: 0, flip: lsGet('mapflip') === '1', loading: '' };
+var MAP = { key: '', pts: null, live: null, recv: 0, flip: false, loading: '' };
 var MAP_COLORS = ['#f5b83d', '#5fb3ff', '#b99cff', '#3ddc84', '#ff8a3d', '#ff6fb5'];
 function mapData(live) {
   var m = live && live.state && live.state.map;
@@ -1595,7 +1594,7 @@ window.addEventListener('resize', function () {
   var wide = ($('map-box').clientWidth || window.innerWidth) > 640;
   if (wide !== MAP.wide) mapBuild();
 });
-$('map-flip').onclick = function () { MAP.flip = !MAP.flip; lsSet('mapflip', MAP.flip ? '1' : null); mapBuild(); };
+lsSet('mapflip', null);   // dawny przycisk „odbij” – mapa jest dobrze ustawiona domyślnie
 
 boot();
 
