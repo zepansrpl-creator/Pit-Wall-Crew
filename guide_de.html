@@ -42,7 +42,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">Was ist das</a><a href="#inst">Installation</a><a href="#app">Die App</a><a href="#set">Einstellungen</a>
-  <a href="#talk">Sprechen</a><a href="#ai">KI (Groq)</a><a href="#wall">Boxenmauer</a><a href="#plan">Zeitplan &amp; Plan</a>
+  <a href="#talk">Sprechen</a><a href="#ai">KI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Boxenmauer</a><a href="#plan">Zeitplan &amp; Plan</a>
   <a href="#phone">Benachrichtigungen</a><a href="#race">Langes Rennen</a><a href="#help">Probleme</a>
 </nav>
 <main>
@@ -61,22 +61,22 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Windows 10 oder 11 und Le Mans Ultimate.</li>
     <li>Ein Headset mit Mikrofon und eine freie Taste am Lenkrad (oder eine Taste auf der Tastatur).</li>
     <li>Internet (Stimme, Spracherkennung und Boxenmauer funktionieren online).</li>
-    <li>Einen kostenlosen Groq-Schlüssel – Spracherkennung, KI-Antworten und Übersetzung seltener Meldungen (siehe <a href="#ai">KI</a>).</li>
+    <li>Einen kostenlosen Groq-Schlüssel – <b>ohne ihn funktioniert die KI nicht</b> (bessere Spracherkennung, KI-Antworten, Übersetzung seltener Meldungen); wie du ihn bekommst: <a href="#ai">KI</a>.</li>
   </ul>
 </section>
 
 <section id="inst">
   <h2>Installation (5 Minuten)</h2>
   <ol>
-    <li>Lade das Paket <code>PitWallCrew_….zip</code> herunter. <b>Vor dem Entpacken:</b> Rechtsklick auf die Datei → Eigenschaften →
+    <li>Lade das Paket <code>PitWallCrew_….zip</code> aus dem FR-Mods-Beitrag auf Patreon herunter. <b>Vor dem Entpacken:</b> Rechtsklick auf die Datei → Eigenschaften →
       <b>Zulassen</b> anhaken → OK (sonst kann Windows die Dateien blockieren).</li>
-    <li>In einen Ordner entpacken, z. B. <code>Dokumente\Pit Wall Crew</code>.</li>
-    <li>Doppelklick auf <b>INSTALUJ_KIEROWCA.bat</b> (das Installationsprogramm). Es lädt das Nötige herunter (ein paar Minuten), fragt nach Team,
+    <li>Entpacken, z. B. nach <code>Dokumente</code> – es entsteht der Ordner <code>Pit Wall Crew</code> mit <b>INSTALL.bat</b> und dem Ordner <code>Program</code> (Programmdateien, musst du nicht öffnen).</li>
+    <li>Doppelklick auf <b>INSTALL.bat</b> (das Installationsprogramm). Es lädt das Nötige herunter (ein paar Minuten), fragt nach Team,
       Mikrofon und Funktaste und legt ein Desktop-Symbol <b>Pit Wall Crew</b> an.</li>
     <li>In LMU einmalig: <b>Settings → Gameplay → Enable Plugins = ON</b> (ohne das sieht das Programm die Spieldaten nicht).</li>
   </ol>
   <div class="tip">Updates installieren sich beim Start der App – nie während der Fahrt. Deine Einstellungen bleiben erhalten.
-  Die Sprache wird automatisch aus Windows übernommen; ändern kannst du sie unter Einstellungen → Stimme → Język / Language.</div>
+  Beim ersten Start wählst du die Sprache; ändern kannst du sie unter Einstellungen → Stimme → Język / Language.</div>
 </section>
 
 <section id="app">
@@ -141,14 +141,32 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </section>
 
 <section id="ai">
-  <h2>KI – kostenloser Groq-Schlüssel (2 Minuten, eine Person)</h2>
+  <h2>KI – kostenloser Groq-Schlüssel (einmal, 3 Minuten)</h2>
+  <div class="tip"><b>Ohne Groq-Schlüssel funktioniert die KI nicht</b>: Antworten auf Fragen außerhalb der Befehlsliste, bessere Spracherkennung
+  (Whisper – ohne Schlüssel bleibt die schwächere Google-Erkennung) und Übersetzung seltener Meldungen auf Englisch, Deutsch und Französisch.
+  Warnungen, Strategie und Befehle funktionieren auch ohne Schlüssel.</div>
   <ol>
-    <li>Lege ein kostenloses Konto auf <a href="https://console.groq.com">console.groq.com</a> an → <b>API Keys → Create API Key</b> → Schlüssel kopieren.</li>
-    <li>Auf der Boxenmauer: <b>Team → Team-KI (Groq)</b> → einfügen → <b>Schlüssel speichern</b>. Nur Teammitglieder sehen ihn.
-      Du fährst solo? Füge ihn in der App ein: <b>Erweitert → Eigener Groq-Schlüssel</b>.</li>
-    <li>In der App erscheint ein grünes <b>KI: Groq</b>.</li>
+    <li>Öffne <a href="https://console.groq.com">console.groq.com</a> und melde dich an – am einfachsten mit einem Google-Konto. Das Konto ist kostenlos.</li>
+    <li>Links: <b>API Keys → Create API Key</b>, Namen eingeben (z. B. <code>PWC</code>) → <b>Submit</b>.</li>
+    <li><b>Schlüssel sofort kopieren</b> (beginnt mit <code>gsk_</code>) – Groq zeigt ihn nur einmal. Der Schlüssel ist kostenlos, mit Tageslimit.</li>
+    <li><b>Team</b> (eine Person reicht): Boxenmauer → <b>Team → Team-KI (Groq)</b> → einfügen → <b>Schlüssel speichern</b>.
+      Der Schlüssel gilt für das ganze Team, nur Teammitglieder sehen ihn.</li>
+    <li><b>Solo oder eigenes Limit</b>: App → <b>Erweitert → Eigener Groq-Schlüssel</b> → einfügen → <b>Speichern und neu starten</b>.</li>
+    <li>Fertig, wenn auf der Seite <b>Renningenieur</b> ein grünes <b>KI: Groq</b> steht.</li>
   </ol>
   <p>Schick den Schlüssel nie in einem Chat – füge ihn selbst ein.</p>
+</section>
+
+<section id="patreon">
+  <h2>Updates und Patreon</h2>
+  <ol>
+    <li>Neue Versionen bekommen <b>zahlende FR-Mods-Unterstützer</b> auf Patreon.</li>
+    <li>In der App auf der Seite <b>Renningenieur</b> auf <b>Mit Patreon anmelden</b> klicken. Im Browser bei Patreon anmelden und <b>Allow</b> klicken,
+      dann zurück zur App. Danach bleibt nur <b>Von Patreon abmelden</b>.</li>
+    <li>Updates installieren sich beim Start der App – nie während der Fahrt. Deine Einstellungen bleiben erhalten.</li>
+    <li><b>Tester</b> geben stattdessen einen Code vom Autor ein: <b>Erweitert → Testercode → Speichern und neu starten</b>.</li>
+  </ol>
+  <p>Ohne Patreon oder Testercode läuft das Programm weiter, nur ohne neue Versionen.</p>
 </section>
 
 <section id="wall">
