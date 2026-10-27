@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pit Wall Crew – prywatność</title>
 <style>
-:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+:root { --bg:#0c1411; --card:#13201b; --line:#22362d; --text:#efe9da; --muted:#9a9ea6; --acc:#d9a227; --hi:#ffc400; }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
 * { box-sizing:border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
@@ -31,26 +31,26 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <!-- ============================== POLSKI ============================== -->
 <article data-l="pl">
 <h1>Prywatność</h1>
-<p class="muted">Pit Wall Crew – aplikacja i ściana boksów. Stan na 27.10.2026.</p>
+<p class="muted">Pit Wall Crew – aplikacja i pit wall. Stan na 27.10.2026.</p>
 
 <section><h2>Kto odpowiada za dane</h2>
-<p>Maciej Szczepaniak (FR Mods). Kontakt: <span class="contact"></span> albo formularz „Zgłoś problem” w aplikacji lub na ścianie boksów.</p></section>
+<p>Maciej Szczepaniak (FR Mods). Kontakt: <span class="contact"></span> albo formularz „Zgłoś problem” w aplikacji lub na pit wallu.</p></section>
 
 <section><h2>Ciasteczka i pamięć przeglądarki</h2>
-<p>Ściana boksów <b>nie używa ciasteczek</b>, reklam ani narzędzi do śledzenia czy statystyk odwiedzin. W pamięci przeglądarki (localStorage, IndexedDB) zapisuje tylko to, bez czego strona nie działa:</p>
+<p>Pit wall <b>nie używa ciasteczek</b>, reklam ani narzędzi do śledzenia czy statystyk odwiedzin. W pamięci przeglądarki (localStorage, IndexedDB) zapisuje tylko to, bez czego strona nie działa:</p>
 <ul><li>logowanie do zespołu (Google Firebase),</li><li>Twoje ustawienia: język, otwarta zakładka, wybrane imię, obrót mapy, odsłuch radia, zamknięte komunikaty.</li></ul>
 <p>Możesz to w każdej chwili usunąć, czyszcząc dane tej strony w przeglądarce. Strona i jej biblioteki są pobierane z serwerów GitHub Pages, Google (gstatic.com) i Cloudflare (cdnjs) – jak przy każdej stronie, te serwery widzą Twój adres IP.</p></section>
 
 <section><h2>Co i dokąd wysyła program</h2>
 <div class="wrap"><table>
 <tr><th>Dokąd</th><th>Co</th><th>Po co</th></tr>
-<tr><td>Baza zespołu – Google Firebase (serwery w Belgii)</td><td>imię lub nick kierowcy, dane z gry (okrążenia, paliwo, opony, pozycje, nazwy kierowców z serwera), radio zespołu, plan, pamięć zespołu, klucz Groq zespołu</td><td>ściana boksów; widzi to tylko Twój zespół (kod i hasło), a podgląd na żywo także ten, komu zespół da link dla widzów</td></tr>
+<tr><td>Baza zespołu – Google Firebase (serwery w Belgii)</td><td>imię lub nick kierowcy, dane z gry (okrążenia, paliwo, opony, pozycje, nazwy kierowców z serwera), radio zespołu, plan, pamięć zespołu, klucz Groq zespołu</td><td>pit wall; widzi to tylko Twój zespół (kod i hasło), a podgląd na żywo także ten, komu zespół da link dla widzów</td></tr>
 <tr><td>Groq (USA)</td><td>nagranie głosu po wciśnięciu przycisku, pytania, dane wyścigu potrzebne do odpowiedzi, zdania do przetłumaczenia</td><td>rozpoznawanie mowy, odpowiedzi AI, tłumaczenia – z kluczem Twoim lub zespołu</td></tr>
 <tr><td>Google (rozpoznawanie mowy)</td><td>to samo nagranie głosu</td><td>druga, równoległa próba rozpoznania mowy</td></tr>
 <tr><td>Microsoft (głosy Edge)</td><td>tekst, który mówi inżynier</td><td>zamiana tekstu na głos</td></tr>
 <tr><td>ntfy.sh</td><td>treść powiadomień</td><td>powiadomienia na telefon – tylko jeśli je ustawisz</td></tr>
 <tr><td>GitHub</td><td>zapytanie o nową wersję</td><td>aktualizacje</td></tr>
-<tr><td>Autor programu</td><td>zgłoszenia problemów i sugestii, kontakt (jeśli podasz), raporty awarii i dziennik – <b>tylko za Twoją zgodą</b></td><td>naprawianie błędów</td></tr>
+<tr><td>Autor programu</td><td>zgłoszenia problemów i sugestii, kontakt (jeśli podasz), raporty awarii i dziennik – <b>tylko za Twoją zgodą</b></td><td>naprawianie błędów; kopia zgłoszeń trafia do prywatnego repozytorium autora na GitHubie</td></tr>
 </table></div>
 <p>Program nie zapisuje nagrań głosu na dysku i nigdy nie wysyła ich autorowi.</p></section>
 
@@ -86,7 +86,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (Edge voices)</td><td>the text the engineer says</td><td>text to speech</td></tr>
 <tr><td>ntfy.sh</td><td>notification text</td><td>phone notifications – only if you set them up</td></tr>
 <tr><td>GitHub</td><td>a check for a new version</td><td>updates</td></tr>
-<tr><td>The author</td><td>problem reports and suggestions, your contact (if given), crash reports and the log – <b>only with your consent</b></td><td>fixing bugs</td></tr>
+<tr><td>The author</td><td>problem reports and suggestions, your contact (if given), crash reports and the log – <b>only with your consent</b></td><td>fixing bugs; a copy of reports is kept in the author's private GitHub repository</td></tr>
 </table></div>
 <p>The program does not save voice recordings to disk and never sends them to the author.</p></section>
 
@@ -122,7 +122,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (Edge-Stimmen)</td><td>der Text, den der Ingenieur spricht</td><td>Sprachausgabe</td></tr>
 <tr><td>ntfy.sh</td><td>Text der Benachrichtigungen</td><td>Handy-Benachrichtigungen – nur wenn du sie einrichtest</td></tr>
 <tr><td>GitHub</td><td>Abfrage einer neuen Version</td><td>Updates</td></tr>
-<tr><td>Der Autor</td><td>Problemmeldungen und Vorschläge, dein Kontakt (falls angegeben), Absturzberichte und Protokoll – <b>nur mit deiner Zustimmung</b></td><td>Fehlerbehebung</td></tr>
+<tr><td>Der Autor</td><td>Problemmeldungen und Vorschläge, dein Kontakt (falls angegeben), Absturzberichte und Protokoll – <b>nur mit deiner Zustimmung</b></td><td>Fehlerbehebung; eine Kopie der Meldungen liegt im privaten GitHub-Repository des Autors</td></tr>
 </table></div>
 <p>Das Programm speichert keine Sprachaufnahmen auf der Festplatte und sendet sie nie an den Autor.</p></section>
 
@@ -158,7 +158,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (voix Edge)</td><td>le texte que dit l'ingénieur</td><td>synthèse vocale</td></tr>
 <tr><td>ntfy.sh</td><td>le texte des notifications</td><td>notifications sur téléphone – seulement si tu les configures</td></tr>
 <tr><td>GitHub</td><td>vérification d'une nouvelle version</td><td>mises à jour</td></tr>
-<tr><td>L'auteur</td><td>signalements et suggestions, ton contact (si tu le donnes), rapports de plantage et journal – <b>seulement avec ton accord</b></td><td>corriger les bugs</td></tr>
+<tr><td>L'auteur</td><td>signalements et suggestions, ton contact (si tu le donnes), rapports de plantage et journal – <b>seulement avec ton accord</b></td><td>corriger les bugs ; une copie des signalements est conservée dans le dépôt GitHub privé de l'auteur</td></tr>
 </table></div>
 <p>Le programme n'enregistre pas ta voix sur le disque et ne l'envoie jamais à l'auteur.</p></section>
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pit Wall Crew – instrukcja</title>
 <style>
-:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+:root { --bg:#0c1411; --card:#13201b; --line:#22362d; --text:#efe9da; --muted:#9a9ea6; --acc:#d9a227; --hi:#ffc400; }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
 * { box-sizing: border-box; }
 body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
@@ -26,7 +26,7 @@ li { margin:3px 0; }
 .legend li { counter-increment:n; padding-left:36px; position:relative; margin:6px 0; }
 .legend li::before { content:counter(n); position:absolute; left:0; top:1px; width:24px; height:24px; border-radius:50%;
   background:var(--hi); color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
-.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(255,59,48,.07); border-radius:6px; margin:10px 0; }
+.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(217,162,39,.08); border-radius:6px; margin:10px 0; }
 code, kbd { background:rgba(127,127,127,.15); border-radius:4px; padding:1px 5px; font-size:.92em; }
 table { border-collapse:collapse; width:100%; font-size:15px; }
 td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
@@ -38,11 +38,11 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <header>
   <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
   <h1>Pit Wall Crew – instrukcja</h1>
-  <p>Głosowy inżynier wyścigowy i ściana boksów do Le Mans Ultimate. Od instalacji do pierwszego wyścigu.</p>
+  <p>Głosowy inżynier wyścigowy i pit wall do Le Mans Ultimate. Od instalacji do pierwszego wyścigu.</p>
 </header>
 <nav class="toc">
   <a href="#co">Co to jest</a><a href="#inst">Instalacja</a><a href="#app">Aplikacja</a><a href="#ust">Ustawienia</a>
-  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#sciana">Ściana boksów</a><a href="#plan">Grafik i plan</a>
+  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
   <a href="#tel">Powiadomienia</a><a href="#wyscig">Długi wyścig</a><a href="#problemy">Problemy</a>
 </nav>
 <main>
@@ -52,14 +52,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p><b>Inżynier</b> to program na Twoim komputerze. Czyta dane z gry i mówi do Ciebie przez słuchawki:
   ostrzega przed szybszymi autami, mówi, kiedy zjechać do boksu, co zmienić na postoju, gdzie tracisz czas. Na pytania
   odpowiada głosem – trzymasz przycisk na kierownicy, mówisz, puszczasz.</p>
-  <p><b>Ściana boksów</b> to strona w przeglądarce (komputer albo telefon). Cały zespół widzi tam na żywo stan auta,
+  <p><b>Pit wall</b> to strona w przeglądarce (komputer albo telefon). Cały zespół widzi tam na żywo stan auta,
   rywali, pogodę i grafik zmian kierowców, a kierowcy można wysłać wiadomość, którą inżynier przeczyta.</p>
   <p>Możesz jeździć sam (tryb <b>Solo</b>) albo w zespole.</p>
   <h3>Czego potrzebujesz</h3>
   <ul>
     <li>Windows 10 lub 11 i Le Mans Ultimate.</li>
     <li>Słuchawki z mikrofonem i wolny przycisk na kierownicy (albo klawisz na klawiaturze).</li>
-    <li>Internet (głos inżyniera, rozpoznawanie mowy i ściana boksów działają przez internet).</li>
+    <li>Internet (głos inżyniera, rozpoznawanie mowy i pit wall działają przez internet).</li>
     <li>Opcjonalnie: darmowy klucz Groq – rozpoznawanie mowy i odpowiedzi AI (rozdział <a href="#ai">AI</a>).</li>
   </ul>
 </section>
@@ -83,14 +83,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/app_main.webp" alt="Główne okno aplikacji z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy inżynier działa, czy widzi grę („Jedziesz” albo „podgląd” – gdy jedzie kolega), połączenie z zespołem i AI. Zielone = w porządku.</li>
-    <li><b>Test bez gry</b> – symulowany wyścig. Sprawdzisz głos, mikrofon i ścianę boksów bez uruchamiania LMU.</li>
+    <li><b>Test bez gry</b> – symulowany wyścig. Sprawdzisz głos, mikrofon i pit wall bez uruchamiania LMU.</li>
     <li><b>Uruchom / Zatrzymaj</b> inżyniera.</li>
     <li><b>Najważniejsze liczby</b>: pozycja, okrążenie, za ile zjazd, energia albo paliwo, czasy, czas do mety.</li>
     <li><b>Komunikaty</b> – wszystko, co inżynier powiedział, Twoje pytania i wiadomości od zespołu. Czerwone = pilne.</li>
     <li><b>Pole pytania</b> – możesz napisać pytanie zamiast mówić.</li>
     <li><b>Ustawienia</b> – zespół, mikrofon, głos, ostrzeżenia (rozdział niżej).</li>
     <li><b>Pomoc</b> – lista komend, opis funkcji, instrukcja, zmiany w wersjach, informacje o programie i <b>Zgłoś problem</b>.</li>
-    <li><b>Ściana boksów</b> – otwiera stronę zespołu w przeglądarce.</li>
+    <li><b>Pit wall</b> – otwiera stronę zespołu w przeglądarce.</li>
   </ol>
 </section>
 
@@ -101,7 +101,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <h3>Zespół</h3>
   <img src="img/app_team.webp" alt="Ustawienia zespołu">
   <ul>
-    <li><b>Solo</b> – jeździsz sam: nie wpisujesz nic więcej. Ściana boksów nadal działa jako Twój podgląd.</li>
+    <li><b>Solo</b> – jeździsz sam: nie wpisujesz nic więcej. Pit wall nadal działa jako Twój podgląd.</li>
     <li><b>Zespół</b> – jedna osoba klika <b>Utwórz nowy zespół…</b> (nazwa i hasło) i dostaje <b>kod zespołu</b> (6 znaków).
       Pozostali wpisują ten kod i hasło. Potem <b>Sprawdź połączenie</b> i wybierz z listy, kim jesteś.</li>
     <li>Kod i hasło przekazujcie sobie <b>tylko prywatnie</b> – kto je zna, widzi stan auta i może pisać do kierowcy.</li>
@@ -148,7 +148,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <h2>AI – darmowy klucz Groq (2 minuty, jedna osoba)</h2>
   <ol>
     <li>Załóż darmowe konto na <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → skopiuj klucz.</li>
-    <li>Na ścianie boksów: zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>. Klucz widzą tylko członkowie zespołu.
+    <li>Na pit wallu: zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>. Klucz widzą tylko członkowie zespołu.
       Jeździsz sam? Wklej go w aplikacji: <b>Zaawansowane → Własny klucz Groq</b>.</li>
     <li>W aplikacji pojawi się zielone <b>AI: Groq</b>.</li>
   </ol>
@@ -156,11 +156,11 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </section>
 
 <section id="sciana">
-  <h2>Ściana boksów</h2>
-  <p>Otwierasz ją przyciskiem <b>Ściana boksów</b> w aplikacji albo pod adresem
+  <h2>Pit wall</h2>
+  <p>Otwierasz go przyciskiem <b>Pit wall</b> w aplikacji albo pod adresem
   <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
-  (logowanie kodem i hasłem zespołu; telefon je zapamięta).</p>
-  <img src="img/wall_live.webp" alt="Ściana boksów – na żywo, z numerami">
+  (logowanie kodem i hasłem zespołu; telefon je zapamięta). U góry wybierasz język, a przyciskiem <b>☀ / ☾</b> wygląd: jasny albo ciemny.</p>
+  <img src="img/wall_live.webp" alt="Pit wall – na żywo, z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy dane płyną na żywo, kto jedzie, czy działa AI.</li>
     <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia, Pamięć, Pomoc.</li>
@@ -175,10 +175,10 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Niżej na tej stronie są też <b>mapa toru</b> z autami i <b>radio zespołu</b>:
   „Do kierowcy” (inżynier przeczyta wiadomość), „Zapytaj inżyniera” (odpowiedź głosem), „Zapytaj (tylko tekst)”, „Do pamięci”.</p>
   <h3>Na telefonie</h3>
-  <img class="phone" src="img/wall_phone.webp" alt="Ściana boksów na telefonie">
+  <img class="phone" src="img/wall_phone.webp" alt="Pit wall na telefonie">
   <h3>Zakładka Zespół</h3>
-  <img src="img/wall_team.webp" alt="Ściana boksów – zespół">
-  <p>Kod zespołu i kod QR do ściany, lista kierowców z tematami powiadomień, klucz Groq
+  <img src="img/wall_team.webp" alt="Pit wall – zespół">
+  <p>Kod zespołu i kod QR do pit walla, lista kierowców z tematami powiadomień, klucz Groq
   i <b>link dla widzów</b> – sam podgląd na żywo, bez radia i planu; można go dać każdemu.</p>
 </section>
 
@@ -201,7 +201,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <h2>Powiadomienia na telefon (każdy kierowca, 2 minuty)</h2>
   <ol>
     <li>Zainstaluj darmową aplikację <b>ntfy</b> (Google Play / App Store).</li>
-    <li>Na ścianie boksów: <b>Zespół</b> → przy swoim imieniu kliknij <b>📱</b> – zobaczysz swój temat i kod QR.</li>
+    <li>Na pit wallu: <b>Zespół</b> → przy swoim imieniu kliknij <b>📱</b> – zobaczysz swój temat i kod QR.</li>
     <li>W ntfy dotknij <b>+</b>, wpisz temat i <b>Subskrybuj</b> (albo zeskanuj kod QR).</li>
     <li>Kliknij <b>Test</b> przy swoim imieniu – na telefonie przyjdzie „Pit Wall Crew – test”.</li>
   </ol>
@@ -211,16 +211,16 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="wyscig">
   <h2>Długi wyścig (np. 24 h)</h2>
   <ul>
-    <li><b>Kierowca, który jedzie</b>, ma włączony Pit Wall Crew przez cały stint – to jego aplikacja wysyła dane na ścianę i powiadomienia.</li>
+    <li><b>Kierowca, który jedzie</b>, ma włączony Pit Wall Crew przez cały stint – to jego aplikacja wysyła dane na pit wall i powiadomienia.</li>
     <li><b>Pozostali</b> mogą wyłączyć grę, program i komputer. Po powiadomieniu na telefon włącz komputer, LMU i Pit Wall Crew, <b>zanim wsiądziesz</b>.</li>
     <li>Plan, grafik, wiadomości, pamięć zespołu i odprawa od poprzedniego kierowcy są w bazie zespołu – program pobierze je sam.</li>
   </ul>
   <h3>Próba przed wyścigiem (15 minut)</h3>
   <ol>
     <li>Wszyscy uruchamiają Pit Wall Crew – zielone <b>Zespół</b> i <b>AI: Groq</b>.</li>
-    <li>Jeden kierowca klika <b>Test bez gry</b>. Pozostali otwierają ścianę boksów – dane powinny być „na żywo”.</li>
+    <li>Jeden kierowca klika <b>Test bez gry</b>. Pozostali otwierają pit wall – dane powinny być „na żywo”.</li>
     <li>Kierowca pyta głosem „ile paliwa?” – odpowiedź słychać u wszystkich.</li>
-    <li>Ze ściany wyślijcie „Do kierowcy” – inżynier przeczyta wiadomość.</li>
+    <li>Ze pit walla wyślijcie „Do kierowcy” – inżynier przeczyta wiadomość.</li>
   </ol>
 </section>
 
@@ -231,21 +231,21 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>„Czekam na LMU” mimo włączonej gry</td><td>W LMU: Settings → Gameplay → Enable Plugins = ON, potem uruchom grę ponownie.</td></tr>
     <tr><td>Inżynier mnie nie słyszy / „Nie słyszę Cię”</td><td>Mikrofon i przycisk → Test 3 s. Sprawdź wyciszenie na słuchawkach i Windows → Prywatność → Mikrofon.</td></tr>
     <tr><td>„Zły kod albo hasło zespołu”</td><td>Zespół → popraw → Sprawdź połączenie → Zapisz.</td></tr>
-    <tr><td>Ściana: „brak danych z gry”</td><td>U kierowcy musi działać aplikacja z zielonym „Zespół”.</td></tr>
-    <tr><td>„AI: Groq – zły klucz”</td><td>Wklej klucz ponownie (ściana → Zespół → AI zespołu).</td></tr>
+    <tr><td>Pit wall: „brak danych z gry”</td><td>U kierowcy musi działać aplikacja z zielonym „Zespół”.</td></tr>
+    <tr><td>„AI: Groq – zły klucz”</td><td>Wklej klucz ponownie (pit wall → Zespół → AI zespołu).</td></tr>
     <tr><td>Każdy komunikat słychać dwa razy</td><td>Program działa podwójnie: zamknij aplikację, w Menedżerze zadań zakończ „pythonw”, uruchom raz.</td></tr>
     <tr><td>Nie przychodzą powiadomienia</td><td>Start wyścigu i kierowcy w planie, temat w ntfy, przycisk Test; u kogoś z zespołu działa aplikacja.</td></tr>
     <tr><td>Gra się przycina</td><td>Najczęściej brakuje pamięci karty graficznej: niższe tekstury, mniej widocznych aut i cieni, zamknij inne programy.</td></tr>
     <tr><td>Windows blokuje pliki</td><td>Przed rozpakowaniem: prawy przycisk na paczce → Właściwości → Odblokuj.</td></tr>
   </table>
   <h3>Zgłoś problem albo sugestię</h3>
-  <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na ścianie boksów: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
+  <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na pit wallu: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
   Za Twoją zgodą aplikacja może sama wysłać raport, gdy się zepsuje (bez nagrań głosu, kluczy i haseł) –
   włączasz to i wyłączasz na tej samej stronie. Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
   <img src="img/app_feedback.webp" alt="Zgłoś problem">
 </section>
 
 </main>
-<footer>Pit Wall Crew · stworzone przez <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · podziękowania dla Retta i Barnego za pomoc w testach · <a href="prywatnosc.html?lang=pl">Prywatność</a></footer>
+<footer>Pit Wall Crew · stworzone przez <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · podziękowania dla Retta i Barnego za pomoc w testach · <a href="prywatnosc.html?lang=pl">Prywatność</a><br>© 2026 Maciej Szczepaniak (FR Mods). Wszelkie prawa zastrzeżone.</footer>
 </body>
 </html>
