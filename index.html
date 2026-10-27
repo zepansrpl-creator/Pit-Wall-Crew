@@ -12,6 +12,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="i18n.js"></script>
+<script src="i18n_core.js"></script>
 <style>
   :root {
     --bg: #0b0c0f; --bg2: #101216; --card: #15171c; --card2: #1b1e24; --line: #252932; --line2: #2f3440;
@@ -166,6 +168,9 @@
   <span class="pill" id="st-driver">—</span>
   <span class="pill" id="st-laptop">—</span>
   <select id="feed" style="display:none" aria-label="Auto / sesja"></select>
+  <select id="langsel" data-notr aria-label="Language" onchange="PWC_SET_LANG(this.value)" style="margin-left:auto">
+    <option value="pl">PL</option><option value="en">EN</option><option value="de">DE</option><option value="fr">FR</option>
+  </select>
   <nav class="tabs" id="tabs" style="display:none">
     <button data-v="live" class="on">Na żywo</button>
     <button data-v="plan">Grafik i plan</button>
@@ -175,6 +180,15 @@
     <button data-v="help">Pomoc</button>
   </nav>
 </header>
+<div id="lang-note" class="note" style="display:none;margin:8px 16px;padding:8px 12px;border:1px solid var(--line, #333);border-radius:10px">
+  Tłumaczenia na inne języki mogą zawierać błędy językowe. Autor prosi o zgłoszenie każdego z nich (Pomoc → Zgłoś problem).
+  <button type="button" class="second" onclick="this.parentNode.style.display='none';try{localStorage.setItem('pwc_lang_note','1')}catch(e){}" style="margin-left:8px">OK</button>
+</div>
+
+<div id="cookie-note" class="note" style="display:none;margin:8px 16px;padding:8px 12px;border:1px solid var(--line, #333);border-radius:10px">
+  <span>Ta strona nie używa ciasteczek reklamowych ani śledzących. W przeglądarce zapisuje tylko Twoje ustawienia (język, zakładka, imię) i logowanie do zespołu – bez tego nie działa.</span> <a href="prywatnosc.html" target="_blank" rel="noopener">Prywatność</a>
+  <button type="button" class="second" onclick="this.parentNode.style.display='none';try{localStorage.setItem('pwc_cookie_note','1')}catch(e){}" style="margin-left:8px">OK</button>
+</div>
 
 <div id="v-login" class="login" style="display:none">
   <section>
@@ -408,6 +422,7 @@
 <div id="v-help" class="view"><div class="page">
   <section>
     <h2>Pierwsze kroki</h2>
+    <p><a id="guide-link" href="instrukcja.html" target="_blank" rel="noopener"><b>Pełna instrukcja ze zdjęciami ↗</b></a> – co do czego służy w aplikacji i na tej stronie.</p>
     <ol class="steps">
       <li><b>Program na komputerze.</b> Rozpakuj paczkę Pit Wall Crew, uruchom <b>INSTALUJ_KIEROWCA.bat</b>, w aplikacji (zakładka Zespół) wpisz <b>kod i hasło zespołu</b> i wybierz swoje imię. W LMU raz: Ustawienia → Rozgrywka → Enable Plugins = ON.</li>
       <li><b>Ta strona.</b> Wejdź kodem i hasłem zespołu – na telefonie zeskanuj kod QR z zakładki Zespół. Strona zapamięta logowanie.</li>
@@ -435,6 +450,18 @@
       <li><b>3. Plan stintów</b>: popraw, jeśli trzeba (np. kto jedzie start), i <b>Zapisz plan</b>.</li>
       <li>W wyścigu grafik przelicza się sam z prawdziwego tempa. Gdy numery stintów się rozjadą (np. kara drive-through), w „Strategia” wpisz korektę numeru stintu (+1 albo −1).</li>
     </ol>
+  </section>
+  <section id="fb-box">
+    <h2>Zgłoś problem albo sugestię</h2>
+    <p class="note">Trafia prosto do autora. Opisz, co się stało (kiedy, co robiłeś, co mówił inżynier) albo co chciałbyś mieć w programie.</p>
+    <div class="btnrow" style="margin:6px 0">
+      <label><input type="radio" name="fb-kind" value="problem" checked> Problem</label>
+      <label><input type="radio" name="fb-kind" value="sugestia"> Sugestia</label>
+    </div>
+    <textarea id="fb-text" rows="5" maxlength="3000" style="width:100%" placeholder="Opis…"></textarea>
+    <input id="fb-contact" maxlength="120" style="width:100%;margin-top:6px" placeholder="Kontakt (opcjonalnie): e-mail albo nick na Discordzie">
+    <p class="note" style="margin:4px 0 0"><span>Zgłoszenie (i kontakt, jeśli go podasz) widzi tylko autor programu.</span> <a href="prywatnosc.html" target="_blank" rel="noopener">Prywatność</a></p>
+    <div class="btnrow" style="margin-top:8px"><button id="b-fb">Wyślij</button><span id="fb-st" class="note"></span></div>
   </section>
 </div></div>
 
@@ -615,7 +642,7 @@ function render(v) {
   $('msgs').innerHTML = (v.msgs || []).map(function (m) {
     var d = new Date(m.t);
     var hh = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-    return '<div class="msg"><small>' + hh + ' · ' + esc(m.from) + ' · ' + esc(m.kind) + (m.delivered ? ' · ' + esc(m.delivered) : '') + '</small><br>' + esc(m.text) + '</div>';
+    return '<div class="msg"><small>' + hh + ' · ' + esc(m.from) + ' · <span>' + esc(m.kind) + '</span>' + (m.delivered ? ' · <span>' + esc(m.delivered) + '</span>' : '') + '</small><br>' + esc(m.text) + '</div>';
   }).join('') || '<p class="note">Brak wiadomości.</p>';
 
   var sel = $('kto');
@@ -1349,8 +1376,10 @@ $('b-listen').onclick = function () {
 };
 function say(text) {
   if (!window.speechSynthesis) return;
-  var u = new SpeechSynthesisUtterance(text); u.lang = 'pl-PL'; u.rate = 1.05;
-  var v = speechSynthesis.getVoices().filter(function (x) { return /^pl/i.test(x.lang); });
+  var L = window.PWC_LANG || 'pl', tags = { pl: 'pl-PL', en: 'en-GB', de: 'de-DE', fr: 'fr-FR' };
+  if (L !== 'pl' && window.PWC_T) text = window.PWC_T(text);
+  var u = new SpeechSynthesisUtterance(text); u.lang = tags[L] || 'pl-PL'; u.rate = 1.05;
+  var v = speechSynthesis.getVoices().filter(function (x) { return new RegExp('^' + L, 'i').test(x.lang); });
   if (v.length) u.voice = v.filter(function (x) { return /natural|online|neural/i.test(x.name); })[0] || v[0];
   speechSynthesis.speak(u);
 }
@@ -1361,7 +1390,7 @@ function speakNew(list) {
     if (!VOICE.on || (m.t || 0) < VOICE.t0 || Date.now() - (m.t || 0) > 30000) return;
     if (m.kind === 'ostrzeżenie' || m.delivered === 'tylko na ścianie') return;
     if (m.voice) say(m.text);
-    else if (m.kind === 'wiadomość' && m.from !== $('kto').value) say('Wiadomość od ' + m.from + ': ' + m.text);
+    else if (m.kind === 'wiadomość' && m.from !== $('kto').value) say((window.PWC_T ? window.PWC_T('Wiadomość od') : 'Wiadomość od') + ' ' + m.from + ': ' + m.text);
     else if (m.kind === 'odpowiedź') say(m.text);
   });
 }
@@ -1513,6 +1542,25 @@ window.addEventListener('resize', function () {
 $('map-flip').onclick = function () { MAP.flip = !MAP.flip; lsSet('mapflip', MAP.flip ? '1' : null); mapBuild(); };
 
 boot();
+
+$('b-fb').onclick = function () {
+  var text = $('fb-text').value.trim();
+  if (text.length < 5) { $('fb-st').textContent = 'Napisz kilka słów.'; return; }
+  var kind = (document.querySelector('input[name="fb-kind"]:checked') || {}).value || 'problem';
+  var rec = { t: Date.now(), kind: kind, text: text.slice(0, 3000), contact: $('fb-contact').value.trim().slice(0, 120),
+              team: CODE || '', from: 'sciana', lang: (navigator.language || '').slice(0, 10) };
+  $('b-fb').disabled = true; $('fb-st').textContent = 'Wysyłam…';
+  firebase.database().ref('feedback').push(rec).then(function () {
+    $('fb-text').value = ''; $('fb-st').textContent = 'Dziękuję! Zgłoszenie wysłane.';
+  }).catch(function (e) { $('fb-st').textContent = 'Nie udało się wysłać: ' + (e && e.message || e); })
+    .then(function () { $('b-fb').disabled = false; });
+};
+
+try { $('langsel').value = window.PWC_LANG || 'pl'; } catch (e) {}
+try { if ((window.PWC_LANG || 'pl') !== 'pl' && !localStorage.getItem('pwc_lang_note')) $('lang-note').style.display = ''; } catch (e) {}
+try { if (!localStorage.getItem('pwc_cookie_note')) $('cookie-note').style.display = ''; } catch (e) { $('cookie-note').style.display = ''; }
+try { if ((window.PWC_LANG || 'pl') !== 'pl') $('guide-link').href = 'guide_' + window.PWC_LANG + '.html'; } catch (e) {}
 </script>
+<footer class="note" style="text-align:center;margin:28px 12px 16px">Pit Wall Crew · stworzone przez <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · podziękowania dla Retta i Barnego za pomoc w testach<span> · </span><a href="prywatnosc.html" target="_blank" rel="noopener">Prywatność</a></footer>
 </body>
 </html>
