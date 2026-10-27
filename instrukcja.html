@@ -70,11 +70,22 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Pobierz paczkę <code>PitWallCrew_….zip</code> z posta na Patreonie FR Mods. <b>Zanim ją rozpakujesz:</b> prawy przycisk na pliku → Właściwości →
       zaznacz <b>Odblokuj</b> → OK (inaczej Windows może blokować pliki).</li>
     <li>Rozpakuj np. do <code>Dokumenty</code> – powstanie folder <code>Pit Wall Crew</code>, a w nim <b>INSTALL.bat</b> i folder <code>Program</code> (pliki programu, nie trzeba tam zaglądać).</li>
-    <li>Kliknij dwa razy <b>INSTALL.bat</b>. Instalator pobierze potrzebne składniki (kilka minut), zapyta o zespół,
-      mikrofon i przycisk mówienia i utworzy ikonę <b>Pit Wall Crew</b> na pulpicie. Pierwszym krokiem w oknie ustawień jest <b>wybór języka</b>.</li>
-    <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry).</li>
+    <li>Kliknij dwa razy <b>INSTALL.bat</b>. Instalator sam pobierze potrzebne składniki (kilka minut, o nic nie pyta) i utworzy ikonę
+      <b>Pit Wall Crew</b> na pulpicie. Na koniec sam uruchomi aplikację – okno instalatora możesz zamknąć.</li>
+    <li>W aplikacji wybierz <b>język</b>. Obok otworzy się okienko <b>Pierwsze kroki</b> – przejdź je po kolei (przy każdym punkcie jest przycisk <b>Otwórz</b>):
+      <ol>
+        <li><b>Zespół</b>: kod i hasło zespołu od kolegów i Twoje imię albo <b>Utwórz nowy zespół…</b>; jeździsz sam – tryb <b>Solo</b>.</li>
+        <li><b>Mikrofon i przycisk</b>: wybierz mikrofon (pasek ma się ruszać, gdy mówisz), kliknij <b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy.</li>
+        <li><b>Głos</b>: wybierz głos inżyniera i kliknij <b>▶ Odsłuchaj</b>.</li>
+        <li><b>Klucz Groq</b> (darmowy, do AI): <a href="#ai">jak go zdobyć</a> → Zaawansowane → Własny klucz Groq → <b>Sprawdź klucz</b>.</li>
+        <li><b>Patreon</b>: na stronie Inżynier <b>Zaloguj przez Patreon</b> – wtedy dostajesz aktualizacje.</li>
+        <li>Kliknij <b>Zapisz i uruchom ponownie</b>.</li>
+      </ol></li>
+    <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry). Wyjedź na tor, przytrzymaj przycisk i zapytaj np. „ile paliwa?”.</li>
   </ol>
-  <div class="tip">Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Twoje ustawienia zostają.</div>
+  <div class="tip">Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Twoje ustawienia zostają.
+  Okienko „Pierwsze kroki” otworzysz też później: Pomoc → Instrukcja → Pierwsze kroki.</div>
+  <p><b>Odinstalowanie:</b> w folderze <code>Pit Wall Crew\Program</code> kliknij dwa razy <b>UNINSTALL.bat</b> – usuwa skrót z pulpitu, zamyka program i (jeśli potwierdzisz) cały folder z ustawieniami.</p>
 </section>
 
 <section id="app">
@@ -155,7 +166,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Od razu skopiuj klucz</b> (zaczyna się od <code>gsk_</code>) – Groq pokazuje go tylko raz. Klucz jest darmowy, z dziennym limitem.</li>
     <li><b>Zespół</b> (wystarczy jedna osoba): pit wall → zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>.
       Klucz trafia do wszystkich w zespole i widzą go tylko członkowie zespołu.</li>
-    <li><b>Jeździsz sam albo chcesz własny limit</b>: aplikacja → <b>Zaawansowane → Własny klucz Groq</b> → wklej → <b>Zapisz i uruchom ponownie</b>.</li>
+    <li><b>Jeździsz sam albo chcesz własny limit</b>: aplikacja → <b>Zaawansowane → Własny klucz Groq</b> → wklej → <b>Sprawdź klucz</b> (ma być „✓ Klucz działa”) → <b>Zapisz i uruchom ponownie</b>.</li>
     <li>Gotowe, gdy na stronie <b>Inżynier</b> jest zielone <b>AI: Groq</b>.</li>
   </ol>
   <p>Klucza nikomu nie wysyłaj na czacie – wklej go sam.</p>

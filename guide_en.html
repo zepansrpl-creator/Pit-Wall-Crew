@@ -71,12 +71,22 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Download the <code>PitWallCrew_….zip</code> package from the FR Mods post on Patreon. <b>Before unpacking:</b> right-click the file → Properties →
       tick <b>Unblock</b> → OK (otherwise Windows may block the files).</li>
     <li>Unpack it, e.g. to <code>Documents</code> – you get a <code>Pit Wall Crew</code> folder with <b>INSTALL.bat</b> and a <code>Program</code> folder (program files, no need to open it).</li>
-    <li>Double-click <b>INSTALL.bat</b> (the installer). It downloads what's needed (a few minutes), asks about your team,
-      microphone and radio button, and creates a <b>Pit Wall Crew</b> desktop icon.</li>
-    <li>In LMU once: <b>Settings → Gameplay → Enable Plugins = ON</b> (without it the program can't see the game data).</li>
+    <li>Double-click <b>INSTALL.bat</b>. The installer downloads what's needed by itself (a few minutes, no questions) and creates a
+      <b>Pit Wall Crew</b> desktop icon. At the end it starts the app – you can close the installer window.</li>
+    <li>In the app choose your <b>language</b>. A <b>First steps</b> window opens next to it – go through it in order (each item has an <b>Open</b> button):
+      <ol>
+        <li><b>Team</b>: the team code and password from your teammates and your name, or <b>Create a new team…</b>; driving alone – <b>Solo</b> mode.</li>
+        <li><b>Microphone and button</b>: choose your microphone (the bar should move when you speak), click <b>Set: press the button…</b> and press the button on your wheel.</li>
+        <li><b>Voice</b>: choose the engineer's voice and click <b>▶ Listen</b>.</li>
+        <li><b>Groq key</b> (free, for the AI): <a href="#ai">how to get it</a> → Advanced → Your own Groq key → <b>Check key</b>.</li>
+        <li><b>Patreon</b>: on the Engineer page click <b>Log in with Patreon</b> – that's how you get updates.</li>
+        <li>Click <b>Save and restart</b>.</li>
+      </ol></li>
+    <li>In LMU once: <b>Settings → Gameplay → Enable Plugins = ON</b> (without it the program can't see the game data). Go on track, hold the button and ask e.g. “how much fuel?”.</li>
   </ol>
   <div class="tip">Updates install themselves when the app starts – never while you drive. Your settings are kept.
-  On first start you choose the language; you can change it later under Settings → Voice → Język / Language.</div>
+  You can open the “First steps” window again later: Help → Manual → First steps. Change the language under Voice → Język / Language.</div>
+  <p><b>Uninstall:</b> in the <code>Pit Wall Crew\Program</code> folder double-click <b>UNINSTALL.bat</b> – it removes the desktop shortcut, closes the program and (if you confirm) deletes the whole folder with your settings.</p>
 </section>
 
 <section id="app">
@@ -151,7 +161,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Copy the key right away</b> (it starts with <code>gsk_</code>) – Groq shows it only once. The key is free, with a daily limit.</li>
     <li><b>Team</b> (one person is enough): pit wall → <b>Team → Team AI (Groq)</b> → paste → <b>Save key</b>.
       The key reaches everyone in the team and only team members can see it.</li>
-    <li><b>Driving solo or want your own limit</b>: app → <b>Advanced → Your own Groq key</b> → paste → <b>Save and restart</b>.</li>
+    <li><b>Driving solo or want your own limit</b>: app → <b>Advanced → Your own Groq key</b> → paste → <b>Check key</b> (it should say “✓ The key works”) → <b>Save and restart</b>.</li>
     <li>Done when the <b>Engineer</b> page shows a green <b>AI: Groq</b>.</li>
   </ol>
   <p>Never send the key in a chat – paste it yourself.</p>
