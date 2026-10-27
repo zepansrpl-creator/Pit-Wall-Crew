@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – instrukcja</title>
+<style>
+:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
+header { padding:28px 16px 12px; max-width:1040px; margin:0 auto; }
+header h1 { margin:0; font-size:30px; }
+header p { margin:6px 0 0; color:var(--muted); }
+nav.toc { max-width:1040px; margin:0 auto; padding:0 16px; display:flex; flex-wrap:wrap; gap:6px; }
+nav.toc a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 12px; font-size:14px; background:var(--card); }
+main { max-width:1040px; margin:0 auto; padding:8px 16px 40px; }
+section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:18px 0; }
+h2 { margin:0 0 10px; font-size:22px; }
+h3 { margin:18px 0 6px; font-size:17px; }
+img { max-width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; margin:10px 0; }
+img.phone { max-width:300px; }
+ol, ul { padding-left:22px; margin:6px 0; }
+li { margin:3px 0; }
+.legend { counter-reset:n; list-style:none; padding:0; }
+.legend li { counter-increment:n; padding-left:36px; position:relative; margin:6px 0; }
+.legend li::before { content:counter(n); position:absolute; left:0; top:1px; width:24px; height:24px; border-radius:50%;
+  background:var(--hi); color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(255,59,48,.07); border-radius:6px; margin:10px 0; }
+code, kbd { background:rgba(127,127,127,.15); border-radius:4px; padding:1px 5px; font-size:.92em; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-size:14px; }
+.langs { float:right; font-size:14px; } .langs a { color:var(--muted); margin-left:8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <h1>Pit Wall Crew – instrukcja</h1>
+  <p>Głosowy inżynier wyścigowy i ściana boksów do Le Mans Ultimate. Od instalacji do pierwszego wyścigu.</p>
+</header>
+<nav class="toc">
+  <a href="#co">Co to jest</a><a href="#inst">Instalacja</a><a href="#app">Aplikacja</a><a href="#ust">Ustawienia</a>
+  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#sciana">Ściana boksów</a><a href="#plan">Grafik i plan</a>
+  <a href="#tel">Powiadomienia</a><a href="#wyscig">Długi wyścig</a><a href="#problemy">Problemy</a>
+</nav>
+<main>
+
+<section id="co">
+  <h2>Co to jest</h2>
+  <p><b>Inżynier</b> to program na Twoim komputerze. Czyta dane z gry i mówi do Ciebie przez słuchawki:
+  ostrzega przed szybszymi autami, mówi, kiedy zjechać do boksu, co zmienić na postoju, gdzie tracisz czas. Na pytania
+  odpowiada głosem – trzymasz przycisk na kierownicy, mówisz, puszczasz.</p>
+  <p><b>Ściana boksów</b> to strona w przeglądarce (komputer albo telefon). Cały zespół widzi tam na żywo stan auta,
+  rywali, pogodę i grafik zmian kierowców, a kierowcy można wysłać wiadomość, którą inżynier przeczyta.</p>
+  <p>Możesz jeździć sam (tryb <b>Solo</b>) albo w zespole.</p>
+  <h3>Czego potrzebujesz</h3>
+  <ul>
+    <li>Windows 10 lub 11 i Le Mans Ultimate.</li>
+    <li>Słuchawki z mikrofonem i wolny przycisk na kierownicy (albo klawisz na klawiaturze).</li>
+    <li>Internet (głos inżyniera, rozpoznawanie mowy i ściana boksów działają przez internet).</li>
+    <li>Opcjonalnie: darmowy klucz Groq – rozpoznawanie mowy i odpowiedzi AI (rozdział <a href="#ai">AI</a>).</li>
+  </ul>
+</section>
+
+<section id="inst">
+  <h2>Instalacja (5 minut)</h2>
+  <ol>
+    <li>Pobierz paczkę <code>PitWallCrew_….zip</code>. <b>Zanim ją rozpakujesz:</b> prawy przycisk na pliku → Właściwości →
+      zaznacz <b>Odblokuj</b> → OK (inaczej Windows może blokować pliki).</li>
+    <li>Rozpakuj do folderu, np. <code>Dokumenty\Pit Wall Crew</code>.</li>
+    <li>Kliknij dwa razy <b>INSTALUJ_KIEROWCA.bat</b>. Instalator pobierze potrzebne składniki (kilka minut), zapyta o zespół,
+      mikrofon i przycisk mówienia i utworzy ikonę <b>Pit Wall Crew</b> na pulpicie.</li>
+    <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry).</li>
+  </ol>
+  <div class="tip">Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Twoje ustawienia zostają.</div>
+</section>
+
+<section id="app">
+  <h2>Okno aplikacji</h2>
+  <p>Ikona <b>Pit Wall Crew</b> otwiera aplikację. Inżynier uruchamia się sam, a gdy włączysz grę i wyjedziesz na tor – zaczyna mówić.</p>
+  <img src="img/app_main.webp" alt="Główne okno aplikacji z numerami">
+  <ol class="legend">
+    <li><b>Stan</b>: czy inżynier działa, czy widzi grę („Jedziesz” albo „podgląd” – gdy jedzie kolega), połączenie z zespołem i AI. Zielone = w porządku.</li>
+    <li><b>Test bez gry</b> – symulowany wyścig. Sprawdzisz głos, mikrofon i ścianę boksów bez uruchamiania LMU.</li>
+    <li><b>Uruchom / Zatrzymaj</b> inżyniera.</li>
+    <li><b>Najważniejsze liczby</b>: pozycja, okrążenie, za ile zjazd, energia albo paliwo, czasy, czas do mety.</li>
+    <li><b>Komunikaty</b> – wszystko, co inżynier powiedział, Twoje pytania i wiadomości od zespołu. Czerwone = pilne.</li>
+    <li><b>Pole pytania</b> – możesz napisać pytanie zamiast mówić.</li>
+    <li><b>Ustawienia</b> – zespół, mikrofon, głos, ostrzeżenia (rozdział niżej).</li>
+    <li><b>Pomoc</b> – lista komend, opis funkcji, instrukcja, zmiany w wersjach, informacje o programie i <b>Zgłoś problem</b>.</li>
+    <li><b>Ściana boksów</b> – otwiera stronę zespołu w przeglądarce.</li>
+  </ol>
+</section>
+
+<section id="ust">
+  <h2>Ustawienia</h2>
+  <p>Po każdej zmianie kliknij <b>Zapisz i uruchom ponownie</b> (prawy dolny róg).</p>
+
+  <h3>Zespół</h3>
+  <img src="img/app_team.webp" alt="Ustawienia zespołu">
+  <ul>
+    <li><b>Solo</b> – jeździsz sam: nie wpisujesz nic więcej. Ściana boksów nadal działa jako Twój podgląd.</li>
+    <li><b>Zespół</b> – jedna osoba klika <b>Utwórz nowy zespół…</b> (nazwa i hasło) i dostaje <b>kod zespołu</b> (6 znaków).
+      Pozostali wpisują ten kod i hasło. Potem <b>Sprawdź połączenie</b> i wybierz z listy, kim jesteś.</li>
+    <li>Kod i hasło przekazujcie sobie <b>tylko prywatnie</b> – kto je zna, widzi stan auta i może pisać do kierowcy.</li>
+    <li><b>Słuchaj inżyniera, gdy nie jadę</b> – gdy jedzie kolega, słyszysz komunikaty jego inżyniera (radio zespołu).</li>
+  </ul>
+
+  <h3>Mikrofon i przycisk</h3>
+  <img src="img/app_mic.webp" alt="Mikrofon i przycisk">
+  <ul>
+    <li>Wybierz mikrofon i kliknij <b>Test 3 s</b> – powiedz coś i sprawdź, czy pasek się rusza.</li>
+    <li><b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy, którym będziesz mówić. Można też ustawić klawisz.</li>
+  </ul>
+
+  <h3>Głos</h3>
+  <img src="img/app_voice.webp" alt="Głos">
+  <ul>
+    <li>Głos, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
+    <li>Gdy nadasz imię (np. Marek), inżynier się przedstawi, a „Marku, cicho” go wyciszy.</li>
+  </ul>
+
+  <h3>Ostrzeżenia</h3>
+  <img src="img/app_alerts.webp" alt="Ostrzeżenia">
+  <p>Co inżynier mówi bez pytania: dublowanie przez szybsze klasy (i od ilu sekund), auta stojące na torze, flagi,
+  trener przed zakrętem, porównanie z najlepszym okrążeniem, komentarze po wyprzedzeniu, sugestie ustawień.
+  Wszystko to włączysz i wyłączysz też głosem w trakcie jazdy (np. „bez trenera”).</p>
+
+  <h3>Zaawansowane</h3>
+  <img src="img/app_adv.webp" alt="Zaawansowane">
+  <p>Czas zmiany kompletu opon, automatyczny start inżyniera, skróty na pulpicie, aktualizacje
+  i własny klucz Groq (opcjonalnie – Twój osobny limit).</p>
+</section>
+
+<section id="mowa">
+  <h2>Rozmowa z inżynierem</h2>
+  <p><b>Trzymaj przycisk, mów, puść.</b> Naciśnięcie przycisku przerywa też to, co inżynier właśnie mówi.</p>
+  <p>Przykłady: „ile paliwa?”, „kiedy zjazd?”, „które opony zmienić?”, „kto przede mną?”, „gdzie tracę?”, „jaka pogoda?”,
+  „za ile dubluje hypercar?”, „cisza” (całkowite wyciszenie do następnego naciśnięcia), „tylko pilne”, „powtórz”.</p>
+  <p>Pełna lista jest w aplikacji: <b>Pomoc → Komendy</b>.</p>
+  <img src="img/app_commands.webp" alt="Lista komend">
+  <p>Pytanie, którego program nie zna, trafia do AI (jeśli jest klucz Groq) razem z danymi wyścigu.</p>
+</section>
+
+<section id="ai">
+  <h2>AI – darmowy klucz Groq (2 minuty, jedna osoba)</h2>
+  <ol>
+    <li>Załóż darmowe konto na <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → skopiuj klucz.</li>
+    <li>Na ścianie boksów: zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>. Klucz widzą tylko członkowie zespołu.
+      Jeździsz sam? Wklej go w aplikacji: <b>Zaawansowane → Własny klucz Groq</b>.</li>
+    <li>W aplikacji pojawi się zielone <b>AI: Groq</b>.</li>
+  </ol>
+  <p>Klucza nikomu nie wysyłaj na czacie – wklej go sam.</p>
+</section>
+
+<section id="sciana">
+  <h2>Ściana boksów</h2>
+  <p>Otwierasz ją przyciskiem <b>Ściana boksów</b> w aplikacji albo pod adresem
+  <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
+  (logowanie kodem i hasłem zespołu; telefon je zapamięta).</p>
+  <img src="img/wall_live.webp" alt="Ściana boksów – na żywo, z numerami">
+  <ol class="legend">
+    <li><b>Stan</b>: czy dane płyną na żywo, kto jedzie, czy działa AI.</li>
+    <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia, Pamięć, Pomoc.</li>
+    <li><b>Wyścig</b>: pozycja w klasie, okrążenie, czasy, czas do mety, flaga.</li>
+    <li><b>Następny postój</b>: za ile okrążeń, zużycie energii i paliwa, co zrobić na postoju.</li>
+    <li><b>Opony i auto</b>: zużycie i temperatury każdej opony, uszkodzenia, silnik, hamulce.</li>
+    <li><b>Pogoda i tor</b>: deszcz, wilgotność, chmury, temperatura toru i uwagi inżyniera.</li>
+    <li><b>Rywale w klasie</b>: odstępy, tempo, kto kogo dogoni, energia, przewidywany zjazd.</li>
+    <li><b>Grafik stintów</b>: kto jedzie, kiedy zmiana, co na postoju, o ile minut grafik przesunął się względem planu.
+      Gdy na dziś nie ma planu, układa się sam dla kierowcy, który jedzie – z długości wyścigu i liczby opon dostępnych w grze.</li>
+  </ol>
+  <p>Niżej na tej stronie są też <b>mapa toru</b> z autami i <b>radio zespołu</b>:
+  „Do kierowcy” (inżynier przeczyta wiadomość), „Zapytaj inżyniera” (odpowiedź głosem), „Zapytaj (tylko tekst)”, „Do pamięci”.</p>
+  <h3>Na telefonie</h3>
+  <img class="phone" src="img/wall_phone.webp" alt="Ściana boksów na telefonie">
+  <h3>Zakładka Zespół</h3>
+  <img src="img/wall_team.webp" alt="Ściana boksów – zespół">
+  <p>Kod zespołu i kod QR do ściany, lista kierowców z tematami powiadomień, klucz Groq
+  i <b>link dla widzów</b> – sam podgląd na żywo, bez radia i planu; można go dać każdemu.</p>
+</section>
+
+<section id="plan">
+  <h2>Grafik i plan (przed długim wyścigiem, jedna osoba)</h2>
+  <img src="img/wall_plan.webp" alt="Grafik i plan">
+  <ol>
+    <li><b>1. Wyścig</b>: data i godzina startu, długość, czas okrążenia, ile opon macie na wyścig → <b>Zapisz</b>.</li>
+    <li><b>2. Plan stintów → Rozpisz plan automatycznie</b>: okrążenia w stincie, kolejność kierowców, zużycie opon
+      (przycisk <b>z pomiarów</b> wpisze zużycie zmierzone w Waszych sesjach), czasy postoju → <b>Rozpisz plan</b>.
+      Program rozdzieli opony tak, żeby zużywały się jak najrówniej.</li>
+    <li>W tabeli popraw, co trzeba: kierowca z listy, okrążenia, <b>Lewe / Prawe</b> = zmiana opon po tej stronie → <b>Zapisz plan</b>.
+      Licznik pokaże, czy mieścicie się w oponach.</li>
+  </ol>
+  <p>W wyścigu grafik przelicza się sam z prawdziwego tempa. Inżynier zjeżdża i zmienia opony według planu
+  (chyba że któraś opona nie dojedzie albo zabraknie energii). Plan działa w wyścigu o długości wpisanej w „1. Wyścig”.</p>
+</section>
+
+<section id="tel">
+  <h2>Powiadomienia na telefon (każdy kierowca, 2 minuty)</h2>
+  <ol>
+    <li>Zainstaluj darmową aplikację <b>ntfy</b> (Google Play / App Store).</li>
+    <li>Na ścianie boksów: <b>Zespół</b> → przy swoim imieniu kliknij <b>📱</b> – zobaczysz swój temat i kod QR.</li>
+    <li>W ntfy dotknij <b>+</b>, wpisz temat i <b>Subskrybuj</b> (albo zeskanuj kod QR).</li>
+    <li>Kliknij <b>Test</b> przy swoim imieniu – na telefonie przyjdzie „Pit Wall Crew – test”.</li>
+  </ol>
+  <p>Powiadomienie przychodzi ok. 30 minut przed Twoją zmianą, drugie – gdy zmiana przesunie się o 10 minut lub więcej, a także gdy zacznie padać.</p>
+</section>
+
+<section id="wyscig">
+  <h2>Długi wyścig (np. 24 h)</h2>
+  <ul>
+    <li><b>Kierowca, który jedzie</b>, ma włączony Pit Wall Crew przez cały stint – to jego aplikacja wysyła dane na ścianę i powiadomienia.</li>
+    <li><b>Pozostali</b> mogą wyłączyć grę, program i komputer. Po powiadomieniu na telefon włącz komputer, LMU i Pit Wall Crew, <b>zanim wsiądziesz</b>.</li>
+    <li>Plan, grafik, wiadomości, pamięć zespołu i odprawa od poprzedniego kierowcy są w bazie zespołu – program pobierze je sam.</li>
+  </ul>
+  <h3>Próba przed wyścigiem (15 minut)</h3>
+  <ol>
+    <li>Wszyscy uruchamiają Pit Wall Crew – zielone <b>Zespół</b> i <b>AI: Groq</b>.</li>
+    <li>Jeden kierowca klika <b>Test bez gry</b>. Pozostali otwierają ścianę boksów – dane powinny być „na żywo”.</li>
+    <li>Kierowca pyta głosem „ile paliwa?” – odpowiedź słychać u wszystkich.</li>
+    <li>Ze ściany wyślijcie „Do kierowcy” – inżynier przeczyta wiadomość.</li>
+  </ol>
+</section>
+
+<section id="problemy">
+  <h2>Gdy coś nie działa</h2>
+  <table>
+    <tr><th>Objaw</th><th>Co zrobić</th></tr>
+    <tr><td>„Czekam na LMU” mimo włączonej gry</td><td>W LMU: Settings → Gameplay → Enable Plugins = ON, potem uruchom grę ponownie.</td></tr>
+    <tr><td>Inżynier mnie nie słyszy / „Nie słyszę Cię”</td><td>Mikrofon i przycisk → Test 3 s. Sprawdź wyciszenie na słuchawkach i Windows → Prywatność → Mikrofon.</td></tr>
+    <tr><td>„Zły kod albo hasło zespołu”</td><td>Zespół → popraw → Sprawdź połączenie → Zapisz.</td></tr>
+    <tr><td>Ściana: „brak danych z gry”</td><td>U kierowcy musi działać aplikacja z zielonym „Zespół”.</td></tr>
+    <tr><td>„AI: Groq – zły klucz”</td><td>Wklej klucz ponownie (ściana → Zespół → AI zespołu).</td></tr>
+    <tr><td>Każdy komunikat słychać dwa razy</td><td>Program działa podwójnie: zamknij aplikację, w Menedżerze zadań zakończ „pythonw”, uruchom raz.</td></tr>
+    <tr><td>Nie przychodzą powiadomienia</td><td>Start wyścigu i kierowcy w planie, temat w ntfy, przycisk Test; u kogoś z zespołu działa aplikacja.</td></tr>
+    <tr><td>Gra się przycina</td><td>Najczęściej brakuje pamięci karty graficznej: niższe tekstury, mniej widocznych aut i cieni, zamknij inne programy.</td></tr>
+    <tr><td>Windows blokuje pliki</td><td>Przed rozpakowaniem: prawy przycisk na paczce → Właściwości → Odblokuj.</td></tr>
+  </table>
+  <h3>Zgłoś problem albo sugestię</h3>
+  <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na ścianie boksów: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
+  Za Twoją zgodą aplikacja może sama wysłać raport, gdy się zepsuje (bez nagrań głosu, kluczy i haseł) –
+  włączasz to i wyłączasz na tej samej stronie. Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
+  <img src="img/app_feedback.webp" alt="Zgłoś problem">
+</section>
+
+</main>
+<footer>Pit Wall Crew · stworzone przez <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · podziękowania dla Retta i Barnego za pomoc w testach · <a href="prywatnosc.html?lang=pl">Prywatność</a></footer>
+</body>
+</html>

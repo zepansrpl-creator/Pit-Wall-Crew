@@ -1,8 +1,8 @@
 {
- "version": "10.0.4.0.11",
- "display": "0.4.0.11",
- "sha256": "f7308b958f19cfd46052687377a8eedc331bb89f3c3be4526dede3718b302bff",
- "size": 639368,
+ "version": "10.0.4.1.0",
+ "display": "0.4.1.0",
+ "sha256": "44a0d48fab6e1cd79e1f385c28de1bb274f5557e1f016b1b9174bd1238d79caa",
+ "size": 2632860,
  "url": "PitWallCrew.zip",
- "notes": "- Dziennik przycięć: procesy obserwowane cały czas (także bez gry), więc porównanie „nagle więcej niż zwykle” nie pokazuje już fałszywych skoków od zera. W zrzucie procesy_*.txt dochodzi: ile wolnej pamięci i pliku wymiany, łączny ruch na dysku, programy zajmujące najwięcej pamięci. „System Idle Process” pominięty."
+ "notes": "- Trzy nowe języki: angielski, niemiecki i francuski – głos inżyniera, komendy, aplikacja, ściana boksów, pomoc i instrukcja ze zdjęciami. Język wybiera się sam według Windows; zmiana: Ustawienia → Głos → Język / Language. Tłumaczenia mogą mieć błędy – autor prosi o zgłaszanie każdego.\n- Instrukcja ze zdjęciami (aplikacja → Pomoc → Instrukcja → „Instrukcja ze zdjęciami”) – od instalacji do pierwszego wyścigu.\n- Zgłoś problem / sugestię: w aplikacji (Pomoc) i na ścianie boksów – trafia prosto do autora. Można dołączyć dziennik ostatniej sesji.\n- Raporty awarii tylko za zgodą: pytanie przy pierwszym starcie, zmiana na stronie „Zgłoś problem”. Bez nagrań głosu, kluczy i haseł.\n- Strona „Prywatność”: co i dokąd wysyła program; ściana boksów nie używa ciasteczek ani śledzenia (krótka informacja przy pierwszym wejściu).\n- Lepsze rozumienie mowy: Groq (Whisper) i Google rozpoznają równolegle, wygrywa wynik lepiej pasujący do słownictwa inżyniera; przekręcone słowa poprawiane do najbliższej komendy.\n- Brak planu na dziś: grafik i strategia na stronie „Na żywo” układają się same dla kierowcy, który jedzie – z długości wyścigu i liczby opon z gry.\n- Usunięte style głosu i „mów naturalniej” – inżynier mówi zawsze krótko i rzeczowo.\n- Usunięte narzędzia diagnostyczne niepotrzebne zwykłym użytkownikom.\n- Naprawione: nowa instalacja nie startowała przez podwójny wpis w config.toml.\n- Kod testera (Zaawansowane): testerzy dostają nowe wersje przed wszystkimi.\n- O programie: stworzone przez M"
 }

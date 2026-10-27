@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – mode d'emploi</title>
+<style>
+:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
+header { padding:28px 16px 12px; max-width:1040px; margin:0 auto; }
+header h1 { margin:0; font-size:30px; }
+header p { margin:6px 0 0; color:var(--muted); }
+nav.toc { max-width:1040px; margin:0 auto; padding:0 16px; display:flex; flex-wrap:wrap; gap:6px; }
+nav.toc a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 12px; font-size:14px; background:var(--card); }
+main { max-width:1040px; margin:0 auto; padding:8px 16px 40px; }
+section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:18px 0; }
+h2 { margin:0 0 10px; font-size:22px; }
+h3 { margin:18px 0 6px; font-size:17px; }
+img { max-width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; margin:10px 0; }
+img.phone { max-width:300px; }
+ol, ul { padding-left:22px; margin:6px 0; }
+li { margin:3px 0; }
+.legend { counter-reset:n; list-style:none; padding:0; }
+.legend li { counter-increment:n; padding-left:36px; position:relative; margin:6px 0; }
+.legend li::before { content:counter(n); position:absolute; left:0; top:1px; width:24px; height:24px; border-radius:50%;
+  background:var(--hi); color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(255,59,48,.07); border-radius:6px; margin:10px 0; }
+code, kbd { background:rgba(127,127,127,.15); border-radius:4px; padding:1px 5px; font-size:.92em; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-size:14px; }
+.langs { float:right; font-size:14px; } .langs a { color:var(--muted); margin-left:8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <h1>Pit Wall Crew – mode d'emploi</h1>
+  <p>Ingénieur de course vocal et mur des stands pour Le Mans Ultimate. De l'installation à ta première course.</p>
+</header>
+<nav class="toc">
+  <a href="#what">C'est quoi</a><a href="#inst">Installation</a><a href="#app">L'appli</a><a href="#set">Réglages</a>
+  <a href="#talk">Parler</a><a href="#ai">IA (Groq)</a><a href="#wall">Mur des stands</a><a href="#plan">Planning &amp; plan</a>
+  <a href="#phone">Notifications</a><a href="#race">Course longue</a><a href="#help">Problèmes</a>
+</nav>
+<main>
+<div class="tip">Les traductions peuvent contenir des erreurs de langue. L'auteur te demande de signaler chacune d'elles (Aide → Signaler un problème).</div>
+
+<section id="what">
+  <h2>C'est quoi</h2>
+  <p>L'<b>ingénieur</b> est un programme sur ton PC. Il lit les données du jeu et te parle dans ton casque :
+  il t'avertit des voitures plus rapides, te dit quand rentrer au stand, ce qu'on change à l'arrêt et où tu perds du temps.
+  Il répond à tes questions à la voix – maintiens le bouton du volant, parle, relâche.</p>
+  <p>Le <b>mur des stands</b> est une page web (PC ou téléphone). Toute l'équipe voit en direct l'état de la voiture, les rivaux, la météo et le
+  planning des relais, et peut envoyer au pilote des messages que l'ingénieur lit à voix haute.</p>
+  <p>Fonctionne sur tous les circuits, avec toutes les voitures et catégories de Le Mans Ultimate. Tu peux rouler seul (mode <b>Solo</b>) ou en équipe.</p>
+  <h3>Ce qu'il te faut</h3>
+  <ul>
+    <li>Windows 10 ou 11 et Le Mans Ultimate.</li>
+    <li>Un casque avec micro et un bouton libre sur le volant (ou une touche du clavier).</li>
+    <li>Internet (la voix, la reconnaissance vocale et le mur des stands fonctionnent en ligne).</li>
+    <li>Une clé Groq gratuite – reconnaissance vocale, réponses de l'IA et traduction des messages moins courants (voir <a href="#ai">IA</a>).</li>
+  </ul>
+</section>
+
+<section id="inst">
+  <h2>Installation (5 minutes)</h2>
+  <ol>
+    <li>Télécharge le paquet <code>PitWallCrew_….zip</code>. <b>Avant de décompresser :</b> clic droit sur le fichier → Propriétés →
+      coche <b>Débloquer</b> → OK (sinon Windows peut bloquer les fichiers).</li>
+    <li>Décompresse-le dans un dossier, par ex. <code>Documents\Pit Wall Crew</code>.</li>
+    <li>Double-clique sur <b>INSTALUJ_KIEROWCA.bat</b> (l'installateur). Il télécharge le nécessaire (quelques minutes), demande l'équipe,
+      le micro et le bouton radio, et crée une icône <b>Pit Wall Crew</b> sur le bureau.</li>
+    <li>Dans LMU, une fois : <b>Settings → Gameplay → Enable Plugins = ON</b> (sans cela le programme ne voit pas les données du jeu).</li>
+  </ol>
+  <div class="tip">Les mises à jour s'installent au démarrage de l'appli – jamais pendant que tu roules. Tes réglages sont conservés.
+  La langue est choisie automatiquement d'après Windows ; tu peux la changer dans Réglages → Voix → Język / Language.</div>
+</section>
+
+<section id="app">
+  <h2>La fenêtre de l'appli</h2>
+  <p>L'icône <b>Pit Wall Crew</b> ouvre l'appli. L'ingénieur démarre tout seul et commence à parler dès que tu lances le jeu et que tu vas en piste.</p>
+  <img src="img/fr/app_main.webp" alt="Fenêtre principale avec numéros">
+  <ol class="legend">
+    <li><b>État</b> : l'ingénieur tourne-t-il, voit-il le jeu (« Tu roules » ou spectateur quand un coéquipier conduit), connexion équipe et IA. Vert = OK.</li>
+    <li><b>Test sans jeu</b> – une course simulée. Vérifie la voix, le micro et le mur des stands sans lancer LMU.</li>
+    <li><b>Démarrer / Arrêter</b> l'ingénieur.</li>
+    <li><b>Chiffres clés</b> : position, tour, tours avant l'arrêt, énergie ou carburant, chronos, temps jusqu'à l'arrivée.</li>
+    <li><b>Messages</b> – tout ce qu'a dit l'ingénieur, tes questions et les messages de l'équipe. Rouge = urgent.</li>
+    <li><b>Champ de question</b> – écris une question au lieu de parler.</li>
+    <li><b>Réglages</b> – équipe, micro, voix, alertes (voir plus bas).</li>
+    <li><b>Aide</b> – commandes, fonctions, mode d'emploi, à propos et <b>Signaler un problème</b>.</li>
+    <li><b>Mur des stands</b> – ouvre la page de l'équipe dans le navigateur.</li>
+  </ol>
+</section>
+
+<section id="set">
+  <h2>Réglages</h2>
+  <p>Après chaque changement, clique sur <b>Enregistrer et redémarrer</b> (en bas à droite).</p>
+  <h3>Équipe</h3>
+  <img src="img/fr/app_team.webp" alt="Réglages de l'équipe">
+  <ul>
+    <li><b>Solo</b> – tu roules seul : rien d'autre à saisir. Le mur des stands fonctionne quand même comme ta vue en direct.</li>
+    <li><b>Équipe</b> – une personne clique sur <b>Créer une nouvelle équipe…</b> (nom et mot de passe) et reçoit un <b>code d'équipe</b> de 6 caractères.
+      Les autres saisissent ce code et le mot de passe, cliquent sur <b>Tester la connexion</b> et choisissent qui ils sont.</li>
+    <li>Partage le code et le mot de passe <b>uniquement en privé</b> – qui les connaît voit l'état de la voiture et peut écrire au pilote.</li>
+    <li><b>Écouter l'ingénieur quand je ne roule pas</b> – quand un coéquipier conduit, tu entends son ingénieur (radio d'équipe).</li>
+  </ul>
+  <h3>Micro et bouton</h3>
+  <img src="img/fr/app_mic.webp" alt="Micro et bouton">
+  <ul>
+    <li>Choisis le micro et clique sur <b>Test 3 s</b> – dis quelque chose et vérifie que le niveau bouge.</li>
+    <li><b>Définir : appuie sur le bouton…</b> puis appuie sur le bouton du volant qui servira à parler. Une touche du clavier marche aussi.</li>
+  </ul>
+  <h3>Voix</h3>
+  <img src="img/fr/app_voice.webp" alt="Voix">
+  <ul>
+    <li>Voix, débit, volume, effet radio, langue et prénom de l'ingénieur. <b>▶ Écouter</b> joue un exemple.</li>
+    <li>Si tu lui donnes un prénom (par ex. Marc), il se présente et « Marc, silence » le fait taire.</li>
+  </ul>
+  <h3>Alertes</h3>
+  <img src="img/fr/app_alerts.webp" alt="Alertes">
+  <p>Ce que l'ingénieur dit de lui-même : prises de tour par les catégories plus rapides (et à partir de combien de secondes), voitures arrêtées,
+  drapeaux, coaching avant les virages, comparaison avec ton meilleur tour, commentaires après les dépassements, conseils de réglages.
+  Tout s'active et se désactive à la voix en roulant (par ex. « pas de coach »).</p>
+  <h3>Avancé</h3>
+  <img src="img/fr/app_adv.webp" alt="Avancé">
+  <p>Temps d'un changement complet de pneus, démarrage automatique de l'ingénieur, raccourcis sur le bureau, mises à jour et ta propre clé Groq (facultative – ta propre limite).</p>
+</section>
+
+<section id="talk">
+  <h2>Parler à l'ingénieur</h2>
+  <p><b>Maintiens le bouton, parle, relâche.</b> Un appui interrompt aussi ce que dit l'ingénieur.</p>
+  <p>Exemples : « combien de carburant ? », « quand je rentre ? », « quels pneus on change ? », « qui est devant ? », « où je perds ? »,
+  « météo ? », « quand l'hypercar va me prendre un tour ? », « silence » (silence total jusqu'au prochain appui), « urgent seulement », « répète ».</p>
+  <p>La liste complète est dans l'appli : <b>Aide → Commandes</b>.</p>
+  <img src="img/fr/app_commands.webp" alt="Commandes">
+  <p>Une question que le programme ne connaît pas part à l'IA (avec une clé Groq) avec les données de course.</p>
+</section>
+
+<section id="ai">
+  <h2>IA – clé Groq gratuite (2 minutes, une personne)</h2>
+  <ol>
+    <li>Crée un compte gratuit sur <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → copie la clé.</li>
+    <li>Sur le mur des stands : <b>Équipe → IA de l'équipe (Groq)</b> → colle → <b>Enregistrer la clé</b>. Seuls les membres de l'équipe la voient.
+      Tu roules en solo ? Colle-la dans l'appli : <b>Avancé → Ta propre clé Groq</b>.</li>
+    <li>Un <b>IA : Groq</b> vert apparaît dans l'appli.</li>
+  </ol>
+  <p>N'envoie jamais la clé dans un chat – colle-la toi-même.</p>
+</section>
+
+<section id="wall">
+  <h2>Mur des stands</h2>
+  <p>Ouvre-le avec le bouton <b>Mur des stands</b> de l'appli ou sur
+  <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
+  (connexion avec le code et le mot de passe de l'équipe ; ton téléphone les retient). Le choix de la langue est en haut.</p>
+  <img src="img/fr/wall_live.webp" alt="Mur des stands – en direct, avec numéros">
+  <ol class="legend">
+    <li><b>État</b> : les données sont-elles en direct, qui conduit, l'IA fonctionne-t-elle.</li>
+    <li><b>Onglets</b> : En direct, Planning &amp; plan, Équipe, Tours, Mémoire, Aide.</li>
+    <li><b>Course</b> : position dans la catégorie, tour, chronos, temps jusqu'à l'arrivée, drapeau.</li>
+    <li><b>Prochain arrêt</b> : dans combien de tours, consommation d'énergie et de carburant, ce qu'on fait à l'arrêt.</li>
+    <li><b>Pneus et voiture</b> : usure et températures de chaque pneu, dégâts, moteur, freins.</li>
+    <li><b>Météo et piste</b> : pluie, humidité, nuages, température de piste et remarques de l'ingénieur.</li>
+    <li><b>Rivaux de la catégorie</b> : écarts, rythme, qui rattrape qui, énergie, arrêt prévu.</li>
+    <li><b>Planning des relais</b> : qui conduit, quand a lieu le changement, ce qui se passe à l'arrêt, de combien de minutes le planning a bougé par rapport au plan.
+      Sans plan pour aujourd'hui, il est créé automatiquement pour le pilote en piste – d'après la durée de la course et les pneus disponibles dans le jeu.</li>
+  </ol>
+  <p>Plus bas se trouvent la <b>carte du circuit</b> avec toutes les voitures et la <b>radio d'équipe</b> :
+  « Au pilote » (l'ingénieur lit le message), « Demander à l'ingénieur » (réponse à la voix), « Demander (texte seul) », « En mémoire ».</p>
+  <h3>Sur téléphone</h3>
+  <img class="phone" src="img/fr/wall_phone.webp" alt="Mur des stands sur téléphone">
+  <h3>Onglet Équipe</h3>
+  <img src="img/fr/wall_team.webp" alt="Mur des stands – équipe">
+  <p>Code d'équipe et QR code pour le mur, pilotes avec leurs sujets de notification, la clé Groq et un <b>lien spectateurs</b> –
+  vue en direct seulement, sans radio ni plan ; tu peux le donner à n'importe qui.</p>
+</section>
+
+<section id="plan">
+  <h2>Planning &amp; plan (avant une course longue, une personne)</h2>
+  <img src="img/fr/wall_plan.webp" alt="Planning et plan">
+  <ol>
+    <li><b>1. Course</b> : date et heure du départ, durée, temps au tour, pneus pour la course → <b>Enregistrer</b>.</li>
+    <li><b>2. Plan des relais → Générer le plan automatiquement</b> : tours par relais, ordre des pilotes, usure des pneus
+      (<b>des mesures</b> remplit l'usure mesurée pendant vos sessions), temps d'arrêt → <b>Générer le plan</b>.
+      Le programme répartit les pneus pour qu'ils s'usent le plus régulièrement possible.</li>
+    <li>Ajuste le tableau si besoin : pilote dans la liste, tours, <b>Gauche / Droite</b> = changer les pneus de ce côté → <b>Enregistrer le plan</b>.
+      Le compteur indique si vous restez dans l'allocation de pneus.</li>
+  </ol>
+  <p>Pendant la course, le planning se recalcule d'après le rythme réel. L'ingénieur te fait rentrer et change les pneus selon le plan
+  (sauf si un pneu ne tient pas ou si l'énergie manque). Le plan s'applique à une course de la durée saisie dans « 1. Course ».</p>
+</section>
+
+<section id="phone">
+  <h2>Notifications sur téléphone (chaque pilote, 2 minutes)</h2>
+  <ol>
+    <li>Installe l'appli gratuite <b>ntfy</b> (Google Play / App Store).</li>
+    <li>Sur le mur des stands : <b>Équipe</b> → clique sur <b>📱</b> à côté de ton prénom – ton sujet et un QR code apparaissent.</li>
+    <li>Dans ntfy, touche <b>+</b>, saisis le sujet et <b>Subscribe</b> (ou scanne le QR code).</li>
+    <li>Clique sur <b>Test</b> à côté de ton prénom – « Pit Wall Crew – test » arrive sur ton téléphone.</li>
+  </ol>
+  <p>La notification arrive environ 30 minutes avant ton relais, une deuxième si le relais bouge de 10 minutes ou plus, et quand il commence à pleuvoir.</p>
+</section>
+
+<section id="race">
+  <h2>Course longue (par ex. 24 h)</h2>
+  <ul>
+    <li>Le <b>pilote en piste</b> garde Pit Wall Crew lancé pendant tout le relais – son appli envoie les données au mur et les notifications.</li>
+    <li><b>Les autres</b> peuvent éteindre le jeu, l'appli et le PC. Après la notification, lance le PC, LMU et Pit Wall Crew <b>avant de monter dans la voiture</b>.</li>
+    <li>Le plan, le planning, les messages, la mémoire d'équipe et le briefing de relais sont dans la base de l'équipe – le programme les récupère tout seul.</li>
+  </ul>
+  <h3>Répétition avant la course (15 minutes)</h3>
+  <ol>
+    <li>Tout le monde lance Pit Wall Crew – <b>Équipe</b> et <b>IA : Groq</b> en vert.</li>
+    <li>Un pilote clique sur <b>Test sans jeu</b>. Les autres ouvrent le mur des stands – les données doivent être « en direct ».</li>
+    <li>Le pilote demande à la voix « combien de carburant ? » – tout le monde entend la réponse.</li>
+    <li>Envoie « Au pilote » depuis le mur – l'ingénieur lit le message.</li>
+  </ol>
+</section>
+
+<section id="help">
+  <h2>Si quelque chose ne marche pas</h2>
+  <table>
+    <tr><th>Symptôme</th><th>Que faire</th></tr>
+    <tr><td>« En attente de LMU » alors que le jeu tourne</td><td>LMU : Settings → Gameplay → Enable Plugins = ON, puis relance le jeu.</td></tr>
+    <tr><td>L'ingénieur ne m'entend pas</td><td>Micro et bouton → Test 3 s. Vérifie la sourdine du casque et Windows → Confidentialité → Microphone.</td></tr>
+    <tr><td>« Mauvais code ou mot de passe d'équipe »</td><td>Équipe → corrige → Tester la connexion → Enregistrer.</td></tr>
+    <tr><td>Mur des stands : « pas de données du jeu »</td><td>L'appli du pilote doit tourner avec « Équipe » en vert.</td></tr>
+    <tr><td>« IA : Groq – mauvaise clé »</td><td>Colle à nouveau la clé (mur des stands → Équipe → IA de l'équipe).</td></tr>
+    <tr><td>Chaque message s'entend deux fois</td><td>Le programme tourne deux fois : ferme l'appli, termine « pythonw » dans le Gestionnaire des tâches, relance une fois.</td></tr>
+    <tr><td>Pas de notifications</td><td>Départ et pilotes dans le plan, sujet dans ntfy, bouton Test ; l'appli tourne sur le PC de quelqu'un.</td></tr>
+    <tr><td>Le jeu saccade</td><td>Souvent pas assez de mémoire graphique : baisse les textures, les voitures visibles et les ombres, ferme les autres programmes.</td></tr>
+    <tr><td>Windows bloque des fichiers</td><td>Avant de décompresser : clic droit sur le paquet → Propriétés → Débloquer.</td></tr>
+  </table>
+  <h3>Signaler un problème ou une suggestion</h3>
+  <p>Dans l'appli : <b>Aide → Signaler un problème</b>, sur le mur des stands : l'onglet <b>Aide</b>. Ça va directement à l'auteur.
+  Avec ton accord, l'appli peut envoyer automatiquement un rapport en cas de plantage (sans voix, clés ni mots de passe) –
+  tu l'actives ou le désactives sur la même page. Détails : <a href="prywatnosc.html?lang=fr">Confidentialité</a>.</p>
+  <img src="img/fr/app_feedback.webp" alt="Signaler un problème">
+</section>
+
+</main>
+<footer>Pit Wall Crew · créé par <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · merci à Rett et Barny pour leur aide aux tests · <a href="prywatnosc.html?lang=fr">Confidentialité</a></footer>
+</body>
+</html>

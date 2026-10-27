@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – prywatność</title>
+<style>
+:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
+main { max-width:860px; margin:0 auto; padding:16px; }
+h1 { margin:18px 0 4px; font-size:28px; } h2 { margin:0 0 8px; font-size:20px; }
+.muted { color:var(--muted); }
+section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:16px 0; }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+th { color:var(--muted); font-weight:600; }
+.wrap { overflow-x:auto; }
+a { color:#5fb3ff; }
+.langs { text-align:right; font-size:14px; } .langs a { color:var(--muted); margin-left:10px; }
+.langs a.on { color:var(--text); font-weight:700; }
+article { display:none; } article.on { display:block; }
+footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-size:14px; }
+</style>
+</head>
+<body>
+<main>
+<div class="langs"><a href="?lang=pl" data-l="pl">Polski</a><a href="?lang=en" data-l="en">English</a><a href="?lang=de" data-l="de">Deutsch</a><a href="?lang=fr" data-l="fr">Français</a></div>
+
+<!-- ============================== POLSKI ============================== -->
+<article data-l="pl">
+<h1>Prywatność</h1>
+<p class="muted">Pit Wall Crew – aplikacja i ściana boksów. Stan na 27.10.2026.</p>
+
+<section><h2>Kto odpowiada za dane</h2>
+<p>Maciej Szczepaniak (FR Mods). Kontakt: <span class="contact"></span> albo formularz „Zgłoś problem” w aplikacji lub na ścianie boksów.</p></section>
+
+<section><h2>Ciasteczka i pamięć przeglądarki</h2>
+<p>Ściana boksów <b>nie używa ciasteczek</b>, reklam ani narzędzi do śledzenia czy statystyk odwiedzin. W pamięci przeglądarki (localStorage, IndexedDB) zapisuje tylko to, bez czego strona nie działa:</p>
+<ul><li>logowanie do zespołu (Google Firebase),</li><li>Twoje ustawienia: język, otwarta zakładka, wybrane imię, obrót mapy, odsłuch radia, zamknięte komunikaty.</li></ul>
+<p>Możesz to w każdej chwili usunąć, czyszcząc dane tej strony w przeglądarce. Strona i jej biblioteki są pobierane z serwerów GitHub Pages, Google (gstatic.com) i Cloudflare (cdnjs) – jak przy każdej stronie, te serwery widzą Twój adres IP.</p></section>
+
+<section><h2>Co i dokąd wysyła program</h2>
+<div class="wrap"><table>
+<tr><th>Dokąd</th><th>Co</th><th>Po co</th></tr>
+<tr><td>Baza zespołu – Google Firebase (serwery w Belgii)</td><td>imię lub nick kierowcy, dane z gry (okrążenia, paliwo, opony, pozycje, nazwy kierowców z serwera), radio zespołu, plan, pamięć zespołu, klucz Groq zespołu</td><td>ściana boksów; widzi to tylko Twój zespół (kod i hasło), a podgląd na żywo także ten, komu zespół da link dla widzów</td></tr>
+<tr><td>Groq (USA)</td><td>nagranie głosu po wciśnięciu przycisku, pytania, dane wyścigu potrzebne do odpowiedzi, zdania do przetłumaczenia</td><td>rozpoznawanie mowy, odpowiedzi AI, tłumaczenia – z kluczem Twoim lub zespołu</td></tr>
+<tr><td>Google (rozpoznawanie mowy)</td><td>to samo nagranie głosu</td><td>druga, równoległa próba rozpoznania mowy</td></tr>
+<tr><td>Microsoft (głosy Edge)</td><td>tekst, który mówi inżynier</td><td>zamiana tekstu na głos</td></tr>
+<tr><td>ntfy.sh</td><td>treść powiadomień</td><td>powiadomienia na telefon – tylko jeśli je ustawisz</td></tr>
+<tr><td>GitHub</td><td>zapytanie o nową wersję</td><td>aktualizacje</td></tr>
+<tr><td>Autor programu</td><td>zgłoszenia problemów i sugestii, kontakt (jeśli podasz), raporty awarii i dziennik – <b>tylko za Twoją zgodą</b></td><td>naprawianie błędów</td></tr>
+</table></div>
+<p>Program nie zapisuje nagrań głosu na dysku i nigdy nie wysyła ich autorowi.</p></section>
+
+<section><h2>Raporty awarii (za zgodą)</h2>
+<p>Przy pierwszym uruchomieniu program pyta, czy wysyłać autorowi raporty awarii. Raport zawiera opis błędu, wersję programu, język i dziennik ostatniej sesji (komunikaty inżyniera i to, co rozpoznał z Twojej mowy). Przed wysłaniem program usuwa z niego klucze, hasła, adresy e-mail i nazwę użytkownika Windows. Przy ręcznym zgłoszeniu sam decydujesz, czy dołączyć dziennik. Zgodę zmienisz w każdej chwili w aplikacji: Pomoc → Zgłoś problem.</p></section>
+
+<section><h2>Jak długo</h2>
+<p>Zgłoszenia i raporty awarii – do 12 miesięcy albo krócej, gdy sprawa zostanie załatwiona. Dane zespołu – dopóki zespół korzysta z programu; zespół może je usunąć, a na prośbę usuwa je autor.</p></section>
+
+<section><h2>Podstawa i Twoje prawa</h2>
+<p>Dane zespołu przetwarzamy, żeby działała usługa, z której korzystasz (art. 6 ust. 1 lit. b RODO); raporty awarii i dziennik – na podstawie Twojej zgody (lit. a); zgłoszenia – w uzasadnionym interesie naprawiania programu (lit. f). Masz prawo dostępu do danych, ich poprawienia, usunięcia, ograniczenia przetwarzania, sprzeciwu, przeniesienia i cofnięcia zgody w każdej chwili. Możesz też złożyć skargę do Prezesa Urzędu Ochrony Danych Osobowych (lub organu w swoim kraju).</p></section>
+</article>
+
+<!-- ============================== ENGLISH ============================== -->
+<article data-l="en">
+<h1>Privacy</h1>
+<p class="muted">Pit Wall Crew – app and pit wall. Last updated 27 Oct 2026.</p>
+
+<section><h2>Who is responsible</h2>
+<p>Maciej Szczepaniak (FR Mods). Contact: <span class="contact"></span> or the “Report a problem” form in the app or on the pit wall.</p></section>
+
+<section><h2>Cookies and browser storage</h2>
+<p>The pit wall <b>does not use cookies</b>, ads, tracking or visitor statistics. It stores in your browser (localStorage, IndexedDB) only what the page needs to work:</p>
+<ul><li>your team login (Google Firebase),</li><li>your settings: language, open tab, chosen name, map rotation, radio listening, dismissed notices.</li></ul>
+<p>You can delete this at any time by clearing this site's data in your browser. The page and its libraries are loaded from GitHub Pages, Google (gstatic.com) and Cloudflare (cdnjs) – as with any website, those servers see your IP address.</p></section>
+
+<section><h2>What the program sends and where</h2>
+<div class="wrap"><table>
+<tr><th>Where</th><th>What</th><th>Why</th></tr>
+<tr><td>Team database – Google Firebase (servers in Belgium)</td><td>driver name or nickname, game data (laps, fuel, tyres, positions, driver names from the server), team radio, plan, team memory, the team's Groq key</td><td>the pit wall; only your team can see it (code and password), and the live view also anyone your team gives the spectator link to</td></tr>
+<tr><td>Groq (USA)</td><td>your voice recording after pressing the button, questions, race data needed for answers, sentences to translate</td><td>speech recognition, AI answers, translations – with your own or the team's key</td></tr>
+<tr><td>Google (speech recognition)</td><td>the same voice recording</td><td>a second, parallel speech recognition attempt</td></tr>
+<tr><td>Microsoft (Edge voices)</td><td>the text the engineer says</td><td>text to speech</td></tr>
+<tr><td>ntfy.sh</td><td>notification text</td><td>phone notifications – only if you set them up</td></tr>
+<tr><td>GitHub</td><td>a check for a new version</td><td>updates</td></tr>
+<tr><td>The author</td><td>problem reports and suggestions, your contact (if given), crash reports and the log – <b>only with your consent</b></td><td>fixing bugs</td></tr>
+</table></div>
+<p>The program does not save voice recordings to disk and never sends them to the author.</p></section>
+
+<section><h2>Crash reports (with consent)</h2>
+<p>On first start the program asks whether to send crash reports to the author. A report contains the error description, program version, language and the log of the last session (the engineer's messages and what it recognised from your speech). Before sending, keys, passwords, e-mail addresses and your Windows user name are removed. When you report a problem yourself, you decide whether to attach the log. You can change your consent at any time in the app: Help → Report a problem.</p></section>
+
+<section><h2>How long</h2>
+<p>Reports and crash reports – up to 12 months, or less once the issue is resolved. Team data – as long as the team uses the program; the team can delete it, and the author deletes it on request.</p></section>
+
+<section><h2>Legal basis and your rights</h2>
+<p>Team data is processed to provide the service you use (Art. 6(1)(b) GDPR); crash reports and logs – based on your consent (Art. 6(1)(a)); problem reports – in the legitimate interest of fixing the program (Art. 6(1)(f)). You have the right to access, correct and delete your data, to restrict processing, to object, to data portability and to withdraw consent at any time. You can also lodge a complaint with the data protection authority in your country.</p></section>
+</article>
+
+<!-- ============================== DEUTSCH ============================== -->
+<article data-l="de">
+<h1>Datenschutz</h1>
+<p class="muted">Pit Wall Crew – App und Boxenmauer. Stand: 27.10.2026.</p>
+
+<section><h2>Verantwortlicher</h2>
+<p>Maciej Szczepaniak (FR Mods). Kontakt: <span class="contact"></span> oder das Formular „Problem melden“ in der App oder auf der Boxenmauer.</p></section>
+
+<section><h2>Cookies und Browserspeicher</h2>
+<p>Die Boxenmauer <b>verwendet keine Cookies</b>, keine Werbung, kein Tracking und keine Besucherstatistik. Im Browser (localStorage, IndexedDB) speichert sie nur, was die Seite zum Funktionieren braucht:</p>
+<ul><li>die Anmeldung im Team (Google Firebase),</li><li>deine Einstellungen: Sprache, offener Tab, gewählter Name, Kartenausrichtung, Funk mithören, geschlossene Hinweise.</li></ul>
+<p>Du kannst das jederzeit löschen, indem du die Daten dieser Seite im Browser löschst. Die Seite und ihre Bibliotheken werden von GitHub Pages, Google (gstatic.com) und Cloudflare (cdnjs) geladen – wie bei jeder Website sehen diese Server deine IP-Adresse.</p></section>
+
+<section><h2>Was das Programm wohin sendet</h2>
+<div class="wrap"><table>
+<tr><th>Wohin</th><th>Was</th><th>Wozu</th></tr>
+<tr><td>Teamdatenbank – Google Firebase (Server in Belgien)</td><td>Name oder Nickname des Fahrers, Spieldaten (Runden, Kraftstoff, Reifen, Positionen, Fahrernamen vom Server), Teamfunk, Plan, Teamgedächtnis, Groq-Schlüssel des Teams</td><td>Boxenmauer; nur dein Team sieht sie (Code und Passwort), die Live-Ansicht auch jeder, dem das Team den Zuschauer-Link gibt</td></tr>
+<tr><td>Groq (USA)</td><td>deine Sprachaufnahme nach dem Tastendruck, Fragen, für Antworten nötige Renndaten, zu übersetzende Sätze</td><td>Spracherkennung, KI-Antworten, Übersetzungen – mit deinem oder dem Team-Schlüssel</td></tr>
+<tr><td>Google (Spracherkennung)</td><td>dieselbe Sprachaufnahme</td><td>ein zweiter, paralleler Erkennungsversuch</td></tr>
+<tr><td>Microsoft (Edge-Stimmen)</td><td>der Text, den der Ingenieur spricht</td><td>Sprachausgabe</td></tr>
+<tr><td>ntfy.sh</td><td>Text der Benachrichtigungen</td><td>Handy-Benachrichtigungen – nur wenn du sie einrichtest</td></tr>
+<tr><td>GitHub</td><td>Abfrage einer neuen Version</td><td>Updates</td></tr>
+<tr><td>Der Autor</td><td>Problemmeldungen und Vorschläge, dein Kontakt (falls angegeben), Absturzberichte und Protokoll – <b>nur mit deiner Zustimmung</b></td><td>Fehlerbehebung</td></tr>
+</table></div>
+<p>Das Programm speichert keine Sprachaufnahmen auf der Festplatte und sendet sie nie an den Autor.</p></section>
+
+<section><h2>Absturzberichte (mit Zustimmung)</h2>
+<p>Beim ersten Start fragt das Programm, ob Absturzberichte an den Autor gesendet werden sollen. Ein Bericht enthält die Fehlerbeschreibung, Programmversion, Sprache und das Protokoll der letzten Sitzung (Meldungen des Ingenieurs und was er aus deiner Sprache erkannt hat). Vor dem Senden werden Schlüssel, Passwörter, E-Mail-Adressen und dein Windows-Benutzername entfernt. Bei einer eigenen Meldung entscheidest du, ob das Protokoll angehängt wird. Die Zustimmung änderst du jederzeit in der App: Hilfe → Problem melden.</p></section>
+
+<section><h2>Speicherdauer</h2>
+<p>Meldungen und Absturzberichte – bis zu 12 Monate, oder kürzer, sobald das Problem gelöst ist. Teamdaten – solange das Team das Programm nutzt; das Team kann sie löschen, auf Anfrage löscht sie der Autor.</p></section>
+
+<section><h2>Rechtsgrundlage und deine Rechte</h2>
+<p>Teamdaten werden verarbeitet, um den genutzten Dienst bereitzustellen (Art. 6 Abs. 1 lit. b DSGVO); Absturzberichte und Protokolle – auf Grundlage deiner Einwilligung (lit. a); Meldungen – im berechtigten Interesse an der Fehlerbehebung (lit. f). Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch, Datenübertragbarkeit und jederzeitigen Widerruf der Einwilligung. Du kannst dich auch bei der Datenschutzbehörde deines Landes beschweren.</p></section>
+</article>
+
+<!-- ============================== FRANÇAIS ============================== -->
+<article data-l="fr">
+<h1>Confidentialité</h1>
+<p class="muted">Pit Wall Crew – application et mur des stands. Mise à jour : 27/10/2026.</p>
+
+<section><h2>Responsable</h2>
+<p>Maciej Szczepaniak (FR Mods). Contact : <span class="contact"></span> ou le formulaire « Signaler un problème » dans l'appli ou sur le mur des stands.</p></section>
+
+<section><h2>Cookies et stockage du navigateur</h2>
+<p>Le mur des stands <b>n'utilise pas de cookies</b>, ni publicité, ni pistage, ni statistiques de visites. Il enregistre dans le navigateur (localStorage, IndexedDB) seulement ce dont la page a besoin pour fonctionner :</p>
+<ul><li>la connexion à l'équipe (Google Firebase),</li><li>tes réglages : langue, onglet ouvert, prénom choisi, rotation de la carte, écoute radio, messages fermés.</li></ul>
+<p>Tu peux les effacer à tout moment en supprimant les données de ce site dans ton navigateur. La page et ses bibliothèques sont chargées depuis GitHub Pages, Google (gstatic.com) et Cloudflare (cdnjs) – comme pour tout site, ces serveurs voient ton adresse IP.</p></section>
+
+<section><h2>Ce que le programme envoie et où</h2>
+<div class="wrap"><table>
+<tr><th>Où</th><th>Quoi</th><th>Pourquoi</th></tr>
+<tr><td>Base de l'équipe – Google Firebase (serveurs en Belgique)</td><td>prénom ou pseudo du pilote, données du jeu (tours, carburant, pneus, positions, noms des pilotes du serveur), radio d'équipe, plan, mémoire d'équipe, clé Groq de l'équipe</td><td>mur des stands ; seule ton équipe y a accès (code et mot de passe), et la vue en direct aussi toute personne à qui l'équipe donne le lien spectateurs</td></tr>
+<tr><td>Groq (États-Unis)</td><td>l'enregistrement de ta voix après l'appui sur le bouton, les questions, les données de course nécessaires aux réponses, les phrases à traduire</td><td>reconnaissance vocale, réponses de l'IA, traductions – avec ta clé ou celle de l'équipe</td></tr>
+<tr><td>Google (reconnaissance vocale)</td><td>le même enregistrement</td><td>une deuxième tentative de reconnaissance, en parallèle</td></tr>
+<tr><td>Microsoft (voix Edge)</td><td>le texte que dit l'ingénieur</td><td>synthèse vocale</td></tr>
+<tr><td>ntfy.sh</td><td>le texte des notifications</td><td>notifications sur téléphone – seulement si tu les configures</td></tr>
+<tr><td>GitHub</td><td>vérification d'une nouvelle version</td><td>mises à jour</td></tr>
+<tr><td>L'auteur</td><td>signalements et suggestions, ton contact (si tu le donnes), rapports de plantage et journal – <b>seulement avec ton accord</b></td><td>corriger les bugs</td></tr>
+</table></div>
+<p>Le programme n'enregistre pas ta voix sur le disque et ne l'envoie jamais à l'auteur.</p></section>
+
+<section><h2>Rapports de plantage (avec accord)</h2>
+<p>Au premier lancement, le programme demande s'il peut envoyer des rapports de plantage à l'auteur. Un rapport contient la description de l'erreur, la version, la langue et le journal de la dernière session (messages de l'ingénieur et ce qu'il a reconnu de ta voix). Avant l'envoi, les clés, mots de passe, adresses e-mail et ton nom d'utilisateur Windows sont supprimés. Quand tu signales un problème toi-même, tu décides de joindre ou non le journal. Tu peux changer ton accord à tout moment dans l'appli : Aide → Signaler un problème.</p></section>
+
+<section><h2>Durée de conservation</h2>
+<p>Signalements et rapports de plantage – jusqu'à 12 mois, ou moins une fois le problème réglé. Données d'équipe – tant que l'équipe utilise le programme ; l'équipe peut les supprimer, et l'auteur les supprime sur demande.</p></section>
+
+<section><h2>Base légale et tes droits</h2>
+<p>Les données d'équipe sont traitées pour fournir le service que tu utilises (art. 6, par. 1, b du RGPD) ; les rapports de plantage et journaux – sur la base de ton consentement (a) ; les signalements – dans l'intérêt légitime de corriger le programme (f). Tu as le droit d'accès, de rectification, d'effacement, de limitation, d'opposition, de portabilité et de retirer ton consentement à tout moment. Tu peux aussi déposer une plainte auprès de l'autorité de protection des données de ton pays.</p></section>
+</article>
+
+<footer>Pit Wall Crew · Maciej Szczepaniak from FR Mods</footer>
+</main>
+<script>
+(function () {
+  var CONTACT = 'maciej.szczepaniak59@gmail.com';
+  var ok = ['pl', 'en', 'de', 'fr'], l = '';
+  try { l = new URLSearchParams(location.search).get('lang') || localStorage.getItem('pwc_lang') || ''; } catch (e) {}
+  if (ok.indexOf(l) < 0) l = (navigator.language || 'pl').slice(0, 2);
+  if (ok.indexOf(l) < 0) l = 'en';
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-l]').forEach(function (el) { el.classList.toggle('on', el.getAttribute('data-l') === l); });
+  document.querySelectorAll('.contact').forEach(function (el) {
+    if (CONTACT) { var a = document.createElement('a'); a.href = 'mailto:' + CONTACT; a.textContent = CONTACT; el.appendChild(a); }
+    else el.textContent = '–';
+  });
+  var t = { pl: 'Pit Wall Crew – prywatność', en: 'Pit Wall Crew – privacy', de: 'Pit Wall Crew – Datenschutz', fr: 'Pit Wall Crew – confidentialité' };
+  document.title = t[l];
+})();
+</script>
+</body>
+</html>

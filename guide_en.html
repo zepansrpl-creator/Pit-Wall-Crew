@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – guide</title>
+<style>
+:root { --bg:#0e0f12; --card:#17191d; --line:#2a2d33; --text:#e9eaec; --muted:#9a9ea6; --acc:#ff3b30; --hi:#ffc400; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
+header { padding:28px 16px 12px; max-width:1040px; margin:0 auto; }
+header h1 { margin:0; font-size:30px; }
+header p { margin:6px 0 0; color:var(--muted); }
+nav.toc { max-width:1040px; margin:0 auto; padding:0 16px; display:flex; flex-wrap:wrap; gap:6px; }
+nav.toc a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 12px; font-size:14px; background:var(--card); }
+main { max-width:1040px; margin:0 auto; padding:8px 16px 40px; }
+section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:18px 0; }
+h2 { margin:0 0 10px; font-size:22px; }
+h3 { margin:18px 0 6px; font-size:17px; }
+img { max-width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; margin:10px 0; }
+img.phone { max-width:300px; }
+ol, ul { padding-left:22px; margin:6px 0; }
+li { margin:3px 0; }
+.legend { counter-reset:n; list-style:none; padding:0; }
+.legend li { counter-increment:n; padding-left:36px; position:relative; margin:6px 0; }
+.legend li::before { content:counter(n); position:absolute; left:0; top:1px; width:24px; height:24px; border-radius:50%;
+  background:var(--hi); color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(255,59,48,.07); border-radius:6px; margin:10px 0; }
+code, kbd { background:rgba(127,127,127,.15); border-radius:4px; padding:1px 5px; font-size:.92em; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-size:14px; }
+.langs { float:right; font-size:14px; } .langs a { color:var(--muted); margin-left:8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <h1>Pit Wall Crew – guide</h1>
+  <p>Voice race engineer and pit wall for Le Mans Ultimate. From installation to your first race.</p>
+</header>
+<nav class="toc">
+  <a href="#what">What it is</a><a href="#inst">Installation</a><a href="#app">The app</a><a href="#set">Settings</a>
+  <a href="#talk">Talking</a><a href="#ai">AI (Groq)</a><a href="#wall">Pit wall</a><a href="#plan">Schedule &amp; plan</a>
+  <a href="#phone">Notifications</a><a href="#race">Long race</a><a href="#help">Problems</a>
+</nav>
+<main>
+<div class="tip">Translations may contain language errors. The author kindly asks you to report every one of them (Help → Report a problem).</div>
+
+<section id="what">
+  <h2>What it is</h2>
+  <p>The <b>engineer</b> is a program on your PC. It reads data from the game and talks to you through your headset:
+  it warns you about faster cars, tells you when to pit, what to change at the stop and where you lose time.
+  It answers questions by voice – hold the button on your wheel, speak, release.</p>
+  <p>The <b>pit wall</b> is a web page (PC or phone). The whole team sees the car status, rivals, weather and the
+  stint schedule live, and can send the driver messages that the engineer reads out.</p>
+  <p>It works on every track, with every car and class in Le Mans Ultimate. You can drive alone (<b>Solo</b> mode) or as a team.</p>
+  <h3>What you need</h3>
+  <ul>
+    <li>Windows 10 or 11 and Le Mans Ultimate.</li>
+    <li>A headset with a microphone and a free button on your wheel (or a keyboard key).</li>
+    <li>Internet (the voice, speech recognition and the pit wall work online).</li>
+    <li>A free Groq key – speech recognition, AI answers and translation of less common messages (see <a href="#ai">AI</a>).</li>
+  </ul>
+</section>
+
+<section id="inst">
+  <h2>Installation (5 minutes)</h2>
+  <ol>
+    <li>Download the <code>PitWallCrew_….zip</code> package. <b>Before unpacking:</b> right-click the file → Properties →
+      tick <b>Unblock</b> → OK (otherwise Windows may block the files).</li>
+    <li>Unpack it to a folder, e.g. <code>Documents\Pit Wall Crew</code>.</li>
+    <li>Double-click <b>INSTALUJ_KIEROWCA.bat</b> (the installer). It downloads what's needed (a few minutes), asks about your team,
+      microphone and radio button, and creates a <b>Pit Wall Crew</b> desktop icon.</li>
+    <li>In LMU once: <b>Settings → Gameplay → Enable Plugins = ON</b> (without it the program can't see the game data).</li>
+  </ol>
+  <div class="tip">Updates install themselves when the app starts – never while you drive. Your settings are kept.
+  The language is chosen automatically from Windows; you can change it under Settings → Voice → Język / Language.</div>
+</section>
+
+<section id="app">
+  <h2>The app window</h2>
+  <p>The <b>Pit Wall Crew</b> icon opens the app. The engineer starts by itself and begins talking once you start the game and go on track.</p>
+  <img src="img/en/app_main.webp" alt="Main window with numbers">
+  <ol class="legend">
+    <li><b>Status</b>: whether the engineer runs, sees the game (“You're driving” or “watching” when a teammate drives), team and AI connection. Green = OK.</li>
+    <li><b>Test without game</b> – a simulated race. Check the voice, microphone and pit wall without starting LMU.</li>
+    <li><b>Start / Stop</b> the engineer.</li>
+    <li><b>Key numbers</b>: position, lap, laps to the pit stop, energy or fuel, lap times, time to the finish.</li>
+    <li><b>Messages</b> – everything the engineer said, your questions and team messages. Red = urgent.</li>
+    <li><b>Question box</b> – type a question instead of speaking.</li>
+    <li><b>Settings</b> – team, microphone, voice, warnings (see below).</li>
+    <li><b>Help</b> – commands, features, manual, about and <b>Report a problem</b>.</li>
+    <li><b>Pit wall</b> – opens the team page in your browser.</li>
+  </ol>
+</section>
+
+<section id="set">
+  <h2>Settings</h2>
+  <p>After every change click <b>Save and restart</b> (bottom right).</p>
+  <h3>Team</h3>
+  <img src="img/en/app_team.webp" alt="Team settings">
+  <ul>
+    <li><b>Solo</b> – you drive alone: nothing else to enter. The pit wall still works as your live view.</li>
+    <li><b>Team</b> – one person clicks <b>Create a new team…</b> (name and password) and gets a 6-character <b>team code</b>.
+      The others enter that code and password, click <b>Test connection</b> and choose who they are.</li>
+    <li>Share the code and password <b>only privately</b> – whoever knows them sees the car status and can message the driver.</li>
+    <li><b>Listen to the engineer when I'm not driving</b> – while a teammate drives you hear his engineer (team radio).</li>
+  </ul>
+  <h3>Microphone and button</h3>
+  <img src="img/en/app_mic.webp" alt="Microphone and button">
+  <ul>
+    <li>Choose the microphone and click <b>Test 3 s</b> – say something and check the level moves.</li>
+    <li><b>Set: press the button…</b> and press the button on your wheel you'll use to talk. A keyboard key works too.</li>
+  </ul>
+  <h3>Voice</h3>
+  <img src="img/en/app_voice.webp" alt="Voice">
+  <ul>
+    <li>Voice, speaking rate, volume, radio effect, language and the engineer's name. <b>▶ Listen</b> plays a sample.</li>
+    <li>If you give him a name (e.g. Mark), he introduces himself and “Mark, quiet” mutes him.</li>
+  </ul>
+  <h3>Warnings</h3>
+  <img src="img/en/app_alerts.webp" alt="Warnings">
+  <p>What the engineer says unprompted: lapping by faster classes (and from how many seconds), stopped cars,
+  flags, coaching before corners, comparison with your best lap, comments after overtakes, setup suggestions.
+  You can switch all of them on and off by voice while driving (e.g. “no coach”).</p>
+  <h3>Advanced</h3>
+  <img src="img/en/app_adv.webp" alt="Advanced">
+  <p>Full tyre change time, automatic engineer start, desktop shortcuts, updates and your own Groq key (optional – your own limit).</p>
+</section>
+
+<section id="talk">
+  <h2>Talking to the engineer</h2>
+  <p><b>Hold the button, speak, release.</b> Pressing the button also interrupts what the engineer is saying.</p>
+  <p>Examples: “how much fuel?”, “when do I box?”, “which tyres do we change?”, “who's ahead?”, “where am I losing time?”,
+  “what's the weather?”, “when will the first hypercar lap me?”, “quiet” (complete silence until the next press), “urgent only”, “repeat”.</p>
+  <p>The full list is in the app: <b>Help → Commands</b>.</p>
+  <img src="img/en/app_commands.webp" alt="Commands">
+  <p>A question the program doesn't know goes to the AI (with a Groq key) together with the race data.</p>
+</section>
+
+<section id="ai">
+  <h2>AI – free Groq key (2 minutes, one person)</h2>
+  <ol>
+    <li>Create a free account at <a href="https://console.groq.com">console.groq.com</a> → <b>API Keys → Create API Key</b> → copy the key.</li>
+    <li>On the pit wall: <b>Team → Team AI (Groq)</b> → paste → <b>Save key</b>. Only team members can see it.
+      Driving solo? Paste it in the app: <b>Advanced → Your own Groq key</b>.</li>
+    <li>A green <b>AI: Groq</b> appears in the app.</li>
+  </ol>
+  <p>Never send the key in a chat – paste it yourself.</p>
+</section>
+
+<section id="wall">
+  <h2>Pit wall</h2>
+  <p>Open it with the <b>Pit wall</b> button in the app or at
+  <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
+  (log in with the team code and password; your phone remembers them). The language selector is at the top.</p>
+  <img src="img/en/wall_live.webp" alt="Pit wall – live, with numbers">
+  <ol class="legend">
+    <li><b>Status</b>: whether data is live, who is driving, whether the AI works.</li>
+    <li><b>Tabs</b>: Live, Schedule &amp; plan, Team, Laps, Memory, Help.</li>
+    <li><b>Race</b>: class position, lap, lap times, time to the finish, flag.</li>
+    <li><b>Next pit stop</b>: in how many laps, energy and fuel use, what to do at the stop.</li>
+    <li><b>Tyres and car</b>: wear and temperatures of each tyre, damage, engine, brakes.</li>
+    <li><b>Weather and track</b>: rain, wetness, clouds, track temperature and the engineer's remarks.</li>
+    <li><b>Rivals in class</b>: gaps, pace, who catches whom, energy, predicted pit stop.</li>
+    <li><b>Stint schedule</b>: who drives, when the change is, what happens at the stop, how many minutes the schedule moved against the plan.
+      With no plan for today it is generated automatically for the current driver – from the race length and the tyres available in the game.</li>
+  </ol>
+  <p>Further down there are the <b>track map</b> with all cars and the <b>team radio</b>:
+  “To driver” (the engineer reads the message), “Ask the engineer” (answer by voice), “Ask (text only)”, “To memory”.</p>
+  <h3>On a phone</h3>
+  <img class="phone" src="img/en/wall_phone.webp" alt="Pit wall on a phone">
+  <h3>Team tab</h3>
+  <img src="img/en/wall_team.webp" alt="Pit wall – team">
+  <p>Team code and QR code for the wall, drivers with notification topics, the Groq key and a <b>spectator link</b> –
+  live view only, no radio and no plan; you can give it to anyone.</p>
+</section>
+
+<section id="plan">
+  <h2>Schedule &amp; plan (before a long race, one person)</h2>
+  <img src="img/en/wall_plan.webp" alt="Schedule and plan">
+  <ol>
+    <li><b>1. Race</b>: start date and time, length, lap time, tyres for the race → <b>Save</b>.</li>
+    <li><b>2. Stint plan → Generate plan automatically</b>: laps per stint, driver order, tyre wear
+      (<b>from measurements</b> fills in the wear measured in your sessions), stop times → <b>Generate plan</b>.
+      The program spreads the tyres so they wear as evenly as possible.</li>
+    <li>Adjust the table if needed: driver from the list, laps, <b>Left / Right</b> = change the tyres on that side → <b>Save plan</b>.
+      The counter shows whether you stay within the tyre allocation.</li>
+  </ol>
+  <p>During the race the schedule recalculates itself from the real pace. The engineer pits and changes tyres according to the plan
+  (unless a tyre wouldn't last or energy runs short). The plan applies to a race of the length entered in “1. Race”.</p>
+</section>
+
+<section id="phone">
+  <h2>Phone notifications (every driver, 2 minutes)</h2>
+  <ol>
+    <li>Install the free <b>ntfy</b> app (Google Play / App Store).</li>
+    <li>On the pit wall: <b>Team</b> → click <b>📱</b> next to your name – your topic and QR code appear.</li>
+    <li>In ntfy tap <b>+</b>, enter the topic and <b>Subscribe</b> (or scan the QR code).</li>
+    <li>Click <b>Test</b> next to your name – “Pit Wall Crew – test” arrives on your phone.</li>
+  </ol>
+  <p>The notification comes about 30 minutes before your stint, a second one if the stint moves by 10 minutes or more, and when it starts raining.</p>
+</section>
+
+<section id="race">
+  <h2>Long race (e.g. 24 h)</h2>
+  <ul>
+    <li>The <b>driver in the car</b> keeps Pit Wall Crew running for the whole stint – his app sends data to the wall and the notifications.</li>
+    <li><b>The others</b> may turn off the game, the app and the PC. After the phone notification start the PC, LMU and Pit Wall Crew <b>before you get in the car</b>.</li>
+    <li>The plan, schedule, messages, team memory and the handover briefing are in the team database – the program fetches them itself.</li>
+  </ul>
+  <h3>Rehearsal before the race (15 minutes)</h3>
+  <ol>
+    <li>Everyone starts Pit Wall Crew – green <b>Team</b> and <b>AI: Groq</b>.</li>
+    <li>One driver clicks <b>Test without game</b>. The others open the pit wall – data should be “live”.</li>
+    <li>The driver asks by voice “how much fuel?” – everyone hears the answer.</li>
+    <li>Send “To driver” from the wall – the engineer reads the message out.</li>
+  </ol>
+</section>
+
+<section id="help">
+  <h2>When something doesn't work</h2>
+  <table>
+    <tr><th>Symptom</th><th>What to do</th></tr>
+    <tr><td>“Waiting for LMU” although the game runs</td><td>LMU: Settings → Gameplay → Enable Plugins = ON, then restart the game.</td></tr>
+    <tr><td>The engineer doesn't hear me / “I can't hear you”</td><td>Microphone and button → Test 3 s. Check the mute on the headset and Windows → Privacy → Microphone.</td></tr>
+    <tr><td>“Wrong team code or password”</td><td>Team → correct it → Test connection → Save.</td></tr>
+    <tr><td>Pit wall: “no data from the game”</td><td>The driver's app must be running with a green “Team”.</td></tr>
+    <tr><td>“AI: Groq – wrong key”</td><td>Paste the key again (pit wall → Team → Team AI).</td></tr>
+    <tr><td>Every message is heard twice</td><td>The program runs twice: close the app, end “pythonw” in Task Manager, start it once.</td></tr>
+    <tr><td>No notifications</td><td>Race start and drivers in the plan, topic in ntfy, Test button; the app running on someone's PC.</td></tr>
+    <tr><td>The game stutters</td><td>Usually not enough graphics memory: lower textures, fewer visible cars and shadows, close other programs.</td></tr>
+    <tr><td>Windows blocks files</td><td>Before unpacking: right-click the package → Properties → Unblock.</td></tr>
+  </table>
+  <h3>Report a problem or a suggestion</h3>
+  <p>In the app: <b>Help → Report a problem</b>, on the pit wall: the <b>Help</b> tab. It goes straight to the author.
+  With your consent the app can automatically send a report when it crashes (no voice recordings, keys or passwords) –
+  you switch this on or off on the same page. Details: <a href="prywatnosc.html?lang=en">Privacy</a>.</p>
+  <img src="img/en/app_feedback.webp" alt="Report a problem">
+</section>
+
+</main>
+<footer>Pit Wall Crew · created by <b>Maciej Szczepaniak</b> from <b>FR Mods</b> · thanks to Rett and Barny for helping with the tests · <a href="prywatnosc.html?lang=en">Privacy</a></footer>
+</body>
+</html>
