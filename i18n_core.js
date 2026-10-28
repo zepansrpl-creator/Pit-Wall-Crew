@@ -59,6 +59,18 @@
     for (var c = node.firstChild; c; c = c.nextSibling) walk(c);
   }
   window.PWC_I18N_APPLY = function () { init(); if (D) walk(document.body); };
+  // wzorce od aplikacji kierowcy (plan postoju, silnik, zmęczenie…): {skrót: [polski wzorzec, tłumaczenie]}
+  var LIVE = {};
+  window.PWC_I18N_ADD = function (m) {
+    if (!D || !m) return;
+    var added = false;
+    Object.keys(m).forEach(function (h) {
+      var e = m[h];
+      if (!e || LIVE[h] || typeof e[0] !== 'string' || typeof e[1] !== 'string') return;
+      LIVE[h] = 1; D[e[0]] = e[1]; delete MISS[e[0]]; added = true;
+    });
+    if (added) setTimeout(function () { walk(document.body); }, 0);
+  };
   function start() {
     init();
     if (!D) return;

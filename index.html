@@ -12,8 +12,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=8ab1650a"></script>
-<script src="i18n_core.js?v=01ba6920"></script>
+<script src="i18n.js?v=e4c6d9ff"></script>
+<script src="i18n_core.js?v=88e851c0"></script>
 <style>
   :root {
     --bg: #0c1411; --bg2: #101a16; --card: #13201b; --card2: #172720; --line: #22362d; --line2: #2c4439;
@@ -543,9 +543,11 @@ function clockTxt(s) {
 }
 function gapTxt(g) {
   if (!g) return '—';
-  var t = g.trend == null ? '' : ' (' + (g.trend > 0 ? '+' : '−') + n1(Math.abs(g.trend)) + '/okr.)';
+  var t = g.trend == null ? '' : ' ' + TR('(' + (g.trend > 0 ? '+' : '−') + n1(Math.abs(g.trend)) + '/okr.)');
   return esc(g.name) + ' ' + n1(Math.abs(g.gap)) + ' s' + t;
 }
+function TR(s) { return window.PWC_T ? window.PWC_T(s) : s; }   // tłumaczenie kawałka tekstu przed sklejeniem
+function msgText(m) { return (m.tr && window.PWC_LANG && m.tr[window.PWC_LANG]) || m.text; }   // komunikat w języku strony
 function pill(el, txt, cls) { el.textContent = txt; el.className = 'pill ' + (cls || ''); }
 
 function render(v) {
@@ -559,6 +561,7 @@ function render(v) {
     $('obs-box').style.display = '';
   }
   var live = v.live, st = live ? live.state || {} : {};
+  if (st.tr && window.PWC_I18N_ADD) PWC_I18N_ADD(st.tr[window.PWC_LANG]);   // tłumaczenia tekstów auta od aplikacji
   if (!live) pill($('st-live'), 'brak danych z gry', 'warn');
   else if (v.age > 30) pill($('st-live'), 'dane sprzed ' + v.age + ' s', 'warn');
   else pill($('st-live'), 'na żywo', 'ok');
@@ -571,7 +574,8 @@ function render(v) {
   $('lap').textContent = st.laps_done != null ? (st.laps_done + 1) + (st.stint_laps != null ? ' (w stincie ' + st.stint_laps + ')' : '') : '—';
   $('laptimes').textContent = lapTxt(st.last_lap) + ' / ' + lapTxt(st.avg_lap);
   $('remain').textContent = clockTxt(st.time_remaining);
-  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : (st.phase === 'fcy' ? 'FCY / neutralizacja' : (st.phase === 'green' ? 'zielona' : (st.phase || '—')));
+  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : ({ fcy: 'FCY / neutralizacja', green: 'zielona', stopped: 'wyścig wstrzymany',
+    over: 'koniec sesji', paused: 'pauza', before: 'przed startem' }[st.phase] || st.phase || '—');
   $('ahead').innerHTML = gapTxt(st.ahead);
   $('behind').innerHTML = gapTxt(st.behind);
 
@@ -607,7 +611,7 @@ function render(v) {
               (d > 0 ? '+' : '−') + n1(Math.abs(d)) + '</span>';
     }
     var who = (r.drivers || []).filter(function (x) { return x.pace; });
-    var tip = who.map(function (x) { return x.name + ' ' + lapTxt(x.pace) + ' (' + x.laps + ' okr.)'; }).join('\n');
+    var tip = who.map(function (x) { return x.name + ' ' + lapTxt(x.pace) + ' ' + TR('(' + x.laps + ' okr.)'); }).join('\n');
     var catchTxt = r.catch ? (r.gap > 0 ? 'dogoni Cię za ~' : 'dogonisz za ~') + Math.round(r.catch) + ' okr.' : '—';
     var veTxt = r.ve == null ? '—' : Math.round(r.ve) + '%';
     if (r.ve != null && mine.ve != null && !r.me) {
@@ -652,7 +656,7 @@ function render(v) {
   }
   $('tyres').innerHTML = html;
   $('compound').textContent = st.compound || '—';
-  $('damage').textContent = st.damage ? ((st.damage_text || ('poziom ' + st.damage)) + (st.damage_loss != null ? ', strata ' + n1(st.damage_loss) + ' s/okr.' : ', mierzę stratę')) : (live ? 'brak' : '—');
+  $('damage').textContent = st.damage ? (TR(st.damage_text || ('poziom ' + st.damage)) + ', ' + TR(st.damage_loss != null ? 'strata ' + n1(st.damage_loss) + ' s/okr.' : 'mierzę stratę')) : (live ? 'brak' : '—');
 
   var en = st.engine || null;
   $('engine').textContent = en ? Math.round(en.water) + ' / ' + Math.round(en.oil) + ' °C' +
@@ -689,7 +693,7 @@ function render(v) {
   $('msgs').innerHTML = (v.msgs || []).map(function (m) {
     var d = new Date(m.t);
     var hh = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-    return '<div class="msg"><small>' + hh + ' · ' + esc(m.from) + ' · <span>' + esc(m.kind) + '</span>' + (m.delivered ? ' · <span>' + esc(m.delivered === 'tylko na ścianie' ? 'tylko na pit wallu' : m.delivered) + '</span>' : '') + '</small><br>' + esc(m.text) + '</div>';
+    return '<div class="msg"><small>' + hh + ' · ' + esc(m.from) + ' · <span>' + esc(m.kind) + '</span>' + (m.delivered ? ' · <span>' + esc(m.delivered === 'tylko na ścianie' ? 'tylko na pit wallu' : m.delivered) + '</span>' : '') + '</small><br>' + esc(msgText(m)) + '</div>';
   }).join('') || '<p class="note">Brak wiadomości.</p>';
 
   var sel = $('kto');
@@ -1262,8 +1266,8 @@ function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) 
   el.style.display = '';
   var h = '';
   if (st.pit_check) h += '<div>' + esc(st.pit_check) + '</div>';
-  if (pt) h += '<div>Zmierzone w wyścigu (stanie w boksie, energia ' + Math.round(pt.ve || 0) + '%): bez opon <b>' + pt['0'] + ' s</b>, 2 opony <b>' + pt['2'] +
-    ' s</b>, 4 opony <b>' + pt['4'] + ' s</b> <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
+  if (pt) h += '<div>' + esc(TR('Zmierzone w wyścigu (stanie w boksie, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
+    ' s, 4 opony ' + pt['4'] + ' s')) + ' <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
   if (el.innerHTML !== h) {
     el.innerHTML = h;
     var b = $('b-usepit');
@@ -1311,7 +1315,7 @@ $('b-wmeas').onclick = function () {
     }
     for (var k = 0; k < 4; k++) $('g-w' + k).value = String(Math.round(rates[k] * 100) / 100).replace('.', ',');
     var laps = smp.reduce(function (a, x) { return a + x.laps; }, 0), s0 = smp[0] || {};
-    $('gen-ok').textContent = 'Zużycie z pomiarów: ' + (s0.track || key) + (s0.car ? ', ' + s0.car : '') + ' – ' + smp.length + (smp.length === 1 ? ' stint, ' : (smp.length % 10 >= 2 && smp.length % 10 <= 4 && (smp.length % 100 < 12 || smp.length % 100 > 14) ? ' stinty, ' : ' stintów, ')) + laps + ' okr.' + nfTxt + '. Kliknij „Rozpisz plan”.';
+    $('gen-ok').textContent = 'Zużycie z pomiarów: ' + (s0.track || key) + (s0.car ? ', ' + s0.car : '') + ' – ' + smp.length + (smp.length === 1 ? ' stint, ' : (smp.length % 10 >= 2 && smp.length % 10 <= 4 && (smp.length % 100 < 12 || smp.length % 100 > 14) ? ' stinty, ' : ' stintów, ')) + laps + ' okr.' + nfTxt + (nfTxt ? '.' : '') + ' Kliknij „Rozpisz plan”.';
     refreshTimes();
   }).catch(function (e) { alert(authErr(e)); });
 };
@@ -1444,7 +1448,7 @@ function speakNew(list) {
     VOICE.seen[m.id] = 1;
     if (!VOICE.on || (m.t || 0) < VOICE.t0 || Date.now() - (m.t || 0) > 30000) return;
     if (m.kind === 'ostrzeżenie' || m.delivered === 'tylko na ścianie') return;
-    if (m.voice) say(m.text);
+    if (m.voice) say(msgText(m));
     else if (m.kind === 'wiadomość' && m.from !== $('kto').value) say((window.PWC_T ? window.PWC_T('Wiadomość od') : 'Wiadomość od') + ' ' + m.from + ': ' + m.text);
     else if (m.kind === 'odpowiedź') say(m.text);
   });
