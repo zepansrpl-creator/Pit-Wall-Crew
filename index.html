@@ -1490,7 +1490,7 @@ $('b-csv').onclick = function () {
 function drawMem(obj) {
   var rows = Object.keys(obj).map(function (k) { var r = obj[k]; r.id = k; return r; }).sort(function (a, b) { return (b.t || 0) - (a.t || 0); });
   $('mem').innerHTML = rows.map(function (r) {
-    return '<tr><td>' + esc(r.when || '') + '</td><td>' + esc(r.who) + '</td><td>' + esc(r.track || 'każdy') + '</td><td>' + esc(r.text) +
+    return '<tr><td>' + esc(r.when || '') + '</td><td>' + esc(r.who) + '</td><td>' + esc(r.track || 'każdy') + '</td><td>' + esc(msgText(r)) +
       '</td><td><button class="second" data-id="' + esc(r.id) + '" title="Usuń">×</button></td></tr>';
   }).join('') || '<tr><td colspan="5" class="note">Brak notatek.</td></tr>';
   $('mem').querySelectorAll('[data-id]').forEach(function (b) {
