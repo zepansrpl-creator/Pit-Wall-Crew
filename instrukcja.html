@@ -194,7 +194,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/wall_live.webp" alt="Pit wall – na żywo, z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy dane płyną na żywo, kto jedzie, czy działa AI.</li>
-    <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia, Pamięć, Pomoc.</li>
+    <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia (na górze <b>podsumowanie sesji</b>: najlepsze i średnie okrążenie, równość, paliwo i energia na okrążenie – dla każdego kierowcy i stintu), Pamięć, Pomoc.</li>
     <li><b>Wyścig</b>: pozycja w klasie, okrążenie, czasy, czas do mety, flaga.</li>
     <li><b>Następny postój</b>: za ile okrążeń, zużycie energii i paliwa, co zrobić na postoju.</li>
     <li><b>Opony i auto</b>: zużycie i temperatury każdej opony, uszkodzenia, silnik, hamulce.</li>
@@ -219,7 +219,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ol>
     <li><b>1. Wyścig</b>: data i godzina startu, długość, czas okrążenia, ile opon macie na wyścig → <b>Zapisz</b>.</li>
     <li><b>2. Plan stintów → Rozpisz plan automatycznie</b>: okrążenia w stincie, kolejność kierowców, zużycie opon
-      (przycisk <b>z pomiarów</b> wpisze zużycie zmierzone w Waszych sesjach), czasy postoju → <b>Rozpisz plan</b>.
+      (w polu <b>Pomiary</b> wybierz tor i auto oraz kierowcę – <b>Wczytaj</b> wpisze zużycie opon i czasy całego postoju zmierzone w Waszych sesjach), czasy postoju, <b>Opony na start zużyte (%)</b> – gdy startujecie na komplecie z kwalifikacji → <b>Rozpisz plan</b>.
       Program rozdzieli opony tak, żeby zużywały się jak najrówniej.</li>
     <li>W tabeli popraw, co trzeba: kierowca z listy, okrążenia, <b>Lewe / Prawe</b> = zmiana opon po tej stronie → <b>Zapisz plan</b>.
       Licznik pokaże, czy mieścicie się w oponach.</li>
@@ -267,12 +267,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>Każdy komunikat słychać dwa razy</td><td>Program działa podwójnie: zamknij aplikację, w Menedżerze zadań zakończ „pythonw”, uruchom raz.</td></tr>
     <tr><td>Nie przychodzą powiadomienia</td><td>Start wyścigu i kierowcy w planie, temat w ntfy, przycisk Test; u kogoś z zespołu działa aplikacja.</td></tr>
     <tr><td>Gra się przycina</td><td>Najczęściej brakuje pamięci karty graficznej: niższe tekstury, mniej widocznych aut i cieni, zamknij inne programy.</td></tr>
+    <tr><td>Inżynier nie odpowiada głosem, ostrzeżenie o folderze tymczasowym</td><td>Program uruchomiono z wnętrza zipa. Kliknij zip prawym przyciskiem → Wyodrębnij wszystkie… i uruchom INSTALL.bat z rozpakowanego folderu.</td></tr>
     <tr><td>Windows blokuje pliki</td><td>Przed rozpakowaniem: prawy przycisk na paczce → Właściwości → Odblokuj.</td></tr>
   </table>
   <h3>Zgłoś problem albo sugestię</h3>
   <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na pit wallu: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
   Za Twoją zgodą aplikacja może sama wysłać raport, gdy się zepsuje (bez nagrań głosu, kluczy i haseł) –
-  włączasz to i wyłączasz na tej samej stronie. Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
+  włączasz to i wyłączasz na tej samej stronie. Tam też wyłączysz <b>anonimowy licznik użytkowników</b> (losowy numer instalacji, wersja i język – bez imion i danych z gry). Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
   <img src="img/app_feedback.webp" alt="Zgłoś problem">
 </section>
 
