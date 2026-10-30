@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=ba03a085"></script>
+<script src="i18n.js?v=9dbc3b6e"></script>
 <script src="i18n_core.js?v=88e851c0"></script>
 <style>
   :root {
@@ -384,7 +384,9 @@
           <option value="side">jedna strona co stint (na zmianę)</option><option value="0">bez zmiany opon</option></select></label>
         <label>Noc od – do<span class="pair"><input id="g-n1" value="18:45"><input id="g-n2" value="03:15"></span></label>
         <label>Zużycie na okrążenie (%): LP / PP / LT / PT<span class="pair"><input id="g-w0" inputmode="decimal"><input id="g-w1" inputmode="decimal"><input id="g-w2" inputmode="decimal"><input id="g-w3" inputmode="decimal"></span></label>
-        <label>W nocy zużycie mniejsze o (%)<span class="pair"><input id="g-nw" inputmode="numeric" value="15"><button class="second mini" id="b-wmeas" type="button" title="Zużycie zmierzone przez programy kierowców na tym torze tym autem (zapisuje się samo, także w treningu)">z pomiarów</button></span></label>
+        <label>W nocy zużycie mniejsze o (%)<input id="g-nw" inputmode="numeric" value="15"></label>
+        <label>Opony na start zużyte (%)<input id="g-qw" inputmode="decimal" value="0" title="Komplet po kwalifikacjach bywa lekko zużyty – np. 3–5%. 0 = nowe opony na start"></label>
+        <label style="grid-column:span 2">Pomiary: tor i auto / kierowca<span class="pair"><select id="g-msrc" aria-label="Tor i auto" style="width:auto;flex:2 1 0;min-width:0"><option value="">–</option></select><select id="g-mdrv" aria-label="Kierowca" style="width:auto;flex:1 1 0;min-width:0"><option value="">wszyscy</option></select><button class="second mini" id="b-wmeas" type="button" title="Zużycie opon i czasy postoju zmierzone przez programy kierowców (zapisują się same, także w treningu)">Wczytaj</button></span></label>
         <label>Postój (s): bez opon / 2 opony / 4 opony<span class="pair"><input id="g-s0" inputmode="numeric" value="60"><input id="g-s2" inputmode="numeric" value="65"><input id="g-s4" inputmode="numeric" value="72"></span></label>
       </div>
       <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
@@ -454,6 +456,20 @@
 </div></div>
 
 <div id="v-laps" class="view"><div class="page">
+  <section id="sum-box" style="display:none">
+    <h2>Podsumowanie sesji <span class="note" id="sum-when"></span></h2>
+    <div class="btnrow" style="margin:0 0 8px"><select id="sum-sel" aria-label="Sesja"></select></div>
+    <p id="sum-head"></p>
+    <div class="scroll"><table>
+      <thead><tr><th>Kierowca</th><th>Okr.</th><th>Najlepsze</th><th>Średnie</th><th>Równość</th></tr></thead>
+      <tbody id="sum-drv"></tbody>
+    </table></div>
+    <div class="scroll" style="margin-top:12px"><table>
+      <thead><tr><th>Stint</th><th>Kierowca</th><th>Okr.</th><th>Najlepsze</th><th>Średnie</th><th>Równość</th><th>Paliwo / okr.</th><th>Energia % / okr.</th><th>Uwagi</th></tr></thead>
+      <tbody id="sum-st"></tbody>
+    </table></div>
+    <p class="note">Średnie i równość z czystych okrążeń: bez alei, FCY, nieważnych i wolniejszych o ponad 7% od najlepszego. Równość = typowe odchylenie od średniej.</p>
+  </section>
   <section>
     <h2>Okrążenia <span class="note" id="laps-n"></span></h2>
     <div class="btnrow" style="margin:0 0 8px"><button id="b-laps" class="second">Odśwież</button><button id="b-csv" class="second">Pobierz CSV</button></div>
@@ -930,6 +946,7 @@ function tab(v) {
   document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); });
   lsSet('tab', v);
   if (v === 'laps') loadLaps();
+  if (v === 'plan') loadMeas();
 }
 document.querySelectorAll('#tabs button').forEach(function (b) { b.onclick = function () { tab(b.dataset.v); }; });
 $('feed').onchange = function () { FEED = this.value; pickFeed(); };
@@ -1018,7 +1035,7 @@ function editSettings() {
   if (!$('g-order').value) $('g-order').value = ((s.drivers || []).map(function (d) { return d && d.name; }).filter(Boolean)).join(', ');
   for (var wk = 0; wk < 4; wk++) if (document.activeElement !== $('g-w' + wk) && !$('g-w' + wk).value)
     $('g-w' + wk).value = String((s.wear || [])[wk] || WEAR_DEF[wk]).replace('.', ',');
-  [['g-n1', 'nightFrom'], ['g-n2', 'nightTo'], ['g-s0', 'stopBase'], ['g-s2', 'stop2'], ['g-s4', 'stop4'], ['g-nw', 'nightWear']].forEach(function (x) {
+  [['g-n1', 'nightFrom'], ['g-n2', 'nightTo'], ['g-s0', 'stopBase'], ['g-s2', 'stop2'], ['g-s4', 'stop4'], ['g-nw', 'nightWear'], ['g-qw', 'startWear']].forEach(function (x) {
     if (s[x[1]] != null && document.activeElement !== $(x[0])) $(x[0]).value = s[x[1]];
   });
   if (!planRows().length) $('gen-box').open = true;
@@ -1065,16 +1082,18 @@ function wearRates() {
 }
 // Opony optymalnie: limit opon → ile zmian po każdej stronie i gdzie, żeby najbardziej zużyta opona była jak najmniej
 // zużyta (równo); tam, gdzie zużycie musi być największe – w nocy i po prawej stronie.
-function optimizeTyres(rows, budget, rates, nf) {
+function startWear() { var q = num(($('g-qw') || {}).value); return q > 0 && q < 60 ? q : 0; }   // komplet po kwalifikacjach
+function optimizeTyres(rows, budget, rates, nf, q0) {
   var st = rows.filter(function (r) { return !r._after; }), N = st.length;
   if (N < 2) return;
   var K = budget ? Math.max(0, Math.floor((budget - 4) / 2)) : N - 1;   // zmian jednej strony (po 2 opony)
   var side = [Math.max(rates[0], rates[2]), Math.max(rates[1], rates[3])];   // lewa / prawa: decyduje szybciej zużywana
   function wearOf(i, sd) { var r = st[i]; return (r._final ? r._lapsFin : r.laps) * side[sd] * (r._night ? nf : 1); }
-  function runW(a, b, sd) { var x = 0; for (var i = a; i <= b; i++) x += wearOf(i, sd); return x; }
+  var q = q0 || 0;   // opony na start już trochę zużyte (kwalifikacje): pierwszy odcinek każdej strony zaczyna od q
+  function runW(a, b, sd) { var x = a === 0 ? q : 0; for (var i = a; i <= b; i++) x += wearOf(i, sd); return x; }
   function changesFor(T, sd) {   // najmniej zmian, żeby żadna opona nie zużyła się bardziej niż T
-    var c = 0, cum = 0;
-    for (var i = 0; i < N; i++) { var w = wearOf(i, sd); if (w > T + 1e-9) return 1e9; if (cum + w > T + 1e-9) { c++; cum = w; } else cum += w; }
+    var c = 0, cum = q;
+    for (var i = 0; i < N; i++) { var w = wearOf(i, sd); if (w > T + 1e-9 || (i === 0 && q + w > T + 1e-9)) return 1e9; if (cum + w > T + 1e-9) { c++; cum = w; } else cum += w; }
     return c;
   }
   function bestMax(k, sd) {      // najmniejsze możliwe maksymalne zużycie przy k zmianach
@@ -1120,7 +1139,7 @@ function stopTimes() {
 // godziny, pora, meta i licznik opon – liczone z planu jak w arkuszu
 function planTimes(rows) {
   var s = S.settings || {}, lap = s.lapTime || 240, t = s.raceStartMs, end = t ? t + (s.raceHours || 24) * 3600000 : null;
-  var used = 4, fin = false, rates = wearRates(), nf = 1 - (num(($('g-nw') || {}).value) || 0) / 100, wear = [0, 0, 0, 0];
+  var used = 4, fin = false, rates = wearRates(), nf = 1 - (num(($('g-nw') || {}).value) || 0) / 100, q = startWear(), wear = [q, q, q, q];
   var budget = s.tyreBudget;
   rows.forEach(function (r) {
     r._after = fin; r._final = false; r._tread = null; r._left = null;
@@ -1229,6 +1248,7 @@ $('b-gen').onclick = function () {
   var n = Math.ceil(hours * 3600 / (laps * lap + st[0])) + 1, rows = [], nightK = 0, dayK = 0, sideK = 0;
   var NIGHT = [[1, 0], [0, 1], [1, 0], [0, 0], [1, 1]];
   var wr = wearRates(); sv.wear = wr; sv.nightWear = num($('g-nw').value) || 0; S.settings.wear = wr; S.settings.nightWear = sv.nightWear;
+  sv.startWear = startWear(); S.settings.startWear = sv.startWear;
   for (var i = 0; i < n; i++) rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: st[0], tyreL: false, tyreR: false });
   planTimes(rows);
   rows.forEach(function (r) {
@@ -1244,7 +1264,7 @@ $('b-gen').onclick = function () {
     }
     r.tyreL = L; r.tyreR = R;
   });
-  if (mode === 'opt') optimizeTyres(rows, s.tyreBudget, wr, 1 - sv.nightWear / 100);
+  if (mode === 'opt') optimizeTyres(rows, s.tyreBudget, wr, 1 - sv.nightWear / 100, sv.startWear);
   // limit opon: od końca wyścigu zmniejszamy zmiany (4 → 2 → 0), aż się zmieści
   var budget = s.tyreBudget, info = planTimes(rows), cut = 0;
   for (var k = rows.length - 1; budget && info.used > budget && k >= 0; k--) {
@@ -1266,8 +1286,8 @@ function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) 
   el.style.display = '';
   var h = '';
   if (st.pit_check) h += '<div>' + esc(st.pit_check) + '</div>';
-  if (pt) h += '<div>' + esc(TR('Zmierzone w wyścigu (stanie w boksie, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
-    ' s, 4 opony ' + pt['4'] + ' s')) + ' <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
+  if (pt) h += '<div>' + esc(TR('Zmierzony cały postój (stanie w boksie + aleja ok. ' + Math.round(pt.lane || 0) + ' s, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
+    ' s, 4 opony ' + pt['4'] + ' s. Grafik na żywo już z nich korzysta.')) + ' <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
   if (el.innerHTML !== h) {
     el.innerHTML = h;
     var b = $('b-usepit');
@@ -1288,22 +1308,65 @@ function wearKey(s) {
   s = String(s || '').replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, function (c) { return en[pl.indexOf(c)]; });
   return s.replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 50) || 'x';
 }
-// zużycie opon z pomiarów (programy kierowców zapisują je po każdym czystym okrążeniu, także w treningu)
-$('b-wmeas').onclick = function () {
-  T('wear').once('value').then(function (snap) {
-    var all = snap.val() || {}, st = (S.live || {}).state || {}, keys = Object.keys(all);
-    if (!keys.length) { alert('Nie ma jeszcze pomiarów zużycia opon. Program kierowcy zapisuje je sam po 3 czystych okrążeniach stintu (także w treningu) – pojeździjcie tym autem na tym torze.'); return; }
-    var want = st.track && st.car ? wearKey(st.track) + '__' + wearKey(st.car) : '';
-    var key = all[want] ? want : keys.sort(function (a, b) {
-      var la = Math.max.apply(null, Object.values(all[a]).map(function (x) { return x.t || 0; }));
-      var lb = Math.max.apply(null, Object.values(all[b]).map(function (x) { return x.t || 0; }));
-      return lb - la; })[0];
-    var smp = Object.values(all[key]).filter(function (x) { return x && x.rates && x.laps; });
-    var avg = function (list) {
-      var w = [0, 0, 0, 0], n = 0;
-      list.forEach(function (x) { for (var k = 0; k < 4; k++) w[k] += x.rates[k] * x.laps; n += x.laps; });
-      return n ? w.map(function (v) { return v / n; }) : null;
-    };
+// pomiary z programów kierowców: zużycie opon (po każdym czystym okrążeniu, także w treningu) i czasy postoju
+var MEAS = null;
+function measLatest(list) { return Math.max.apply(null, [0].concat(list.map(function (x) { return (x && x.t) || 0; }))); }
+function measOf(key, drv) {
+  var w = Object.values((MEAS.wear || {})[key] || {}).filter(function (x) { return x && x.rates && x.laps; });
+  var p = Object.values((MEAS.pit || {})[key] || {}).filter(function (x) { return x && (x.loss_s || x.stop_s); });
+  if (drv) {
+    w = w.filter(function (x) { return (x.driver || '') === drv; });
+    p = p.filter(function (x) { return (x.driver || '') === drv; });
+  }
+  return { wear: w, pit: p };
+}
+function measDrivers() {
+  var key = $('g-msrc').value, keep = $('g-mdrv').value, m = key ? measOf(key, '') : { wear: [], pit: [] }, names = {};
+  m.wear.concat(m.pit).forEach(function (x) { if (x.driver) names[x.driver] = 1; });
+  $('g-mdrv').innerHTML = '<option value="">' + esc(TR('wszyscy')) + '</option>' +
+    Object.keys(names).sort().map(function (n) { return '<option>' + esc(n) + '</option>'; }).join('');
+  if (names[keep]) $('g-mdrv').value = keep;
+}
+function loadMeas(cb) {
+  if (!T) return;
+  Promise.all([T('wear').once('value'), T('pitlog').once('value').catch(function () { return null; })]).then(function (r) {
+    MEAS = { wear: r[0].val() || {}, pit: (r[1] && r[1].val()) || {} };
+    var keys = Object.keys(MEAS.wear).concat(Object.keys(MEAS.pit)).filter(function (k, i, a) { return a.indexOf(k) === i; });
+    var info = keys.map(function (k) {
+      var m = measOf(k, ''), any = m.wear[0] || m.pit[0] || {};
+      return { k: k, t: measLatest(m.wear.concat(m.pit)), name: (any.track || k.split('__')[0]) + (any.car ? ', ' + any.car : ''), nw: m.wear.length, np: m.pit.length };
+    }).sort(function (a, b) { return b.t - a.t; });
+    var st = (S.live || {}).state || {}, want = st.track && st.car ? wearKey(st.track) + '__' + wearKey(st.car) : '', keep = $('g-msrc').value;
+    $('g-msrc').innerHTML = info.length ? info.map(function (x) {
+      return '<option value="' + esc(x.k) + '">' + esc(x.name) + ' (' + x.nw + ' ' + esc(TR('st.')) + ', ' + x.np + ' ' + esc(TR('post.')) + ')</option>'; }).join('')
+      : '<option value="">' + esc(TR('brak pomiarów')) + '</option>';
+    $('g-msrc').value = info.some(function (x) { return x.k === keep; }) ? keep : (info.some(function (x) { return x.k === want; }) ? want : (info[0] || {}).k || '');
+    measDrivers();
+    if (cb) cb();
+  }).catch(function (e) { alert(authErr(e)); });
+}
+$('g-msrc').onchange = measDrivers;
+function median(a) { a = a.slice().sort(function (x, y) { return x - y; }); return a.length ? (a.length % 2 ? a[(a.length - 1) / 2] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2) : null; }
+function pitFromMeas(list) {   // cały postój dla 0 / 2 / 4 opon: zmierzony z tyloma oponami, a gdy takiego nie było – oszacowany z innych
+  var out = {};
+  ['0', '2', '4'].forEach(function (n) {
+    var direct = list.filter(function (x) { return String(x.tyres) === n && x.loss_s; }).map(function (x) { return +x.loss_s; });
+    var est = list.filter(function (x) { return x.est && x.est[n]; }).map(function (x) { return +x.est[n]; });
+    var v = median(direct.length ? direct : est);
+    if (v) out[n] = Math.round(v);
+  });
+  return out;
+}
+function applyMeas() {
+  var key = $('g-msrc').value, drv = $('g-mdrv').value;
+  if (!key) { alert(TR('Nie ma jeszcze pomiarów. Program kierowcy zapisuje zużycie opon sam po 3 czystych okrążeniach stintu, a czas postoju po każdym postoju (także w treningu) – pojeździjcie tym autem na tym torze.')); return; }
+  var m = measOf(key, drv), parts = [], smp = m.wear;
+  var avg = function (list) {
+    var w = [0, 0, 0, 0], n = 0;
+    list.forEach(function (x) { for (var k = 0; k < 4; k++) w[k] += x.rates[k] * x.laps; n += x.laps; });
+    return n ? w.map(function (v) { return v / n; }) : null;
+  };
+  if (smp.length) {
     var temps = smp.map(function (x) { return x.temp; }).filter(function (x) { return x != null; });
     var lo = Math.min.apply(null, temps), hi = Math.max.apply(null, temps), nfTxt = '';
     var warm = temps.length && hi - lo >= 8 ? smp.filter(function (x) { return x.temp >= hi - 4; }) : smp;
@@ -1311,15 +1374,28 @@ $('b-wmeas').onclick = function () {
     if (temps.length && hi - lo >= 8) {   // chłodniejszy tor (noc): o ile mniejsze zużycie
       var cold = avg(smp.filter(function (x) { return x.temp != null && x.temp <= lo + 4; }));
       var f = cold ? 1 - (cold[0] + cold[1] + cold[2] + cold[3]) / (rates[0] + rates[1] + rates[2] + rates[3]) : 0;
-      if (f > 0 && f < 0.5) { $('g-nw').value = Math.round(f * 100); nfTxt = ', w chłodzie (' + Math.round(lo) + '°C) zużycie mniejsze o ' + Math.round(f * 100) + '%'; }
+      if (f > 0 && f < 0.5) { $('g-nw').value = Math.round(f * 100); nfTxt = TR('w chłodzie ({0}°C) zużycie mniejsze o {1}%').replace('{0}', Math.round(lo)).replace('{1}', Math.round(f * 100)); }
     }
     for (var k = 0; k < 4; k++) $('g-w' + k).value = String(Math.round(rates[k] * 100) / 100).replace('.', ',');
-    var laps = smp.reduce(function (a, x) { return a + x.laps; }, 0), s0 = smp[0] || {};
-    $('gen-ok').textContent = 'Zużycie z pomiarów: ' + (s0.track || key) + (s0.car ? ', ' + s0.car : '') + ' – ' + smp.length + (smp.length === 1 ? ' stint, ' : (smp.length % 10 >= 2 && smp.length % 10 <= 4 && (smp.length % 100 < 12 || smp.length % 100 > 14) ? ' stinty, ' : ' stintów, ')) + laps + ' okr.' + nfTxt + (nfTxt ? '.' : '') + ' Kliknij „Rozpisz plan”.';
-    refreshTimes();
-  }).catch(function (e) { alert(authErr(e)); });
-};
-['g-w0', 'g-w1', 'g-w2', 'g-w3', 'g-nw'].forEach(function (id) { $(id).addEventListener('input', function () { refreshTimes(); }); });
+    var laps = smp.reduce(function (a, x) { return a + x.laps; }, 0);
+    parts.push(TR('zużycie opon: {0} st., {1} okr.').replace('{0}', smp.length).replace('{1}', laps) + (nfTxt ? ', ' + nfTxt : ''));
+  }
+  var pt = pitFromMeas(m.pit);
+  if (pt['0'] || pt['2'] || pt['4']) {
+    if (pt['0']) $('g-s0').value = pt['0'];
+    if (pt['2']) $('g-s2').value = pt['2'];
+    if (pt['4']) $('g-s4').value = pt['4'];
+    parts.push(TR('cały postój: bez opon {0} s, 2 opony {1} s, 4 opony {2} s ({3} post.)').replace('{0}', pt['0'] || '—').replace('{1}', pt['2'] || '—')
+      .replace('{2}', pt['4'] || '—').replace('{3}', m.pit.length));
+  }
+  var src = $('g-msrc').selectedOptions[0], name = src ? src.textContent.replace(/\s*\(.*$/, '') : key;
+  $('gen-ok').textContent = parts.length ? TR('Z pomiarów') + ' – ' + name + (drv ? ' (' + drv + ')' : '') + ': ' + parts.join('; ') + '. ' + TR('Kliknij „Rozpisz plan”.')
+    : TR('Brak pomiarów dla tego wyboru.');
+  refreshTimes();
+}
+$('b-wmeas').onclick = function () { if (MEAS) applyMeas(); else loadMeas(applyMeas); };
+$('g-msrc').addEventListener('focus', function () { if (!MEAS) loadMeas(); });
+['g-w0', 'g-w1', 'g-w2', 'g-w3', 'g-nw', 'g-qw'].forEach(function (id) { $(id).addEventListener('input', function () { refreshTimes(); }); });
 $('b-addrow').onclick = function () {
   var rows = rowsFromTable(), last = rows[rows.length - 1] || { laps: 11, stopS: 60 };
   rows.push({ n: rows.length + 1, laps: last.laps, offsetMin: 0, driver: '', stopS: stopTimes()[0], tyreL: false, tyreR: false });
@@ -1471,11 +1547,94 @@ function loadLaps() {
     $('laps').innerHTML = LAPS.slice().reverse().map(function (l) {
       return '<tr><td>' + esc(l.stint) + '</td><td>' + esc(l.lap) + '</td><td>' + esc(l.who) + '</td><td>' + esc(l.time_txt || lapTxt(l.time)) +
         '</td><td>' + n1(l.fuel) + '</td><td>' + esc(l.ve) + '</td><td>' + esc(l.wet) + '</td><td>' + esc(l.track_temp) +
-        '</td><td>' + esc(l.compound) + '</td><td class="note">' + esc(l.notes) + '</td></tr>';
+        '</td><td>' + esc(l.compound) + '</td><td class="note">' + esc(lapNotes(l).split(', ').map(TR).join(', ')) + '</td></tr>';
     }).join('') || '<tr><td colspan="10" class="note">Brak okrążeń.</td></tr>';
+    drawSummary();
   }).catch(function (e) { $('laps').innerHTML = '<tr><td colspan="10" class="err">' + esc(authErr(e)) + '</td></tr>'; });
 }
 $('b-laps').onclick = loadLaps;
+
+// ------------------------------------------------------------------ podsumowanie sesji (z okrążeń)
+var SESSION_GAP_MS = 45 * 60e3;     // przerwa dłuższa niż 45 min = nowa sesja
+function lapNotes(l) { return String(l.notes || ''); }
+function lapClean(l) { return l.time > 0 && !/aleja|FCY|nieważne/.test(lapNotes(l)); }
+function lapStats(list, best) {
+  var all = list.filter(function (l) { return l.time > 0; });
+  var clean = list.filter(function (l) { return lapClean(l) && (!best || l.time <= best * 1.07); });
+  var b = all.reduce(function (m, l) { return lapClean(l) && (m == null || l.time < m) ? l.time : m; }, null);
+  var avg = clean.length ? clean.reduce(function (a, l) { return a + l.time; }, 0) / clean.length : null;
+  var sd = clean.length > 2 ? Math.sqrt(clean.reduce(function (a, l) { return a + (l.time - avg) * (l.time - avg); }, 0) / (clean.length - 1)) : null;
+  var avgOf = function (k) { var v = clean.filter(function (l) { return l[k] !== '' && l[k] != null && Number(l[k]) > 0; });
+    return v.length ? v.reduce(function (a, l) { return a + Number(l[k]); }, 0) / v.length : null; };
+  var off = 0, bad = 0, hit = 0;
+  list.forEach(function (l) { var n = lapNotes(l), m = n.match(/poza torem x(\d+)/);
+    if (m) off += +m[1]; if (/nieważne/.test(n)) bad++; if (/uderzenie/.test(n)) hit++; });
+  return { laps: list.length, clean: clean.length, best: b, avg: avg, sd: sd, fuel: avgOf('fuel'), ve: avgOf('ve'), off: off, bad: bad, hit: hit };
+}
+function lapSummary(laps) {
+  var ls = laps.filter(function (l) { return l && l.t; }).slice().sort(function (a, b) { return a.t - b.t; });
+  var sessions = [], cur = null;
+  ls.forEach(function (l) {
+    if (!cur || l.t - cur.end > SESSION_GAP_MS) { cur = { start: l.t, end: l.t, laps: [] }; sessions.push(cur); }
+    cur.laps.push(l); cur.end = l.t;
+  });
+  sessions.forEach(function (s) {
+    var best = lapStats(s.laps).best;
+    s.total = lapStats(s.laps, best);
+    s.bestLap = s.laps.filter(function (l) { return lapClean(l) && l.time === best; })[0] || null;
+    var byDrv = {}, bySt = {}, order = [];
+    s.laps.forEach(function (l) {
+      (byDrv[l.who || '?'] = byDrv[l.who || '?'] || []).push(l);
+      var k = (l.stint == null ? '?' : l.stint) + '|' + (l.who || '?');
+      if (!bySt[k]) { bySt[k] = []; order.push(k); }
+      bySt[k].push(l);
+    });
+    s.drivers = Object.keys(byDrv).map(function (w) { var x = lapStats(byDrv[w], best); x.who = w; return x; })
+      .sort(function (a, b) { return (a.best || 1e9) - (b.best || 1e9); });
+    s.stints = order.map(function (k) { var x = lapStats(bySt[k], best); x.stint = bySt[k][0].stint; x.who = bySt[k][0].who || '?'; return x; })
+      .sort(function (a, b) { return (a.stint || 0) - (b.stint || 0); });
+  });
+  return sessions.reverse();       // najnowsza pierwsza
+}
+function sdTxt(x) { return x == null ? '—' : '± ' + x.toFixed(2).replace('.', ',') + ' s'; }
+function whenTxt(t) {
+  var d = new Date(t), p = function (n) { return (n < 10 ? '0' : '') + n; };
+  return p(d.getDate()) + '.' + p(d.getMonth() + 1) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+var SUMS = [];
+function drawSummary() {
+  SUMS = lapSummary(LAPS);
+  $('sum-box').style.display = SUMS.length ? '' : 'none';
+  if (!SUMS.length) return;
+  var sel = $('sum-sel'), keep = sel.value;
+  sel.innerHTML = SUMS.map(function (s, i) { return '<option value="' + i + '">' + esc(whenTxt(s.start) + ' – ' + whenTxt(s.end).slice(-5)) +
+    ' · ' + s.laps.length + ' ' + esc(TR('okr.')) + '</option>'; }).join('');
+  sel.value = keep && +keep < SUMS.length ? keep : '0';
+  drawSession();
+}
+function drawSession() {
+  var s = SUMS[+$('sum-sel').value || 0];
+  if (!s) return;
+  var mins = Math.round((s.end - s.start) / 60e3);
+  $('sum-when').textContent = '(' + whenTxt(s.start) + ')';
+  $('sum-head').innerHTML = esc(TR('Okrążenia')) + ': <b>' + s.laps.length + '</b> · ' + esc(TR('czas')) + ': <b>' + esc(clockTxt(mins * 60)) + '</b>' +
+    (s.bestLap ? ' · ' + esc(TR('najlepsze')) + ': <b>' + esc(lapTxt(s.bestLap.time)) + '</b> (' + esc(s.bestLap.who || '?') + ', ' + esc(TR('stint')) + ' ' + esc(s.bestLap.stint) + ')' : '') +
+    (s.total.fuel ? ' · ' + esc(TR('paliwo / okr.')) + ': <b>' + n1(s.total.fuel) + ' l</b>' : '') +
+    (s.total.ve ? ' · ' + esc(TR('energia / okr.')) + ': <b>' + n1(s.total.ve) + '%</b>' : '');
+  $('sum-drv').innerHTML = s.drivers.map(function (d) {
+    return '<tr><td>' + esc(d.who) + '</td><td>' + d.laps + '</td><td>' + esc(lapTxt(d.best)) + '</td><td>' + esc(lapTxt(d.avg)) + '</td><td>' + esc(sdTxt(d.sd)) + '</td></tr>';
+  }).join('');
+  $('sum-st').innerHTML = s.stints.map(function (x) {
+    var notes = [];
+    if (x.off) notes.push(TR('poza torem') + ' ×' + x.off);
+    if (x.bad) notes.push(TR('nieważne') + ' ×' + x.bad);
+    if (x.hit) notes.push(TR('uderzenie') + ' ×' + x.hit);
+    return '<tr><td>' + esc(x.stint == null ? '—' : x.stint) + '</td><td>' + esc(x.who) + '</td><td>' + x.laps + '</td><td>' + esc(lapTxt(x.best)) +
+      '</td><td>' + esc(lapTxt(x.avg)) + '</td><td>' + esc(sdTxt(x.sd)) + '</td><td>' + (x.fuel ? n1(x.fuel) + ' l' : '—') + '</td><td>' + (x.ve ? n1(x.ve) : '—') +
+      '</td><td class="note">' + esc(notes.join(', ')) + '</td></tr>';
+  }).join('');
+}
+$('sum-sel').onchange = drawSession;
 $('b-csv').onclick = function () {
   var cols = ['stint', 'lap', 'who', 'time', 'time_txt', 'fuel', 've', 'wet', 'track_temp', 'compound', 'notes'];
   var csv = cols.join(';') + '\n' + LAPS.map(function (l) {
@@ -1611,6 +1770,10 @@ $('b-fb').onclick = function () {
   $('b-fb').disabled = true; $('fb-st').textContent = 'Wysyłam…';
   firebase.database().ref('feedback').push(rec).then(function () {
     $('fb-text').value = ''; $('fb-st').textContent = 'Dziękuję! Zgłoszenie wysłane.';
+    try {   // powiadomienie autora na telefon (bez kontaktu)
+      if (FB_CONFIG && FB_CONFIG.updateUrl) fetch(FB_CONFIG.updateUrl.replace(/\/$/, '') + '/report', { method: 'POST',
+        body: JSON.stringify({ kind: kind, text: rec.text.slice(0, 400), lang: rec.lang.slice(0, 2), from: 'pit wall' }) }).catch(function () {});
+    } catch (e) {}
   }).catch(function (e) { $('fb-st').textContent = 'Nie udało się wysłać: ' + (e && e.message || e); })
     .then(function () { $('b-fb').disabled = false; });
 };

@@ -189,7 +189,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/fr/wall_live.webp" alt="Mur des stands – en direct, avec numéros">
   <ol class="legend">
     <li><b>État</b> : les données sont-elles en direct, qui conduit, l'IA fonctionne-t-elle.</li>
-    <li><b>Onglets</b> : En direct, Planning &amp; plan, Équipe, Tours, Mémoire, Aide.</li>
+    <li><b>Onglets</b> : En direct, Planning &amp; plan, Équipe, Tours (en haut un <b>résumé de la session</b> : meilleur tour et tour moyen, régularité, carburant et énergie par tour – pour chaque pilote et relais), Mémoire, Aide.</li>
     <li><b>Course</b> : position dans la catégorie, tour, chronos, temps jusqu'à l'arrivée, drapeau.</li>
     <li><b>Prochain arrêt</b> : dans combien de tours, consommation d'énergie et de carburant, ce qu'on fait à l'arrêt.</li>
     <li><b>Pneus et voiture</b> : usure et températures de chaque pneu, dégâts, moteur, freins.</li>
@@ -214,7 +214,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ol>
     <li><b>1. Course</b> : date et heure du départ, durée, temps au tour, pneus pour la course → <b>Enregistrer</b>.</li>
     <li><b>2. Plan des relais → Générer le plan automatiquement</b> : tours par relais, ordre des pilotes, usure des pneus
-      (<b>des mesures</b> remplit l'usure mesurée pendant vos sessions), temps d'arrêt → <b>Générer le plan</b>.
+      (dans <b>Mesures</b>, choisis le circuit et la voiture et le pilote – <b>Charger</b> remplit l'usure et les temps d'arrêt complet mesurés pendant vos sessions), temps d'arrêt, <b>Pneus usés au départ (%)</b> – si vous partez sur le train des qualifications → <b>Générer le plan</b>.
       Le programme répartit les pneus pour qu'ils s'usent le plus régulièrement possible.</li>
     <li>Ajuste le tableau si besoin : pilote dans la liste, tours, <b>Gauche / Droite</b> = changer les pneus de ce côté → <b>Enregistrer le plan</b>.
       Le compteur indique si vous restez dans l'allocation de pneus.</li>
@@ -262,12 +262,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>Chaque message s'entend deux fois</td><td>Le programme tourne deux fois : ferme l'appli, termine « pythonw » dans le Gestionnaire des tâches, relance une fois.</td></tr>
     <tr><td>Pas de notifications</td><td>Départ et pilotes dans le plan, sujet dans ntfy, bouton Test ; l'appli tourne sur le PC de quelqu'un.</td></tr>
     <tr><td>Le jeu saccade</td><td>Souvent pas assez de mémoire graphique : baisse les textures, les voitures visibles et les ombres, ferme les autres programmes.</td></tr>
+    <tr><td>L'ingénieur ne répond pas à voix haute, avertissement sur un dossier temporaire</td><td>Le programme a été lancé depuis l'intérieur du zip. Clic droit sur le zip → Extraire tout… et lance INSTALL.bat depuis le dossier extrait.</td></tr>
     <tr><td>Windows bloque des fichiers</td><td>Avant de décompresser : clic droit sur le paquet → Propriétés → Débloquer.</td></tr>
   </table>
   <h3>Signaler un problème ou une suggestion</h3>
   <p>Dans l'appli : <b>Aide → Signaler un problème</b>, sur le mur des stands : l'onglet <b>Aide</b>. Ça va directement à l'auteur.
   Avec ton accord, l'appli peut envoyer automatiquement un rapport en cas de plantage (sans voix, clés ni mots de passe) –
-  tu l'actives ou le désactives sur la même page. Détails : <a href="prywatnosc.html?lang=fr">Confidentialité</a>.</p>
+  tu l'actives ou le désactives sur la même page. Là aussi, tu peux couper le <b>compteur anonyme d'utilisateurs</b> (numéro d'installation aléatoire, version et langue – ni noms ni données du jeu). Détails : <a href="prywatnosc.html?lang=fr">Confidentialité</a>.</p>
   <img src="img/fr/app_feedback.webp" alt="Signaler un problème">
 </section>
 

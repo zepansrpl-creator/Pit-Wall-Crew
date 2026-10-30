@@ -189,7 +189,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/en/wall_live.webp" alt="Pit wall – live, with numbers">
   <ol class="legend">
     <li><b>Status</b>: whether data is live, who is driving, whether the AI works.</li>
-    <li><b>Tabs</b>: Live, Schedule &amp; plan, Team, Laps, Memory, Help.</li>
+    <li><b>Tabs</b>: Live, Schedule &amp; plan, Team, Laps (at the top a <b>session summary</b>: best and average lap, consistency, fuel and energy per lap – for each driver and stint), Memory, Help.</li>
     <li><b>Race</b>: class position, lap, lap times, time to the finish, flag.</li>
     <li><b>Next pit stop</b>: in how many laps, energy and fuel use, what to do at the stop.</li>
     <li><b>Tyres and car</b>: wear and temperatures of each tyre, damage, engine, brakes.</li>
@@ -214,7 +214,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ol>
     <li><b>1. Race</b>: start date and time, length, lap time, tyres for the race → <b>Save</b>.</li>
     <li><b>2. Stint plan → Generate plan automatically</b>: laps per stint, driver order, tyre wear
-      (<b>from measurements</b> fills in the wear measured in your sessions), stop times → <b>Generate plan</b>.
+      (in <b>Measurements</b> pick the track and car and the driver – <b>Load</b> fills in the tyre wear and whole-stop times measured in your sessions), stop times, <b>Tyres used at the start (%)</b> – when you start on the qualifying set → <b>Generate plan</b>.
       The program spreads the tyres so they wear as evenly as possible.</li>
     <li>Adjust the table if needed: driver from the list, laps, <b>Left / Right</b> = change the tyres on that side → <b>Save plan</b>.
       The counter shows whether you stay within the tyre allocation.</li>
@@ -262,12 +262,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>Every message is heard twice</td><td>The program runs twice: close the app, end “pythonw” in Task Manager, start it once.</td></tr>
     <tr><td>No notifications</td><td>Race start and drivers in the plan, topic in ntfy, Test button; the app running on someone's PC.</td></tr>
     <tr><td>The game stutters</td><td>Usually not enough graphics memory: lower textures, fewer visible cars and shadows, close other programs.</td></tr>
+    <tr><td>The engineer doesn't answer by voice, warning about a temporary folder</td><td>The program was started from inside the zip. Right-click the zip → Extract All… and run INSTALL.bat from the extracted folder.</td></tr>
     <tr><td>Windows blocks files</td><td>Before unpacking: right-click the package → Properties → Unblock.</td></tr>
   </table>
   <h3>Report a problem or a suggestion</h3>
   <p>In the app: <b>Help → Report a problem</b>, on the pit wall: the <b>Help</b> tab. It goes straight to the author.
   With your consent the app can automatically send a report when it crashes (no voice recordings, keys or passwords) –
-  you switch this on or off on the same page. Details: <a href="prywatnosc.html?lang=en">Privacy</a>.</p>
+  you switch this on or off on the same page. There you can also turn off the <b>anonymous user counter</b> (a random installation number, version and language – no names or game data). Details: <a href="prywatnosc.html?lang=en">Privacy</a>.</p>
   <img src="img/en/app_feedback.webp" alt="Report a problem">
 </section>
 

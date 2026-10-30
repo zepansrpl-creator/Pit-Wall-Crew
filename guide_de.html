@@ -189,7 +189,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/de/wall_live.webp" alt="Boxenmauer – live, mit Nummern">
   <ol class="legend">
     <li><b>Status</b>: ob die Daten live sind, wer fährt, ob die KI funktioniert.</li>
-    <li><b>Tabs</b>: Live, Zeitplan &amp; Plan, Team, Runden, Gedächtnis, Hilfe.</li>
+    <li><b>Tabs</b>: Live, Zeitplan &amp; Plan, Team, Runden (oben eine <b>Sitzungsübersicht</b>: beste und durchschnittliche Runde, Konstanz, Kraftstoff und Energie pro Runde – für jeden Fahrer und Stint), Gedächtnis, Hilfe.</li>
     <li><b>Rennen</b>: Position in der Klasse, Runde, Rundenzeiten, Zeit bis ins Ziel, Flagge.</li>
     <li><b>Nächster Boxenstopp</b>: in wie vielen Runden, Energie- und Kraftstoffverbrauch, was beim Stopp passiert.</li>
     <li><b>Reifen und Auto</b>: Verschleiß und Temperaturen jedes Reifens, Schäden, Motor, Bremsen.</li>
@@ -214,7 +214,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ol>
     <li><b>1. Rennen</b>: Startdatum und -uhrzeit, Dauer, Rundenzeit, Reifen fürs Rennen → <b>Speichern</b>.</li>
     <li><b>2. Stintplan → Plan automatisch erstellen</b>: Runden pro Stint, Fahrerreihenfolge, Reifenverschleiß
-      (<b>aus Messungen</b> trägt den in euren Sessions gemessenen Verschleiß ein), Stoppzeiten → <b>Plan erstellen</b>.
+      (unter <b>Messungen</b> Strecke und Auto sowie Fahrer wählen – <b>Laden</b> trägt den in euren Sessions gemessenen Verschleiß und die Zeiten des ganzen Stopps ein), Stoppzeiten, <b>Reifen beim Start abgenutzt (%)</b> – wenn ihr auf dem Qualifying-Satz startet → <b>Plan erstellen</b>.
       Das Programm verteilt die Reifen so, dass sie möglichst gleichmäßig verschleißen.</li>
     <li>Tabelle bei Bedarf anpassen: Fahrer aus der Liste, Runden, <b>Links / Rechts</b> = Reifen auf dieser Seite wechseln → <b>Plan speichern</b>.
       Der Zähler zeigt, ob ihr im Reifenkontingent bleibt.</li>
@@ -262,12 +262,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>Jede Meldung ist doppelt zu hören</td><td>Das Programm läuft zweimal: App schließen, „pythonw“ im Task-Manager beenden, einmal starten.</td></tr>
     <tr><td>Keine Benachrichtigungen</td><td>Rennstart und Fahrer im Plan, Thema in ntfy, Test-Taste; die App läuft auf jemandes PC.</td></tr>
     <tr><td>Das Spiel ruckelt</td><td>Meist zu wenig Grafikspeicher: Texturen, sichtbare Autos und Schatten reduzieren, andere Programme schließen.</td></tr>
+    <tr><td>Der Ingenieur antwortet nicht per Stimme, Warnung zum temporären Ordner</td><td>Das Programm wurde aus dem Zip heraus gestartet. Rechtsklick aufs Zip → Alle extrahieren… und INSTALL.bat aus dem entpackten Ordner starten.</td></tr>
     <tr><td>Windows blockiert Dateien</td><td>Vor dem Entpacken: Rechtsklick aufs Paket → Eigenschaften → Zulassen.</td></tr>
   </table>
   <h3>Problem oder Vorschlag melden</h3>
   <p>In der App: <b>Hilfe → Problem melden</b>, auf der Boxenmauer: Tab <b>Hilfe</b>. Das geht direkt an den Autor.
   Mit deiner Zustimmung kann die App bei einem Absturz automatisch einen Bericht senden (ohne Sprachaufnahmen, Schlüssel und Passwörter) –
-  das schaltest du auf derselben Seite ein oder aus. Details: <a href="prywatnosc.html?lang=de">Datenschutz</a>.</p>
+  das schaltest du auf derselben Seite ein oder aus. Dort schaltest du auch den <b>anonymen Nutzerzähler</b> ab (zufällige Installationsnummer, Version und Sprache – keine Namen und Spieldaten). Details: <a href="prywatnosc.html?lang=de">Datenschutz</a>.</p>
   <img src="img/de/app_feedback.webp" alt="Problem melden">
 </section>
 
