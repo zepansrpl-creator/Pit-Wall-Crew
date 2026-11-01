@@ -468,7 +468,7 @@
       <thead><tr><th>Stint</th><th>Kierowca</th><th>Okr.</th><th>Najlepsze</th><th>Średnie</th><th>Równość</th><th>Paliwo / okr.</th><th>Energia % / okr.</th><th>Uwagi</th></tr></thead>
       <tbody id="sum-st"></tbody>
     </table></div>
-    <p class="note">Średnie i równość z czystych okrążeń: bez alei, FCY, nieważnych i wolniejszych o ponad 7% od najlepszego. Równość = typowe odchylenie od średniej.</p>
+    <p class="note">Średnie i równość z czystych okrążeń: bez alei, safety cara, nieważnych i wolniejszych o ponad 7% od najlepszego. Równość = typowe odchylenie od średniej.</p>
   </section>
   <section>
     <h2>Okrążenia <span class="note" id="laps-n"></span></h2>
@@ -590,7 +590,7 @@ function render(v) {
   $('lap').textContent = st.laps_done != null ? (st.laps_done + 1) + (st.stint_laps != null ? ' (w stincie ' + st.stint_laps + ')' : '') : '—';
   $('laptimes').textContent = lapTxt(st.last_lap) + ' / ' + lapTxt(st.avg_lap);
   $('remain').textContent = clockTxt(st.time_remaining);
-  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : ({ fcy: 'FCY / neutralizacja', green: 'zielona', stopped: 'wyścig wstrzymany',
+  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : ({ fcy: 'safety car', green: 'zielona', stopped: 'wyścig wstrzymany',
     over: 'koniec sesji', paused: 'pauza', before: 'przed startem' }[st.phase] || st.phase || '—');
   $('ahead').innerHTML = gapTxt(st.ahead);
   $('behind').innerHTML = gapTxt(st.behind);
@@ -1557,7 +1557,7 @@ $('b-laps').onclick = loadLaps;
 // ------------------------------------------------------------------ podsumowanie sesji (z okrążeń)
 var SESSION_GAP_MS = 45 * 60e3;     // przerwa dłuższa niż 45 min = nowa sesja
 function lapNotes(l) { return String(l.notes || ''); }
-function lapClean(l) { return l.time > 0 && !/aleja|FCY|nieważne/.test(lapNotes(l)); }
+function lapClean(l) { return l.time > 0 && !/aleja|FCY|SC|nieważne/.test(lapNotes(l)); }
 function lapStats(list, best) {
   var all = list.filter(function (l) { return l.time > 0; });
   var clean = list.filter(function (l) { return lapClean(l) && (!best || l.time <= best * 1.07); });

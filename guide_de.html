@@ -131,6 +131,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Stimme, Sprechtempo, Lautstärke, Funkeffekt, Sprache und Name des Ingenieurs. <b>▶ Anhören</b> spielt ein Beispiel.</li>
     <li>Gibst du ihm einen Namen (z. B. Markus), stellt er sich vor, und „Markus, ruhig“ schaltet ihn stumm.</li>
+    <li><b>Stimme des Spotters</b> – eigene Stimme für dringende Meldungen zur Strecke (Auto daneben, Flaggen, Unfälle, Überrundungen); „wie der Ingenieur“ = eine Stimme. <b>▶ Spotter anhören</b> spielt ein Beispiel.</li>
   </ul>
   <h3>Warnungen</h3>
   <img src="img/de/app_alerts.webp" alt="Warnungen">
@@ -139,7 +140,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   Alles lässt sich während der Fahrt per Stimme ein- und ausschalten (z. B. „kein Coach“).</p>
   <h3>Erweitert</h3>
   <img src="img/de/app_adv.webp" alt="Erweitert">
-  <p>Zeit für den kompletten Reifenwechsel, automatischer Start des Ingenieurs, Desktop-Verknüpfungen, Updates und dein eigener Groq-Schlüssel (optional – eigenes Limit).</p>
+  <p>Zeit für den kompletten Reifenwechsel, automatischer Start des Ingenieurs, Desktop-Verknüpfungen, Updates und dein eigener Groq-Schlüssel (optional – eigenes Limit).
+  <b>LMU-Setup-Ordner</b> – meist leer (das Programm findet den Spielordner selbst); dorthin schreibt „Setup speichern“ das neue Setup.</p>
 </section>
 
 <section id="talk">
@@ -149,7 +151,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   „Wetter?“, „wann überrundet mich das erste Hypercar?“, „ruhig“ (völlige Stille bis zum nächsten Druck), „nur Dringendes“, „wiederhol“.</p>
   <p>Die vollständige Liste steht in der App: <b>Hilfe → Befehle</b>.</p>
   <img src="img/de/app_commands.webp" alt="Befehle">
-  <p>Eine Frage, die das Programm nicht kennt, geht zusammen mit den Renndaten an die KI (mit Groq-Schlüssel).</p>
+  <p>Eine Frage, die das Programm nicht kennt, geht zusammen mit den Renndaten an die KI (mit Groq-Schlüssel). Fragen zum Programm selbst
+  („wie bringe ich den Spotter zum Schweigen?“) beantwortet die KI anhand dieser Anleitung.</p>
+  <ul>
+    <li><b>Spotter</b> (Einstellungen → Warnungen): „Auto links“, „Rechts Hypercar“, „Three wide“ und auf welcher Seite die Autos sind, „Frei“; „nur meine Klasse“ möglich; schweigt in der Boxengasse. Per Stimme: „Spotter aus“ / „Spotter an“.</li>
+    <li><b>Kurze Drücke auf die Taste ohne zu sprechen:</b> 1 – stoppen, 2 – kurzer Stand (Stopp, Kraftstoff oder Energie, Abstände), 3 – wiederholen, 4 – vorherige Meldung. Per Stimme: „wiederhol“, „vorherige Nachricht“.</li>
+    <li><b>Boxenmenü per Stimme:</b> „beim Stopp Energie 60 Prozent und rechte Reifen“, „Boxenstopp nach Strategie einstellen“. Ein Teamkollege kann das über die Boxenmauer tun: „Ingenieur fragen“.</li>
+    <li><b>Setup:</b> „Vorschläge zusammenfassen“ – alle vorgeschlagenen Änderungen auf einmal; „Setup speichern“ – neue Datei „PWC_…“ mit diesen Änderungen im Streckenordner (Original unverändert), in der Garage laden.</li>
+  </ul>
 </section>
 
 <section id="ai">

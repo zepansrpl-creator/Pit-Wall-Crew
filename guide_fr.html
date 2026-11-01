@@ -131,6 +131,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Voix, débit, volume, effet radio, langue et prénom de l'ingénieur. <b>▶ Écouter</b> joue un exemple.</li>
     <li>Si tu lui donnes un prénom (par ex. Marc), il se présente et « Marc, silence » le fait taire.</li>
+    <li><b>Voix du spotter</b> – une voix à part pour les messages urgents sur la piste (voiture à côté, drapeaux, incidents, prises de tour) ; « comme l'ingénieur » = une seule voix. <b>▶ Écouter le spotter</b> joue un exemple.</li>
   </ul>
   <h3>Alertes</h3>
   <img src="img/fr/app_alerts.webp" alt="Alertes">
@@ -139,7 +140,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   Tout s'active et se désactive à la voix en roulant (par ex. « pas de coach »).</p>
   <h3>Avancé</h3>
   <img src="img/fr/app_adv.webp" alt="Avancé">
-  <p>Temps d'un changement complet de pneus, démarrage automatique de l'ingénieur, raccourcis sur le bureau, mises à jour et ta propre clé Groq (facultative – ta propre limite).</p>
+  <p>Temps d'un changement complet de pneus, démarrage automatique de l'ingénieur, raccourcis sur le bureau, mises à jour et ta propre clé Groq (facultative – ta propre limite).
+  <b>Dossier des réglages LMU</b> – en général vide (le programme trouve lui-même le dossier du jeu) ; « enregistre le setup » y écrit le nouveau réglage.</p>
 </section>
 
 <section id="talk">
@@ -149,7 +151,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   « météo ? », « quand l'hypercar va me prendre un tour ? », « silence » (silence total jusqu'au prochain appui), « urgent seulement », « répète ».</p>
   <p>La liste complète est dans l'appli : <b>Aide → Commandes</b>.</p>
   <img src="img/fr/app_commands.webp" alt="Commandes">
-  <p>Une question que le programme ne connaît pas part à l'IA (avec une clé Groq) avec les données de course.</p>
+  <p>Une question que le programme ne connaît pas part à l'IA (avec une clé Groq) avec les données de course. Les questions sur le programme lui-même
+  (« comment faire taire le spotter ? ») reçoivent une réponse d'après ce mode d'emploi.</p>
+  <ul>
+    <li><b>Spotter</b> (Réglages → Alertes) : « Voiture à gauche », « À droite, Hypercar », « Three wide » et de quel côté sont les voitures, « Libre » ; « ma catégorie seulement » possible ; se tait dans la voie des stands. À la voix : « spotter désactivé » / « spotter activé ».</li>
+    <li><b>Appuis courts sur le bouton sans parler :</b> 1 – coupe, 2 – état rapide (arrêt, carburant ou énergie, écarts), 3 – répète, 4 – message précédent. À la voix : « répète », « message précédent ».</li>
+    <li><b>Menu des stands à la voix :</b> « à l'arrêt énergie 60 pour cent et pneus droits », « règle l'arrêt selon la stratégie ». Un équipier peut le faire depuis le mur des stands : « Demander à l'ingénieur ».</li>
+    <li><b>Réglages :</b> « résume les conseils » – tous les changements proposés d'un coup ; « enregistre le setup » – nouveau fichier « PWC_… » avec ces changements dans le dossier du circuit (original inchangé), à charger au garage.</li>
+  </ul>
 </section>
 
 <section id="ai">
