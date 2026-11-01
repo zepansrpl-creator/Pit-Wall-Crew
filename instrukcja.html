@@ -133,6 +133,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Głos, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
     <li>Gdy nadasz imię (np. Marek), inżynier się przedstawi, a „Marku, cicho” go wyciszy.</li>
+    <li><b>Głos spottera</b> – osobny głos dla pilnych komunikatów o sytuacji na torze (auto obok, flagi, wypadki, dublowanie); „jak inżynier” = ten sam głos. <b>▶ Odsłuchaj spottera</b> odtworzy próbkę.</li>
   </ul>
 
   <h3>Ostrzeżenia</h3>
@@ -140,11 +141,15 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Co inżynier mówi bez pytania: dublowanie przez szybsze klasy (i od ilu sekund), auta stojące na torze, flagi,
   trener przed zakrętem, porównanie z najlepszym okrążeniem, komentarze po wyprzedzeniu, sugestie ustawień.
   Wszystko to włączysz i wyłączysz też głosem w trakcie jazdy (np. „bez trenera”).</p>
+  <p><b>Spotter</b>: „Z lewej”, „Z prawej Hypercar”, „Three wide” (po angielsku, jak mówią spotterzy) i po której stronie są auta, „Czysto”.
+  Pole „Spotter tylko dla aut z mojej klasy” pomija inne klasy. W alei serwisowej spotter milczy. Głosem: „spotter wyłącz” / „spotter włącz”,
+  „spotter tylko moja klasa” / „spotter wszystkie klasy”.</p>
 
   <h3>Zaawansowane</h3>
   <img src="img/app_adv.webp" alt="Zaawansowane">
   <p>Czas zmiany kompletu opon, automatyczny start inżyniera, skróty na pulpicie, aktualizacje
-  i własny klucz Groq (opcjonalnie – Twój osobny limit).</p>
+  i własny klucz Groq (opcjonalnie – Twój osobny limit). <b>Folder setupów LMU</b> – zwykle puste (program sam znajdzie folder gry);
+  tam „zapisz setup” zapisuje nowy setup.</p>
 </section>
 
 <section id="mowa">
@@ -154,7 +159,15 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   „za ile dubluje hypercar?”, „cisza” (całkowite wyciszenie do następnego naciśnięcia), „tylko pilne”, „powtórz”.</p>
   <p>Pełna lista jest w aplikacji: <b>Pomoc → Komendy</b>.</p>
   <img src="img/app_commands.webp" alt="Lista komend">
-  <p>Pytanie, którego program nie zna, trafia do AI (jeśli jest klucz Groq) razem z danymi wyścigu.</p>
+  <p>Pytanie, którego program nie zna, trafia do AI (jeśli jest klucz Groq) razem z danymi wyścigu. Pytania o sam program
+  („co zrobić, żeby spotter przestał się odzywać?”) AI odpowiada na podstawie tej instrukcji.</p>
+  <ul>
+    <li><b>Krótkie naciśnięcia przycisku bez mówienia:</b> 1 – ucisz, 2 – krótki stan (zjazd, paliwo lub energia, odstępy), 3 – powtórz, 4 – poprzedni komunikat. Głosem: „powtórz”, „poprzednia wiadomość”.</li>
+    <li><b>Menu boksu głosem:</b> „na postoju energia 60 procent i prawe opony”, „zmień lewe opony”, „zatankuj 30 litrów”, „zatankuj 40%” (procent = energia), „nie tankuj” (energia i paliwo na 0), „zatankuj do mety” (zakłada zjazd, gdy skończy się energia lub paliwo w aucie), „zatankuj do mety, zjeżdżam teraz”, „ustaw postój według strategii”. Gdy mowa zostanie źle rozpoznana, AI dopasuje polecenie. Kolega z zespołu może to zrobić z pit walla: „Zapytaj inżyniera”.</li>
+    <li><b>Reszta menu boksu:</b> „ciśnienie przód o 2 w dół”, „lewa przednia 140”, „ciśnienia według pomiarów”, „napraw uszkodzenia” (albo „napraw tylko nadwozie”, „napraw wszystko”), „wymień hamulce”, „skrzydło o 1 w górę”, „zamknij przednie kanały hamulców”, „grill na 3”, „na postoju deszczowe opony”, „zmiana kierowcy na Kamila”.</li>
+    <li><b>Propozycja postoju:</b> 2 okrążenia przed zjazdem (i przy deszczu) inżynier pyta „Mogę ustawić pitstop: … Pasuje?” – „tak” ustawia menu boksu.</li>
+    <li><b>Setup:</b> „podsumuj sugestie” – wszystkie proponowane zmiany naraz; „zapisz setup” – nowy plik „PWC_…” z tymi zmianami w folderze toru (oryginał bez zmian), wczytasz go w garażu.</li>
+  </ul>
 </section>
 
 <section id="ai">

@@ -131,15 +131,20 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Voice, speaking rate, volume, radio effect, language and the engineer's name. <b>▶ Listen</b> plays a sample.</li>
     <li>If you give him a name (e.g. Mark), he introduces himself and “Mark, quiet” mutes him.</li>
+    <li><b>Spotter voice</b> – a separate voice for urgent calls about the track (car alongside, flags, incidents, lapping); “same as engineer” = one voice. <b>▶ Listen to the spotter</b> plays a sample.</li>
   </ul>
   <h3>Warnings</h3>
   <img src="img/en/app_alerts.webp" alt="Warnings">
   <p>What the engineer says unprompted: lapping by faster classes (and from how many seconds), stopped cars,
   flags, coaching before corners, comparison with your best lap, comments after overtakes, setup suggestions.
   You can switch all of them on and off by voice while driving (e.g. “no coach”).</p>
+  <p><b>Spotter</b>: “Car left”, “Right side, Hypercar”, “Three wide” and which side the cars are on, “Clear”.
+  “Spotter only for cars in my class” skips other classes. Silent in the pit lane. By voice: “spotter off” / “spotter on”,
+  “spotter my class only” / “spotter all classes”.</p>
   <h3>Advanced</h3>
   <img src="img/en/app_adv.webp" alt="Advanced">
-  <p>Full tyre change time, automatic engineer start, desktop shortcuts, updates and your own Groq key (optional – your own limit).</p>
+  <p>Full tyre change time, automatic engineer start, desktop shortcuts, updates and your own Groq key (optional – your own limit).
+  <b>LMU setup folder</b> – usually empty (the program finds the game folder itself); “save setup” writes the new setup there.</p>
 </section>
 
 <section id="talk">
@@ -149,7 +154,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   “what's the weather?”, “when will the first hypercar lap me?”, “quiet” (complete silence until the next press), “urgent only”, “repeat”.</p>
   <p>The full list is in the app: <b>Help → Commands</b>.</p>
   <img src="img/en/app_commands.webp" alt="Commands">
-  <p>A question the program doesn't know goes to the AI (with a Groq key) together with the race data.</p>
+  <p>A question the program doesn't know goes to the AI (with a Groq key) together with the race data. Questions about the program itself
+  (“how do I stop the spotter talking?”) the AI answers from this manual.</p>
+  <ul>
+    <li><b>Short presses of the button without talking:</b> 1 – silence, 2 – quick status (pit stop, fuel or energy, gaps), 3 – repeat, 4 – previous message. By voice: “repeat”, “previous message”.</li>
+    <li><b>Pit menu by voice:</b> “at the stop energy 60 percent and right tyres”, “set the pit stop according to the strategy”. A teammate can do it from the pit wall: “Ask the engineer”.</li>
+    <li><b>Setup:</b> “summarize suggestions” – all suggested changes at once; “save setup” – a new “PWC_…” file with those changes in the track folder (original unchanged), load it in the garage.</li>
+  </ul>
 </section>
 
 <section id="ai">
