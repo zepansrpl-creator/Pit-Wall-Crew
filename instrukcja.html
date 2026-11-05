@@ -38,11 +38,11 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <header>
   <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
   <h1>Pit Wall Crew – instrukcja</h1>
-  <p>Głosowy inżynier wyścigowy i pit wall do Le Mans Ultimate. Od instalacji do pierwszego wyścigu.</p>
+  <p>Głosowy inżynier wyścigowy i pit wall do Le Mans Ultimate i Assetto Corsa. Od instalacji do pierwszego wyścigu.</p>
 </header>
 <nav class="toc">
   <a href="#co">Co to jest</a><a href="#inst">Instalacja</a><a href="#app">Aplikacja</a><a href="#ust">Ustawienia</a>
-  <a href="#mowa">Rozmowa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
+  <a href="#mowa">Rozmowa</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
   <a href="#tel">Powiadomienia</a><a href="#wyscig">Długi wyścig</a><a href="#problemy">Problemy</a>
 </nav>
 <main>
@@ -57,7 +57,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Możesz jeździć sam (tryb <b>Solo</b>) albo w zespole.</p>
   <h3>Czego potrzebujesz</h3>
   <ul>
-    <li>Windows 10 lub 11 i Le Mans Ultimate.</li>
+    <li>Windows 10 lub 11 i Le Mans Ultimate albo Assetto Corsa (Steam; do Assetto Corsa zalecany Custom Shaders Patch – rozdział <a href="#ac">Assetto Corsa</a>).</li>
     <li>Słuchawki z mikrofonem i wolny przycisk na kierownicy (albo klawisz na klawiaturze).</li>
     <li>Internet (głos inżyniera, rozpoznawanie mowy i pit wall działają przez internet).</li>
     <li>Darmowy klucz Groq – <b>bez niego nie działa AI</b> (lepsze rozpoznawanie mowy, odpowiedzi AI); jak go zdobyć: rozdział <a href="#ai">AI</a>.</li>
@@ -65,14 +65,15 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </section>
 
 <section id="inst">
-  <h2>Instalacja (5 minut)</h2>
+  <h2>Instalacja (2 minuty)</h2>
   <ol>
-    <li>Pobierz paczkę <code>PitWallCrew_….zip</code> z posta na Patreonie FR Mods. <b>Zanim ją rozpakujesz:</b> prawy przycisk na pliku → Właściwości →
-      zaznacz <b>Odblokuj</b> → OK (inaczej Windows może blokować pliki).</li>
-    <li>Rozpakuj np. do <code>Dokumenty</code> – powstanie folder <code>Pit Wall Crew</code>, a w nim <b>INSTALL.bat</b> i folder <code>Program</code> (pliki programu, nie trzeba tam zaglądać).</li>
-    <li>Kliknij dwa razy <b>INSTALL.bat</b>. Instalator sam pobierze potrzebne składniki (kilka minut, o nic nie pyta) i utworzy ikonę
-      <b>Pit Wall Crew</b> na pulpicie. Na koniec sam uruchomi aplikację – okno instalatora możesz zamknąć.</li>
-    <li>W aplikacji wybierz <b>język</b>. Obok otworzy się okienko <b>Pierwsze kroki</b> – przejdź je po kolei (przy każdym punkcie jest przycisk <b>Otwórz</b>):
+    <li>Pobierz instalator <code>PitWallCrew_Setup_….exe</code> z posta na Patreonie FR Mods (post publiczny – darmowe demo; pełną wersję odblokujesz w aplikacji przyciskiem
+      <b>Zaloguj przez Patreon</b> – pobierze się sama, ustawienia zostaną).</li>
+    <li>Uruchom pobrany plik. Instalator nie ma jeszcze podpisu cyfrowego, więc Windows może pokazać okno „System Windows ochronił ten komputer” –
+      kliknij <b>Więcej informacji</b> → <b>Uruchom mimo to</b>.</li>
+    <li>W instalatorze wybierz <b>język</b> (ten sam ustawi się w programie), potem <b>OK</b>, <b>Dalej</b> i <b>Zainstaluj</b>. Instalacja trwa około minuty, niczego nie pobiera (Python jest w środku) i nie wymaga uprawnień administratora.
+      Program i Twoje dane trafią do <code>Dokumenty\Pit Wall Crew</code>. Skróty <b>Pit Wall Crew</b> na pulpicie i w menu Start możesz odznaczyć. Na koniec zaznacz, czy uruchomić aplikację, samouczek głosowy i stronę pełnej wersji na Patreonie, i kliknij <b>Zakończ</b>.</li>
+    <li>Aplikacja otworzy się w wybranym języku, a obok okienko <b>Pierwsze kroki</b> – przejdź je po kolei (przy każdym punkcie jest przycisk <b>Otwórz</b>):
       <ol>
         <li><b>Zespół</b>: na górze <b>Utwórz nowy zespół…</b> (pierwsza osoba) albo kod i hasło zespołu od kolegów; potem Twoje imię – nowe imię po zapisaniu samo trafi do kierowców zespołu; jeździsz sam – tryb <b>Solo</b>.</li>
         <li><b>Mikrofon i przycisk</b>: wybierz mikrofon (pasek ma się ruszać, gdy mówisz), kliknij <b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy.</li>
@@ -81,27 +82,31 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
         <li><b>Patreon</b>: na stronie Inżynier <b>Zaloguj przez Patreon</b> – wtedy dostajesz aktualizacje.</li>
         <li>Kliknij <b>Zapisz i uruchom ponownie moduł inżyniera</b>.</li>
       </ol></li>
-    <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry). Wyjedź na tor, przytrzymaj przycisk i zapytaj np. „ile paliwa?”.</li>
+    <li>W LMU raz: <b>Settings → Gameplay → Enable Plugins = ON</b> (bez tego program nie widzi danych z gry; Assetto Corsa: rozdział <a href="#ac">Assetto Corsa</a>). Wyjedź na tor, przytrzymaj przycisk i zapytaj np. „ile paliwa?”.</li>
   </ol>
   <div class="tip">Aktualizacje instalują się same przy starcie aplikacji – nigdy w trakcie jazdy. Twoje ustawienia zostają.
   Okienko „Pierwsze kroki” otworzysz też później: Pomoc → Instrukcja → Pierwsze kroki.</div>
-  <p><b>Odinstalowanie:</b> w folderze <code>Pit Wall Crew\Program</code> kliknij dwa razy <b>UNINSTALL.bat</b> – usuwa skrót z pulpitu, zamyka program i (jeśli potwierdzisz) cały folder z ustawieniami.</p>
+  <p><b>Masz starą instalację z zipa (INSTALL.bat)?</b> Uruchom nowy instalator. Jeśli program był rozpakowany do <code>Dokumenty\Pit Wall Crew</code>, ustawienia zostaną same.
+  Jeśli był w innym folderze – skopiuj ze starego folderu programu <code>config.toml</code> i folder <code>data</code> do <code>Dokumenty\Pit Wall Crew\Program</code> (albo po prostu przejdź jeszcze raz „Pierwsze kroki”).
+  Starsza instalacja z innym Pythonem niż 3.12 po aktualizacji pokaże komunikat, że trzeba ją zainstalować nowym instalatorem.</p>
+  <p><b>Samouczek głosowy</b> (1–2 minuty): przy pierwszym uruchomieniu inżynier prowadzi przez 5 kroków – test radia, „ile mam paliwa?”, „kto jest za mną?”, dwa krótkie naciśnięcia przycisku, „cisza”. Od razu widać, czy mikrofon i przycisk działają. Rusza dopiero, gdy przycisk mówienia jest przypisany (albo już raz go naciśniesz) i mikrofon daje sygnał; nie startuje w trakcie wyścigu. Pominięcie: „pomiń samouczek” (albo odznacz go na końcu instalacji); ponownie: Pomoc → Instrukcja → <b>Samouczek głosowy</b>.</p>
+  <p><b>Odinstalowanie:</b> Ustawienia Windows → Aplikacje → <b>Pit Wall Crew</b> → <b>Odinstaluj</b> (albo menu Start → <b>Dezinstalacja aplikacji Pit Wall Crew</b>). Usuwa program; Twoje ustawienia i nagrania (<code>config.toml</code>, foldery <code>data</code> i <code>recordings</code> w <code>Dokumenty\Pit Wall Crew\Program</code>) zostają – żeby usunąć wszystko, skasuj potem folder <code>Dokumenty\Pit Wall Crew</code>.</p>
 </section>
 
 <section id="app">
   <h2>Okno aplikacji</h2>
-  <p>Ikona <b>Pit Wall Crew</b> otwiera aplikację. Inżynier uruchamia się sam, a gdy włączysz grę i wyjedziesz na tor – zaczyna mówić.</p>
+  <p>Ikona <b>Pit Wall Crew</b> otwiera aplikację. Inżynier uruchamia się sam, a gdy włączysz grę i wyjedziesz na tor – zaczyna mówić. Motyw <b>☾ Ciemny / ☀ Jasny</b> przełączasz na dole paska po lewej (od razu, bez restartu). Czasy i sektory w kolorach jak na pit wallu: fioletowy – najlepszy w klasie, zielony – Twój rekord, żółty – wolniej. Pod kartami jest pasek <b>Sektory</b> ostatniego okrążenia, przy statusach żółta flaga / safety car. Strona <b>Raporty z jazdy</b> (pod Inżynierem) zbiera raporty po stintach i wyścigach.</p>
   <img src="img/app_main.webp" alt="Główne okno aplikacji z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy inżynier działa, czy widzi grę („Jedziesz” albo „podgląd” – gdy jedzie kolega), połączenie z zespołem i AI. Zielone = w porządku.</li>
-    <li><b>Otwórz pit wall</b> – strona zespołu w przeglądarce.</li>
+    <li><b>Otwórz pit wall</b> – strona zespołu w przeglądarce, od razu zalogowana do zespołu programu (bez wpisywania hasła).</li>
     <li><b>Test bez gry</b> – symulowany wyścig. Sprawdzisz głos, mikrofon i pit wall bez uruchamiania LMU.</li>
     <li><b>Uruchom / Zatrzymaj</b> inżyniera.</li>
     <li><b>Patreon</b> – zaloguj się, żeby dostawać aktualizacje. Po zalogowaniu zostaje tylko „Wyloguj z Patreona”.</li>
     <li><b>Najważniejsze liczby</b>: pozycja, okrążenie, za ile zjazd, energia albo paliwo, czasy, czas do mety.</li>
     <li><b>Komunikaty</b> – wszystko, co inżynier powiedział, Twoje pytania i wiadomości od zespołu. Czerwone = pilne.</li>
     <li><b>Pole pytania</b> – możesz napisać pytanie zamiast mówić.</li>
-    <li><b>Ustawienia</b> – zespół, mikrofon, głos, ostrzeżenia (rozdział niżej).</li>
+    <li><b>Ustawienia</b> – zespół, mikrofon, głos, ostrzeżenia, zaawansowane (rozdział niżej).</li>
     <li><b>Pomoc</b> – lista komend, opis funkcji, instrukcja (tu też <b>Pierwsze kroki</b>), zmiany w wersjach, informacje o programie i <b>Zgłoś problem</b>.</li>
     <li><b>Pit wall</b> – to samo co przycisk 2, z każdej strony aplikacji.</li>
   </ol>
@@ -116,7 +121,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li><b>Solo</b> – jeździsz sam: nie wpisujesz nic więcej. Pit wall nadal działa jako Twój podgląd.</li>
     <li><b>Zespół</b> – jedna osoba klika <b>Utwórz nowy zespół…</b> (nazwa i hasło) i dostaje <b>kod zespołu</b> (6 znaków).
-      Pozostali wpisują ten kod i hasło. Potem <b>Sprawdź połączenie</b> i wybierz z listy, kim jesteś.</li>
+      Pozostali wpisują ten kod i hasło. Potem <b>Połącz z zespołem</b> i wybierz z listy, kim jesteś.</li>
+    <li><b>Kod zespołu</b> ma listę zespołów, z którymi łączył się ten komputer (same kody i nazwy, <b>bez haseł</b>). Wybierz z listy, wpisz hasło tamtego zespołu i zapisz. Pit wall w przeglądarce też pamięta kody: przy logowaniu i w zakładce <b>Zespół</b> („Inne zespoły na tym urządzeniu”).</li>
     <li>Kod i hasło przekazujcie sobie <b>tylko prywatnie</b> – kto je zna, widzi stan auta i może pisać do kierowcy.</li>
     <li><b>Słuchaj inżyniera, gdy nie jadę</b> – gdy jedzie kolega, słyszysz komunikaty jego inżyniera (radio zespołu).</li>
   </ul>
@@ -125,30 +131,34 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/app_mic.webp" alt="Mikrofon i przycisk">
   <ul>
     <li>Wybierz mikrofon i kliknij <b>Test 3 s</b> – powiedz coś i sprawdź, czy pasek się rusza.</li>
-    <li><b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy, którym będziesz mówić. Można też ustawić klawisz.</li>
+    <li><b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy, którym będziesz mówić (działa każdy przycisk, także MOZA o numerach powyżej 32). Można też ustawić klawisz.</li>
+    <li><b>Słuchawki / głośniki</b> – urządzenie, na którym słychać inżyniera i spottera, np. słuchawki, gdy gra jest na głośnikach.</li>
   </ul>
 
   <h3>Głos</h3>
   <img src="img/app_voice.webp" alt="Głos">
   <ul>
-    <li>Głos, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
+    <li>Język, głos, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
     <li>Gdy nadasz imię (np. Marek), inżynier się przedstawi, a „Marku, cicho” go wyciszy.</li>
-    <li><b>Głos spottera</b> – osobny głos dla pilnych komunikatów o sytuacji na torze (auto obok, flagi, wypadki, dublowanie); „jak inżynier” = ten sam głos. <b>▶ Odsłuchaj spottera</b> odtworzy próbkę.</li>
+    <li><b>Głos spottera</b> – osobny głos dla pilnych komunikatów o sytuacji na torze (auto obok, flagi, wypadki, dublowanie); „jak inżynier” = ten sam głos. <b>Efekt radia spottera</b> – osobno od inżyniera (np. spotter bez trzasków, inżynier przez radio). <b>▶ Odsłuchaj spottera</b> odtworzy próbkę.</li>
   </ul>
 
   <h3>Ostrzeżenia</h3>
   <img src="img/app_alerts.webp" alt="Ostrzeżenia">
   <p>Co inżynier mówi bez pytania: dublowanie przez szybsze klasy (i od ilu sekund), auta stojące na torze, flagi,
-  trener przed zakrętem, porównanie z najlepszym okrążeniem, komentarze po wyprzedzeniu, sugestie ustawień.
+  trener przed zakrętem, porównanie z najlepszym okrążeniem, komentarze po wyprzedzeniu, sugestie ustawień. Trener, porównania i sugestie ruszają, gdy jeździsz równo (3 czyste okrążenia o podobnym czasie) – nie w czasie nauki toru.
+  Wyjątek: <b>Rady do setupu także w czasie nauki toru</b> (albo głosem „setup od razu”) – gdy setup jest tak zły, że trudno o równe okrążenia.
+  <b>Przerwa między sugestiami</b> – najmniej tyle minut między kolejnymi radami.
   Wszystko to włączysz i wyłączysz też głosem w trakcie jazdy (np. „bez trenera”).</p>
-  <p><b>Spotter</b>: „Z lewej”, „Z prawej Hypercar”, „Three wide” (po angielsku, jak mówią spotterzy) i po której stronie są auta, „Czysto”.
-  Pole „Spotter tylko dla aut z mojej klasy” pomija inne klasy. Spotter milczy w alei serwisowej, w kwalifikacjach (w LMU prywatne) i w wyścigu przed startem. Głosem: „spotter wyłącz” / „spotter włącz”,
-  „spotter tylko moja klasa” / „spotter wszystkie klasy”.</p>
+  <p><b>Spotter</b>: „Z lewej”, „Z prawej Hypercar”, „Three wide” (po angielsku, jak mówią spotterzy) i po której stronie są auta, „Czysto” – zawsze na końcu, gdy nikogo już nie ma obok.
+  Pole „Spotter tylko dla aut z mojej klasy” pomija inne klasy. Spotter milczy w alei serwisowej, w kwalifikacjach (w LMU prywatne) i w wyścigu przed startem. Na polu startowym inżynier powie, gdy kierownica jest skręcona o ponad 90°. Głosem: „spotter wyłącz” / „spotter włącz”,
+  „spotter tylko moja klasa” / „spotter wszystkie klasy”. Gdy ktoś jedzie obok, inżynier milczy (także przy wyłączonym spotterze), żeby nie przeszkadzać w walce – ustawienie <b>Ostrzeżenia → Inżynier milczy, gdy ktoś jedzie obok</b>: tylko w wyścigu (domyślnie), zawsze albo nigdy.</p>
+  <p><b>Uderzenie</b>: kilka sekund po wypadku inżynier mówi „Sprawdzę, czy przez to tracisz”, a po dwóch czystych okrążeniach podaje stratę na okrążenie, czy spadła prędkość maksymalna i czy naprawa się opłaca. Gdy nie zna czasu naprawy, mówi, do ilu sekund naprawa się opłaca (np. „Naprawa do 45 sekund się opłaca, dłuższą przerwij”) – naprawę w grze można przerwać. Czas naprawy możesz też podać: „naprawa 38 sekund”.</p>
 
   <h3>Zaawansowane</h3>
   <img src="img/app_adv.webp" alt="Zaawansowane">
   <p>Czas zmiany kompletu opon, automatyczny start inżyniera, skróty na pulpicie, aktualizacje
-  i własny klucz Groq (opcjonalnie – Twój osobny limit). <b>Folder setupów LMU</b> – zwykle puste (program sam znajdzie folder gry);
+  i własny klucz Groq (opcjonalnie – Twój osobny limit), kod testera i „Pytaj grę o prognozę, menu boksu i rywali”. <b>Assetto Corsa: skala zużycia opon</b> i <b>Assetto Corsa: folder gry</b> – rozdział <a href="#ac">Assetto Corsa</a>. <b>Folder setupów LMU</b> – zwykle puste (program sam znajdzie folder gry);
   tam „zapisz setup” zapisuje nowy setup.</p>
 </section>
 
@@ -160,13 +170,36 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Pełna lista jest w aplikacji: <b>Pomoc → Komendy</b>.</p>
   <img src="img/app_commands.webp" alt="Lista komend">
   <p>Pytanie, którego program nie zna, trafia do AI (jeśli jest klucz Groq) razem z danymi wyścigu. Pytania o sam program
-  („co zrobić, żeby spotter przestał się odzywać?”) AI odpowiada na podstawie tej instrukcji.</p>
+  („jak wyłączyć mówienie o zbliżających się prototypach?”, „niech spotter nie mówi o stronach”) AI odpowiada na podstawie tej instrukcji i ustawień: podaje komendę albo miejsce w ustawieniach, a gdy dokładnie takiej opcji nie ma – mówi to i podaje najbliższą.</p>
   <ul>
     <li><b>Krótkie naciśnięcia przycisku bez mówienia:</b> 1 – ucisz, 2 – krótki stan (zjazd, paliwo lub energia, odstępy), 3 – powtórz, 4 – poprzedni komunikat. Głosem: „powtórz”, „poprzednia wiadomość”.</li>
+    <li><b>Pośpiech:</b> gdy dodasz do pytania „kurwa” (np. „ile kurwa mam paliwa?”), inżynier odpowie wyraźnie szybciej.</li>
     <li><b>Menu boksu głosem:</b> „na postoju energia 60 procent i prawe opony”, „zmień lewe opony”, „zatankuj 30 litrów”, „zatankuj 40%” (procent = energia), „nie tankuj” (energia i paliwo na 0), „zatankuj do mety” (zakłada zjazd, gdy skończy się energia lub paliwo w aucie), „zatankuj do mety, zjeżdżam teraz”, „ustaw postój według strategii”. Gdy mowa zostanie źle rozpoznana, AI dopasuje polecenie. Kolega z zespołu może to zrobić z pit walla: „Zapytaj inżyniera”.</li>
     <li><b>Reszta menu boksu:</b> „ciśnienie przód o 2 w dół”, „lewa przednia 140”, „ciśnienia według pomiarów”, „napraw uszkodzenia” (albo „napraw tylko nadwozie”, „napraw wszystko”), „wymień hamulce”, „skrzydło o 1 w górę”, „zamknij przednie kanały hamulców”, „grill na 3”, „na postoju deszczowe opony”, „zmiana kierowcy na Kamila”.</li>
     <li><b>Propozycja postoju:</b> 2 okrążenia przed zjazdem (i przy deszczu) inżynier pyta „Mogę ustawić pitstop: … Pasuje?” – „tak” ustawia menu boksu.</li>
+    <li><b>Podsumowanie stintu:</b> po zjeździe do boksu, zmianie kierowcy albo powrocie do garażu (stint od 3 okrążeń) pełne podsumowanie jest na stronie <b>Raporty z jazdy</b> w oknie programu (plik <code>recordings\stint_….txt</code>, kopia na pit wallu): tempo, błędy (wyjazdy, uderzenia, powtarzające się blokowanie, buksowanie, ABS, TC – w których zakrętach), gdzie tracisz do najlepszego okrążenia, a w pełnej wersji także przyczepność w zakrętach i setup. W trakcie stintu: „podsumowanie stintu”. <b>Kopiuj raport</b> kopiuje raport do wklejenia (np. na Discordzie). Przycisk <b>Jak powstaje raport?</b> wyjaśnia w kilku krokach, skąd są dane (błędy i straty w zakrętach liczą się po 3 równych, czystych okrążeniach).</li>
+    <li><b>Historia zmian setupu:</b> po „zmieniłem …” i 3 czystych okrążeniach inżynier sam ocenia zmianę (pomogło / pogorszyło / bez zmian) i zapamiętuje ją dla toru i auta; każda rada setupu mówi też skutek uboczny.</li>
+    <li><b>Przyczepność w zakrętach</b> (pełna wersja): „przyczepność?”, „gdzie mam zapas?”, „przyczepność T5” – jak blisko granicy opon jesteś na wejściu, w środku i na wyjściu (100% = najwięcej, ile pokazałeś w tym zakręcie) i co zrobić tam, gdzie jest zapas. LMU i Assetto Corsa.</li>
+    <li><b>Setup czy styl jazdy:</b> zanim inżynier zaproponuje zmianę setupu, sprawdza na 4–8 czystych okrążeniach, czy problem jest za każdym razem (auto – rada do setupu), czy tylko gdy jedziesz inaczej, np. szybciej wjeżdżasz albo wcześniej dajesz gaz (jazda – rada do jazdy). Rada setupu uwzględnia też warunki (zimne lub zużyte opony, paliwo, temperatura toru), ciśnienia, skutek uboczny zmiany i rodzaj sesji; po 3 okrążeniach gorzej – wróć do poprzedniego ustawienia.</li>
     <li><b>Setup:</b> „podsumuj sugestie” – wszystkie proponowane zmiany naraz; „zapisz setup” – nowy plik „PWC_…” z tymi zmianami w folderze toru (oryginał bez zmian), wczytasz go w garażu.</li>
+  </ul>
+</section>
+
+<section id="ac">
+  <h2>Assetto Corsa</h2>
+  <p>Pit Wall Crew działa też z Assetto Corsa (AC1, Steam). To ten sam program – ten sam inżynier, spotter, pit wall i baza zespołu; program sam rozpoznaje, która gra jest uruchomiona.</p>
+  <ul>
+    <li><b>Custom Shaders Patch (CSP) – bardzo zalecany</b> (Content Manager → Ustawienia → Custom Shaders Patch). Z CSP działa najwięcej: deszcz i kałuże (Rain FX), postój głosem, analiza podsterowności i nadsterowności w zakrętach, sektory, rady o TC i ABS. Bez CSP działa prostsza aplikacja Python – z mniejszą liczbą funkcji.</li>
+    <li><b>Aplikacja w grze</b> – program sam kopiuje ją do gry. Włączaj Pit Wall Crew <b>przed</b> Assetto Corsa; z CSP aplikacja działa sama w tle. Bez CSP włącz ją raz: Content Manager → Ustawienia → Assetto Corsa → Aplikacje Python → zaznacz <b>Pit Wall Crew</b>.</li>
+    <li><b>Gra na innym dysku</b> – program znajdzie ją sam. Gdy nie znajdzie („Nie znalazłem Assetto Corsa”), wpisz folder gry (ten z <code>AssettoCorsa.exe</code>) w <b>Ustawienia → Zaawansowane → Assetto Corsa: folder gry</b>.</li>
+    <li><b>Opony</b> – „zostało X%” jak w Sidekicku; tę samą skalę co w Sidekicku ustaw w <b>Ustawienia → Zaawansowane → Assetto Corsa: skala zużycia opon</b>. Inżynier ostrzega ok. 3 okrążenia przed gwałtownym spadkiem przyczepności. Własny próg dla auta: „w tym aucie zmieniam opony przy 97” – ostrzeżenie 2 okrążenia wcześniej.</li>
+    <li><b>Postój głosem</b> (z CSP) – inżynier ustawia menu szybkiego postoju w grze: „zatankuj do pełna”, „deszczowe opony”, „ciśnienie przód 18”, „bez opon”, „bez paliwa”, „bez napraw”. W AC zmienia się zawsze cały komplet opon.</li>
+    <li><b>Ciśnienia, biegi, setup</b> – „jakie ciśnienia ustawić?” podaje ciśnienia na zimno do garażu (psi); w treningu „podsumuj sugestie” mówi o przełożeniach w klikach („wydłuż bieg 6 o 3 kliki”); „zapisz setup” – nowy plik „PWC_…” w garażu (oryginał bez zmian).</li>
+    <li><b>Ścięcia (RealPenalty)</b> – online inżynier mówi o każdym ostrzeżeniu za ścięcie tak, jak liczy je serwer; „ile mam ostrzeżeń?”.</li>
+    <li><b>Nazwy zakrętów</b> z toru („Tosa”, „Acque Minerali”) zamiast T1, T2 – możesz pytać nazwą: „jak Tosa?”.</li>
+    <li><b>Spotter, rywale, flagi, uszkodzenia, strategia</b> – jak w LMU.</li>
+    <li><b>Czego w AC nie ma:</b> zmian kierowców (program jeździ zawsze jak w trybie solo – bez przekazania auta i odpraw), wirtualnej energii, grilla i kanałów hamulców – inżynier o nich nie mówi.</li>
+    <li><b>Pit wall</b> działa jak w LMU. Kilka aut jednego zespołu w wyścigu – każde ma osobny podgląd (lista u góry).</li>
   </ul>
 </section>
 
@@ -181,7 +214,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Od razu skopiuj klucz</b> (zaczyna się od <code>gsk_</code>) – Groq pokazuje go tylko raz. Klucz jest darmowy, z dziennym limitem.</li>
     <li><b>Zespół</b> (wystarczy jedna osoba): pit wall → zakładka <b>Zespół → AI zespołu (Groq)</b> → wklej → <b>Zapisz klucz</b>.
       Klucz trafia do wszystkich w zespole i widzą go tylko członkowie zespołu.</li>
-    <li><b>Jeździsz sam albo chcesz własny limit</b>: aplikacja → <b>Zaawansowane → Własny klucz Groq</b> → wklej → <b>Sprawdź klucz</b> (ma być „✓ Klucz działa”) → <b>Zapisz i uruchom ponownie moduł inżyniera</b>.</li>
+    <li><b>Jeździsz sam albo chcesz własny limit</b>: aplikacja → <b>Zaawansowane → Własny klucz Groq</b> → wklej → <b>Sprawdź klucz</b> (ma być „✓ Klucz działa”) → <b>Zapisz i uruchom ponownie moduł inżyniera</b>. Ramka <b>AI (Groq)</b> nad polem ma przycisk <b>Jak zdobyć klucz? ↗</b> (otwiera ten rozdział) i znika, gdy klucz działa.</li>
     <li>Gotowe, gdy na stronie <b>Inżynier</b> jest zielone <b>AI: Groq</b>.</li>
   </ol>
   <p>Klucza nikomu nie wysyłaj na czacie – wklej go sam.</p>
@@ -197,22 +230,36 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Testerzy</b> zamiast Patreona wpisują kod od autora: <b>Zaawansowane → Kod testera → Zapisz i uruchom ponownie moduł inżyniera</b>.</li>
   </ol>
   <p>Bez Patreona i kodu testera program działa dalej, tylko bez nowych wersji.</p>
+  <h3>Pełna wersja i demo</h3>
+  <ul>
+    <li>Pełna wersja działa po aktywacji na komputerze: logowanie przez Patreon (albo kod testera) aktywuje ją samo, na najwyżej <b>2 komputerach</b> na konto.
+      Raz aktywowana działa na stałe, także po końcu wsparcia – wtedy bez nowych wersji. Skopiowany folder bez logowania działa jak demo.</li>
+    <li><b>Demo</b> (darmowe): rozmowa głosem, flagi, kary, limity toru, dublowanie, paliwo, energia, kiedy zjazd, ile do końca, czasy okrążeń, pozycja,
+      kto przed i za Tobą, opony, hamulce, uszkodzenia, silnik, pogoda, a także spotter, „gdzie tracę?” (zakręt z największą stratą), 5 pytań do AI na sesję (z darmowym kluczem Groq) i raporty z jazdy z zajawką tego, co pokazałaby pełna wersja (setup, przyczepność). Bez pit walla, zespołu, ustawiania postoju, strategii, setupu i pełnej analizy jazdy.</li>
+    <li>Strona <b>★ Pełna wersja</b> pokazuje wszystkie płatne funkcje i zrzuty pit walla. <b>Zostań patronem</b> otwiera stronę FR Mods na Patreonie (też na pasku na stronie Inżynier). Po zalogowaniu patrona program sam pobiera pełną wersję – ustawienia zostają.</li>
+    <li>Czasem inżynier krótko wspomni o pełnej wersji. Wyłączysz to w <b>Ostrzeżenia → Mów o funkcjach pełnej wersji</b> albo mówiąc „bez reklam”.</li>
+  </ul>
 </section>
 
 <section id="sciana">
   <h2>Pit wall</h2>
   <p>Otwierasz go przyciskiem <b>Pit wall</b> w aplikacji albo pod adresem
   <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
-  (logowanie kodem i hasłem zespołu; telefon je zapamięta). U góry wybierasz język, a przyciskiem <b>☀ / ☾</b> wygląd: jasny albo ciemny.</p>
+  (logowanie kodem i hasłem zespołu; telefon je zapamięta). Przycisk w aplikacji loguje pit wall sam – do zespołu, z którym połączony jest program, także gdy przeglądarka była zalogowana do innego. U góry wybierasz język, a przyciskiem <b>☀ / ☾</b> wygląd: jasny albo ciemny.</p>
   <img src="img/wall_live.webp" alt="Pit wall – na żywo, z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy dane płyną na żywo, kto jedzie, czy działa AI.</li>
+    <li><b>Wygląd</b>: ciemny motyw domyślnie, przełącznik ☀/☾ u góry. Czasy w kolorach: fioletowy – najlepszy w klasie, zielony – Twój rekord, żółty – wolniej. Pasek „Uszkodzenia” pod mapą pojawia się tylko, gdy auto jest uszkodzone (schemat auta, strata na okrążeniu, prędkość maks., ile może trwać naprawa i porada). W wyścigu na okrążenia „Do mety” pokazuje okrążenia (np. 12 / 40).</li>
+    <li><b>Założyciel zespołu</b>: ma własne hasło (podaje je przy zakładaniu zespołu albo w zakładce Zespół: „Zostań założycielem”). Tylko on usuwa i zmienia imiona kierowców oraz zmienia hasło zespołu; na pit wall wchodzi z zaznaczonym „Jestem założycielem”.</li>
+    <li><b>Kilka aut zespołu w jednym wyścigu</b>: każde auto ma osobny podgląd (lista u góry, z numerem auta); wiadomości i pytania idą do kierowcy wybranego auta. Każdy kierowca słyszy swojego inżyniera i spottera.</li>
+    <li><b>Grafik na żywo</b>: pasek stintów (kolor = kierowca, czerwone „TERAZ”). <b>Okrążenia</b>: filtry (sesja – każdy wyścig osobno; auto – gdy jedzie kilka aut zespołu, każde ma swoją tabelę; kierowca, stint, tylko czyste), wykres tempa, kolorowe czasy i sektory S1–S3. <b>Pamięć</b>: notatki jako karty z wyszukiwaniem i filtrem toru. <b>Pomoc</b>: spis treści.</li>
     <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia (na górze <b>podsumowanie sesji</b>: najlepsze i średnie okrążenie, równość, paliwo i energia na okrążenie – dla każdego kierowcy i stintu), Pamięć, Pomoc.</li>
     <li><b>Wyścig</b>: pozycja w klasie, okrążenie, czasy, czas do mety, flaga.</li>
     <li><b>Następny postój</b>: za ile okrążeń, zużycie energii i paliwa, co zrobić na postoju.</li>
     <li><b>Opony i auto</b>: zużycie i temperatury każdej opony, uszkodzenia, silnik, hamulce.</li>
     <li><b>Pogoda i tor</b>: deszcz, wilgotność, chmury, temperatura toru i uwagi inżyniera.</li>
     <li><b>Rywale w klasie</b>: odstępy, tempo, kto kogo dogoni, energia, przewidywany zjazd.</li>
+    <li><b>Porównanie z kolegą</b>: po każdym czystym okrążeniu – w których zakrętach i o ile kolega z zespołu jest szybszy (jego najlepsze okrążenie w podobnych warunkach). W Assetto Corsa także kolega w innym aucie tej samej klasy – wtedy tylko gdzie i o ile, bez rad.</li>
     <li><b>Grafik stintów</b>: kto jedzie, kiedy zmiana, co na postoju, o ile minut grafik przesunął się względem planu.
       Gdy na dziś nie ma planu, układa się sam dla kierowcy, który jedzie – z długości wyścigu i liczby opon dostępnych w grze.</li>
   </ol>
@@ -223,13 +270,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <h3>Zakładka Zespół</h3>
   <img src="img/wall_team.webp" alt="Pit wall – zespół">
   <p>Kod zespołu i kod QR do pit walla, lista kierowców z tematami powiadomień, klucz Groq
-  i <b>link dla widzów</b> – sam podgląd na żywo, bez radia i planu; można go dać każdemu.</p>
+  i <b>link dla widzów</b> – sam podgląd na żywo, bez radia i planu; można go dać każdemu. Gdy jedzie kilka aut zespołu (np. Assetto Corsa), widz wybiera z listy u góry, które auto ogląda (kierowca – auto). Wybór zostaje w adresie (<code>&amp;auto=…</code>), więc można podać link do konkretnego auta.</p>
 </section>
 
 <section id="plan">
   <h2>Grafik i plan (przed długim wyścigiem, jedna osoba)</h2>
   <img src="img/wall_plan.webp" alt="Grafik i plan">
   <ol>
+    <li><b>Auto</b> (na górze): gdy zespół wystawia kilka aut w jednym wyścigu, <b>+ Kolejne auto</b> – każde ma osobny wyścig, plan stintów, grafik i powiadomienia. Program kierowcy bierze plan auta, w którym jest jego imię.</li>
     <li><b>1. Wyścig</b>: data i godzina startu, długość, czas okrążenia, ile opon macie na wyścig → <b>Zapisz</b>.</li>
     <li><b>2. Plan stintów → Rozpisz plan automatycznie</b>: okrążenia w stincie, kolejność kierowców, zużycie opon
       (w polu <b>Pomiary</b> wybierz tor i auto oraz kierowcę – <b>Wczytaj</b> wpisze zużycie opon i czasy całego postoju zmierzone w Waszych sesjach), czasy postoju, <b>Opony na start zużyte (%)</b> – gdy startujecie na komplecie z kwalifikacji → <b>Rozpisz plan</b>.
@@ -266,6 +314,10 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Kierowca pyta głosem „ile paliwa?” – odpowiedź słychać u wszystkich.</li>
     <li>Ze pit walla wyślijcie „Do kierowcy” – inżynier przeczyta wiadomość.</li>
   </ol>
+  <h3>Fair share (LMU)</h3>
+  <p>W wydarzeniach zespołowych każdy kierowca, który przejechał choć okrążenie, musi mieć co najmniej 50% / liczba kierowców okrążeń zespołu (2 kierowców – 25%, 3 – 16,7%, 4 – 12,5%, 5 – 10%, 6 – 8,3%), inaczej cała załoga nie dostaje DR/SR. Inżynier liczy okrążenia każdego kierowcy, przypomina na postoju, ile komu brakuje, ostrzega, gdy robi się ciasno, i odpowiada na „fair share?”. Na pit wallu – w zakładce Na żywo.</p>
+  <h3>Podsumowanie po wyścigu</h3>
+  <p>Na mecie inżynier krótko mówi wynik. Pełne podsumowanie (wynik, postoje, fair share, Twoje tempo i równość, wyjazdy, zużycie) jest w oknie programu, na pit wallu i w pliku <code>recordings\podsumowanie_….txt</code>.</p>
 </section>
 
 <section id="problemy">
@@ -274,14 +326,16 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><th>Objaw</th><th>Co zrobić</th></tr>
     <tr><td>„Czekam na LMU” mimo włączonej gry</td><td>W LMU: Settings → Gameplay → Enable Plugins = ON, potem uruchom grę ponownie.</td></tr>
     <tr><td>Inżynier mnie nie słyszy / „Nie słyszę Cię”</td><td>Mikrofon i przycisk → Test 3 s. Sprawdź wyciszenie na słuchawkach i Windows → Prywatność → Mikrofon.</td></tr>
-    <tr><td>„Zły kod albo hasło zespołu”</td><td>Zespół → popraw → Sprawdź połączenie → Zapisz.</td></tr>
+    <tr><td>„Zły kod albo hasło zespołu”</td><td>Zespół → popraw → Połącz z zespołem → Zapisz.</td></tr>
+    <tr><td>Nie pamiętam kodu albo hasła zespołu</td><td>Kod: zakładka Zespół na pit wallu u kogoś zalogowanego (albo lista zespołów w programie i na stronie). Hasło: zna je założyciel i każdy, kto je wpisał w programie. Nowe hasło zespołu ustawia założyciel: pit wall z zaznaczonym „Jestem założycielem” → Zespół → <b>Zmień hasło zespołu</b>; gdy sam go nie pamięta – „Poproś autora o nowe hasło” i <b>Pomoc → Zgłoś problem</b> z kodem zespołu.</td></tr>
     <tr><td>Pit wall: „brak danych z gry”</td><td>U kierowcy musi działać aplikacja z zielonym „Zespół”.</td></tr>
     <tr><td>„AI: Groq – zły klucz”</td><td>Wklej klucz ponownie (pit wall → Zespół → AI zespołu).</td></tr>
     <tr><td>Każdy komunikat słychać dwa razy</td><td>Program działa podwójnie: zamknij aplikację, w Menedżerze zadań zakończ „pythonw”, uruchom raz.</td></tr>
     <tr><td>Nie przychodzą powiadomienia</td><td>Start wyścigu i kierowcy w planie, temat w ntfy, przycisk Test; u kogoś z zespołu działa aplikacja.</td></tr>
     <tr><td>Gra się przycina</td><td>Najczęściej brakuje pamięci karty graficznej: niższe tekstury, mniej widocznych aut i cieni, zamknij inne programy.</td></tr>
-    <tr><td>Inżynier nie odpowiada głosem, ostrzeżenie o folderze tymczasowym</td><td>Program uruchomiono z wnętrza zipa. Kliknij zip prawym przyciskiem → Wyodrębnij wszystkie… i uruchom INSTALL.bat z rozpakowanego folderu.</td></tr>
-    <tr><td>Windows blokuje pliki</td><td>Przed rozpakowaniem: prawy przycisk na paczce → Właściwości → Odblokuj.</td></tr>
+    <tr><td>„System Windows ochronił ten komputer” przy instalacji</td><td>Instalator nie ma jeszcze podpisu cyfrowego. Kliknij <b>Więcej informacji</b> → <b>Uruchom mimo to</b>.</td></tr>
+    <tr><td>Windows 11 blokuje instalator bez „Uruchom mimo to”</td><td>Włączona „Inteligentna kontrola aplikacji” nie przepuszcza programów bez podpisu cyfrowego. Można ją wyłączyć (Zabezpieczenia Windows → Kontrola aplikacji i przeglądarki), ale Windows nie pozwala potem włączyć jej z powrotem.</td></tr>
+    <tr><td>AVG albo Avast skanuje instalator („CyberCapture”)</td><td>Antywirus sprawdza w chmurze nowy plik bez podpisu cyfrowego. Poczekaj na wynik albo kliknij <b>Otwórz mimo to</b>.</td></tr>
   </table>
   <h3>Zgłoś problem albo sugestię</h3>
   <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na pit wallu: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
