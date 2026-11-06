@@ -1108,9 +1108,12 @@ function boot() {
   if (TRYB === 'widz') return startObs(Q.get('obs'));
   if (Q.get('team')) $('l-code').value = Q.get('team');
   if (Q.get('kto')) { KTO = Q.get('kto'); lsSet('kto', KTO); }
-  var hoBusy = false;
+  var hoBusy = false, wantDone = false;
   firebase.auth().onAuthStateChanged(function (u) {
-    var want = (Q.get('team') || '').trim().toLowerCase();
+    // zespół z adresu (program otwiera pit wall SWOJEGO zespołu) obowiązuje tylko przy otwarciu tej karty;
+    // później logowanie w innej karcie (inny zespół) zmienia też tę kartę – bez wylogowywania tamtej (wcześniej
+    // dwie karty różnych zespołów wylogowywały się nawzajem po kilkudziesięciu sekundach)
+    var want = wantDone ? '' : (Q.get('team') || '').trim().toLowerCase();
     var mine = !!(u && /@pitwallcrew\.team$/.test(u.email || ''));
     if (hoBusy && !u) return;                 // logowanie z programu: wylogowanie z innego zespołu bez migania logowania
     if (HANDOFF && want) {
@@ -1134,6 +1137,13 @@ function boot() {
         showLogin(); pickLogin(want);
         $('l-err').textContent = 'Program używa zespołu ' + want + ' – wpisz jego hasło.';
       });
+    }
+    if (!hoBusy && (!want || (mine && codeOf(u.email) === want) || !u)) {
+      wantDone = true;
+      if (Q.get('team')) {
+        Q.delete('team');
+        try { history.replaceState(null, '', location.pathname + (Q.toString() ? '?' + Q.toString() : '')); } catch (e) {}
+      }
     }
     IS_OWNER = !!(u && /\.owner@/.test(u.email || ''));
     if (u && /@pitwallcrew\.team$/.test(u.email || '')) startTeam(codeOf(u.email));
@@ -1242,6 +1252,7 @@ var STARTED = '';
 function startTeam(code) {
   // ten sam zespół drugi raz (np. po zostaniu założycielem logowanie zmienia konto) – bez podwójnych subskrypcji
   if (STARTED === code) { ownerBox(); editDrivers(); return; }
+  if (STARTED) { location.reload(); return; }   // w innej karcie zalogowano inny zespół – ta karta przechodzi na niego
   STARTED = code;
   CODE = code; T = function (p) { return db.ref('teams/' + code + (p ? '/' + p : '')); };
   teamsAdd(code);
