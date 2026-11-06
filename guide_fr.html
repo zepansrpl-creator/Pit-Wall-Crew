@@ -36,7 +36,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </head>
 <body>
 <header>
-  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a><a href="guide_es.html">ES</a><a href="guide_it.html">IT</a><a href="guide_da.html">DA</a></div>
   <h1>Pit Wall Crew – mode d'emploi</h1>
   <p>Ingénieur de course vocal et Pit Wall pour Le Mans Ultimate et Assetto Corsa. De l'installation à ta première course.</p>
 </header>
@@ -72,13 +72,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
       <b>Se connecter avec Patreon</b> – elle se télécharge toute seule, tes réglages restent).</li>
     <li>Lance le fichier téléchargé. L'installateur n'a pas encore de signature numérique, donc Windows peut afficher « Windows a protégé votre ordinateur » –
       clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>.</li>
-    <li>Dans l'installateur, choisis ta <b>langue</b> (le programme utilisera la même), puis <b>OK</b>, <b>Suivant</b> et <b>Installer</b>. L'installation dure environ une minute, ne télécharge rien (Python est inclus) et ne demande pas de droits d'administrateur.
+    <li>Dans l'installateur, choisis ta <b>langue</b> (le programme utilisera la même ; l'espagnol, l'italien et le danois se choisissent ensuite dans l'app : Son et langue → Język / Language), puis <b>OK</b>, <b>Suivant</b> et <b>Installer</b>. L'installation dure environ une minute, ne télécharge rien (Python est inclus) et ne demande pas de droits d'administrateur.
       Le programme et tes données vont dans <code>Documents\Pit Wall Crew</code>. Tu peux décocher les raccourcis <b>Pit Wall Crew</b> sur le bureau et dans le menu Démarrer. À la fin, choisis de lancer ou non l'appli, le tutoriel vocal et la page de la version complète sur Patreon, puis clique sur <b>Terminer</b>.</li>
     <li>L'appli s'ouvre dans la langue choisie, avec la fenêtre <b>Premiers pas</b> à côté – suis-la dans l'ordre (chaque point a un bouton <b>Ouvrir</b>) :
       <ol>
         <li><b>Équipe</b> : en haut <b>Créer une nouvelle équipe…</b> (première personne) ou code et mot de passe de l'équipe donnés par tes coéquipiers ; puis ton nom – un nouveau nom est ajouté aux pilotes de l'équipe à l'enregistrement ; seul – mode <b>Solo</b>.</li>
         <li><b>Micro et bouton</b> : choisis ton micro (la barre bouge quand tu parles), clique sur <b>Définir : appuie sur le bouton…</b> et appuie sur le bouton du volant.</li>
-        <li><b>Voix</b> : choisis la voix de l'ingénieur et clique sur <b>▶ Écouter</b>.</li>
+        <li><b>Son et langue</b> : choisis la voix de l'ingénieur et clique sur <b>▶ Écouter</b>.</li>
         <li><b>Clé Groq</b> (gratuite, pour l'IA) : <a href="#ai">comment l'obtenir</a> → Avancé → Ta propre clé Groq → <b>Vérifier la clé</b>.</li>
         <li><b>Patreon</b> : sur la page Ingénieur, <b>Se connecter avec Patreon</b> – c'est ainsi que tu reçois les mises à jour.</li>
         <li>Clique sur <b>Enregistrer et redémarrer le module ingénieur</b>.</li>
@@ -86,7 +86,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Dans LMU, une fois : <b>Settings → Gameplay → Enable Plugins = ON</b> (sans cela le programme ne voit pas les données du jeu ; Assetto Corsa : section <a href="#ac">Assetto Corsa</a>). Va en piste, maintiens le bouton et demande par ex. « combien de carburant ? ».</li>
   </ol>
   <div class="tip">Les mises à jour s'installent au démarrage de l'appli – jamais pendant que tu roules. Tes réglages sont conservés.
-  Tu peux rouvrir « Premiers pas » plus tard : Aide → Mode d'emploi → Premiers pas. Changer de langue : Voix → Język / Language.</div>
+  Tu peux rouvrir « Premiers pas » plus tard : Aide → Mode d'emploi → Premiers pas. Changer de langue : Son et langue → Język / Language.</div>
   <p><b>Ancienne installation depuis le zip (INSTALL.bat) ?</b> Lance le nouvel installateur. Si le programme avait été décompressé dans <code>Documents\Pit Wall Crew</code>, tes réglages restent automatiquement.
   S'il était dans un autre dossier, copie <code>config.toml</code> et le dossier <code>data</code> de l'ancien dossier du programme vers <code>Documents\Pit Wall Crew\Program</code> (ou refais simplement « Premiers pas »).
   Une ancienne installation avec un autre Python que 3.12 affiche après une mise à jour un message demandant de l'installer avec le nouvel installateur.</p>
@@ -131,12 +131,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Choisis le micro et clique sur <b>Test 3 s</b> – dis quelque chose et vérifie que le niveau bouge.</li>
     <li><b>Définir : appuie sur le bouton…</b> puis appuie sur le bouton du volant qui servira à parler (tous les boutons marchent, y compris ceux des MOZA numérotés au-delà de 32). Une touche du clavier marche aussi.</li>
-    <li><b>Casque / haut-parleurs</b> – l'appareil sur lequel tu entends l'ingénieur et le spotter, p. ex. un casque pendant que le jeu est sur les haut-parleurs.</li>
   </ul>
-  <h3>Voix</h3>
-  <img src="img/fr/app_voice.webp" alt="Voix">
+  <h3>Son et langue</h3>
+  <img src="img/fr/app_voice.webp" alt="Son et langue">
   <ul>
-    <li>Voix, débit, volume, effet radio, langue et prénom de l'ingénieur. <b>▶ Écouter</b> joue un exemple.</li>
+    <li><b>Język / Language</b> – tout en haut, toujours aussi en anglais, pour la trouver facilement.</li>
+    <li><b>Casque / haut-parleurs</b> – l'appareil sur lequel tu entends l'ingénieur et le spotter, p. ex. un casque pendant que le jeu est sur les haut-parleurs.</li>
+    <li>Voix de l'ingénieur, débit, volume, effet radio et prénom de l'ingénieur. <b>▶ Écouter</b> joue un exemple.</li>
     <li>Si tu lui donnes un prénom (par ex. Marc), il se présente et « Marc, silence » le fait taire.</li>
     <li><b>Voix du spotter</b> – une voix à part pour les messages urgents sur la piste (voiture à côté, drapeaux, incidents, prises de tour) ; « comme l'ingénieur » = une seule voix. <b>Effet radio du spotter</b> – séparé de l'ingénieur (par ex. spotter sans grésillement, ingénieur à la radio). <b>▶ Écouter le spotter</b> joue un exemple.</li>
   </ul>
@@ -159,7 +160,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>La liste complète est dans l'appli : <b>Aide → Commandes</b>.</p>
   <img src="img/fr/app_commands.webp" alt="Commandes">
   <p>Une question que le programme ne connaît pas part à l'IA (avec une clé Groq) avec les données de course. Les questions sur le programme lui-même
-  (« comment couper les annonces des prototypes qui arrivent ? », « que le spotter n'annonce plus les côtés ») reçoivent une réponse de l'IA d'après ce mode d'emploi et les réglages : la commande ou l'endroit dans les réglages, et si cette option n'existe pas, elle le dit et propose la plus proche.</p>
+  (« comment couper les annonces des prototypes qui arrivent ? », « que le spotter n'annonce plus les côtés ») reçoivent une réponse de l'IA d'après ce mode d'emploi et les réglages : la commande ou l'endroit dans les réglages, et si cette option n'existe pas, elle le dit et propose la plus proche.
+  Une commande dite avec tes propres mots (« des gommes neuves à droite », « envoie un texto à Patrick pour qu'il se lève ») est reconnue par l'IA dans la liste de toutes les commandes (aussi dans la démo) et l'appli l'exécute ; la fois suivante, la même phrase marche tout de suite sans IA (« oublie les commandes apprises » les efface). Les mots mal reconnus sont corrigés par l'appli elle-même, sans Internet, et les noms de tes coéquipiers et des rivaux proches sont donnés en indice à la reconnaissance vocale.</p>
   <ul>
     <li><b>Spotter</b> (Réglages → Alertes) : « Voiture à gauche », « À droite, Hypercar », « Three wide » et de quel côté sont les voitures, « Libre » – toujours à la fin, quand plus personne n’est à côté ; « ma catégorie seulement » possible ; se tait dans la voie des stands, en qualifications (privées dans LMU) et en course avant le départ. Sur la grille, l’ingénieur prévient quand le volant est tourné de plus de 90°. À la voix : « spotter désactivé » / « spotter activé ». Quand une voiture roule à côté, l'ingénieur se tait (même spotter désactivé) pour te laisser te concentrer sur la bagarre – réglage <b>Alertes → L'ingénieur se tait quand une voiture est à côté</b> : en course seulement (par défaut), toujours ou jamais.</li>
     <li><b>Choc</b> : quelques secondes après l'accident, l'ingénieur dit « Je vérifie si ça te fait perdre du temps » ; après deux tours propres, il donne la perte par tour, si la vitesse de pointe a baissé et si la réparation vaut le coup. S'il ne connaît pas le temps de réparation, il dit jusqu'à combien de secondes elle vaut le coup (ex. « Une réparation jusqu'à 45 secondes vaut le coup, interromps-la si elle est plus longue ») – on peut interrompre la réparation dans le jeu.</li>
@@ -197,7 +199,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="ai">
   <h2>IA – clé Groq gratuite (une fois, 3 minutes)</h2>
   <div class="tip"><b>Sans clé Groq, l'IA ne fonctionne pas</b> : réponses aux questions hors de la liste des commandes, meilleure reconnaissance vocale
-  (Whisper – sans clé, la reconnaissance Google, moins bonne, est utilisée) et traduction des messages moins courants en anglais, allemand et français.
+  (Whisper – sans clé, la reconnaissance Google, moins bonne, est utilisée) et traduction des messages moins courants en anglais, allemand, français, espagnol, italien et danois.
   Les alertes, la stratégie et les commandes fonctionnent aussi sans clé.</div>
   <ol>
     <li>Va sur <a href="https://console.groq.com">console.groq.com</a> et connecte-toi – le plus simple avec un compte Google. Le compte est gratuit.</li>
@@ -327,11 +329,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>« Windows a protégé votre ordinateur » à l'installation</td><td>L'installateur n'a pas encore de signature numérique. Clique sur <b>Informations complémentaires</b> → <b>Exécuter quand même</b>.</td></tr>
     <tr><td>Windows 11 bloque l'installateur sans « Exécuter quand même »</td><td>Le « Contrôle intelligent des applications » est activé et refuse les programmes sans signature numérique. On peut le désactiver (Sécurité Windows → Contrôle des applications et du navigateur), mais Windows ne permet pas de le réactiver ensuite.</td></tr>
     <tr><td>AVG ou Avast analyse l'installateur (« CyberCapture »)</td><td>L'antivirus vérifie dans le cloud un nouveau fichier sans signature numérique. Attends le résultat ou clique sur <b>Ouvrir quand même</b>.</td></tr>
+    <tr><td>« Je n'ai pas compris », la voix de l'ingénieur coupe, les messages disent « Ton antivirus (Avast/AVG) bloque… »</td><td>Avast/AVG bloque les connexions de l'appli. Avast/AVG → Menu → Paramètres → Général → Exceptions → Ajouter une exception → le dossier Documents\Pit Wall Crew, puis redémarre l'appli.</td></tr>
   </table>
   <h3>Signaler un problème ou une suggestion</h3>
   <p>Dans l'appli : <b>Aide → Signaler un problème</b>, sur le Pit Wall : l'onglet <b>Aide</b>. Ça va directement à l'auteur.
+  En roulant, dis <b>« signale un bug : … »</b> (p. ex. « signale un bug : le spotter a dit à gauche mais il n'y avait personne ») – l'appli ajoute ta position sur la piste, le tour et les derniers messages de l'ingénieur ; juste « signale un bug » – l'ingénieur demande ce qui s'est passé.
   Avec ton accord, l'appli peut envoyer automatiquement un rapport en cas de plantage (sans voix, clés ni mots de passe) –
-  tu l'actives ou le désactives sur la même page. Là aussi, tu peux couper le <b>compteur anonyme d'utilisateurs</b> (numéro d'installation aléatoire, version et langue – ni noms ni données du jeu). Détails : <a href="prywatnosc.html?lang=fr">Confidentialité</a>.</p>
+  tu l'actives ou le désactives sur la même page. Là aussi, tu peux couper le <b>compteur anonyme d'utilisateurs</b> (numéro d'installation aléatoire, version et langue – ni noms ni données du jeu) et les <b>statistiques d'utilisation des fonctions</b> (noms des fonctions, nombres et temps de démarrage – jamais tes questions) et les phrases que l'IA a reconnues comme commandes (sans noms – les plus fréquentes sont ajoutées à l'appli pour tous). Les mises à jour ne téléchargent que les fichiers modifiés si tu as la version précédente. Détails : <a href="prywatnosc.html?lang=fr">Confidentialité</a>.</p>
   <img src="img/fr/app_feedback.webp" alt="Signaler un problème">
 </section>
 

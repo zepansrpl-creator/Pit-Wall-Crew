@@ -36,7 +36,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </head>
 <body>
 <header>
-  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a><a href="guide_es.html">ES</a><a href="guide_it.html">IT</a><a href="guide_da.html">DA</a></div>
   <h1>Pit Wall Crew – instrukcja</h1>
   <p>Głosowy inżynier wyścigowy i pit wall do Le Mans Ultimate i Assetto Corsa. Od instalacji do pierwszego wyścigu.</p>
 </header>
@@ -71,13 +71,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
       <b>Zaloguj przez Patreon</b> – pobierze się sama, ustawienia zostaną).</li>
     <li>Uruchom pobrany plik. Instalator nie ma jeszcze podpisu cyfrowego, więc Windows może pokazać okno „System Windows ochronił ten komputer” –
       kliknij <b>Więcej informacji</b> → <b>Uruchom mimo to</b>.</li>
-    <li>W instalatorze wybierz <b>język</b> (ten sam ustawi się w programie), potem <b>OK</b>, <b>Dalej</b> i <b>Zainstaluj</b>. Instalacja trwa około minuty, niczego nie pobiera (Python jest w środku) i nie wymaga uprawnień administratora.
+    <li>W instalatorze wybierz <b>język</b> (ten sam ustawi się w programie; hiszpański, włoski i duński wybierzesz potem w programie: Dźwięk i język → Język / Language), potem <b>OK</b>, <b>Dalej</b> i <b>Zainstaluj</b>. Instalacja trwa około minuty, niczego nie pobiera (Python jest w środku) i nie wymaga uprawnień administratora.
       Program i Twoje dane trafią do <code>Dokumenty\Pit Wall Crew</code>. Skróty <b>Pit Wall Crew</b> na pulpicie i w menu Start możesz odznaczyć. Na koniec zaznacz, czy uruchomić aplikację, samouczek głosowy i stronę pełnej wersji na Patreonie, i kliknij <b>Zakończ</b>.</li>
     <li>Aplikacja otworzy się w wybranym języku, a obok okienko <b>Pierwsze kroki</b> – przejdź je po kolei (przy każdym punkcie jest przycisk <b>Otwórz</b>):
       <ol>
         <li><b>Zespół</b>: na górze <b>Utwórz nowy zespół…</b> (pierwsza osoba) albo kod i hasło zespołu od kolegów; potem Twoje imię – nowe imię po zapisaniu samo trafi do kierowców zespołu; jeździsz sam – tryb <b>Solo</b>.</li>
         <li><b>Mikrofon i przycisk</b>: wybierz mikrofon (pasek ma się ruszać, gdy mówisz), kliknij <b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy.</li>
-        <li><b>Głos</b>: wybierz głos inżyniera i kliknij <b>▶ Odsłuchaj</b>.</li>
+        <li><b>Dźwięk i język</b>: wybierz głos inżyniera i kliknij <b>▶ Odsłuchaj</b>.</li>
         <li><b>Klucz Groq</b> (darmowy, do AI): <a href="#ai">jak go zdobyć</a> → Zaawansowane → Własny klucz Groq → <b>Sprawdź klucz</b>.</li>
         <li><b>Patreon</b>: na stronie Inżynier <b>Zaloguj przez Patreon</b> – wtedy dostajesz aktualizacje.</li>
         <li>Kliknij <b>Zapisz i uruchom ponownie moduł inżyniera</b>.</li>
@@ -132,13 +132,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Wybierz mikrofon i kliknij <b>Test 3 s</b> – powiedz coś i sprawdź, czy pasek się rusza.</li>
     <li><b>Ustaw: naciśnij przycisk…</b> i naciśnij przycisk na kierownicy, którym będziesz mówić (działa każdy przycisk, także MOZA o numerach powyżej 32). Można też ustawić klawisz.</li>
-    <li><b>Słuchawki / głośniki</b> – urządzenie, na którym słychać inżyniera i spottera, np. słuchawki, gdy gra jest na głośnikach.</li>
   </ul>
 
-  <h3>Głos</h3>
-  <img src="img/app_voice.webp" alt="Głos">
+  <h3>Dźwięk i język</h3>
+  <img src="img/app_voice.webp" alt="Dźwięk i język">
   <ul>
-    <li>Język, głos, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
+    <li><b>Język / Language</b> – na samej górze, zawsze z angielskim podpisem, żeby łatwo go znaleźć.</li>
+    <li><b>Słuchawki / głośniki</b> – urządzenie, na którym słychać inżyniera i spottera, np. słuchawki, gdy gra jest na głośnikach.</li>
+    <li>Głos inżyniera, tempo, głośność, efekt radia i imię inżyniera. <b>▶ Odsłuchaj</b> odtworzy próbkę.</li>
     <li>Gdy nadasz imię (np. Marek), inżynier się przedstawi, a „Marku, cicho” go wyciszy.</li>
     <li><b>Głos spottera</b> – osobny głos dla pilnych komunikatów o sytuacji na torze (auto obok, flagi, wypadki, dublowanie); „jak inżynier” = ten sam głos. <b>Efekt radia spottera</b> – osobno od inżyniera (np. spotter bez trzasków, inżynier przez radio). <b>▶ Odsłuchaj spottera</b> odtworzy próbkę.</li>
   </ul>
@@ -170,7 +171,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Pełna lista jest w aplikacji: <b>Pomoc → Komendy</b>.</p>
   <img src="img/app_commands.webp" alt="Lista komend">
   <p>Pytanie, którego program nie zna, trafia do AI (jeśli jest klucz Groq) razem z danymi wyścigu. Pytania o sam program
-  („jak wyłączyć mówienie o zbliżających się prototypach?”, „niech spotter nie mówi o stronach”) AI odpowiada na podstawie tej instrukcji i ustawień: podaje komendę albo miejsce w ustawieniach, a gdy dokładnie takiej opcji nie ma – mówi to i podaje najbliższą.</p>
+  („jak wyłączyć mówienie o zbliżających się prototypach?”, „niech spotter nie mówi o stronach”) AI odpowiada na podstawie tej instrukcji i ustawień: podaje komendę albo miejsce w ustawieniach, a gdy dokładnie takiej opcji nie ma – mówi to i podaje najbliższą.
+  Polecenie powiedziane po swojemu („daj nowe gumy na prawo”, „esemes do Patryka, że wstaje”) AI dopasowuje do listy wszystkich komend (także w demo) i program je wykonuje; następnym razem to samo zdanie działa od razu, bez AI („zapomnij nauczone polecenia” je kasuje). Przekręcone przez rozpoznawanie mowy słowa („zapankuj 40 litrów”) program poprawia sam, bez internetu, a imiona kolegów z zespołu i nazwiska rywali obok podpowiada rozpoznawaniu mowy.</p>
   <ul>
     <li><b>Krótkie naciśnięcia przycisku bez mówienia:</b> 1 – ucisz, 2 – krótki stan (zjazd, paliwo lub energia, odstępy), 3 – powtórz, 4 – poprzedni komunikat. Głosem: „powtórz”, „poprzednia wiadomość”.</li>
     <li><b>Pośpiech:</b> gdy dodasz do pytania „kurwa” (np. „ile kurwa mam paliwa?”), inżynier odpowie wyraźnie szybciej.</li>
@@ -206,7 +208,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="ai">
   <h2>AI – darmowy klucz Groq (raz, 3 minuty)</h2>
   <div class="tip"><b>Bez klucza Groq nie działa AI</b>: odpowiedzi na pytania spoza listy komend, lepsze rozpoznawanie mowy
-  (Whisper – bez klucza zostaje słabsze rozpoznawanie Google) i tłumaczenie rzadszych komunikatów po angielsku, niemiecku i francusku.
+  (Whisper – bez klucza zostaje słabsze rozpoznawanie Google) i tłumaczenie rzadszych komunikatów po angielsku, niemiecku, francusku, hiszpańsku, włosku i duńsku.
   Ostrzeżenia, strategia i komendy działają także bez klucza.</div>
   <ol>
     <li>Wejdź na <a href="https://console.groq.com">console.groq.com</a> i zaloguj się – najprościej kontem Google. Konto jest darmowe.</li>
@@ -336,11 +338,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>„System Windows ochronił ten komputer” przy instalacji</td><td>Instalator nie ma jeszcze podpisu cyfrowego. Kliknij <b>Więcej informacji</b> → <b>Uruchom mimo to</b>.</td></tr>
     <tr><td>Windows 11 blokuje instalator bez „Uruchom mimo to”</td><td>Włączona „Inteligentna kontrola aplikacji” nie przepuszcza programów bez podpisu cyfrowego. Można ją wyłączyć (Zabezpieczenia Windows → Kontrola aplikacji i przeglądarki), ale Windows nie pozwala potem włączyć jej z powrotem.</td></tr>
     <tr><td>AVG albo Avast skanuje instalator („CyberCapture”)</td><td>Antywirus sprawdza w chmurze nowy plik bez podpisu cyfrowego. Poczekaj na wynik albo kliknij <b>Otwórz mimo to</b>.</td></tr>
+    <tr><td>„Nie zrozumiałem”, głos inżyniera urywa się, w komunikatach „Antywirus (Avast/AVG) blokuje…”</td><td>Avast/AVG blokuje połączenia programu. Avast/AVG → Menu → Ustawienia → Ogólne → Wyjątki → Dodaj wyjątek → folder Dokumenty\Pit Wall Crew, potem uruchom program ponownie.</td></tr>
   </table>
   <h3>Zgłoś problem albo sugestię</h3>
   <p>W aplikacji: <b>Pomoc → Zgłoś problem</b>, na pit wallu: zakładka <b>Pomoc</b>. Zgłoszenie trafia prosto do autora.
+  W trakcie jazdy powiedz <b>„zgłoś błąd: …”</b> (np. „zgłoś błąd: spotter powiedział z lewej, a nikogo nie było”) – program dołączy miejsce na torze, okrążenie i ostatnie komunikaty inżyniera; samo „zgłoś błąd” – inżynier zapyta, co się stało.
   Za Twoją zgodą aplikacja może sama wysłać raport, gdy się zepsuje (bez nagrań głosu, kluczy i haseł) –
-  włączasz to i wyłączasz na tej samej stronie. Tam też wyłączysz <b>anonimowy licznik użytkowników</b> (losowy numer instalacji, wersja i język – bez imion i danych z gry). Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
+  włączasz to i wyłączasz na tej samej stronie. Tam też wyłączysz <b>anonimowy licznik użytkowników</b> (losowy numer instalacji, wersja i język – bez imion i danych z gry) i <b>statystyki użycia funkcji</b> (nazwy funkcji, liczby i czas uruchomienia – bez treści pytań) oraz zdania, które AI dopasowało do poleceń (bez imion – najczęstsze trafiają do programu dla wszystkich). Aktualizacje pobierają tylko zmienione pliki, gdy masz poprzednią wersję. Szczegóły: <a href="prywatnosc.html?lang=pl">Prywatność</a>.</p>
   <img src="img/app_feedback.webp" alt="Zgłoś problem">
 </section>
 

@@ -4,7 +4,7 @@
   try {
     L = new URLSearchParams(location.search).get('lang') || localStorage.getItem('pwc_lang') || (navigator.language || 'pl').slice(0, 2);
   } catch (e) { L = (navigator.language || 'pl').slice(0, 2); }
-  if (['pl', 'en', 'de', 'fr'].indexOf(L) < 0) L = 'en';
+  if (['pl', 'en', 'de', 'fr', 'es', 'it', 'da'].indexOf(L) < 0) L = 'en';
   window.PWC_LANG = L;
   document.documentElement.lang = L;
   var D = null, PATS = [], MISS = window.__I18N_MISS = {};

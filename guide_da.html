@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – vejledning</title>
+<style>
+:root { --bg:#0c1411; --card:#13201b; --line:#22362d; --text:#efe9da; --muted:#9a9ea6; --acc:#d9a227; --hi:#ffc400; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg:#f4f5f7; --card:#fff; --line:#dde0e5; --text:#16181c; --muted:#5d636d; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui, "Segoe UI", Roboto, sans-serif; }
+header { padding:28px 16px 12px; max-width:1040px; margin:0 auto; }
+header h1 { margin:0; font-size:30px; }
+header p { margin:6px 0 0; color:var(--muted); }
+nav.toc { max-width:1040px; margin:0 auto; padding:0 16px; display:flex; flex-wrap:wrap; gap:6px; }
+nav.toc a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:4px 12px; font-size:14px; background:var(--card); }
+main { max-width:1040px; margin:0 auto; padding:8px 16px 40px; }
+section { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:18px 0; }
+h2 { margin:0 0 10px; font-size:22px; }
+h3 { margin:18px 0 6px; font-size:17px; }
+img { max-width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block; margin:10px 0; }
+img.phone { max-width:300px; }
+ol, ul { padding-left:22px; margin:6px 0; }
+li { margin:3px 0; }
+.legend { counter-reset:n; list-style:none; padding:0; }
+.legend li { counter-increment:n; padding-left:36px; position:relative; margin:6px 0; }
+.legend li::before { content:counter(n); position:absolute; left:0; top:1px; width:24px; height:24px; border-radius:50%;
+  background:var(--hi); color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; }
+.tip { border-left:3px solid var(--acc); padding:6px 12px; background:rgba(217,162,39,.08); border-radius:6px; margin:10px 0; }
+code, kbd { background:rgba(127,127,127,.15); border-radius:4px; padding:1px 5px; font-size:.92em; }
+table { border-collapse:collapse; width:100%; font-size:15px; }
+td, th { border-bottom:1px solid var(--line); padding:7px 8px; text-align:left; vertical-align:top; }
+footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-size:14px; }
+.langs { float:right; font-size:14px; } .langs a { color:var(--muted); margin-left:8px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a><a href="guide_es.html">ES</a><a href="guide_it.html">IT</a><a href="guide_da.html">DA</a></div>
+  <h1>Pit Wall Crew – vejledning</h1>
+  <p>Stemmestyret raceingeniør og Pit Wall til Le Mans Ultimate og Assetto Corsa. Fra installation til dit første løb.</p>
+</header>
+<nav class="toc">
+  <a href="#what">Hvad er det</a><a href="#inst">Installation</a><a href="#app">Appen</a><a href="#set">Indstillinger</a>
+  <a href="#talk">Tal</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Rækkefølge og plan</a>
+  <a href="#phone">Notifikationer</a><a href="#race">Langt løb</a><a href="#help">Problemer</a>
+</nav>
+<main>
+<div class="tip">Oversættelserne kan indeholde sprogfejl. Forfatteren beder dig venligst rapportere dem alle (Hjælp → Rapportér et problem).</div>
+
+<section id="what">
+  <h2>Hvad er det</h2>
+  <p><b>Ingeniøren</b> er et program på din pc. Den læser data fra spillet og taler til dig gennem headsettet:
+  den advarer dig om hurtigere biler, siger hvornår du skal i pit, hvad der skal skiftes ved pitstoppet, og hvor du taber tid.
+  Den svarer på spørgsmål med stemmen – hold knappen på rattet inde, tal, slip.</p>
+  <p><b>Pit Wall</b> er en webside (pc eller telefon). Hele holdet ser live bilens status, rivaler, vejr og
+  stint-rækkefølgen og kan sende køreren beskeder, som ingeniøren læser op.</p>
+  <p>Det virker på alle baner, med alle biler og klasser i Le Mans Ultimate og Assetto Corsa. Du kan køre alene (<b>Solo</b>-tilstand) eller som hold.</p>
+  <h3>Det skal du bruge</h3>
+  <ul>
+    <li>Windows 10 eller 11 og Le Mans Ultimate eller Assetto Corsa (Steam; til Assetto Corsa anbefales Custom Shaders Patch – afsnittet <a href="#ac">Assetto Corsa</a>).</li>
+    <li>Et headset med mikrofon og en ledig knap på rattet (eller en tast).</li>
+    <li>Internet (stemmen, talegenkendelsen og Pit Wall virker online).</li>
+    <li>En gratis Groq-nøgle – <b>uden den virker AI'en ikke</b> (bedre talegenkendelse, AI-svar, oversættelse af mindre almindelige beskeder); sådan får du den: <a href="#ai">AI</a>.</li>
+  </ul>
+</section>
+
+<section id="inst">
+  <h2>Installation (2 minutter)</h2>
+  <ol>
+    <li>Hent installationsprogrammet <code>PitWallCrew_Setup_….exe</code> fra FR Mods' opslag på Patreon (offentligt opslag – gratis demo; den fulde version låser du op i appen med
+      <b>Log ind med Patreon</b> – den henter sig selv, og dine indstillinger bliver).</li>
+    <li>Kør den hentede fil. Installationsprogrammet har endnu ingen digital signatur, så Windows kan vise »Windows beskyttede din pc« –
+      klik <b>Flere oplysninger</b> → <b>Kør alligevel</b>.</li>
+    <li>Vælg <b>sprog</b> i installationsprogrammet (engelsk, polsk, tysk eller fransk; dansk vælges bagefter i appen: Lyd og sprog → Język / Language), derefter <b>OK</b>, <b>Næste</b> og <b>Installer</b>. Installationen tager cirka et minut, henter intet (Python er med) og kræver ikke administratorrettigheder.
+      Programmet og dine data havner i <code>Dokumenter\Pit Wall Crew</code>. Du kan fravælge genvejene til <b>Pit Wall Crew</b> på skrivebordet og i Start-menuen. Til sidst vælger du, om appen, stemmevejledningen og siden med den fulde version på Patreon skal startes, og klikker <b>Udfør</b>.</li>
+    <li>Appen åbner med vinduet <b>Første skridt</b> ved siden af – gå det igennem i rækkefølge (hvert punkt har en <b>Åbn</b>-knap):
+      <ol>
+        <li><b>Hold</b>: øverst <b>Opret et nyt hold…</b> (første person) eller holdets kode og adgangskode fra holdkammeraterne; derefter dit navn – et nyt navn føjes til holdets kørere, når du gemmer; kører du alene – <b>Solo</b>-tilstand.</li>
+        <li><b>Mikrofon og knap</b>: vælg mikrofonen (bjælken bevæger sig, når du taler), klik <b>Indstil: tryk på knappen…</b> og tryk på knappen på rattet.</li>
+        <li><b>Lyd og sprog</b>: vælg ingeniørens stemme og klik <b>▶ Lyt</b>.</li>
+        <li><b>Groq-nøgle</b> (gratis, til AI'en): <a href="#ai">sådan får du den</a> → Avanceret → Din Groq-nøgle → <b>Tjek nøgle</b>.</li>
+        <li><b>Patreon</b>: på siden Ingeniør klik <b>Log ind med Patreon</b> – sådan får du opdateringer.</li>
+        <li>Klik <b>Gem og genstart ingeniørmodulet</b>.</li>
+      </ol></li>
+    <li>I LMU én gang: <b>Settings → Gameplay → Enable Plugins = ON</b> (uden det kan programmet ikke se spillets data; Assetto Corsa: afsnittet <a href="#ac">Assetto Corsa</a>). Kør ud på banen, hold knappen inde og spørg fx »hvor meget brændstof?«.</li>
+  </ol>
+  <div class="tip">Opdateringer installerer sig selv, når appen starter – aldrig mens du kører. Dine indstillinger bliver.
+  Vinduet »Første skridt« åbner du igen under Hjælp → Manual → Første skridt. Sproget skifter du under Lyd og sprog → Język / Language.</div>
+  <p><b>Gammel installation fra zip (INSTALL.bat)?</b> Kør det nye installationsprogram. Hvis programmet var pakket ud i <code>Dokumenter\Pit Wall Crew</code>, bliver dine indstillinger automatisk.
+  Hvis det lå i en anden mappe, så kopiér <code>config.toml</code> og mappen <code>data</code> fra den gamle mappe til <code>Dokumenter\Pit Wall Crew\Program</code> (eller gå »Første skridt« igennem igen).
+  En ældre installation med en anden Python end 3.12 viser efter en opdatering en besked om at installere den med det nye installationsprogram.</p>
+  <p><b>Stemmevejledning</b> (1–2 minutter): ved første start fører ingeniøren dig gennem 5 trin – radiotest, »hvor meget brændstof har jeg?«, »hvem er bagved?«, to korte tryk på knappen, »stille«. Du ser straks, om mikrofon og knap virker. Den starter kun, når en taleknap er sat op (eller du har trykket på den én gang), og mikrofonen giver signal; aldrig under et løb. Spring over: »spring vejledningen over« (eller fravælg den til sidst i installationen); igen: Hjælp → Manual → <b>Stemmevejledning</b>.</p>
+  <p><b>Afinstallation:</b> Windows-indstillinger → Apps → <b>Pit Wall Crew</b> → <b>Afinstaller</b> (eller Start-menuen → <b>Uninstall Pit Wall Crew</b>). Det fjerner programmet; dine indstillinger og optagelser (<code>config.toml</code>, mapperne <code>data</code> og <code>recordings</code> i <code>Dokumenter\Pit Wall Crew\Program</code>) bliver – for at fjerne alt skal du bagefter slette mappen <code>Dokumenter\Pit Wall Crew</code>.</p>
+</section>
+
+<section id="app">
+  <h2>Appens vindue</h2>
+  <p>Ikonet <b>Pit Wall Crew</b> åbner appen. Ingeniøren starter selv og begynder at tale, når du starter spillet og kører ud på banen. Skift tema <b>☾ Mørkt / ☀ Lyst</b> nederst i venstre bjælke (med det samme, uden genstart). Omgangs- og sektortider er farvet som på Pit Wall: lilla – bedst i klassen, grøn – din bedste, gul – langsommere.</p>
+  <img src="img/en/app_main.webp" alt="Hovedvindue med numre">
+  <ol class="legend">
+    <li><b>Status</b>: om ingeniøren kører, om den ser spillet (»Du kører« eller »du ser på«, når en holdkammerat kører), forbindelse til hold og AI. Grøn = OK.</li>
+    <li><b>Åbn Pit Wall</b> – holdets side i browseren, allerede forbundet til appens hold (uden at skrive adgangskode).</li>
+    <li><b>Test uden spil</b> – et simuleret løb. Tjek stemme, mikrofon og Pit Wall uden at starte LMU.</li>
+    <li><b>Start / Stop</b> ingeniøren.</li>
+    <li><b>Patreon</b> – log ind for at få opdateringer. Efter login er kun »Log ud af Patreon« tilbage.</li>
+    <li><b>Nøgletal</b>: placering, omgang, omgange til pitstop, energi eller brændstof, omgangstider, tid til slut.</li>
+    <li><b>Beskeder</b> – alt hvad ingeniøren har sagt, dine spørgsmål og holdets beskeder. Rød = akut.</li>
+    <li><b>Spørgefelt</b> – skriv et spørgsmål i stedet for at tale.</li>
+    <li><b>Indstillinger</b> – hold, mikrofon, stemme, advarsler (se nedenfor).</li>
+    <li><b>Hjælp</b> – kommandoer, funktioner, manual (også <b>Første skridt</b>), ændringer, om programmet og <b>Rapportér et problem</b>.</li>
+    <li><b>Pit Wall</b> – som knap 2, fra alle appens sider.</li>
+  </ol>
+</section>
+
+<section id="set">
+  <h2>Indstillinger</h2>
+  <p>Efter hver ændring klik <b>Gem og genstart ingeniørmodulet</b> (nederst til højre).</p>
+  <h3>Hold</h3>
+  <img src="img/en/app_team.webp" alt="Holdindstillinger">
+  <ul>
+    <li><b>Solo</b> – du kører alene: intet andet at udfylde. Pit Wall virker stadig som din live-visning.</li>
+    <li><b>Hold</b> – én person klikker <b>Opret et nyt hold…</b> (navn og adgangskode) og får en <b>holdkode</b> på 6 tegn.
+      De andre skriver koden og adgangskoden, klikker <b>Forbind til holdet</b> og vælger, hvem de er.</li>
+    <li>Feltet <b>Holdkode</b> viser de hold, denne computer har været forbundet til (kun koder og navne, <b>ingen adgangskoder</b>). Vælg et, skriv det holds adgangskode og gem. Pit Wall i browseren husker også koder: ved login og på fanen <b>Hold</b> (»Andre hold på denne enhed«).</li>
+    <li>Del kode og adgangskode <b>kun privat</b> – den, der kender dem, ser bilens status og kan skrive til køreren.</li>
+    <li><b>Lyt til ingeniøren, når jeg ikke kører</b> – mens en holdkammerat kører, hører du hans ingeniør (holdradio).</li>
+  </ul>
+  <h3>Mikrofon og knap</h3>
+  <img src="img/en/app_mic.webp" alt="Mikrofon og knap">
+  <ul>
+    <li>Vælg mikrofonen og klik <b>Test 3 s</b> – sig noget og tjek, at niveauet bevæger sig.</li>
+    <li><b>Indstil: tryk på knappen…</b> og tryk på den knap på rattet, du vil tale med (enhver knap virker, også MOZA-knapper med numre over 32). En tast virker også.</li>
+  </ul>
+  <h3>Lyd og sprog</h3>
+  <img src="img/en/app_voice.webp" alt="Lyd og sprog">
+  <ul>
+    <li><b>Język / Language</b> – helt øverst, altid også på engelsk, så det er nemt at finde.</li>
+    <li><b>Hovedtelefoner / højttalere</b> – den enhed, du hører ingeniøren og spotteren på, fx hovedtelefoner mens spillet kører på højttalerne.</li>
+    <li>Ingeniørens stemme, hastighed, lydstyrke, radioeffekt og ingeniørens navn. <b>▶ Lyt</b> afspiller en prøve.</li>
+    <li>Giver du ham et navn (fx Mads), præsenterer han sig, og »Mads, stille« får ham til at tie.</li>
+    <li><b>Spotterens stemme</b> – en separat stemme til akutte meldinger om banen (bil ved siden af, flag, uheld, overhalinger); »samme som ingeniøren« = én stemme. <b>Spotterens radioeffekt</b> – separat fra ingeniøren (fx ren spotter, ingeniør over radio). <b>▶ Lyt til spotteren</b> afspiller en prøve.</li>
+  </ul>
+  <h3>Advarsler</h3>
+  <img src="img/en/app_alerts.webp" alt="Advarsler">
+  <p>Det ingeniøren siger af sig selv: overhaling fra hurtigere klasser (og fra hvor mange sekunder), biler der holder stille,
+  flag, coach før svingene, sammenligning med din bedste omgang, kommentarer efter overhalinger, opsætningstips. Coach, sammenligninger og tips starter, når dine omgangstider er stabile (3 rene omgange med ens tider) – ikke mens du lærer banen. Undtagelse: <b>Opsætningsråd også mens jeg lærer banen</b> (eller med stemmen »opsætning nu«) – når opsætningen er så dårlig, at jævne omgange er svære. <b>Pause mellem tips</b> – mindste antal minutter mellem tips.
+  Du kan slå dem alle til og fra med stemmen under kørsel (fx »ingen coach«).</p>
+  <p><b>Spotter</b>: »Venstre«, »Til højre, Hypercar«, »Tre på linje« og hvilken side bilerne er på, »Fri« – altid til sidst, når der ikke længere er nogen ved siden af.
+  »Spotter kun for biler i min klasse« springer andre klasser over. Stille i pitlanen, i kvalifikationen (privat i LMU) og i løb før starten. På startgriden siger ingeniøren, hvis rattet er drejet mere end 90°. Med stemmen: »spotter fra« / »spotter til«,
+  »spotter kun min klasse« / »spotter alle klasser«.</p>
+  <p>Mens en bil er ved siden af, tier ingeniøren (også med spotteren slået fra), så du kan koncentrere dig om kampen – indstillingen <b>Advarsler → Ingeniøren tier, når en bil er ved siden af</b>: kun i løb (standard), altid eller aldrig. <b>Sammenstød</b>: et par sekunder efter et sammenstød siger ingeniøren »Jeg tjekker, om det koster dig tid«; efter to rene omgange siger han tabet pr. omgang, om topfarten er faldet, og om en reparation kan betale sig. Kender han ikke reparationstiden, siger han, op til hvor mange sekunder den kan betale sig (fx »En reparation på op til 45 sekunder kan betale sig, stop en længere«) – du kan stoppe reparationen i spillet. Du kan også sige: »reparation 38 sekunder«.</p>
+  <h3>Avanceret</h3>
+  <img src="img/en/app_adv.webp" alt="Avanceret">
+  <p>Tid for fuldt dækskift, automatisk start af ingeniøren, genveje, opdateringer og din egen Groq-nøgle (valgfri – din egen grænse), testerkode og »Spørg spillet om prognose, pitmenu og rivaler«.
+  <b>LMU-opsætningsmappe</b> – som regel tom (programmet finder selv spillets mappe); »gem opsætningen« skriver den nye opsætning dertil.</p>
+</section>
+
+<section id="talk">
+  <h2>Tal med ingeniøren</h2>
+  <p><b>Hold knappen inde, tal, slip.</b> Et tryk på knappen afbryder også det, ingeniøren siger.</p>
+  <p>Eksempler: »hvor meget brændstof?«, »hvornår går jeg i pit?«, »hvilke dæk skifter vi?«, »hvem er foran?«, »hvor taber jeg tid?«,
+  »hvordan er vejret?«, »hvornår overhaler den første hypercar mig?«, »stille« (helt stille til næste tryk), »kun det vigtige«, »gentag«.</p>
+  <p>Den fulde liste står i appen: <b>Hjælp → Kommandoer</b>.</p>
+  <img src="img/en/app_commands.webp" alt="Kommandoer">
+  <p>Et spørgsmål, programmet ikke kender, går til AI'en (med Groq-nøgle) sammen med løbets data. Spørgsmål om selve programmet
+  (»hvordan slår jeg advarsler om prototyper bagfra fra?«, »spotteren skal ikke sige siderne«) besvarer AI'en ud fra denne manual og indstillingerne: den giver kommandoen eller stedet i indstillingerne, og findes muligheden ikke, siger den det og foreslår den nærmeste.
+  En kommando sagt med dine egne ord (»nye dæk i højre side«, »skriv til Patrik, at han skal stå op«) matcher AI'en med listen over alle kommandoer (også i demoen), og appen udfører den; næste gang virker den samme sætning straks uden AI (»glem lærte kommandoer« sletter dem). Ord, som talegenkendelsen hørte forkert, retter appen selv uden internet, og navnene på dine holdkammerater og nærliggende rivaler sendes med som hint til talegenkendelsen.</p>
+  <ul>
+    <li><b>Korte tryk på knappen uden at tale:</b> 1 – stille, 2 – hurtig status (pitstop, brændstof eller energi, afstande), 3 – gentag, 4 – forrige besked. Med stemmen: »gentag«, »forrige besked«.</li>
+    <li><b>Har du travlt:</b> tilføj et bandeord til spørgsmålet (fx »hvor meget fandens brændstof har jeg?«), så svarer ingeniøren mærkbart hurtigere.</li>
+    <li><b>Pitmenu med stemmen:</b> »ved pitstoppet energi 60 procent og højre dæk«, »indstil pitstoppet efter strategien«. Også »skift venstre dæk«, »tank 30 liter«, »tank 40 procent«, »intet brændstof«, »tank til slutningen«; hvis talen bliver hørt forkert, finder AI'en kommandoen. En holdkammerat kan gøre det fra Pit Wall: »Spørg ingeniøren«.</li>
+    <li><b>Resten af pitmenuen:</b> »dæktryk for 2 ned«, »venstre for 140«, »dæktryk fra data«, »reparer skaderne« (eller »reparer kun karrosseriet«, »reparer alt«), »skift bremserne«, »vinge 1 op«, »luk forreste bremsekøling«, »kølergitter 3«, »regndæk ved pitstoppet«, »kørerskift til Kamil«.</li>
+    <li><b>Forslag om pitstop:</b> 2 omgange før pitstoppet (og i regn) spørger ingeniøren »Jeg kan indstille pitstoppet: … Er det OK?« – »ja« indstiller pitmenuen.</li>
+    <li><b>Stint-opsummering:</b> efter et pitstop, kørerskift eller tilbagevenden til garagen (stints på 3+ omgange) ligger den fulde opsummering på appens side <b>Kørerapporter</b> (filen <code>recordings\stint_….txt</code>, en kopi på Pit Wall): tempo, fejl (udforkørsler, sammenstød, gentagne blokeringer, hjulspin, ABS, TC – i hvilke sving), hvor du taber tid i forhold til din bedste omgang og i den fulde version også grebsudnyttelse i svingene og opsætning. Under et stint: »stint-opsummering«. <b>Kopiér rapport</b> kopierer rapporten til at indsætte (fx på Discord). Knappen <b>Hvordan laves en rapport?</b> forklarer i et par trin, hvor data kommer fra (fejl og tab pr. sving tæller efter 3 jævne, rene omgange).</li>
+    <li><b>Historik over opsætningsændringer:</b> efter »jeg har ændret …« og 3 rene omgange vurderer ingeniøren ændringen (hjalp / værre / ingen ændring) og husker den for banen og bilen; hvert opsætningstip nævner også sin bivirkning.</li>
+    <li><b>Greb i svingene</b> (fuld version): »greb?«, »hvor har jeg margin?«, »greb T5« – hvor tæt du er på dækkets grænse ved indgangen, midt i svinget og ved udgangen (100% = det mest, du har vist i det sving), og hvad du skal gøre, hvor der er margin. LMU og Assetto Corsa.</li>
+    <li><b>Opsætning eller kørestil:</b> før ingeniøren foreslår en ændring i opsætningen, tjekker han 4–8 rene omgange: er problemet der hver gang (bilen – opsætningsråd) eller kun, når du kører anderledes, fx hurtigere indgang eller tidligere gas (kørsel – kørselsråd)? Opsætningsråd tager også højde for forholdene (kolde eller slidte dæk, brændstof, banetemperatur), dæktryk, ændringens bivirkning og sessionstypen; er det værre efter 3 omgange, så gå tilbage.</li>
+    <li><b>Opsætning:</b> »opsummer tipsene« – alle foreslåede ændringer på én gang; »gem opsætningen« – en ny fil »PWC_…« med de ændringer i banens mappe (originalen ændres ikke), indlæs den i garagen.</li>
+  </ul>
+</section>
+
+<section id="ac">
+  <h2>Assetto Corsa</h2>
+  <p>Pit Wall Crew virker også med Assetto Corsa (AC1, Steam). Det er det samme program – samme ingeniør, spotter, Pit Wall og holddatabase; programmet genkender selv, hvilket spil der kører.</p>
+  <ul>
+    <li><b>Custom Shaders Patch (CSP) – stærkt anbefalet</b> (Content Manager → Settings → Custom Shaders Patch). Med CSP får du mest muligt: regn og vandpytter (Rain FX), pitstop med stemmen, analyse af under- og overstyring i svingene, sektorer, råd om TC og ABS. Uden CSP kører en enklere Python-app – med færre funktioner.</li>
+    <li><b>App i spillet</b> – programmet kopierer den selv ind i spillet. Start Pit Wall Crew <b>før</b> Assetto Corsa; med CSP kører appen selv i baggrunden. Uden CSP aktiverer du den én gang: Content Manager → Settings → Assetto Corsa → Python apps → sæt flueben ved <b>Pit Wall Crew</b>.</li>
+    <li><b>Spillet på et andet drev</b> – programmet finder det selv. Hvis ikke, angiv spillets mappe (den med <code>AssettoCorsa.exe</code>) under <b>Indstillinger → Avanceret → Assetto Corsa: spillets mappe</b>.</li>
+    <li><b>Dæk</b> – »X% tilbage« som i Sidekick; indstil samme skala som i Sidekick under <b>Indstillinger → Avanceret → Assetto Corsa: dækslidskala</b>. Ingeniøren advarer cirka 3 omgange før »cliffen« (pludseligt fald i greb). Din egen grænse pr. bil: »med denne bil skifter jeg dæk ved 97« – en advarsel 2 omgange før.</li>
+    <li><b>Pitstop med stemmen</b> (med CSP) – ingeniøren indstiller spillets hurtige pitmenu: »fyld op«, »regndæk ved pitstoppet«, »dæktryk for 18«, »ingen reparationer«. I AC skiftes altid hele dæksættet.</li>
+    <li><b>Dæktryk, gear, opsætning</b> – »hvilke dæktryk skal jeg køre med?« giver kolde tryk til garagen (psi); i træning siger »opsummer tipsene« ændringer i gearudvekslingen i klik (»forlæng sjette gear 3 klik«); »gem opsætningen« – en ny fil »PWC_…« i garagen (originalen ændres ikke).</li>
+    <li><b>Skæringer (RealPenalty)</b> – online fortæller ingeniøren om hver advarsel for at skære, som serveren tæller dem; »hvor mange advarsler har jeg?«.</li>
+    <li><b>Svingnavne</b> fra banen (»Tosa«, »Acque Minerali«) i stedet for T1, T2 – du kan spørge med navnet: »hvordan er Tosa?«.</li>
+    <li><b>Spotter, rivaler, flag, skader, strategi</b> – som i LMU.</li>
+    <li><b>Det AC ikke har:</b> kørerskift (programmet kører altid i solo-stil – ingen overlevering af bilen eller briefinger), virtuel energi, kølergitter og bremsekøling – ingeniøren taler ikke om dem.</li>
+    <li><b>Pit Wall</b> virker som i LMU. Flere biler fra ét hold i et løb – hver har sin egen visning (liste øverst).</li>
+  </ul>
+</section>
+
+<section id="ai">
+  <h2>AI – gratis Groq-nøgle (én gang, 3 minutter)</h2>
+  <div class="tip"><b>Uden Groq-nøgle virker AI'en ikke</b>: svar på spørgsmål uden for kommandolisten, bedre talegenkendelse
+  (Whisper – uden nøgle bruges Googles svagere genkendelse) og oversættelse af mindre almindelige beskeder på engelsk, tysk, fransk, spansk, italiensk og dansk.
+  Advarsler, strategi og kommandoer virker også uden nøgle.</div>
+  <ol>
+    <li>Gå til <a href="https://console.groq.com">console.groq.com</a> og log ind – nemmest med en Google-konto. Kontoen er gratis.</li>
+    <li>Til venstre: <b>API Keys → Create API Key</b>, skriv et navn (fx <code>PWC</code>) → <b>Submit</b>.</li>
+    <li><b>Kopiér nøglen med det samme</b> (den starter med <code>gsk_</code>) – Groq viser den kun én gang. Nøglen er gratis med en daglig grænse.</li>
+    <li><b>Hold</b> (én person er nok): Pit Wall → <b>Hold → Holdets AI (Groq)</b> → indsæt → <b>Gem nøgle</b>.
+      Nøglen når ud til hele holdet, og kun holdets medlemmer kan se den.</li>
+    <li><b>Kører du alene eller vil have din egen grænse</b>: app → <b>Avanceret → Din Groq-nøgle</b> → indsæt → <b>Tjek nøgle</b> (der skal stå »✓ Nøglen virker«) → <b>Gem og genstart ingeniørmodulet</b>. Boksen <b>AI (Groq)</b> over feltet har en knap <b>Hvordan får jeg en nøgle? ↗</b> (åbner dette kapitel) og forsvinder, når nøglen virker.</li>
+    <li>Færdig, når siden <b>Ingeniør</b> viser <b>AI: Groq</b> i grønt.</li>
+  </ol>
+  <p>Send aldrig nøglen i en chat – indsæt den selv.</p>
+</section>
+
+<section id="patreon">
+  <h2>Opdateringer og Patreon</h2>
+  <ol>
+    <li>Nye versioner går til <b>betalende patrons af FR Mods</b> på Patreon.</li>
+    <li>I appen, på siden <b>Ingeniør</b> klik <b>Log ind med Patreon</b>. Log ind på Patreon i browseren og klik <b>Allow</b>,
+      gå derefter tilbage til appen. Kun knappen <b>Log ud af Patreon</b> er tilbage.</li>
+    <li>Opdateringer installerer sig selv, når appen starter – aldrig mens du kører. Dine indstillinger bliver.</li>
+    <li><b>Testere</b> skriver i stedet en kode fra forfatteren: <b>Avanceret → Testerkode → Gem og genstart ingeniørmodulet</b>.</li>
+  </ol>
+  <p>Uden Patreon eller testerkode virker programmet videre, bare uden nye versioner.</p>
+  <h3>Fuld version og demo</h3>
+  <ul>
+    <li>Den fulde version virker, når den er aktiveret på en computer: login med Patreon (eller en testerkode) aktiverer den selv, på op til <b>2 computere</b> pr. konto.
+      Når den først er aktiveret, virker den for altid, også når din støtte ophører – bare uden nye versioner. En kopieret mappe uden login virker som demo.</li>
+    <li><b>Demo</b> (gratis): samtale med stemmen, flag, straffe, banegrænser, overhalinger, brændstof, energi, hvornår du skal i pit, tid til slut, omgangstider, placering,
+      hvem der er foran og bagved, dæk, bremser, skader, motor, vejr, plus spotteren, »hvor taber jeg tid?« (svinget med det største tab), 5 AI-spørgsmål pr. session (med en gratis Groq-nøgle) og kørerapporter med et smugkig på, hvad den fulde version ville vise (opsætning, greb). Ingen Pit Wall, hold, indstilling af pitmenuen, strategi, opsætning eller fuld køreanalyse.</li>
+    <li>Siden <b>★ Fuld version</b> viser alle betalte funktioner med skærmbilleder fra Pit Wall. <b>Bliv patron</b> åbner FR Mods' side på Patreon (også i bjælken på siden Ingeniør). Når en patron logger ind, henter appen selv den fulde version – indstillingerne bliver.</li>
+    <li>Engang imellem nævner ingeniøren kort den fulde version. Slå det fra under <b>Advarsler → Nævn funktioner i den fulde version</b> eller sig »ingen reklamer«.</li>
+  </ul>
+</section>
+
+<section id="wall">
+  <h2>Pit Wall</h2>
+  <p>Åbn den med knappen <b>Pit Wall</b> i appen eller på
+  <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
+  (log ind med holdets kode og adgangskode; telefonen husker dem). Knappen i appen logger selv Pit Wall ind – til det hold, appen er forbundet til, også hvis browseren var logget ind på et andet hold. Sprogvælgeren er øverst, og knappen <b>☀ / ☾</b> skifter mellem lyst og mørkt udseende.</p>
+  <img src="img/en/wall_live.webp" alt="Pit Wall – live, med numre">
+  <ol class="legend">
+    <li><b>Status</b>: om data er live, hvem der kører, om AI'en virker.</li>
+    <li><b>Udseende</b>: mørkt tema som standard, ☀/☾-knap øverst. Farvede tider: lilla – bedst i klassen, grøn – din bedste, gul – langsommere. Bjælken »Skader« under kortet vises kun, når bilen er skadet (bilskitse, tab pr. omgang, topfart, hvor lang tid en reparation kan tage og råd). I et løb med fast antal omgange viser »Til slut« omgange (fx 12 / 40).</li>
+    <li><b>Holdets stifter</b>: har sin egen adgangskode (sat ved oprettelse af holdet eller på fanen Hold: »Bliv stifter«). Kun stifteren kan fjerne eller omdøbe kørere og ændre holdets adgangskode; han logger ind på Pit Wall med »Jeg er stifteren« afkrydset.</li>
+    <li><b>Flere af holdets biler i ét løb</b>: hver bil har sin egen visning (liste øverst, med bilens nummer); beskeder og spørgsmål går til køreren i den valgte bil. Hver kører hører sin egen ingeniør og spotter.</li>
+    <li><b>Live-rækkefølge</b>: en stint-bjælke (farve = kører, rødt »NU«). <b>Omgange</b>: filtre (session – hvert løb for sig; bil – når flere af holdets biler kører, får hver sin tabel; kører, stint, kun rene), en tempograf, farvede tider og sektorer S1–S3. <b>Hukommelse</b>: noter som kort med søgning og banefilter. <b>Hjælp</b>: en indholdsfortegnelse.</li>
+    <li><b>Faner</b>: Live, Rækkefølge og plan, Hold, Omgange (øverst en <b>sessionsopsummering</b>: bedste og gennemsnitlige omgang, stabilitet, brændstof og energi pr. omgang – for hver kører og stint), Hukommelse, Hjælp.</li>
+    <li><b>Løb</b>: placering i klassen, omgang, omgangstider, tid til slut, flag.</li>
+    <li><b>Næste pitstop</b>: om hvor mange omgange, energi- og brændstofforbrug, hvad der skal ske ved pitstoppet.</li>
+    <li><b>Dæk og bil</b>: slid og temperaturer på hvert dæk, skader, motor, bremser.</li>
+    <li><b>Vejr og bane</b>: regn, våd bane, skyer, banetemperatur og ingeniørens bemærkninger.</li>
+    <li><b>Rivaler i klassen</b>: afstande, tempo, hvem der indhenter hvem, energi, forventet pitstop.</li>
+    <li><b>Sammenligning med holdkammerater</b>: efter hver ren omgang – i hvilke sving og hvor meget en holdkammerat er hurtigere (hans bedste omgang under lignende forhold). I Assetto Corsa også en holdkammerat i en anden bil i samme klasse – så kun hvor og hvor meget, uden råd.</li>
+    <li><b>Stint-rækkefølge</b>: hvem der kører, hvornår skiftet er, hvad der sker ved pitstoppet, hvor mange minutter rækkefølgen har flyttet sig i forhold til planen.
+      Uden plan for i dag laves den automatisk for den aktuelle kører – ud fra løbets længde og de dæk, der er til rådighed i spillet.</li>
+  </ol>
+  <p>Længere nede er <b>banekortet</b> med alle biler og <b>holdradioen</b>:
+  »Til køreren« (ingeniøren læser beskeden op), »Spørg ingeniøren« (svar med stemmen), »Spørg (kun tekst)«, »Til hukommelsen«.</p>
+  <h3>På telefonen</h3>
+  <img class="phone" src="img/en/wall_phone.webp" alt="Pit Wall på telefonen">
+  <h3>Fanen Hold</h3>
+  <img src="img/en/wall_team.webp" alt="Pit Wall – hold">
+  <p>Holdkode og QR-kode til muren, kørere med notifikationsemner, Groq-nøglen og et <b>tilskuerlink</b> –
+  kun live-visningen, uden radio og uden plan; du kan give det til hvem som helst. Når flere af holdets biler er på banen (fx Assetto Corsa), vælger tilskueren, hvilken bil han vil se, i listen øverst (kører – bil). Valget står i adressen (<code>&amp;auto=…</code>), så du kan dele et link til en bestemt bil.</p>
+</section>
+
+<section id="plan">
+  <h2>Rækkefølge og plan (før et langt løb, én person)</h2>
+  <img src="img/en/wall_plan.webp" alt="Rækkefølge og plan">
+  <ol>
+    <li><b>Bil</b> (øverst): når holdet stiller med flere biler i ét løb, <b>+ En bil til</b> – hver har sine egne løbsindstillinger, stint-plan, rækkefølge og notifikationer. Kørerens app bruger planen for den bil, hvor hans navn står.</li>
+    <li><b>1. Løb</b>: startdato og -tid, længde, omgangstid, dæk til løbet → <b>Gem</b>.</li>
+    <li><b>2. Stint-plan → Generér planen automatisk</b>: omgange pr. stint, kørerrækkefølge, dækslid
+      (under <b>Målinger</b> vælg bane, bil og kører – <b>Indlæs</b> udfylder dækslid og tider for hele pitstop målt i dine sessioner), pitstoptider, <b>Dæk brugt ved start (%)</b> – når du starter på kvalifikationssættet → <b>Generér plan</b>.
+      Programmet fordeler dækkene, så de slides så jævnt som muligt.</li>
+    <li>Ret tabellen om nødvendigt: kører fra listen, omgange, <b>Venstre / Højre</b> = skift dækkene i den side → <b>Gem plan</b>.
+      Tælleren viser, om du holder dig inden for dæktildelingen.</li>
+  </ol>
+  <p>Under løbet genberegnes rækkefølgen selv ud fra det faktiske tempo. Ingeniøren går i pit og skifter dæk efter planen
+  (medmindre et dæk ikke holder, eller energien ikke rækker). Planen gælder for et løb med den længde, der er indtastet under »1. Løb«.</p>
+</section>
+
+<section id="phone">
+  <h2>Notifikationer på telefonen (hver kører, 2 minutter)</h2>
+  <ol>
+    <li>Installer den gratis app <b>ntfy</b> (Google Play / App Store).</li>
+    <li>På Pit Wall: <b>Hold</b> → klik <b>📱</b> ved dit navn – dit emne og QR-koden vises.</li>
+    <li>I ntfy tryk på <b>+</b>, skriv emnet og <b>Subscribe</b> (eller scan QR-koden).</li>
+    <li>Klik <b>Test</b> ved dit navn – »Pit Wall Crew – test« kommer på telefonen.</li>
+  </ol>
+  <p>Notifikationen kommer cirka 30 minutter før dit stint, endnu en hvis stintet flytter sig 10 minutter eller mere, og når det begynder at regne.</p>
+</section>
+
+<section id="race">
+  <h2>Langt løb (fx 24 t)</h2>
+  <ul>
+    <li><b>Køreren i bilen</b> har Pit Wall Crew kørende hele stintet – hans app sender data til muren og notifikationerne.</li>
+    <li><b>De andre</b> kan slukke spillet, appen og pc'en. Efter notifikationen på telefonen starter du pc'en, LMU og Pit Wall Crew, <b>før du sætter dig i bilen</b>.</li>
+    <li>Planen, rækkefølgen, beskederne, holdets hukommelse og briefingen ved skiftet ligger i holdets database – programmet henter dem selv.</li>
+  </ul>
+  <h3>Generalprøve før løbet (15 minutter)</h3>
+  <ol>
+    <li>Alle starter Pit Wall Crew – <b>Hold</b> og <b>AI: Groq</b> i grønt.</li>
+    <li>Én kører klikker <b>Test uden spil</b>. De andre åbner Pit Wall – data skal være »live«.</li>
+    <li>Køreren spørger med stemmen »hvor meget brændstof?« – alle hører svaret.</li>
+    <li>Send »Til køreren« fra muren – ingeniøren læser beskeden op.</li>
+  </ol>
+  <h3>Fair share (LMU)</h3>
+  <p>I holdevents skal hver kører, der har gennemført mindst én omgang, have mindst 50% / antal kørere af holdets omgange (2 kørere – 25%, 3 – 16,7%, 4 – 12,5%, 5 – 10%, 6 – 8,3%), ellers får hele holdet ingen DR/SR. Ingeniøren tæller hver kørers omgange, minder ved pitstop om, hvor mange hver mangler, advarer når det bliver stramt og svarer på »fair share?«. På Pit Wall – fanen Live.</p>
+  <h3>Løbsopsummering</h3>
+  <p>Ved målstregen siger ingeniøren kort resultatet. Den fulde opsummering (resultat, pitstop, fair share, dit tempo og din stabilitet, udforkørsler, forbrug) ligger i appens vindue, på Pit Wall og i <code>recordings\podsumowanie_….txt</code>.</p>
+</section>
+
+<section id="help">
+  <h2>Når noget ikke virker</h2>
+  <table>
+    <tr><th>Symptom</th><th>Hvad du gør</th></tr>
+    <tr><td>»Venter på LMU«, selvom spillet kører</td><td>LMU: Settings → Gameplay → Enable Plugins = ON, genstart derefter spillet.</td></tr>
+    <tr><td>Ingeniøren kan ikke høre mig / »Jeg kan ikke høre dig«</td><td>Mikrofon og knap → Test 3 s. Tjek lydløs på headsettet og Windows → Beskyttelse af personlige oplysninger → Mikrofon.</td></tr>
+    <tr><td>»Forkert holdkode eller adgangskode«</td><td>Hold → ret det → Forbind til holdet → Gem.</td></tr>
+    <tr><td>Jeg har glemt holdets kode eller adgangskode</td><td>Kode: fanen Hold på Pit Wall hos en, der er logget ind (eller holdlisten i appen og på siden). Adgangskode: stifteren kender den, og det gør alle, der har skrevet den i appen. En ny adgangskode til holdet sætter stifteren: Pit Wall med »Jeg er stifteren« afkrydset → Hold → <b>Skift holdets adgangskode</b>; husker han den heller ikke – »Bed forfatteren om en ny adgangskode« og <b>Hjælp → Rapportér et problem</b> med holdkoden.</td></tr>
+    <tr><td>Pit Wall: »ingen data fra spillet«</td><td>Kørerens app skal køre med »Hold« i grønt.</td></tr>
+    <tr><td>»AI: Groq – forkert nøgle«</td><td>Indsæt nøglen igen (Pit Wall → Hold → Holdets AI).</td></tr>
+    <tr><td>Hver besked høres to gange</td><td>Programmet kører to gange: luk appen, afslut »pythonw« i Jobliste, og start det én gang.</td></tr>
+    <tr><td>Ingen notifikationer</td><td>Løbsstart og kørere i planen, emne i ntfy, knappen Test; appen kørende på nogens pc.</td></tr>
+    <tr><td>Spillet hakker</td><td>Som regel for lidt grafikhukommelse: sænk teksturer, færre synlige biler og skygger, luk andre programmer.</td></tr>
+    <tr><td>»Windows beskyttede din pc« ved installation</td><td>Installationsprogrammet har endnu ingen digital signatur. Klik <b>Flere oplysninger</b> → <b>Kør alligevel</b>.</td></tr>
+    <tr><td>Windows 11 blokerer installationsprogrammet uden »Kør alligevel«</td><td>»Smart App Control« er slået til og tillader ikke programmer uden digital signatur. Du kan slå det fra (Windows-sikkerhed → App- og browserkontrol), men Windows lader dig ikke slå det til igen bagefter.</td></tr>
+    <tr><td>AVG eller Avast analyserer installationsprogrammet (»CyberCapture«)</td><td>Antivirusprogrammet tjekker en ny fil uden digital signatur i skyen. Vent på resultatet, eller klik <b>Åbn alligevel</b>.</td></tr>
+    <tr><td>»Jeg forstod det ikke«, ingeniørens stemme falder ud, beskederne siger »Dit antivirus (Avast/AVG) blokerer…«</td><td>Avast/AVG blokerer appens forbindelser. Avast/AVG → Menu → Indstillinger → Generelt → Undtagelser → Tilføj undtagelse → mappen Dokumenter\Pit Wall Crew, og genstart så appen.</td></tr>
+  </table>
+  <h3>Rapportér et problem eller et forslag</h3>
+  <p>I appen: <b>Hjælp → Rapportér et problem</b>, på Pit Wall: fanen <b>Hjælp</b>. Det går direkte til forfatteren.
+  Under kørsel sig <b>»rapportér en fejl: …«</b> (fx »rapportér en fejl: spotteren sagde venstre, men der var ingen«) – appen tilføjer dit sted på banen, omgangen og ingeniørens sidste beskeder; kun »rapportér en fejl« – ingeniøren spørger, hvad der skete.
+  Med dit samtykke kan appen automatisk sende en rapport, når den går ned (ingen stemmeoptagelser, nøgler eller adgangskoder) –
+  det slår du til og fra på samme side. Dér kan du også slå den <b>anonyme brugertæller</b> fra (et tilfældigt installationsnummer, version og sprog – ingen navne eller spildata), <b>statistikken over brug af funktioner</b> (funktionsnavne, antal og opstartstid – aldrig hvad du spurgte om) og de sætninger, AI'en har matchet med kommandoer (uden navne – de mest almindelige føjes til appen for alle). Opdateringer henter kun de ændrede filer, når du har den forrige version. Detaljer: <a href="prywatnosc.html?lang=da">Privatliv</a>.</p>
+  <img src="img/en/app_feedback.webp" alt="Rapportér et problem">
+</section>
+
+</main>
+<footer>Pit Wall Crew · lavet af <b>Maciej Szczepaniak</b> fra <b>FR Mods</b> · tak til Rett og Barny for hjælpen med testene · <a href="prywatnosc.html?lang=da">Privatliv</a><br>© 2026 Maciej Szczepaniak (FR Mods). Alle rettigheder forbeholdes.</footer>
+</body>
+</html>
