@@ -26,7 +26,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </head>
 <body>
 <main>
-<div class="langs"><a href="?lang=pl" data-l="pl">Polski</a><a href="?lang=en" data-l="en">English</a><a href="?lang=de" data-l="de">Deutsch</a><a href="?lang=fr" data-l="fr">Français</a></div>
+<div class="langs"><a href="?lang=pl" data-l="pl">Polski</a><a href="?lang=en" data-l="en">English</a><a href="?lang=de" data-l="de">Deutsch</a><a href="?lang=fr" data-l="fr">Français</a><a href="?lang=es" data-l="es">Español</a><a href="?lang=it" data-l="it">Italiano</a><a href="?lang=da" data-l="da">Dansk</a></div>
 
 <!-- ============================== POLSKI ============================== -->
 <article data-l="pl">
@@ -50,13 +50,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (głosy Edge)</td><td>tekst, który mówi inżynier</td><td>zamiana tekstu na głos</td></tr>
 <tr><td>ntfy.sh</td><td>treść powiadomień</td><td>powiadomienia na telefon – tylko jeśli je ustawisz</td></tr>
 <tr><td>GitHub</td><td>zapytanie o nową wersję</td><td>aktualizacje</td></tr>
-<tr><td>Serwer aktualizacji autora – Cloudflare</td><td>co 10 minut, gdy program działa: losowy numer instalacji, wersja, język, tryb (solo/zespół) i czy ktoś akurat jedzie; po wysłaniu zgłoszenia – jego początek (bez kontaktu i dziennika)</td><td>licznik, ile osób używa programu (przechowywany do 3 miesięcy, wyłączysz w Pomoc → Zgłoś problem); powiadomienie autora o nowym zgłoszeniu</td></tr>
+<tr><td>Serwer aktualizacji autora – Cloudflare</td><td>co 10 minut, gdy program działa: losowy numer instalacji, wersja, język, tryb (solo/zespół) i czy ktoś akurat jedzie; nazwy użytych funkcji z liczbą użyć (np. „pytanie:paliwo”, „strona:raporty”) i czas uruchomienia programu – bez treści pytań, toru i wyników; zdania, których program sam nie rozpoznał, a AI albo poprawka literówek dopasowały do polecenia (bez słów z wielkiej litery, czyli imion; bez powiadomień i zgłoszeń); po wysłaniu zgłoszenia – jego początek (bez kontaktu i dziennika)</td><td>licznik, ile osób używa programu i których funkcji (przechowywany do 3 miesięcy, wyłączysz w Pomoc → Zgłoś problem); powiadomienie autora o nowym zgłoszeniu</td></tr>
 <tr><td>Autor programu</td><td>zgłoszenia problemów i sugestii, kontakt (jeśli podasz), raporty awarii i dziennik – <b>tylko za Twoją zgodą</b></td><td>naprawianie błędów; kopia zgłoszeń trafia do prywatnego repozytorium autora na GitHubie</td></tr>
 </table></div>
 <p>Program nie zapisuje nagrań głosu na dysku i nigdy nie wysyła ich autorowi.</p></section>
 
 <section><h2>Raporty awarii (za zgodą)</h2>
-<p>Przy pierwszym uruchomieniu program pyta, czy wysyłać autorowi raporty awarii. Raport zawiera opis błędu, wersję programu, język i dziennik ostatniej sesji (komunikaty inżyniera i to, co rozpoznał z Twojej mowy). Przed wysłaniem program usuwa z niego klucze, hasła, adresy e-mail i nazwę użytkownika Windows. Przy ręcznym zgłoszeniu sam decydujesz, czy dołączyć dziennik. Zgodę zmienisz w każdej chwili w aplikacji: Pomoc → Zgłoś problem.</p></section>
+<p>Przy pierwszym uruchomieniu program pyta, czy wysyłać autorowi raporty awarii. Raport zawiera opis błędu, wersję programu, język i dziennik ostatniej sesji (komunikaty inżyniera i to, co rozpoznał z Twojej mowy). Przed wysłaniem program usuwa z niego klucze, hasła, adresy e-mail i nazwę użytkownika Windows. Przy ręcznym zgłoszeniu sam decydujesz, czy dołączyć dziennik. Zgłoszenie głosem („zgłoś błąd: …”) zawiera Twój opis, wersję, grę, tor, sesję, okrążenie, miejsce na torze, prędkość i ostatnie komunikaty inżyniera oraz Twoje ostatnie zdania – bez dziennika. Zgodę zmienisz w każdej chwili w aplikacji: Pomoc → Zgłoś problem.</p></section>
 
 <section><h2>Jak długo</h2>
 <p>Zgłoszenia i raporty awarii – do 12 miesięcy albo krócej, gdy sprawa zostanie załatwiona. Dane zespołu – dopóki zespół korzysta z programu; zespół może je usunąć, a na prośbę usuwa je autor.</p></section>
@@ -87,13 +87,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (Edge voices)</td><td>the text the engineer says</td><td>text to speech</td></tr>
 <tr><td>ntfy.sh</td><td>notification text</td><td>phone notifications – only if you set them up</td></tr>
 <tr><td>GitHub</td><td>a check for a new version</td><td>updates</td></tr>
-<tr><td>The author's update server – Cloudflare</td><td>every 10 minutes while the program runs: a random installation number, version, language, mode (solo/team) and whether someone is driving; after you send a report – its beginning (without contact and log)</td><td>a counter of how many people use the program (kept up to 3 months, turn it off in Help → Report a problem); notifying the author about a new report</td></tr>
+<tr><td>The author's update server – Cloudflare</td><td>every 10 minutes while the program runs: a random installation number, version, language, mode (solo/team) and whether someone is driving; the names of features used with how many times (e.g. “question:fuel”, “page:reports”) and the program's startup time – never what you asked, the track or results; sentences the app did not recognise itself that the AI or the typo fix matched to a command (without capitalised words, i.e. names; no notifications or reports); after you send a report – its beginning (without contact and log)</td><td>a counter of how many people use the program and which features (kept up to 3 months, turn it off in Help → Report a problem); notifying the author about a new report</td></tr>
 <tr><td>The author</td><td>problem reports and suggestions, your contact (if given), crash reports and the log – <b>only with your consent</b></td><td>fixing bugs; a copy of reports is kept in the author's private GitHub repository</td></tr>
 </table></div>
 <p>The program does not save voice recordings to disk and never sends them to the author.</p></section>
 
 <section><h2>Crash reports (with consent)</h2>
-<p>On first start the program asks whether to send crash reports to the author. A report contains the error description, program version, language and the log of the last session (the engineer's messages and what it recognised from your speech). Before sending, keys, passwords, e-mail addresses and your Windows user name are removed. When you report a problem yourself, you decide whether to attach the log. You can change your consent at any time in the app: Help → Report a problem.</p></section>
+<p>On first start the program asks whether to send crash reports to the author. A report contains the error description, program version, language and the log of the last session (the engineer's messages and what it recognised from your speech). Before sending, keys, passwords, e-mail addresses and your Windows user name are removed. When you report a problem yourself, you decide whether to attach the log. A voice report (“report a bug: …”) contains your description, version, game, track, session, lap, spot on track, speed, the engineer's last messages and your last sentences – no log. You can change your consent at any time in the app: Help → Report a problem.</p></section>
 
 <section><h2>How long</h2>
 <p>Reports and crash reports – up to 12 months, or less once the issue is resolved. Team data – as long as the team uses the program; the team can delete it, and the author deletes it on request.</p></section>
@@ -124,13 +124,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (Edge-Stimmen)</td><td>der Text, den der Ingenieur spricht</td><td>Sprachausgabe</td></tr>
 <tr><td>ntfy.sh</td><td>Text der Benachrichtigungen</td><td>Handy-Benachrichtigungen – nur wenn du sie einrichtest</td></tr>
 <tr><td>GitHub</td><td>Abfrage einer neuen Version</td><td>Updates</td></tr>
-<tr><td>Update-Server des Autors – Cloudflare</td><td>alle 10 Minuten, solange das Programm läuft: eine zufällige Installationsnummer, Version, Sprache, Modus (Solo/Team) und ob gerade jemand fährt; nach einer Meldung – deren Anfang (ohne Kontakt und Protokoll)</td><td>Zähler, wie viele Leute das Programm nutzen (bis zu 3 Monate gespeichert, abschaltbar unter Hilfe → Problem melden); Benachrichtigung des Autors über eine neue Meldung</td></tr>
+<tr><td>Update-Server des Autors – Cloudflare</td><td>alle 10 Minuten, solange das Programm läuft: eine zufällige Installationsnummer, Version, Sprache, Modus (Solo/Team) und ob gerade jemand fährt; die Namen genutzter Funktionen mit Anzahl (z. B. „Frage:Kraftstoff“, „Seite:Berichte“) und die Startzeit des Programms – nie deine Fragen, Strecke oder Ergebnisse; Sätze, die das Programm selbst nicht erkannt hat und die die KI oder die Tippfehlerkorrektur einem Befehl zugeordnet hat (ohne großgeschriebene Wörter, also Namen; keine Benachrichtigungen oder Meldungen); nach einer Meldung – deren Anfang (ohne Kontakt und Protokoll)</td><td>Zähler, wie viele Leute das Programm und welche Funktionen nutzen (bis zu 3 Monate gespeichert, abschaltbar unter Hilfe → Problem melden); Benachrichtigung des Autors über eine neue Meldung</td></tr>
 <tr><td>Der Autor</td><td>Problemmeldungen und Vorschläge, dein Kontakt (falls angegeben), Absturzberichte und Protokoll – <b>nur mit deiner Zustimmung</b></td><td>Fehlerbehebung; eine Kopie der Meldungen liegt im privaten GitHub-Repository des Autors</td></tr>
 </table></div>
 <p>Das Programm speichert keine Sprachaufnahmen auf der Festplatte und sendet sie nie an den Autor.</p></section>
 
 <section><h2>Absturzberichte (mit Zustimmung)</h2>
-<p>Beim ersten Start fragt das Programm, ob Absturzberichte an den Autor gesendet werden sollen. Ein Bericht enthält die Fehlerbeschreibung, Programmversion, Sprache und das Protokoll der letzten Sitzung (Meldungen des Ingenieurs und was er aus deiner Sprache erkannt hat). Vor dem Senden werden Schlüssel, Passwörter, E-Mail-Adressen und dein Windows-Benutzername entfernt. Bei einer eigenen Meldung entscheidest du, ob das Protokoll angehängt wird. Die Zustimmung änderst du jederzeit in der App: Hilfe → Problem melden.</p></section>
+<p>Beim ersten Start fragt das Programm, ob Absturzberichte an den Autor gesendet werden sollen. Ein Bericht enthält die Fehlerbeschreibung, Programmversion, Sprache und das Protokoll der letzten Sitzung (Meldungen des Ingenieurs und was er aus deiner Sprache erkannt hat). Vor dem Senden werden Schlüssel, Passwörter, E-Mail-Adressen und dein Windows-Benutzername entfernt. Bei einer eigenen Meldung entscheidest du, ob das Protokoll angehängt wird. Eine Sprachmeldung („Fehler melden: …“) enthält deine Beschreibung, Version, Spiel, Strecke, Session, Runde, Stelle auf der Strecke, Geschwindigkeit, die letzten Meldungen des Ingenieurs und deine letzten Sätze – kein Protokoll. Die Zustimmung änderst du jederzeit in der App: Hilfe → Problem melden.</p></section>
 
 <section><h2>Speicherdauer</h2>
 <p>Meldungen und Absturzberichte – bis zu 12 Monate, oder kürzer, sobald das Problem gelöst ist. Teamdaten – solange das Team das Programm nutzt; das Team kann sie löschen, auf Anfrage löscht sie der Autor.</p></section>
@@ -161,13 +161,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <tr><td>Microsoft (voix Edge)</td><td>le texte que dit l'ingénieur</td><td>synthèse vocale</td></tr>
 <tr><td>ntfy.sh</td><td>le texte des notifications</td><td>notifications sur téléphone – seulement si tu les configures</td></tr>
 <tr><td>GitHub</td><td>vérification d'une nouvelle version</td><td>mises à jour</td></tr>
-<tr><td>Serveur de mises à jour de l'auteur – Cloudflare</td><td>toutes les 10 minutes quand le programme tourne : un numéro d'installation aléatoire, la version, la langue, le mode (solo/équipe) et si quelqu'un roule ; après un signalement – son début (sans contact ni journal)</td><td>compteur du nombre d'utilisateurs (conservé jusqu'à 3 mois, désactivable dans Aide → Signaler un problème) ; prévenir l'auteur d'un nouveau signalement</td></tr>
+<tr><td>Serveur de mises à jour de l'auteur – Cloudflare</td><td>toutes les 10 minutes quand le programme tourne : un numéro d'installation aléatoire, la version, la langue, le mode (solo/équipe) et si quelqu'un roule ; les noms des fonctions utilisées avec leur nombre (p. ex. « question:carburant », « page:rapports ») et le temps de démarrage du programme – jamais tes questions, la piste ni les résultats ; les phrases que l'appli n'a pas reconnues elle-même et que l'IA ou la correction des fautes a associées à une commande (sans mots en majuscule, donc sans noms ; ni notifications ni signalements) ; après un signalement – son début (sans contact ni journal)</td><td>compteur du nombre d'utilisateurs et des fonctions utilisées (conservé jusqu'à 3 mois, désactivable dans Aide → Signaler un problème) ; prévenir l'auteur d'un nouveau signalement</td></tr>
 <tr><td>L'auteur</td><td>signalements et suggestions, ton contact (si tu le donnes), rapports de plantage et journal – <b>seulement avec ton accord</b></td><td>corriger les bugs ; une copie des signalements est conservée dans le dépôt GitHub privé de l'auteur</td></tr>
 </table></div>
 <p>Le programme n'enregistre pas ta voix sur le disque et ne l'envoie jamais à l'auteur.</p></section>
 
 <section><h2>Rapports de plantage (avec accord)</h2>
-<p>Au premier lancement, le programme demande s'il peut envoyer des rapports de plantage à l'auteur. Un rapport contient la description de l'erreur, la version, la langue et le journal de la dernière session (messages de l'ingénieur et ce qu'il a reconnu de ta voix). Avant l'envoi, les clés, mots de passe, adresses e-mail et ton nom d'utilisateur Windows sont supprimés. Quand tu signales un problème toi-même, tu décides de joindre ou non le journal. Tu peux changer ton accord à tout moment dans l'appli : Aide → Signaler un problème.</p></section>
+<p>Au premier lancement, le programme demande s'il peut envoyer des rapports de plantage à l'auteur. Un rapport contient la description de l'erreur, la version, la langue et le journal de la dernière session (messages de l'ingénieur et ce qu'il a reconnu de ta voix). Avant l'envoi, les clés, mots de passe, adresses e-mail et ton nom d'utilisateur Windows sont supprimés. Quand tu signales un problème toi-même, tu décides de joindre ou non le journal. Un signalement à la voix (« signale un bug : … ») contient ta description, la version, le jeu, la piste, la session, le tour, ta position sur la piste, la vitesse, les derniers messages de l'ingénieur et tes dernières phrases – sans journal. Tu peux changer ton accord à tout moment dans l'appli : Aide → Signaler un problème.</p></section>
 
 <section><h2>Durée de conservation</h2>
 <p>Signalements et rapports de plantage – jusqu'à 12 mois, ou moins une fois le problème réglé. Données d'équipe – tant que l'équipe utilise le programme ; l'équipe peut les supprimer, et l'auteur les supprime sur demande.</p></section>
@@ -176,12 +176,123 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <p>Les données d'équipe sont traitées pour fournir le service que tu utilises (art. 6, par. 1, b du RGPD) ; les rapports de plantage et journaux – sur la base de ton consentement (a) ; les signalements – dans l'intérêt légitime de corriger le programme (f). Tu as le droit d'accès, de rectification, d'effacement, de limitation, d'opposition, de portabilité et de retirer ton consentement à tout moment. Tu peux aussi déposer une plainte auprès de l'autorité de protection des données de ton pays.</p></section>
 </article>
 
+<!-- ============================== ESPAÑOL ============================== -->
+<article data-l="es">
+<h1>Privacidad</h1>
+<p class="muted">Pit Wall Crew – aplicación y pit wall. Actualizado el 6 de noviembre de 2026.</p>
+
+<section><h2>Quién es el responsable</h2>
+<p>Maciej Szczepaniak (FR Mods). Contacto: <span class="contact"></span> o el formulario «Informar de un problema» en la aplicación o en el pit wall.</p></section>
+
+<section><h2>Cookies y almacenamiento del navegador</h2>
+<p>El pit wall <b>no usa cookies</b>, publicidad, seguimiento ni estadísticas de visitas. Guarda en tu navegador (localStorage, IndexedDB) solo lo que la página necesita para funcionar:</p>
+<ul><li>tu inicio de sesión en el equipo (Google Firebase),</li><li>tus ajustes: idioma, pestaña abierta, nombre elegido, giro del mapa, escucha de la radio, avisos cerrados.</li></ul>
+<p>Puedes borrarlo en cualquier momento eliminando los datos de este sitio en tu navegador. La página y sus bibliotecas se cargan desde GitHub Pages, Google (gstatic.com) y Cloudflare (cdnjs) – como en cualquier web, esos servidores ven tu dirección IP.</p></section>
+
+<section><h2>Qué envía el programa y adónde</h2>
+<div class="wrap"><table>
+<tr><th>Adónde</th><th>Qué</th><th>Para qué</th></tr>
+<tr><td>Base de datos del equipo – Google Firebase (servidores en Bélgica)</td><td>nombre o apodo del piloto, datos del juego (vueltas, combustible, neumáticos, posiciones, nombres de pilotos del servidor), radio del equipo, plan, memoria del equipo, la clave Groq del equipo</td><td>el pit wall; solo lo ve tu equipo (código y contraseña), y la vista en directo también quien reciba de tu equipo el enlace de espectador</td></tr>
+<tr><td>Groq (EE. UU.)</td><td>la grabación de tu voz tras pulsar el botón, preguntas, datos de carrera necesarios para responder, frases para traducir</td><td>reconocimiento de voz, respuestas de la IA, traducciones – con tu propia clave o la del equipo</td></tr>
+<tr><td>Google (reconocimiento de voz)</td><td>la misma grabación de voz</td><td>un segundo intento de reconocimiento de voz en paralelo</td></tr>
+<tr><td>Microsoft (voces de Edge)</td><td>el texto que dice el ingeniero</td><td>síntesis de voz</td></tr>
+<tr><td>ntfy.sh</td><td>texto de la notificación</td><td>notificaciones en el móvil – solo si las configuras</td></tr>
+<tr><td>GitHub</td><td>comprobación de una nueva versión</td><td>actualizaciones</td></tr>
+<tr><td>Servidor de actualizaciones del autor – Cloudflare</td><td>cada 10 minutos mientras el programa funciona: un número de instalación aleatorio, versión, idioma, modo (solo/equipo) y si alguien está conduciendo; los nombres de las funciones usadas con cuántas veces (p. ej. «pregunta:combustible», «página:informes») y el tiempo de arranque del programa – nunca lo que preguntaste, el circuito ni los resultados; frases que el programa no reconoció por sí mismo y que la IA o la corrección de erratas asoció a una orden (sin palabras en mayúscula, es decir, sin nombres; sin notificaciones ni informes); tras enviar un informe – su comienzo (sin contacto ni registro)</td><td>un contador de cuántas personas usan el programa y qué funciones (se guarda hasta 3 meses; se desactiva en Ayuda → Informar de un problema); aviso al autor de un nuevo informe</td></tr>
+<tr><td>El autor</td><td>informes de problemas y sugerencias, tu contacto (si lo das), informes de fallos y el registro – <b>solo con tu consentimiento</b></td><td>corregir errores; una copia de los informes se guarda en el repositorio privado del autor en GitHub</td></tr>
+</table></div>
+<p>El programa no guarda grabaciones de voz en el disco y nunca las envía al autor.</p></section>
+
+<section><h2>Informes de fallos (con consentimiento)</h2>
+<p>En el primer arranque el programa pregunta si puede enviar informes de fallos al autor. Un informe contiene la descripción del error, la versión del programa, el idioma y el registro de la última sesión (los mensajes del ingeniero y lo que reconoció de tu voz). Antes de enviarlo se eliminan claves, contraseñas, direcciones de correo y tu nombre de usuario de Windows. Cuando informas tú mismo de un problema, decides si adjuntar el registro. Un informe por voz («informa de un error: …») contiene tu descripción, versión, juego, circuito, sesión, vuelta, punto del circuito, velocidad, los últimos mensajes del ingeniero y tus últimas frases – sin registro. Puedes cambiar tu consentimiento en cualquier momento en la aplicación: Ayuda → Informar de un problema.</p></section>
+
+<section><h2>Cuánto tiempo</h2>
+<p>Informes y informes de fallos – hasta 12 meses, o menos una vez resuelto el problema. Datos del equipo – mientras el equipo use el programa; el equipo puede borrarlos y el autor los borra si se le pide.</p></section>
+
+<section><h2>Base legal y tus derechos</h2>
+<p>Los datos del equipo se tratan para prestar el servicio que usas (art. 6.1.b del RGPD); los informes de fallos y registros – con tu consentimiento (art. 6.1.a); los informes de problemas – por el interés legítimo de corregir el programa (art. 6.1.f). Tienes derecho de acceso, rectificación, supresión, limitación del tratamiento, oposición, portabilidad y a retirar tu consentimiento en cualquier momento. También puedes presentar una reclamación ante la autoridad de protección de datos de tu país.</p></section>
+</article>
+
+<!-- ============================== ITALIANO ============================== -->
+<article data-l="it">
+<h1>Privacy</h1>
+<p class="muted">Pit Wall Crew – app e pit wall. Aggiornato al 6 novembre 2026.</p>
+
+<section><h2>Chi è il titolare</h2>
+<p>Maciej Szczepaniak (FR Mods). Contatto: <span class="contact"></span> oppure il modulo «Segnala un problema» nell'app o sul pit wall.</p></section>
+
+<section><h2>Cookie e memoria del browser</h2>
+<p>Il pit wall <b>non usa cookie</b>, pubblicità, tracciamento né statistiche delle visite. Salva nel tuo browser (localStorage, IndexedDB) solo ciò che serve alla pagina per funzionare:</p>
+<ul><li>il tuo accesso alla squadra (Google Firebase),</li><li>le tue impostazioni: lingua, scheda aperta, nome scelto, rotazione della mappa, ascolto della radio, avvisi chiusi.</li></ul>
+<p>Puoi cancellarli in qualsiasi momento eliminando i dati di questo sito nel browser. La pagina e le sue librerie vengono caricate da GitHub Pages, Google (gstatic.com) e Cloudflare (cdnjs) – come per qualsiasi sito, quei server vedono il tuo indirizzo IP.</p></section>
+
+<section><h2>Cosa invia il programma e dove</h2>
+<div class="wrap"><table>
+<tr><th>Dove</th><th>Cosa</th><th>Perché</th></tr>
+<tr><td>Database della squadra – Google Firebase (server in Belgio)</td><td>nome o soprannome del pilota, dati di gioco (giri, carburante, gomme, posizioni, nomi dei piloti dal server), radio di squadra, piano, memoria della squadra, la chiave Groq della squadra</td><td>il pit wall; lo vede solo la tua squadra (codice e password), e la vista live anche chi riceve dalla squadra il link spettatore</td></tr>
+<tr><td>Groq (USA)</td><td>la registrazione della tua voce dopo aver premuto il pulsante, domande, dati di gara necessari per rispondere, frasi da tradurre</td><td>riconoscimento vocale, risposte dell'IA, traduzioni – con la tua chiave o con quella della squadra</td></tr>
+<tr><td>Google (riconoscimento vocale)</td><td>la stessa registrazione della voce</td><td>un secondo tentativo di riconoscimento vocale in parallelo</td></tr>
+<tr><td>Microsoft (voci di Edge)</td><td>il testo che dice l'ingegnere</td><td>sintesi vocale</td></tr>
+<tr><td>ntfy.sh</td><td>testo della notifica</td><td>notifiche sul telefono – solo se le configuri</td></tr>
+<tr><td>GitHub</td><td>controllo di una nuova versione</td><td>aggiornamenti</td></tr>
+<tr><td>Server degli aggiornamenti dell'autore – Cloudflare</td><td>ogni 10 minuti mentre il programma è in funzione: un numero di installazione casuale, versione, lingua, modalità (solo/squadra) e se qualcuno sta guidando; i nomi delle funzioni usate con il numero di volte (es. «domanda:carburante», «pagina:rapporti») e il tempo di avvio del programma – mai cosa hai chiesto, il circuito o i risultati; frasi che il programma non ha riconosciuto da solo e che l'IA o la correzione degli errori ha associato a un comando (senza parole con la maiuscola, cioè senza nomi; senza notifiche né segnalazioni); dopo l'invio di una segnalazione – il suo inizio (senza contatto e registro)</td><td>un contatore di quante persone usano il programma e quali funzioni (conservato fino a 3 mesi; si disattiva in Aiuto → Segnala un problema); avviso all'autore di una nuova segnalazione</td></tr>
+<tr><td>L'autore</td><td>segnalazioni di problemi e suggerimenti, il tuo contatto (se lo dai), rapporti di crash e il registro – <b>solo con il tuo consenso</b></td><td>correggere gli errori; una copia delle segnalazioni è conservata nel repository GitHub privato dell'autore</td></tr>
+</table></div>
+<p>Il programma non salva registrazioni vocali sul disco e non le invia mai all'autore.</p></section>
+
+<section><h2>Rapporti di crash (con consenso)</h2>
+<p>Al primo avvio il programma chiede se può inviare rapporti di crash all'autore. Un rapporto contiene la descrizione dell'errore, la versione del programma, la lingua e il registro dell'ultima sessione (i messaggi dell'ingegnere e ciò che ha riconosciuto della tua voce). Prima dell'invio vengono rimossi chiavi, password, indirizzi e-mail e il tuo nome utente di Windows. Quando segnali tu un problema, decidi tu se allegare il registro. Una segnalazione a voce («segnala un errore: …») contiene la tua descrizione, versione, gioco, circuito, sessione, giro, punto del circuito, velocità, gli ultimi messaggi dell'ingegnere e le tue ultime frasi – senza registro. Puoi cambiare il consenso in qualsiasi momento nell'app: Aiuto → Segnala un problema.</p></section>
+
+<section><h2>Per quanto tempo</h2>
+<p>Segnalazioni e rapporti di crash – fino a 12 mesi, o meno una volta risolto il problema. Dati della squadra – finché la squadra usa il programma; la squadra può cancellarli e l'autore li cancella su richiesta.</p></section>
+
+<section><h2>Base giuridica e i tuoi diritti</h2>
+<p>I dati della squadra sono trattati per fornire il servizio che usi (art. 6, par. 1, lett. b GDPR); i rapporti di crash e i registri – in base al tuo consenso (lett. a); le segnalazioni – per il legittimo interesse a correggere il programma (lett. f). Hai diritto di accesso, rettifica, cancellazione, limitazione, opposizione, portabilità e di revocare il consenso in qualsiasi momento. Puoi anche presentare reclamo all'autorità per la protezione dei dati del tuo paese.</p></section>
+</article>
+
+<!-- ============================== DANSK ============================== -->
+<article data-l="da">
+<h1>Privatliv</h1>
+<p class="muted">Pit Wall Crew – app og pit wall. Opdateret 6. november 2026.</p>
+
+<section><h2>Hvem er ansvarlig</h2>
+<p>Maciej Szczepaniak (FR Mods). Kontakt: <span class="contact"></span> eller formularen »Rapportér et problem« i appen eller på pit wall.</p></section>
+
+<section><h2>Cookies og browserlager</h2>
+<p>Pit wall <b>bruger ikke cookies</b>, reklamer, sporing eller besøgsstatistik. Den gemmer i din browser (localStorage, IndexedDB) kun det, siden har brug for for at fungere:</p>
+<ul><li>dit holdlogin (Google Firebase),</li><li>dine indstillinger: sprog, åben fane, valgt navn, kortrotation, lytning til radioen, lukkede beskeder.</li></ul>
+<p>Du kan til enhver tid slette det ved at rydde denne sides data i din browser. Siden og dens biblioteker hentes fra GitHub Pages, Google (gstatic.com) og Cloudflare (cdnjs) – som ved enhver hjemmeside ser disse servere din IP-adresse.</p></section>
+
+<section><h2>Hvad programmet sender og hvorhen</h2>
+<div class="wrap"><table>
+<tr><th>Hvorhen</th><th>Hvad</th><th>Hvorfor</th></tr>
+<tr><td>Holdets database – Google Firebase (servere i Belgien)</td><td>kørerens navn eller kaldenavn, spildata (omgange, brændstof, dæk, positioner, kørernavne fra serveren), holdradio, plan, holdets hukommelse, holdets Groq-nøgle</td><td>pit wall; kun dit hold kan se det (kode og adgangskode), og live-visningen også dem, dit hold giver tilskuerlinket</td></tr>
+<tr><td>Groq (USA)</td><td>optagelsen af din stemme efter tryk på knappen, spørgsmål, løbsdata der skal bruges til svar, sætninger der skal oversættes</td><td>talegenkendelse, AI-svar, oversættelser – med din egen eller holdets nøgle</td></tr>
+<tr><td>Google (talegenkendelse)</td><td>den samme stemmeoptagelse</td><td>et andet, parallelt forsøg på talegenkendelse</td></tr>
+<tr><td>Microsoft (Edge-stemmer)</td><td>den tekst, ingeniøren siger</td><td>tekst til tale</td></tr>
+<tr><td>ntfy.sh</td><td>notifikationens tekst</td><td>notifikationer på telefonen – kun hvis du sætter dem op</td></tr>
+<tr><td>GitHub</td><td>tjek efter en ny version</td><td>opdateringer</td></tr>
+<tr><td>Forfatterens opdateringsserver – Cloudflare</td><td>hvert 10. minut mens programmet kører: et tilfældigt installationsnummer, version, sprog, tilstand (solo/hold) og om nogen kører; navnene på brugte funktioner og hvor mange gange (f.eks. »spørgsmål:brændstof«, »side:rapporter«) og programmets opstartstid – aldrig hvad du spurgte om, banen eller resultater; sætninger som programmet ikke selv genkendte, og som AI eller rettelsen af stavefejl knyttede til en kommando (uden ord med stort begyndelsesbogstav, dvs. uden navne; ingen notifikationer eller rapporter); efter du sender en rapport – dens begyndelse (uden kontakt og log)</td><td>en tæller af hvor mange der bruger programmet og hvilke funktioner (gemmes i op til 3 måneder; slås fra i Hjælp → Rapportér et problem); besked til forfatteren om en ny rapport</td></tr>
+<tr><td>Forfatteren</td><td>problemrapporter og forslag, din kontakt (hvis du giver den), nedbrudsrapporter og loggen – <b>kun med dit samtykke</b></td><td>rette fejl; en kopi af rapporterne gemmes i forfatterens private GitHub-repository</td></tr>
+</table></div>
+<p>Programmet gemmer ikke stemmeoptagelser på disken og sender dem aldrig til forfatteren.</p></section>
+
+<section><h2>Nedbrudsrapporter (med samtykke)</h2>
+<p>Ved første start spørger programmet, om det må sende nedbrudsrapporter til forfatteren. En rapport indeholder fejlbeskrivelsen, programversionen, sproget og loggen fra den sidste session (ingeniørens beskeder og hvad den genkendte af din tale). Før afsendelse fjernes nøgler, adgangskoder, e-mailadresser og dit Windows-brugernavn. Når du selv rapporterer et problem, bestemmer du, om loggen skal vedhæftes. En stemmerapport (»rapportér en fejl: …«) indeholder din beskrivelse, version, spil, bane, session, omgang, sted på banen, fart, ingeniørens seneste beskeder og dine seneste sætninger – ingen log. Du kan til enhver tid ændre dit samtykke i appen: Hjælp → Rapportér et problem.</p></section>
+
+<section><h2>Hvor længe</h2>
+<p>Rapporter og nedbrudsrapporter – op til 12 måneder, eller kortere når problemet er løst. Holddata – så længe holdet bruger programmet; holdet kan slette dem, og forfatteren sletter dem på anmodning.</p></section>
+
+<section><h2>Retsgrundlag og dine rettigheder</h2>
+<p>Holddata behandles for at levere den tjeneste, du bruger (GDPR art. 6, stk. 1, litra b); nedbrudsrapporter og logs – på grundlag af dit samtykke (litra a); problemrapporter – ud fra den legitime interesse i at rette programmet (litra f). Du har ret til indsigt, berigtigelse, sletning, begrænsning af behandling, indsigelse, dataportabilitet og til at trække dit samtykke tilbage når som helst. Du kan også klage til datatilsynet i dit land.</p></section>
+</article>
+
 <footer>Pit Wall Crew · Maciej Szczepaniak from FR Mods</footer>
 </main>
 <script>
 (function () {
   var CONTACT = 'maciej.szczepaniak59@gmail.com';
-  var ok = ['pl', 'en', 'de', 'fr'], l = '';
+  var ok = ['pl', 'en', 'de', 'fr', 'es', 'it', 'da'], l = '';
   try { l = new URLSearchParams(location.search).get('lang') || localStorage.getItem('pwc_lang') || ''; } catch (e) {}
   if (ok.indexOf(l) < 0) l = (navigator.language || 'pl').slice(0, 2);
   if (ok.indexOf(l) < 0) l = 'en';
@@ -191,7 +302,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     if (CONTACT) { var a = document.createElement('a'); a.href = 'mailto:' + CONTACT; a.textContent = CONTACT; el.appendChild(a); }
     else el.textContent = '–';
   });
-  var t = { pl: 'Pit Wall Crew – prywatność', en: 'Pit Wall Crew – privacy', de: 'Pit Wall Crew – Datenschutz', fr: 'Pit Wall Crew – confidentialité' };
+  var t = { pl: 'Pit Wall Crew – prywatność', en: 'Pit Wall Crew – privacy', de: 'Pit Wall Crew – Datenschutz', fr: 'Pit Wall Crew – confidentialité',
+            es: 'Pit Wall Crew – privacidad', it: 'Pit Wall Crew – privacy', da: 'Pit Wall Crew – privatliv' };
   document.title = t[l];
 })();
 </script>

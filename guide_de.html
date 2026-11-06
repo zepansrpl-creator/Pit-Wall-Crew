@@ -36,7 +36,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </head>
 <body>
 <header>
-  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a><a href="guide_es.html">ES</a><a href="guide_it.html">IT</a><a href="guide_da.html">DA</a></div>
   <h1>Pit Wall Crew – Anleitung</h1>
   <p>Sprach-Renningenieur und Pit Wall für Le Mans Ultimate und Assetto Corsa. Von der Installation bis zum ersten Rennen.</p>
 </header>
@@ -72,13 +72,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
       <b>Mit Patreon anmelden</b> frei – sie lädt sich selbst, deine Einstellungen bleiben).</li>
     <li>Starte die heruntergeladene Datei. Das Installationsprogramm ist noch nicht digital signiert, deshalb kann Windows „Der Computer wurde durch Windows geschützt“ anzeigen –
       klicke auf <b>Weitere Informationen</b> → <b>Trotzdem ausführen</b>.</li>
-    <li>Wähle im Installationsprogramm die <b>Sprache</b> (das Programm übernimmt sie), dann <b>OK</b>, <b>Weiter</b> und <b>Installieren</b>. Die Installation dauert etwa eine Minute, lädt nichts herunter (Python ist dabei) und braucht keine Administratorrechte.
+    <li>Wähle im Installationsprogramm die <b>Sprache</b> (das Programm übernimmt sie; Spanisch, Italienisch und Dänisch wählst du später in der App: Ton & Sprache → Język / Language), dann <b>OK</b>, <b>Weiter</b> und <b>Installieren</b>. Die Installation dauert etwa eine Minute, lädt nichts herunter (Python ist dabei) und braucht keine Administratorrechte.
       Programm und Daten liegen danach in <code>Dokumente\Pit Wall Crew</code>. Die Verknüpfungen <b>Pit Wall Crew</b> auf dem Desktop und im Startmenü kannst du abwählen. Am Ende wählst du, ob die App, das Sprach-Tutorial und die Seite der Vollversion auf Patreon starten sollen, und klickst auf <b>Fertig</b>.</li>
     <li>Die App öffnet sich in der gewählten Sprache, daneben das Fenster <b>Erste Schritte</b> – geh es der Reihe nach durch (bei jedem Punkt gibt es <b>Öffnen</b>):
       <ol>
         <li><b>Team</b>: oben <b>Neues Team erstellen…</b> (erste Person) oder Teamcode und Passwort von deinen Teamkollegen; dann dein Name – ein neuer Name wird beim Speichern zu den Fahrern des Teams hinzugefügt; allein – Modus <b>Solo</b>.</li>
         <li><b>Mikrofon und Taste</b>: Mikrofon wählen (der Balken bewegt sich beim Sprechen), <b>Festlegen: Taste drücken…</b> klicken und die Taste am Lenkrad drücken.</li>
-        <li><b>Stimme</b>: Stimme des Ingenieurs wählen und <b>▶ Anhören</b> klicken.</li>
+        <li><b>Ton &amp; Sprache</b>: Stimme des Ingenieurs wählen und <b>▶ Anhören</b> klicken.</li>
         <li><b>Groq-Schlüssel</b> (kostenlos, für die KI): <a href="#ai">so bekommst du ihn</a> → Erweitert → Eigener Groq-Schlüssel → <b>Schlüssel prüfen</b>.</li>
         <li><b>Patreon</b>: auf der Seite Renningenieur <b>Mit Patreon anmelden</b> – so bekommst du Updates.</li>
         <li><b>Speichern und Ingenieur-Modul neu starten</b> klicken.</li>
@@ -86,7 +86,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>In LMU einmalig: <b>Settings → Gameplay → Enable Plugins = ON</b> (ohne das sieht das Programm die Spieldaten nicht; Assetto Corsa: Abschnitt <a href="#ac">Assetto Corsa</a>). Fahr raus, halte die Taste und frag z. B. „wie viel Sprit?“.</li>
   </ol>
   <div class="tip">Updates installieren sich beim Start der App – nie während der Fahrt. Deine Einstellungen bleiben erhalten.
-  Das Fenster „Erste Schritte“ öffnest du später unter Hilfe → Anleitung → Erste Schritte. Sprache ändern: Stimme → Język / Language.</div>
+  Das Fenster „Erste Schritte“ öffnest du später unter Hilfe → Anleitung → Erste Schritte. Sprache ändern: Ton & Sprache → Język / Language.</div>
   <p><b>Alte Installation aus dem Zip (INSTALL.bat)?</b> Starte das neue Installationsprogramm. Wurde das Programm nach <code>Dokumente\Pit Wall Crew</code> entpackt, bleiben deine Einstellungen automatisch erhalten.
   Lag es in einem anderen Ordner, kopiere <code>config.toml</code> und den Ordner <code>data</code> aus dem alten Programmordner nach <code>Dokumente\Pit Wall Crew\Program</code> (oder geh das Fenster „Erste Schritte“ einfach noch einmal durch).
   Eine ältere Installation mit einem anderen Python als 3.12 zeigt nach einem Update eine Meldung, dass sie mit dem neuen Installationsprogramm installiert werden muss.</p>
@@ -131,12 +131,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Mikrofon wählen und <b>Test 3 s</b> klicken – etwas sagen und prüfen, ob sich der Pegel bewegt.</li>
     <li><b>Festlegen: Taste drücken…</b> und die Taste am Lenkrad drücken, mit der du sprechen willst (jede Taste geht, auch MOZA-Tasten mit Nummern über 32). Eine Tastaturtaste geht auch.</li>
-    <li><b>Kopfhörer / Lautsprecher</b> – das Gerät, auf dem du Ingenieur und Spotter hörst, z. B. Kopfhörer, während das Spiel auf den Lautsprechern läuft.</li>
   </ul>
-  <h3>Stimme</h3>
-  <img src="img/de/app_voice.webp" alt="Stimme">
+  <h3>Ton &amp; Sprache</h3>
+  <img src="img/de/app_voice.webp" alt="Ton &amp; Sprache">
   <ul>
-    <li>Stimme, Sprechtempo, Lautstärke, Funkeffekt, Sprache und Name des Ingenieurs. <b>▶ Anhören</b> spielt ein Beispiel.</li>
+    <li><b>Język / Language</b> – ganz oben, immer auch englisch beschriftet, damit man sie leicht findet.</li>
+    <li><b>Kopfhörer / Lautsprecher</b> – das Gerät, auf dem du Ingenieur und Spotter hörst, z. B. Kopfhörer, während das Spiel auf den Lautsprechern läuft.</li>
+    <li>Stimme des Ingenieurs, Sprechtempo, Lautstärke, Funkeffekt und Name des Ingenieurs. <b>▶ Anhören</b> spielt ein Beispiel.</li>
     <li>Gibst du ihm einen Namen (z. B. Markus), stellt er sich vor, und „Markus, ruhig“ schaltet ihn stumm.</li>
     <li><b>Stimme des Spotters</b> – eigene Stimme für dringende Meldungen zur Strecke (Auto daneben, Flaggen, Unfälle, Überrundungen); „wie der Ingenieur“ = eine Stimme. <b>Funkeffekt des Spotters</b> – getrennt vom Ingenieur (z. B. Spotter ohne Rauschen, Ingenieur über Funk). <b>▶ Spotter anhören</b> spielt ein Beispiel.</li>
   </ul>
@@ -159,7 +160,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Die vollständige Liste steht in der App: <b>Hilfe → Befehle</b>.</p>
   <img src="img/de/app_commands.webp" alt="Befehle">
   <p>Eine Frage, die das Programm nicht kennt, geht zusammen mit den Renndaten an die KI (mit Groq-Schlüssel). Fragen zum Programm selbst
-  („wie schalte ich die Meldungen über herankommende Prototypen aus?“, „der Spotter soll keine Seiten ansagen“) beantwortet die KI anhand dieser Anleitung und der Einstellungen: sie nennt den Befehl oder die Stelle in den Einstellungen und sagt, wenn es genau diese Option nicht gibt, welche am nächsten kommt.</p>
+  („wie schalte ich die Meldungen über herankommende Prototypen aus?“, „der Spotter soll keine Seiten ansagen“) beantwortet die KI anhand dieser Anleitung und der Einstellungen: sie nennt den Befehl oder die Stelle in den Einstellungen und sagt, wenn es genau diese Option nicht gibt, welche am nächsten kommt.
+  Einen Befehl in deinen eigenen Worten („neue Gummis rechts“, „schick Patrick aufs Handy, dass er aufstehen soll“) ordnet die KI der Liste aller Befehle zu (auch in der Demo) und das Programm führt ihn aus; beim nächsten Mal wirkt derselbe Satz sofort ohne KI („gelernte Befehle vergessen“ löscht sie). Falsch erkannte Wörter korrigiert das Programm selbst, ohne Internet, und die Namen deiner Teamkollegen und der Gegner in der Nähe bekommt die Spracherkennung als Hinweis.</p>
   <ul>
     <li><b>Spotter</b> (Einstellungen → Warnungen): „Auto links“, „Rechts Hypercar“, „Three wide“ und auf welcher Seite die Autos sind, „Frei“ – immer am Ende, wenn niemand mehr neben dir ist; „nur meine Klasse“ möglich; schweigt in der Boxengasse, im Qualifying (in LMU privat) und im Rennen vor dem Start. In der Startaufstellung sagt der Ingenieur, wenn das Lenkrad mehr als 90° eingeschlagen ist. Per Stimme: „Spotter aus“ / „Spotter an“. Fährt jemand neben dir, schweigt der Ingenieur (auch bei ausgeschaltetem Spotter), damit du dich auf den Zweikampf konzentrierst – Einstellung <b>Warnungen → Ingenieur schweigt, wenn jemand neben dir fährt</b>: nur im Rennen (Standard), immer oder nie.</li>
     <li><b>Einschlag</b>: ein paar Sekunden nach dem Unfall sagt der Ingenieur „Ich prüfe, ob dich das Zeit kostet“; nach zwei sauberen Runden nennt er den Verlust pro Runde, ob die Höchstgeschwindigkeit gesunken ist und ob sich die Reparatur lohnt. Kennt er die Reparaturzeit nicht, sagt er, bis zu wie vielen Sekunden sich die Reparatur lohnt (z. B. „Eine Reparatur bis 45 Sekunden lohnt sich, eine längere brich ab“) – die Reparatur lässt sich im Spiel abbrechen.</li>
@@ -197,7 +199,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="ai">
   <h2>KI – kostenloser Groq-Schlüssel (einmal, 3 Minuten)</h2>
   <div class="tip"><b>Ohne Groq-Schlüssel funktioniert die KI nicht</b>: Antworten auf Fragen außerhalb der Befehlsliste, bessere Spracherkennung
-  (Whisper – ohne Schlüssel bleibt die schwächere Google-Erkennung) und Übersetzung seltener Meldungen auf Englisch, Deutsch und Französisch.
+  (Whisper – ohne Schlüssel bleibt die schwächere Google-Erkennung) und Übersetzung seltener Meldungen auf Englisch, Deutsch, Französisch, Spanisch, Italienisch und Dänisch.
   Warnungen, Strategie und Befehle funktionieren auch ohne Schlüssel.</div>
   <ol>
     <li>Öffne <a href="https://console.groq.com">console.groq.com</a> und melde dich an – am einfachsten mit einem Google-Konto. Das Konto ist kostenlos.</li>
@@ -327,11 +329,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>„Der Computer wurde durch Windows geschützt“ bei der Installation</td><td>Das Installationsprogramm ist noch nicht digital signiert. Klicke auf <b>Weitere Informationen</b> → <b>Trotzdem ausführen</b>.</td></tr>
     <tr><td>Windows 11 blockiert das Installationsprogramm ohne „Trotzdem ausführen“</td><td>Das „Intelligente App-Steuerelement“ ist eingeschaltet und lässt Programme ohne digitale Signatur nicht zu. Man kann es abschalten (Windows-Sicherheit → App- &amp; Browsersteuerung), aber Windows lässt es danach nicht wieder einschalten.</td></tr>
     <tr><td>AVG oder Avast prüft das Installationsprogramm („CyberCapture“)</td><td>Der Virenschutz prüft eine neue Datei ohne digitale Signatur in der Cloud. Warte auf das Ergebnis oder klicke auf <b>Trotzdem öffnen</b>.</td></tr>
+    <tr><td>„Nicht verstanden“, die Stimme des Ingenieurs bricht ab, in den Meldungen steht „Dein Virenschutz (Avast/AVG) blockiert…“</td><td>Avast/AVG blockiert die Verbindungen der App. Avast/AVG → Menü → Einstellungen → Allgemein → Ausnahmen → Ausnahme hinzufügen → Ordner Dokumente\Pit Wall Crew, dann die App neu starten.</td></tr>
   </table>
   <h3>Problem oder Vorschlag melden</h3>
   <p>In der App: <b>Hilfe → Problem melden</b>, auf der Pit Wall: Tab <b>Hilfe</b>. Das geht direkt an den Autor.
+  Während der Fahrt sag <b>„Fehler melden: …“</b> (z. B. „Fehler melden: Spotter sagte links, aber da war keiner“) – das Programm fügt die Stelle auf der Strecke, die Runde und die letzten Meldungen des Ingenieurs hinzu; nur „Fehler melden“ – der Ingenieur fragt, was passiert ist.
   Mit deiner Zustimmung kann die App bei einem Absturz automatisch einen Bericht senden (ohne Sprachaufnahmen, Schlüssel und Passwörter) –
-  das schaltest du auf derselben Seite ein oder aus. Dort schaltest du auch den <b>anonymen Nutzerzähler</b> ab (zufällige Installationsnummer, Version und Sprache – keine Namen und Spieldaten). Details: <a href="prywatnosc.html?lang=de">Datenschutz</a>.</p>
+  das schaltest du auf derselben Seite ein oder aus. Dort schaltest du auch den <b>anonymen Nutzerzähler</b> ab (zufällige Installationsnummer, Version und Sprache – keine Namen und Spieldaten) und die <b>Nutzungsstatistik der Funktionen</b> (Funktionsnamen, Anzahl und Startzeit – nie deine Fragen) und die Sätze, die die KI Befehlen zugeordnet hat (ohne Namen – die häufigsten kommen für alle ins Programm). Updates laden nur die geänderten Dateien, wenn du die vorige Version hast. Details: <a href="prywatnosc.html?lang=de">Datenschutz</a>.</p>
   <img src="img/de/app_feedback.webp" alt="Problem melden">
 </section>
 

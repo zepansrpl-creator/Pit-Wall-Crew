@@ -36,7 +36,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </head>
 <body>
 <header>
-  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a></div>
+  <div class="langs"><a href="instrukcja.html">PL</a><a href="guide_en.html">EN</a><a href="guide_de.html">DE</a><a href="guide_fr.html">FR</a><a href="guide_es.html">ES</a><a href="guide_it.html">IT</a><a href="guide_da.html">DA</a></div>
   <h1>Pit Wall Crew – guide</h1>
   <p>Voice race engineer and Pit Wall for Le Mans Ultimate and Assetto Corsa. From installation to your first race.</p>
 </header>
@@ -72,13 +72,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
       <b>Log in with Patreon</b> – it downloads itself and your settings stay).</li>
     <li>Run the downloaded file. The installer isn't digitally signed yet, so Windows may show “Windows protected your PC” –
       click <b>More info</b> → <b>Run anyway</b>.</li>
-    <li>In the installer choose your <b>language</b> (the program will use the same one), then click <b>OK</b>, <b>Next</b> and <b>Install</b>. Installation takes about a minute, downloads nothing (Python is included) and needs no admin rights.
+    <li>In the installer choose your <b>language</b> (the program will use the same one; Spanish, Italian and Danish are chosen later in the app: Sound & language → Język / Language), then click <b>OK</b>, <b>Next</b> and <b>Install</b>. Installation takes about a minute, downloads nothing (Python is included) and needs no admin rights.
       The program and your data go to <code>Documents\Pit Wall Crew</code>. You can untick the <b>Pit Wall Crew</b> shortcuts on the desktop and in the Start menu. At the end choose whether to start the app, the voice tutorial and the full-version page on Patreon, and click <b>Finish</b>.</li>
     <li>The app opens in the chosen language with a <b>First steps</b> window next to it – go through it in order (each item has an <b>Open</b> button):
       <ol>
         <li><b>Team</b>: at the top <b>Create a new team…</b> (first person) or the team code and password from your teammates; then your name – a new name is added to the team's drivers when you save; driving alone – <b>Solo</b> mode.</li>
         <li><b>Microphone and button</b>: choose your microphone (the bar should move when you speak), click <b>Set: press the button…</b> and press the button on your wheel.</li>
-        <li><b>Voice</b>: choose the engineer's voice and click <b>▶ Listen</b>.</li>
+        <li><b>Sound &amp; language</b>: choose the engineer's voice and click <b>▶ Listen</b>.</li>
         <li><b>Groq key</b> (free, for the AI): <a href="#ai">how to get it</a> → Advanced → Your own Groq key → <b>Check key</b>.</li>
         <li><b>Patreon</b>: on the Engineer page click <b>Log in with Patreon</b> – that's how you get updates.</li>
         <li>Click <b>Save and restart the engineer module</b>.</li>
@@ -86,7 +86,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>In LMU once: <b>Settings → Gameplay → Enable Plugins = ON</b> (without it the program can't see the game data; Assetto Corsa: section <a href="#ac">Assetto Corsa</a>). Go on track, hold the button and ask e.g. “how much fuel?”.</li>
   </ol>
   <div class="tip">Updates install themselves when the app starts – never while you drive. Your settings are kept.
-  You can open the “First steps” window again later: Help → Manual → First steps. Change the language under Voice → Język / Language.</div>
+  You can open the “First steps” window again later: Help → Manual → First steps. Change the language under Sound & language → Język / Language.</div>
   <p><b>Old installation from the zip (INSTALL.bat)?</b> Run the new installer. If the program was unpacked to <code>Documents\Pit Wall Crew</code>, your settings stay automatically.
   If it was in another folder, copy <code>config.toml</code> and the <code>data</code> folder from the old program folder to <code>Documents\Pit Wall Crew\Program</code> (or just go through “First steps” again).
   An older installation with a Python other than 3.12 shows a message after an update asking you to install it with the new installer.</p>
@@ -131,12 +131,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <ul>
     <li>Choose the microphone and click <b>Test 3 s</b> – say something and check the level moves.</li>
     <li><b>Set: press the button…</b> and press the button on your wheel you'll use to talk (any button works, including MOZA buttons numbered above 32). A keyboard key works too.</li>
-    <li><b>Headphones / speakers</b> – the device you hear the engineer and spotter on, e.g. headphones while the game is on speakers.</li>
   </ul>
-  <h3>Voice</h3>
-  <img src="img/en/app_voice.webp" alt="Voice">
+  <h3>Sound &amp; language</h3>
+  <img src="img/en/app_voice.webp" alt="Sound &amp; language">
   <ul>
-    <li>Voice, speaking rate, volume, radio effect, language and the engineer's name. <b>▶ Listen</b> plays a sample.</li>
+    <li><b>Język / Language</b> – at the very top, always labelled in English too, so it is easy to find.</li>
+    <li><b>Headphones / speakers</b> – the device you hear the engineer and spotter on, e.g. headphones while the game is on speakers.</li>
+    <li>Engineer voice, speaking rate, volume, radio effect and the engineer's name. <b>▶ Listen</b> plays a sample.</li>
     <li>If you give him a name (e.g. Mark), he introduces himself and “Mark, quiet” mutes him.</li>
     <li><b>Spotter voice</b> – a separate voice for urgent calls about the track (car alongside, flags, incidents, lapping); “same as engineer” = one voice. <b>Spotter radio effect</b> – separate from the engineer (e.g. a clean spotter, the engineer over the radio). <b>▶ Listen to the spotter</b> plays a sample.</li>
   </ul>
@@ -163,7 +164,8 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>The full list is in the app: <b>Help → Commands</b>.</p>
   <img src="img/en/app_commands.webp" alt="Commands">
   <p>A question the program doesn't know goes to the AI (with a Groq key) together with the race data. Questions about the program itself
-  (“how do I turn off the calls about prototypes coming up behind?”, “make the spotter stop calling the sides”) the AI answers from this manual and the settings: it gives the command or the place in the settings, and if there is no such option it says so and gives the closest one.</p>
+  (“how do I turn off the calls about prototypes coming up behind?”, “make the spotter stop calling the sides”) the AI answers from this manual and the settings: it gives the command or the place in the settings, and if there is no such option it says so and gives the closest one.
+  A command said in your own words (“fresh rubber on the right”, “text Patrick to get up”) is matched by the AI against the list of all commands (also in the demo) and the app runs it; next time the same sentence works instantly without AI (“forget learned commands” clears them). Words the speech recognition got wrong are fixed by the app itself, without internet, and the names of your teammates and nearby rivals are passed to the speech recognition as hints.</p>
   <ul>
     <li><b>Short presses of the button without talking:</b> 1 – silence, 2 – quick status (pit stop, fuel or energy, gaps), 3 – repeat, 4 – previous message. By voice: “repeat”, “previous message”.</li>
     <li><b>In a hurry:</b> add a swear word to your question (e.g. “how much fucking fuel do I have?”) and the engineer answers noticeably faster.</li>
@@ -199,7 +201,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="ai">
   <h2>AI – free Groq key (once, 3 minutes)</h2>
   <div class="tip"><b>Without a Groq key the AI doesn't work</b>: answers to questions outside the command list, better speech recognition
-  (Whisper – without a key the weaker Google recognition is used) and translation of less common messages in English, German and French.
+  (Whisper – without a key the weaker Google recognition is used) and translation of less common messages in English, German, French, Spanish, Italian and Danish.
   Warnings, strategy and commands work without a key too.</div>
   <ol>
     <li>Go to <a href="https://console.groq.com">console.groq.com</a> and log in – a Google account is easiest. The account is free.</li>
@@ -329,11 +331,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <tr><td>“Windows protected your PC” when installing</td><td>The installer isn't digitally signed yet. Click <b>More info</b> → <b>Run anyway</b>.</td></tr>
     <tr><td>Windows 11 blocks the installer with no “Run anyway”</td><td>“Smart App Control” is on and doesn't let programs without a digital signature run. You can turn it off (Windows Security → App &amp; browser control), but Windows won't let you turn it back on later.</td></tr>
     <tr><td>AVG or Avast scans the installer (“CyberCapture”)</td><td>The antivirus checks a new file without a digital signature in the cloud. Wait for the result or click <b>Open anyway</b>.</td></tr>
+    <tr><td>“I didn't understand”, the engineer's voice cuts out, the messages say “Your antivirus (Avast/AVG) is blocking…”</td><td>Avast/AVG blocks the app's connections. Avast/AVG → Menu → Settings → General → Exceptions → Add exception → the folder Documents\Pit Wall Crew, then restart the app.</td></tr>
   </table>
   <h3>Report a problem or a suggestion</h3>
   <p>In the app: <b>Help → Report a problem</b>, on the Pit Wall: the <b>Help</b> tab. It goes straight to the author.
+  While driving say <b>“report a bug: …”</b> (e.g. “report a bug: the spotter said left but nobody was there”) – the app adds your spot on track, the lap and the engineer's last messages; just “report a bug” – the engineer asks what happened.
   With your consent the app can automatically send a report when it crashes (no voice recordings, keys or passwords) –
-  you switch this on or off on the same page. There you can also turn off the <b>anonymous user counter</b> (a random installation number, version and language – no names or game data). Details: <a href="prywatnosc.html?lang=en">Privacy</a>.</p>
+  you switch this on or off on the same page. There you can also turn off the <b>anonymous user counter</b> (a random installation number, version and language – no names or game data) and the <b>feature usage statistics</b> (feature names, counts and startup time – never what you asked) and the sentences the AI matched to commands (no names – the most common ones are added to the app for everyone). Updates download only the changed files when you have the previous version. Details: <a href="prywatnosc.html?lang=en">Privacy</a>.</p>
   <img src="img/en/app_feedback.webp" alt="Report a problem">
 </section>
 
