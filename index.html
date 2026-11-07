@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=d5b531d5"></script>
+<script src="i18n.js?v=2140b4a1"></script>
 <script src="i18n_core.js?v=89439f8d"></script>
 <style>
   :root {
@@ -197,6 +197,40 @@
   .lapfilt { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 0 0 8px; }
   .lapfilt select { width: auto; } .lapfilt label { white-space: nowrap; }
   .pace { width: 100%; height: 170px; display: block; }
+
+  /* mapa porównania okrążeń */
+  :root { --c1: #7fc4e8; --c2: #f08a3c; --c3: #e58fd0; }
+  html[data-theme="light"] { --c1: #1d6fb0; --c2: #c95f0a; --c3: #b0368f; }
+  #cmp-box select { max-width: 100%; min-width: 0; text-overflow: ellipsis; }
+  .cmp-drv { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+  .cmp-drv span.d { display: inline-flex; align-items: center; gap: 7px; padding: 5px 11px; border-radius: 10px; background: var(--card2);
+                    border: 1px solid var(--line); font-size: 13px; }
+  .cmp-drv i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+  .cmp-tools { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+  .cmp-tools button { padding: 6px 10px; min-width: 40px; font: 700 14px var(--cond); }
+  .cmp-tools button.on { border-color: var(--accent); color: var(--accent); }
+  .cmp-wrap { position: relative; width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg2); }
+  .cmp-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+  .cmp-ov { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .cmp-lab { position: absolute; white-space: nowrap; }
+  .cmp-card { background: var(--head-bg); border: 1.5px solid var(--line2); border-radius: 10px; padding: 5px 9px; font: 600 11.5px/1.45 var(--mono);
+              color: var(--text); pointer-events: auto; cursor: pointer; }
+  html[data-theme="light"] .cmp-card { background: rgba(255,255,255,.95); }
+  .cmp-card b { font: 700 15px var(--cond); }
+  .cmp-chip { font: 600 10.5px var(--mono); padding: 0 4px; border-radius: 4px; background: var(--head-bg); }
+  html[data-theme="light"] .cmp-chip { background: rgba(255,255,255,.9); }
+  .cmp-tip { position: absolute; display: none; pointer-events: none; background: var(--head-bg); border: 1.5px solid var(--text); border-radius: 10px;
+             padding: 6px 10px; font: 600 12px/1.5 var(--mono); color: var(--text); white-space: nowrap; z-index: 2; }
+  html[data-theme="light"] .cmp-tip { background: rgba(255,255,255,.96); }
+  .cmp-tip small { font: 400 11px Inter, sans-serif; color: var(--muted); display: block; }
+  .cmp-spd { width: 100%; height: 130px; display: block; margin-top: 8px; cursor: crosshair; touch-action: pan-y; }
+  .cmp-corner { margin-top: 12px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+  .cmp-corner h3 { margin: 0 0 6px; font: 700 20px var(--cond); }
+  .cmp-corner svg { width: 100%; height: 210px; display: block; }
+  .cmp-corner td { font: 600 13px var(--mono); } .cmp-corner td:first-child { font: 400 13px Inter, sans-serif; color: var(--muted); }
+  .cmp-setup { margin-top: 12px; } .cmp-setup h3 { margin: 0 0 6px; font: 700 20px var(--cond); }
+  .cmp-setup table { width: auto; min-width: min(560px, 100%); } .cmp-setup td { font: 600 13px var(--mono); padding-right: 22px; } .cmp-setup td:first-child { font: 400 13px Inter, sans-serif; color: var(--muted); }
+  .cmp-why { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; }
   /* pamięć: karty */
   .memgrid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin-top: 10px; }
   .memcard { background: var(--card2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
@@ -607,6 +641,20 @@
       <tbody id="sum-st"></tbody>
     </table></div>
     <p class="note">Średnie i równość z czystych okrążeń: bez alei, safety cara, nieważnych i wolniejszych o ponad 7% od najlepszego. Równość = typowe odchylenie od średniej.</p>
+  </section>
+  <section id="cmp-box">
+    <h2>Mapa porównania <span class="note" id="cmp-note"></span></h2>
+    <div class="lapfilt"><select id="cmp-trk" aria-label="Tor"></select><select id="cmp-s0" aria-label="Okrążenie 1"></select><select id="cmp-s1" aria-label="Okrążenie 2"></select><select id="cmp-s2" aria-label="Okrążenie 3"></select></div>
+    <p class="note" id="cmp-msg">Najlepsze okrążenia kierowców z bazy zespołu – wczytywanie…</p>
+    <div id="cmp-body" style="display:none">
+      <div class="cmp-drv" id="cmp-drv"></div>
+      <div class="cmp-tools" id="cmp-tools"></div>
+      <div class="cmp-wrap" id="cmp-wrap"><svg id="cmp-map" role="img" aria-label="Mapa toru: kolor odcinka pokazuje, kto jest tam najszybszy"></svg><div class="cmp-ov" id="cmp-ov"></div><div class="cmp-tip" id="cmp-tip"></div></div>
+      <svg class="cmp-spd" id="cmp-spd" viewBox="0 0 1000 130" preserveAspectRatio="none" role="img" aria-label="Prędkość na całym okrążeniu"></svg>
+      <p class="note">Najedź albo kliknij w dowolne miejsce toru lub wykresu: prędkość na każdym okrążeniu i strata do prowadzącego. Kółkiem myszy albo + / − przybliżasz, przeciągając przesuwasz. Kliknij zakręt, żeby zobaczyć szczegóły.</p>
+      <div id="cmp-setup" class="cmp-setup"></div>
+      <div class="cmp-corner" id="cmp-corner"></div>
+    </div>
   </section>
   <section>
     <h2>Okrążenia <span class="note" id="laps-n"></span>
@@ -2140,6 +2188,7 @@ $('b-drv').onclick = function () {
 var LAPS = [];
 function loadLaps() {
   if (!T) return;
+  cmpLoad();
   T('laps').orderByChild('t').limitToLast(600).once('value').then(function (s) {
     LAPS = []; s.forEach(function (c) { LAPS.push(c.val()); });
     LAPS.sort(function (a, b) { return carK(a).localeCompare(carK(b)) || (a.stint || 0) - (b.stint || 0) || (a.lap || 0) - (b.lap || 0); });
@@ -2149,6 +2198,483 @@ function loadLaps() {
   }).catch(function (e) { $('laps').innerHTML = '<tr><td colspan="13" class="err">' + esc(authErr(e)) + '</td></tr>'; });
 }
 $('b-laps').onclick = loadLaps;
+// ------------------------------------------------------------------ mapa porównania okrążeń
+// Najlepsze okrążenia kierowców z bazy zespołu (tlapsi/tlaps – przebieg co 5 m: czas, prędkość, gaz, hamulec, bieg, TC;
+// engineer/analysis/teamlaps.py) na kształcie toru (tracks/<klucz>). Do 3 okrążeń: kolor odcinka = kto tam najszybszy,
+// punkty hamowania, prędkość po najechaniu, szczegóły zakrętu. Zakręty wykrywane jak w engineer/analysis/corners.py.
+var CMP = { idx: null, trk: '', sel: ['', '', ''], laps: {}, shapes: {}, z: 1, cx: 0, cy: 0, hov: -1, corner: -1, L: [], C: [], XY: null };
+var CMP_COL = ['var(--c1)', 'var(--c2)', 'var(--c3)'], CMP_BIN = 5;
+function cmpTrackKey(n) { return String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'tor'; }
+function cmpMsg(t) { $('cmp-msg').textContent = TR(t); $('cmp-msg').style.display = ''; }
+function cmpLoad() {
+  if (!T) return;
+  if (!window.DecompressionStream) { cmpMsg('Ta przeglądarka nie pokaże mapy porównania – użyj aktualnej wersji Chrome, Edge, Firefoksa albo Safari.'); return; }
+  T('tlapsi').once('value').then(function (s) { CMP.idx = s.val() || {}; cmpTracks(); })
+    .catch(function (e) { cmpMsg(authErr(e)); });
+}
+function cmpList(trk) {
+  var out = [], ds = (CMP.idx || {})[trk] || {};
+  Object.keys(ds).forEach(function (d) {
+    Object.keys(ds[d] || {}).forEach(function (b) { var m = ds[d][b]; if (m && m.lap_time) out.push({ id: d + '/' + b, m: m }); });
+  });
+  return out.sort(function (a, b) { return a.m.lap_time - b.m.lap_time; });
+}
+function cmpTracks() {
+  var trks = Object.keys(CMP.idx || {}).filter(function (k) { return cmpList(k).length; });
+  if (!trks.length) { $('cmp-body').style.display = 'none'; setH($('cmp-trk'), ''); ['cmp-s0', 'cmp-s1', 'cmp-s2'].forEach(function (i) { setH($(i), ''); });
+    return cmpMsg('Brak okrążeń do porównania. Pojawią się, gdy kierowcy zespołu przejadą czyste okrążenia z włączonym PWC.'); }
+  var last = function (k) { return Math.max.apply(null, cmpList(k).map(function (x) { return x.m.t || 0; })); };
+  trks.sort(function (a, b) { return last(b) - last(a); });
+  if (trks.indexOf(CMP.trk) < 0) { CMP.trk = trks[0]; CMP.sel = ['', '', '']; }
+  setH($('cmp-trk'), trks.map(function (k) { return '<option value="' + esc(k) + '">' + esc(cmpList(k)[0].m.track || k) + '</option>'; }).join(''));
+  $('cmp-trk').value = CMP.trk;
+  cmpOptions();
+}
+function cmpLabel(m, st) {
+  return [m.driver || '?', lapTxt(m.lap_time), m.compound || '', m.temp ? Math.round(m.temp) + '°C' : '', m.fuel != null ? Math.round(m.fuel) + ' l' : '',
+          st && m.setup_h && st[m.driver] && st[m.driver][m.setup_h] ? 'setup ' + st[m.driver][m.setup_h] : '']
+    .filter(Boolean).join(' · ');
+}
+// setupy kierowcy na tym torze: A, B, C… w kolejności pierwszego okrążenia (tylko gdy ma ich kilka)
+function cmpSetupLetters(list) {
+  var by = {}, out = {};
+  list.slice().sort(function (a, b) { return (a.m.t || 0) - (b.m.t || 0); }).forEach(function (x) {
+    if (!x.m.setup_h) return;
+    var d = x.m.driver || '?'; by[d] = by[d] || [];
+    if (by[d].indexOf(x.m.setup_h) < 0) by[d].push(x.m.setup_h);
+  });
+  Object.keys(by).forEach(function (d) { if (by[d].length < 2) return; out[d] = {}; by[d].forEach(function (h, i) { out[d][h] = String.fromCharCode(65 + i); }); });
+  return out;
+}
+function cmpOptions() {
+  var list = cmpList(CMP.trk), ids = list.map(function (x) { return x.id; });
+  CMP.sel = CMP.sel.map(function (v) { return ids.indexOf(v) >= 0 ? v : ''; });
+  if (!CMP.sel[0]) CMP.sel[0] = ids[0] || '';
+  if (!CMP.sel[1]) {
+    var d0 = (list[0] || { m: {} }).m.driver, o = list.filter(function (x) { return x.m.driver !== d0; })[0] || list[1];
+    CMP.sel[1] = o && o.id !== CMP.sel[0] ? o.id : '';
+  }
+  var letters = cmpSetupLetters(list);
+  CMP.letters = letters;
+  var opts = list.map(function (x) { return '<option value="' + esc(x.id) + '">' + esc(cmpLabel(x.m, letters)) + '</option>'; }).join('');
+  for (var i = 0; i < 3; i++) {
+    setH($('cmp-s' + i), (i ? '<option value="">' + esc(TR(i === 1 ? '— bez drugiego okrążenia —' : '— bez trzeciego okrążenia —')) + '</option>' : '') + opts);
+    $('cmp-s' + i).value = CMP.sel[i];
+  }
+  cmpFetch();
+}
+function cmpUnpack(z) {
+  var bin = atob(z), u = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  var st = new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'));
+  return new Response(st).text().then(function (txt) {
+    var d = JSON.parse(txt), t = [], acc = 0;
+    d.t.forEach(function (x) { acc += x; t.push(acc / 1000); });
+    return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [] };
+  });
+}
+function cmpGetLap(id) {
+  var k = CMP.trk + '/' + id;
+  if (CMP.laps[k]) return Promise.resolve(CMP.laps[k]);
+  return T('tlaps/' + k).once('value').then(function (s) {
+    var r = s.val(); if (!r || !r.z) return null;
+    return cmpUnpack(r.z).then(function (L) { L.m = r.meta || {}; L.setup = r.setup || null; CMP.laps[k] = L; return L; });
+  });
+}
+function cmpGetShape(name) {
+  var k = cmpTrackKey(name);
+  if (CMP.shapes.hasOwnProperty(k)) return Promise.resolve(CMP.shapes[k]);
+  return T('tracks/' + k).once('value').then(function (s) { return s.val() || T('tracks/' + k + '_ac').once('value').then(function (s2) { return s2.val(); }); })
+    .then(function (r) { CMP.shapes[k] = r && r.points && r.points.length >= 50 ? r.points : null; return CMP.shapes[k]; })
+    .catch(function () { return null; });
+}
+function cmpFetch() {
+  var ids = CMP.sel.slice(), trk = CMP.trk;
+  if (!ids[0]) return;
+  cmpMsg('Wczytywanie okrążeń…');
+  Promise.all(ids.map(function (id) { return id ? cmpGetLap(id) : null; })).then(function (laps) {
+    if (trk !== CMP.trk || ids.join() !== CMP.sel.join()) return;
+    var first = laps.filter(Boolean)[0];
+    if (!first) return cmpMsg('Nie udało się wczytać okrążenia.');
+    return cmpGetShape(first.m.track).then(function (shape) { if (trk === CMP.trk) cmpBuild(laps, shape); });
+  }).catch(function (e) { cmpMsg(authErr(e)); });
+}
+// ---- obliczenia
+function cmpSmooth(v) {
+  var n = v.length, o = [];
+  for (var i = 0; i < n; i++) { var a = Math.max(0, i - 3), b = Math.min(n, i + 4), s = 0; for (var j = a; j < b; j++) s += v[j]; o.push(s / (b - a)); }
+  return o;
+}
+function cmpMax(v, a, b) { var m = -Infinity; for (var i = a; i < b; i++) if (v[i] > m) m = v[i]; return m; }
+function cmpCorners(r, n) {
+  var sp = cmpSmooth(r.v.slice(0, n)), win = Math.round(120 / CMP_BIN), look = Math.round(500 / CMP_BIN), ap = [];
+  if (n < 20) return [];
+  for (var i = 0; i < n; i++) {
+    var lo = Math.max(0, i - win), hi = Math.min(n, i + win + 1), mn = Infinity;
+    for (var j = lo; j < hi; j++) if (sp[j] < mn) mn = sp[j];
+    if (sp[i] > mn || sp[i] <= 0 || (ap.length && i - ap[ap.length - 1] < win)) continue;
+    if (cmpMax(sp, Math.max(0, i - look), i + 1) - sp[i] >= 15 && cmpMax(sp, i, Math.min(n, i + look)) - sp[i] >= 7.5) ap.push(i);
+  }
+  var cs = ap.map(function (a) {
+    var s = a, lim = Math.max(0, a - look), e = a, le = Math.min(n - 1, a + look);
+    while (s > lim && ((r.b[s - 1] || 0) > 5 || sp[s - 1] >= sp[s])) s--;
+    while (e < le && (r.g[e] || 0) < 95) e++;
+    return [Math.max(0, s - 8), a, Math.min(n - 1, e + 16)];
+  });
+  for (var k = 1; k < cs.length; k++) if (cs[k][0] <= cs[k - 1][2]) { var mid = Math.floor((cs[k - 1][1] + cs[k][1]) / 2); cs[k - 1][2] = mid; cs[k][0] = mid + 1; }
+  return cs.map(function (c, k) { return { name: 'T' + (k + 1), s: c[0], a: c[1], e: c[2] }; });
+}
+function cmpMet(L, c) {
+  var s = c.s, e = Math.min(c.e, L.v.length - 1), lo = Math.max(s, c.a - 12), hi = Math.min(e, c.a + 12) + 1, mi = c.a, mv = Infinity, i;
+  for (i = lo; i < hi; i++) if (L.v[i] < mv) { mv = L.v[i]; mi = i; }
+  var bi = null, ti = null, coast = 0, tc = 0, bp = 0;
+  for (i = s; i <= mi; i++) if (L.b[i] > 15) { bi = i; break; }
+  for (i = mi; i <= e; i++) if (L.g[i] >= 95) { ti = i; break; }
+  for (i = s; i <= e; i++) { if (L.g[i] < 10 && L.b[i] < 5) coast++; tc += L.c[i] ? 1 : 0; }
+  for (i = s; i <= mi; i++) bp = Math.max(bp, L.b[i] || 0);
+  return { time: L.t[e] - L.t[s], bi: bi, brake: bi == null ? null : (c.a - bi) * CMP_BIN, vmin: mv, mi: mi,
+           thr: ti == null ? null : (ti - c.a) * CMP_BIN, coast: coast * CMP_BIN, tc: tc * CMP_BIN, gear: L.n[mi], bp: bp };
+}
+function cmpBuild(laps, shape) {
+  var L = [];
+  laps.forEach(function (x, i) { if (x) L.push({ d: x, slot: i, col: CMP_COL[i] }); });
+  var names = {};
+  L.forEach(function (l) { var f = (l.d.m.driver || '?').split(' ')[0]; names[f] = (names[f] || 0) + 1; });
+  L.forEach(function (l) {
+    var f = (l.d.m.driver || '?').split(' ')[0], lt = ((CMP.letters || {})[l.d.m.driver] || {})[l.d.m.setup_h];
+    l.name = names[f] > 1 ? f + ' ' + (lt ? lt : '(' + (l.slot + 1) + ')') : f;
+  });
+  var n = Math.min.apply(null, L.map(function (l) { return l.d.v.length; }));
+  var ref = L.slice().sort(function (a, b) { return a.d.m.lap_time - b.d.m.lap_time; })[0];
+  var len = ref.d.m.len || n * CMP_BIN;
+  var trackChanged = CMP.trkDrawn !== CMP.trk;
+  CMP.L = L; CMP.n = n; CMP.C = cmpCorners(ref.d, n);
+  CMP.C.forEach(function (c) { c.m = L.map(function (l) { return cmpMet(l.d, c); }); var b = Math.min.apply(null, c.m.map(function (m) { return m.time; }));
+    c.best = c.m.map(function (m) { return m.time; }).indexOf(b); c.m.forEach(function (m) { m.dt = m.time - b; }); });
+  CMP.XY = null;
+  if (shape) {
+    var p = shape.map(function (q) { return [q[0], -q[1]]; }), mx = 0, my = 0;
+    p.forEach(function (q) { mx += q[0]; my += q[1]; }); mx /= p.length; my /= p.length;
+    var sxx = 0, syy = 0, sxy = 0;
+    p.forEach(function (q) { var a = q[0] - mx, b = q[1] - my; sxx += a * a; syy += b * b; sxy += a * b; });
+    var rot = -0.5 * Math.atan2(2 * sxy, sxx - syy), cr = Math.cos(rot), sr = Math.sin(rot);
+    p = p.map(function (q) { var a = q[0] - mx, b = q[1] - my; return [a * cr - b * sr, a * sr + b * cr]; });
+    var xs = p.map(function (q) { return q[0]; }), ys = p.map(function (q) { return q[1]; });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    var pad = Math.max(x1 - x0, y1 - y0) * 0.05;
+    CMP.box = [x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad];
+    CMP.u = Math.max(CMP.box[2], CMP.box[3]) / 1000;
+    CMP.P = p;
+    var N = p.length;
+    CMP.XY = [];
+    for (var i = 0; i < n; i++) {
+      var x = ((i * CMP_BIN / len) % 1) * N, a = Math.floor(x) % N, b = (a + 1) % N, f = x - Math.floor(x);
+      CMP.XY.push([p[a][0] + (p[b][0] - p[a][0]) * f, p[a][1] + (p[b][1] - p[a][1]) * f]);
+    }
+    if (trackChanged) { CMP.z = 1; CMP.cx = CMP.box[0] + CMP.box[2] / 2; CMP.cy = CMP.box[1] + CMP.box[3] / 2; CMP.corner = -1; }
+    $('cmp-wrap').style.aspectRatio = (CMP.box[2] / CMP.box[3]).toFixed(3);
+  }
+  CMP.trkDrawn = CMP.trk;
+  if (CMP.corner >= CMP.C.length) CMP.corner = -1;
+  if (CMP.hov < 0 || CMP.hov >= n) CMP.hov = -1;
+  $('cmp-msg').style.display = shape ? 'none' : '';
+  if (!shape) cmpMsg('Kształt toru pojawi się po pierwszej jeździe na tym torze z włączonym PWC (zbiera się z położenia aut). Wykres prędkości i zakręty działają już teraz.');
+  $('cmp-wrap').style.display = shape ? '' : 'none';
+  $('cmp-body').style.display = '';
+  var best = Math.min.apply(null, L.map(function (l) { return l.d.m.lap_time; }));
+  setH($('cmp-drv'), L.map(function (l) {
+    var g = l.d.m.lap_time - best;
+    return '<span class="d"><i style="background:' + l.col + '"></i><b>' + esc(l.name) + '</b><span class="num">' + lapTxt(l.d.m.lap_time) + '</span>' +
+      '<span class="note">' + (g < 0.0005 ? esc(TR('najszybszy')) : '+' + g.toFixed(3).replace('.', ',')) + '</span></span>';
+  }).join(''));
+  $('cmp-note').textContent = '· ' + (ref.d.m.track || '');
+  cmpDraw(); cmpSpeed(); cmpCornerPanel(); cmpSetup();
+}
+// ---- różnice w setupie (setup przy okrążeniu: engineer/analysis/teamlaps.setup_snapshot)
+var CMP_SET = {
+  VM_REAR_WING: 'Tylne skrzydło', VM_FRONT_WING: 'Przednie skrzydło', VM_FRONT_ANTISWAY: 'Przedni stabilizator', VM_REAR_ANTISWAY: 'Tylny stabilizator',
+  VM_FRONT_3RD_SPRING: 'Trzecia sprężyna przód', VM_REAR_3RD_SPRING: 'Trzecia sprężyna tył', VM_FRONT_3RD_PACKERS: 'Odbojnik trzeciej sprężyny przód',
+  VM_REAR_3RD_PACKERS: 'Odbojnik trzeciej sprężyny tył', VM_DIFF_PRELOAD: 'Napięcie wstępne dyferencjału', VM_BRAKE_BIAS: 'Balans hamulców',
+  VM_BRAKE_PRESSURE: 'Siła hamowania', WM_SLOWBUMP: 'Slow bump', WM_FASTBUMP: 'Fast bump', WM_SLOWREBOUND: 'Slow rebound', WM_FASTREBOUND: 'Fast rebound',
+  WM_SPRING: 'Sprężyna', WM_RIDEHEIGHT: 'Prześwit', WM_PACKERS: 'Odbojniki', WM_PRESSURE: 'Ciśnienie w oponie', WM_CAMBER: 'Pochylenie koła',
+  WM_TOE: 'Zbieżność', WM_TOEIN: 'Zbieżność',
+  ARB_FRONT: 'Przedni stabilizator', ARB_REAR: 'Tylny stabilizator', WING_1: 'Skrzydło 1', WING_2: 'Skrzydło 2', DAMP_BUMP: 'Slow bump',
+  DAMP_FAST_BUMP: 'Fast bump', DAMP_REBOUND: 'Slow rebound', DAMP_FAST_REBOUND: 'Fast rebound', SPRING_RATE: 'Sprężyna', ROD_LENGTH: 'Prześwit',
+  PACKER_RANGE: 'Odbojniki', PRESSURE: 'Ciśnienie w oponie', CAMBER: 'Pochylenie koła', TOE_OUT: 'Zbieżność', DIFF_POWER: 'Dyferencjał przy gazie',
+  DIFF_COAST: 'Dyferencjał przy hamowaniu', DIFF_PRELOAD: 'Napięcie wstępne dyferencjału', FRONT_BIAS: 'Balans hamulców', BRAKE_POWER_MULT: 'Siła hamowania'
+};
+var CMP_WHEEL = { FL: 'LP', FR: 'PP', RL: 'LT', RR: 'PT', LF: 'LP', RF: 'PP', LR: 'LT' };
+function cmpSetName(k) {
+  var m = k.match(/^(WM_[A-Z0-9]+)-W_(FL|FR|RL|RR)$/) || k.match(/^([A-Z0-9_]+?)_(LF|RF|LR|RR)$/), base = m ? m[1] : k, w = m ? CMP_WHEEL[m[2]] : '';
+  var n = CMP_SET[base];
+  if (!n) { n = base.replace(/^(VM|WM)_/, '').replace(/_/g, ' ').toLowerCase(); n = n.charAt(0).toUpperCase() + n.slice(1); }
+  return [n, w];
+}
+function cmpSetup() {
+  var L = CMP.L, box = $('cmp-setup'), have = L.filter(function (l) { return l.d.setup; });
+  if (!have.length || L.length < 2) { setH(box, ''); return; }
+  var h = '<h3>' + esc(TR('Różnice w setupie')) + '</h3>';
+  var cars = {}; have.forEach(function (l) { cars[l.d.m.car || ''] = 1; });
+  if (Object.keys(cars).length > 1) { setH(box, h + '<p class="note">' + esc(TR('Inne auta – setupów nie porównujemy.')) + '</p>'); return; }
+  var miss = L.filter(function (l) { return !l.d.setup; }).map(function (l) {
+    return '<p class="note"><b style="color:' + l.col + '">' + esc(l.name) + '</b> <span>' + esc(TR('– brak setupu (okrążenie sprzed wersji 0.4.3.12 albo kierowca go nie udostępnia)')) + '</span></p>';
+  }).join('');
+  if (have.length < 2) { setH(box, h + miss); return; }
+  var keys = {}; have.forEach(function (l) { Object.keys(l.d.setup).forEach(function (k) { keys[k] = 1; }); });
+  var rows = Object.keys(keys).filter(function (k) {
+    var v = have.map(function (l) { return l.d.setup[k] == null ? '—' : String(l.d.setup[k]); });
+    return v.some(function (x) { return x !== v[0]; });
+  }).map(function (k) { return { k: k, n: cmpSetName(k) }; }).sort(function (a, b) { return (a.n[0] + a.n[1]).localeCompare(b.n[0] + b.n[1]); });
+  if (!rows.length) { setH(box, h + '<p class="note">' + esc(TR('Setup jest taki sam.')) + '</p>' + miss); return; }
+  var t = '<div class="scroll"><table><thead><tr><th></th>' + have.map(function (l) { return '<th style="color:' + l.col + '">' + esc(l.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    rows.map(function (r) {
+      return '<tr><td><span>' + esc(TR(r.n[0])) + '</span>' + (r.n[1] ? ' <span>' + esc(TR(r.n[1])) + '</span>' : '') + '</td>' +
+        have.map(function (l) { var v = l.d.setup[r.k]; return '<td style="color:' + l.col + '">' + esc(v == null ? '—' : v) + '</td>'; }).join('') + '</tr>';
+    }).join('') + '</tbody></table></div>';
+  setH(box, h + t + miss);
+}
+// ---- rysowanie mapy
+function cmpView() { var W = CMP.box[2] / CMP.z, H = CMP.box[3] / CMP.z; return [CMP.cx - W / 2, CMP.cy - H / 2, W, H]; }
+function cmpClamp() {
+  CMP.z = Math.max(1, Math.min(14, CMP.z));
+  var b = CMP.box, W = b[2] / CMP.z, H = b[3] / CMP.z;
+  CMP.cx = Math.max(b[0] + W / 2, Math.min(b[0] + b[2] - W / 2, CMP.cx));
+  CMP.cy = Math.max(b[1] + H / 2, Math.min(b[1] + b[3] - H / 2, CMP.cy));
+}
+function cmpPath(a, b) { var o = []; for (var i = a; i <= b; i++) o.push(CMP.XY[i][0].toFixed(1) + ' ' + CMP.XY[i][1].toFixed(1)); return 'M' + o.join('L'); }
+function cmpShape(j, x, y, s) {
+  x = +x; y = +y;
+  if (j === 0) return '<circle cx="' + x + '" cy="' + y + '" r="' + s + '"';
+  if (j === 1) return '<path d="M' + x + ' ' + (y - s * 1.3) + 'L' + (x + s * 1.3) + ' ' + y + 'L' + x + ' ' + (y + s * 1.3) + 'L' + (x - s * 1.3) + ' ' + y + 'Z"';
+  return '<path d="M' + x + ' ' + (y - s * 1.3) + 'L' + (x + s * 1.2) + ' ' + (y + s) + 'L' + (x - s * 1.2) + ' ' + (y + s) + 'Z"';
+}
+function cmpDraw() {
+  if (!CMP.XY) return cmpTools();
+  cmpClamp();
+  var L = CMP.L, n = CMP.n, k = Math.pow(CMP.z, -0.65) * CMP.u, svg = $('cmp-map'), h = [];
+  var trk = 'M' + CMP.P.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('L') + 'Z';
+  h.push('<path d="' + trk + '" fill="none" style="stroke:var(--map-track)" stroke-width="' + 22 * k + '" stroke-linejoin="round"/>');
+  for (var i0 = 0; i0 < n - 1; i0 += 10) {
+    var i1 = Math.min(n - 1, i0 + 10), ts = L.map(function (l) { return l.d.t[i1] - l.d.t[i0]; });
+    var o = ts.slice().sort(function (a, b) { return a - b; }), gap = L.length > 1 ? o[1] - o[0] : 0, bi = ts.indexOf(o[0]);
+    var col = gap < 0.004 ? 'var(--map-line)' : L[bi].col, op = gap < 0.004 ? 1 : Math.min(1, 0.5 + gap * 12);
+    h.push('<path d="' + cmpPath(i0, i1) + '" fill="none" style="stroke:' + col + '" stroke-width="' + 10 * k + '" stroke-linecap="round" stroke-linejoin="round" opacity="' + op.toFixed(2) + '"/>');
+  }
+  var a = CMP.XY[0], b = CMP.XY[2], dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1, S = 16 * k;
+  h.push('<line x1="' + (a[0] - dy / dl * S) + '" y1="' + (a[1] + dx / dl * S) + '" x2="' + (a[0] + dy / dl * S) + '" y2="' + (a[1] - dx / dl * S) + '" style="stroke:var(--text)" stroke-width="' + 4 * k + '"/>');
+  CMP.C.forEach(function (c) {
+    c.m.forEach(function (m, j) {
+      if (m.bi == null) return;
+      var q = CMP.XY[m.bi];
+      h.push(cmpShape(L[j].slot, q[0].toFixed(1), q[1].toFixed(1), 6 * k) + ' style="fill:' + L[j].col + ';stroke:var(--bg)" stroke-width="' + 1.5 * k + '"/>');
+    });
+    var p = CMP.XY[c.a];
+    h.push('<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' + 7 * k + '" fill="none" style="stroke:var(--text)" stroke-width="' + 2.2 * k + '"/>');
+  });
+  h.push('<circle id="cmp-cur" r="' + 6 * k + '" cx="-1e6" cy="-1e6" style="fill:var(--text);stroke:var(--bg)" stroke-width="' + 2 * k + '"/>');
+  svg.innerHTML = h.join('');
+  svg.style.touchAction = CMP.z > 1.01 ? 'none' : 'pan-y';
+  cmpPan(); cmpTools();
+}
+function cmpPos(x, y, v) { return [(x - v[0]) / v[2] * 100, (y - v[1]) / v[3] * 100]; }
+function cmpIn(q) { return q[0] > -3 && q[0] < 103 && q[1] > -3 && q[1] < 103; }
+function cmpPan() {
+  if (!CMP.XY) return;
+  var v = cmpView(), L = CMP.L, big = CMP.z >= 2.2, h = [], mid = CMP.box[1] + CMP.box[3] / 2;
+  $('cmp-map').setAttribute('viewBox', v.map(function (x) { return x.toFixed(1); }).join(' '));
+  CMP.C.forEach(function (c, ci) {
+    var p = CMP.XY[c.a], q = cmpPos(p[0], p[1], v);
+    if (!cmpIn(q)) return;
+    var below = p[1] > mid, tr = below ? 'translate(-50%,14px)' : 'translate(-50%,calc(-100% - 14px))';
+    var bc = L.length > 1 && c.m[c.best] ? L[c.best].col : 'var(--line2)';
+    var inner = '<b>' + c.name + '</b>';
+    if (big) inner += c.m.map(function (m, j) {
+      return '<div style="color:' + L[j].col + '">' + esc(L[j].name) + ' <span>' + Math.round(m.vmin) + ' km/h</span>' +
+        (m.brake != null ? ' · <span>' + esc(TR('hamuje ' + Math.round(m.brake) + ' m')) + '</span>' : '') +
+        (L.length > 1 ? ' · ' + (m.dt < 0.0005 ? '<span>' + esc(TR('najlepiej')) + '</span>' : '+' + n2(m.dt)) : '') + '</div>';
+    }).join('');
+    else if (L.length > 1) { var w = Math.max.apply(null, c.m.map(function (m) { return m.dt; })); if (w >= 0.01) inner += ' <span style="color:var(--muted)">' + n2(w) + '</span>'; }
+    h.push('<div class="cmp-lab" style="left:' + q[0] + '%;top:' + q[1] + '%;transform:' + tr + '"><div class="cmp-card" data-c="' + ci + '" style="border-color:' + bc + '">' + inner + '</div></div>');
+    if (CMP.z >= 3.2) c.m.forEach(function (m, j) {
+      if (m.bi == null) return;
+      var qb = cmpPos(CMP.XY[m.bi][0], CMP.XY[m.bi][1], v);
+      h.push('<div class="cmp-lab cmp-chip" style="color:' + L[j].col + ';left:' + qb[0] + '%;top:' + qb[1] + '%;transform:translate(-50%,' + [-190, 80, 200][j % 3] + '%)">' + Math.round(m.brake) + ' m</div>');
+    });
+  });
+  $('cmp-ov').innerHTML = h.join('');
+  $('cmp-ov').querySelectorAll('.cmp-card').forEach(function (el) { el.onclick = function () { cmpPickCorner(+el.dataset.c); }; });
+  cmpHover(CMP.hov);
+}
+function cmpTools() {
+  var h = ['<button type="button" class="second" data-k="all">' + esc(TR('Cały tor')) + '</button>'];
+  CMP.C.forEach(function (c, i) { h.push('<button type="button" class="second' + (i === CMP.corner ? ' on' : '') + '" data-k="' + i + '">' + c.name + '</button>'); });
+  if (CMP.XY) h.push('<button type="button" class="second" data-k="in" aria-label="' + esc(TR('Przybliż')) + '">+</button><button type="button" class="second" data-k="out" aria-label="' + esc(TR('Oddal')) + '">−</button>');
+  setH($('cmp-tools'), h.join(''));
+  $('cmp-tools').querySelectorAll('button').forEach(function (b) {
+    b.onclick = function () {
+      var k = b.dataset.k;
+      if (k === 'all') { CMP.z = 1; CMP.corner = -1; cmpDraw(); cmpCornerPanel(); cmpSpeed(); }
+      else if (k === 'in' || k === 'out') { CMP.z *= k === 'in' ? 1.5 : 1 / 1.5; cmpDraw(); }
+      else cmpPickCorner(+k);
+    };
+  });
+}
+function cmpPickCorner(i) {
+  var c = CMP.C[i]; if (!c) return;
+  CMP.corner = i;
+  if (CMP.XY) {
+    var xs = [], ys = [];
+    for (var j = Math.max(c.s, c.a - 36); j <= Math.min(c.e, c.a + 24); j++) { xs.push(CMP.XY[j][0]); ys.push(CMP.XY[j][1]); }
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    CMP.z = Math.max(2.4, Math.min(10, Math.min(CMP.box[2] / ((x1 - x0) * 2.2 || 1), CMP.box[3] / ((y1 - y0) * 2.2 || 1))));
+    CMP.cx = (x0 + x1) / 2; CMP.cy = (y0 + y1) / 2;
+  }
+  cmpDraw(); cmpSpeed(); cmpCornerPanel();
+  var cp = $('cmp-corner'); if (cp && cp.scrollIntoView && window.innerWidth < 800) cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+// ---- najechanie: prędkość wszystkich okrążeń w punkcie
+function cmpHover(i) {
+  CMP.hov = i;
+  var tip = $('cmp-tip'), cur = $('cmp-cur'), L = CMP.L;
+  var sl = $('cmp-sl'); if (sl) { var x = i < 0 ? -10 : i / (CMP.n - 1) * 1000; sl.setAttribute('x1', x); sl.setAttribute('x2', x); }
+  if (i < 0 || !CMP.XY || i >= CMP.n) { if (tip) tip.style.display = 'none'; if (cur) { cur.setAttribute('cx', -1e6); cur.setAttribute('cy', -1e6); } return; }
+  var p = CMP.XY[i], v = cmpView(), q = cmpPos(p[0], p[1], v);
+  cur.setAttribute('cx', p[0]); cur.setAttribute('cy', p[1]);
+  if (!cmpIn(q)) { tip.style.display = 'none'; return; }
+  var tmin = Math.min.apply(null, L.map(function (l) { return l.d.t[i]; }));
+  var cn = CMP.C.filter(function (c) { return i >= c.s && i <= c.e; })[0];
+  var h = '<small><span>' + esc(TR((i * CMP_BIN) + ' m od startu')) + '</span>' + (cn ? ' · <span>' + cn.name + '</span>' : '') + '</small>';
+  L.forEach(function (l) {
+    var dt = l.d.t[i] - tmin;
+    h += '<div><span style="color:' + l.col + ';display:inline-block;min-width:64px">' + esc(l.name) + '</span> <span style="display:inline-block;min-width:74px;text-align:right">' +
+      Math.round(l.d.v[i]) + ' km/h</span> <span style="display:inline-block;min-width:70px;text-align:right;color:' + (dt < 0.0005 ? 'var(--ok)' : 'var(--muted)') + '">' +
+      (L.length < 2 ? '' : dt < 0.0005 ? esc(TR('prowadzi')) : '+' + n2(dt) + ' s') + '</span></div>';
+  });
+  tip.innerHTML = h;
+  tip.style.display = 'block';
+  tip.style.left = q[0] + '%'; tip.style.top = q[1] + '%';
+  tip.style.transform = 'translate(' + (q[0] > 55 ? 'calc(-100% - 14px)' : '14px') + ',' + (q[1] > 70 ? '-100%' : q[1] < 30 ? '0' : '-50%') + ')';
+}
+function cmpNear(e) {
+  var r = $('cmp-map').getBoundingClientRect(), v = cmpView();
+  var x = v[0] + (e.clientX - r.left) / r.width * v[2], y = v[1] + (e.clientY - r.top) / r.height * v[3], thr = 40 * v[2] / r.width, bi = -1;
+  for (var i = 0; i < CMP.n; i++) { var d = Math.hypot(CMP.XY[i][0] - x, CMP.XY[i][1] - y); if (d < thr) { thr = d; bi = i; } }
+  return bi;
+}
+(function () {
+  var svg = $('cmp-map'), ptr = {}, drag = null, pinch = null;
+  if (!svg) return;
+  function zoomAt(f, cx, cy) {
+    var r = svg.getBoundingClientRect(), v = cmpView(), fx = (cx - r.left) / r.width, fy = (cy - r.top) / r.height;
+    var px = v[0] + fx * v[2], py = v[1] + fy * v[3];
+    CMP.z *= f; cmpClamp();
+    var W = CMP.box[2] / CMP.z, H = CMP.box[3] / CMP.z;
+    CMP.cx = px - (fx - 0.5) * W; CMP.cy = py - (fy - 0.5) * H;
+    cmpDraw();
+  }
+  svg.addEventListener('wheel', function (e) { if (!CMP.XY) return; e.preventDefault(); zoomAt(e.deltaY < 0 ? 1.25 : 0.8, e.clientX, e.clientY); }, { passive: false });
+  svg.addEventListener('pointerdown', function (e) {
+    if (!CMP.XY) return;
+    ptr[e.pointerId] = [e.clientX, e.clientY];
+    var ks = Object.keys(ptr);
+    if (ks.length === 2) { var a = ptr[ks[0]], b = ptr[ks[1]]; pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]) || 1 }; drag = null; }
+    else { drag = { x: e.clientX, y: e.clientY, cx: CMP.cx, cy: CMP.cy, moved: false }; try { svg.setPointerCapture(e.pointerId); } catch (x) {} }
+  });
+  svg.addEventListener('pointermove', function (e) {
+    if (!CMP.XY) return;
+    if (ptr[e.pointerId]) ptr[e.pointerId] = [e.clientX, e.clientY];
+    var ks = Object.keys(ptr);
+    if (pinch && ks.length === 2) {
+      var a = ptr[ks[0]], b = ptr[ks[1]], d = Math.hypot(a[0] - b[0], a[1] - b[1]) || 1;
+      zoomAt(d / pinch.d, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); pinch.d = d; return;
+    }
+    if (drag) {
+      if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 5 && CMP.z > 1.01) drag.moved = true;
+      if (drag.moved) {
+        var r = svg.getBoundingClientRect(), v = cmpView();
+        CMP.cx = drag.cx - (e.clientX - drag.x) / r.width * v[2]; CMP.cy = drag.cy - (e.clientY - drag.y) / r.height * v[3];
+        cmpClamp(); cmpPan();
+      }
+      return;
+    }
+    if (e.pointerType === 'mouse') { var i = cmpNear(e); if (i >= 0 && i !== CMP.hov) cmpHover(i); }
+  });
+  function end(e) {
+    delete ptr[e.pointerId];
+    if (Object.keys(ptr).length < 2) pinch = null;
+    if (drag && !drag.moved && e.type === 'pointerup') { var i = cmpNear(e); if (i >= 0) cmpHover(i); }
+    if (!Object.keys(ptr).length) drag = null;
+  }
+  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', end);
+  var sp = $('cmp-spd');
+  function spPick(e) { if (!CMP.n) return; var r = sp.getBoundingClientRect(), i = Math.round((e.clientX - r.left) / r.width * (CMP.n - 1)); if (i >= 0 && i < CMP.n && i !== CMP.hov) cmpHover(i); }
+  sp.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') spPick(e); });
+  sp.addEventListener('pointerdown', spPick);
+  $('cmp-trk').onchange = function () { CMP.trk = this.value; CMP.sel = ['', '', '']; CMP.hov = -1; cmpOptions(); };
+  [0, 1, 2].forEach(function (i) { $('cmp-s' + i).onchange = function () { CMP.sel[i] = this.value; if (!CMP.sel[0]) CMP.sel[0] = CMP.sel[1] || CMP.sel[2]; cmpFetch(); }; });
+})();
+// ---- wykres prędkości na całym okrążeniu
+function cmpSpeed() {
+  var L = CMP.L, n = CMP.n, lo = Infinity, hi = -Infinity, step = Math.max(1, Math.floor(n / 1000));
+  L.forEach(function (l) { for (var i = 0; i < n; i++) { if (l.d.v[i] < lo) lo = l.d.v[i]; if (l.d.v[i] > hi) hi = l.d.v[i]; } });
+  var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v) { return (124 - (v - lo) / ((hi - lo) || 1) * 116).toFixed(1); };
+  var h = [], c = CMP.C[CMP.corner];
+  if (c) h.push('<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>');
+  L.forEach(function (l) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + sy(l.d.v[i])); h.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'); });
+  h.push('<line id="cmp-sl" x1="-10" x2="-10" y1="0" y2="130" style="stroke:var(--text)" stroke-width="1" vector-effect="non-scaling-stroke"/>');
+  $('cmp-spd').innerHTML = h.join('');
+  cmpHover(CMP.hov);
+}
+// ---- szczegóły zakrętu
+function cmpReasons(m, r) {
+  var o = [];
+  if (m.brake != null && r.brake != null && m.brake - r.brake >= 8) o.push([(m.brake - r.brake) / 8, TR('hamuje ' + Math.round(m.brake - r.brake) + ' m wcześniej')]);
+  if (m.brake != null && r.brake != null && r.brake - m.brake >= 8 && m.vmin - r.vmin < -2) o.push([(r.brake - m.brake) / 8, TR('hamuje ' + Math.round(r.brake - m.brake) + ' m później i ma mniej prędkości w środku')]);
+  if (m.vmin - r.vmin <= -3) o.push([(r.vmin - m.vmin) / 3, TR('o ' + Math.round(r.vmin - m.vmin) + ' km/h wolniej w najwolniejszym miejscu')]);
+  if (m.thr != null && r.thr != null && m.thr - r.thr >= 10) o.push([(m.thr - r.thr) / 10, TR('pełny gaz ' + Math.round(m.thr - r.thr) + ' m później')]);
+  if (m.coast - r.coast >= 15) o.push([(m.coast - r.coast) / 15, TR('o ' + Math.round(m.coast - r.coast) + ' m dłużej bez gazu i hamulca')]);
+  if (m.gear && r.gear && m.gear !== r.gear) o.push([0.9, TR('inny bieg w najwolniejszym miejscu: ' + m.gear + ' zamiast ' + r.gear)]);
+  if (m.tc - r.tc >= 20) o.push([0.8, TR('częściej włącza się TC na wyjściu')]);
+  return o.sort(function (a, b) { return b[0] - a[0]; }).slice(0, 2).map(function (x) { return x[1]; });
+}
+function cmpCornerPanel() {
+  var c = CMP.C[CMP.corner], L = CMP.L, box = $('cmp-corner');
+  if (!c) { setH(box, ''); return; }
+  var r = c.m[c.best];
+  var row = function (lab, f) { return '<tr><td>' + esc(TR(lab)) + '</td>' + c.m.map(function (m, j) { return '<td style="color:' + L[j].col + '">' + f(m) + '</td>'; }).join('') + '</tr>'; };
+  var mm = function (x, a, b) { return x == null ? '—' : esc(TR(Math.abs(Math.round(x)) + ' m ' + (x >= 0 ? a : b))); };
+  var tab = '<table><thead><tr><th></th>' + L.map(function (l) { return '<th style="color:' + l.col + '">' + esc(l.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    row('Czas w zakręcie', function (m) { return n2(m.time) + ' s' + (L.length > 1 ? ' <span class="note">' + (m.dt < 0.0005 ? '' : '+' + n2(m.dt)) + '</span>' : ''); }) +
+    row('Początek hamowania', function (m) { return mm(m.brake, 'przed wierzchołkiem', 'za wierzchołkiem'); }) +
+    row('Najmocniej na hamulcu', function (m) { return m.bp ? Math.round(m.bp) + '%' : '—'; }) +
+    row('Najmniejsza prędkość', function (m) { return Math.round(m.vmin) + ' km/h'; }) +
+    row('Bieg w najwolniejszym miejscu', function (m) { return m.gear || '—'; }) +
+    row('Pełny gaz od', function (m) { return mm(m.thr, 'za wierzchołkiem', 'przed wierzchołkiem'); }) +
+    row('Bez gazu i hamulca', function (m) { return Math.round(m.coast) + ' m'; }) +
+    row('TC tnie moc', function (m) { return Math.round(m.tc) + ' m'; }) + '</tbody></table>';
+  var why = '';
+  if (L.length > 1) why = '<ul class="cmp-why">' + c.m.map(function (m, j) {
+    if (j === c.best || m.dt < 0.02) return '';
+    var rs = cmpReasons(m, r);
+    return '<li><b style="color:' + L[j].col + '">' + esc(L[j].name) + '</b> <span>' + esc(TR('traci ' + n2(m.dt) + ' s')) + '</span>' +
+      (rs.length ? ': ' + rs.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join(', ') : '') + '</li>';
+  }).join('') + '</ul>';
+  // przebiegi w zakręcie: prędkość, gaz, hamulec
+  var a = Math.max(0, c.s - 6), b = Math.min(CMP.n - 1, c.e + 6), lo = Infinity, hi = -Infinity;
+  L.forEach(function (l) { for (var i = a; i <= b; i++) { lo = Math.min(lo, l.d.v[i]); hi = Math.max(hi, l.d.v[i]); } });
+  var sx = function (i) { return ((i - a) / ((b - a) || 1) * 1000).toFixed(1); };
+  var g = [];
+  var ax = sx(c.a); g.push('<line x1="' + ax + '" x2="' + ax + '" y1="0" y2="250" style="stroke:var(--line2)" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>');
+  L.forEach(function (l) {
+    var pv = [], pg = [], pb = [];
+    for (var i = a; i <= b; i++) { pv.push(sx(i) + ',' + (126 - (l.d.v[i] - lo) / ((hi - lo) || 1) * 106).toFixed(1)); pg.push(sx(i) + ',' + (182 - l.d.g[i] * 0.3).toFixed(1)); pb.push(sx(i) + ',' + (240 - l.d.b[i] * 0.3).toFixed(1)); }
+    [pv, pg, pb].forEach(function (pp) { g.push('<polyline points="' + pp.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="2" vector-effect="non-scaling-stroke"/>'); });
+  });
+  var bestTxt = L.length > 1 ? ' <span class="note">' + esc(TR('najszybciej: ' + L[c.best].name)) + '</span>' : '';
+  setH(box, '<div><h3>' + c.name + bestTxt + '</h3><div class="scroll">' + tab + '</div>' + why + '</div>' +
+    '<div><h3>' + esc(TR('Prędkość, gaz i hamulec')) + '</h3><svg viewBox="0 0 1000 250" preserveAspectRatio="none" role="img" aria-label="' + esc(TR('Prędkość, gaz i hamulec w zakręcie')) + '">' + g.join('') + '</svg>' +
+    '<p class="note">' + esc(TR('Od góry: prędkość, gaz, hamulec. Linia przerywana: wierzchołek zakrętu.')) + '</p></div>');
+}
 // sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min
 function lapSessions() {
   var ls = LAPS.filter(function (l) { return l && l.t; }).slice().sort(function (a, b) { return a.t - b.t; }), out = [], cur = null;
