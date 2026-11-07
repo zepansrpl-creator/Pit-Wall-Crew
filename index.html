@@ -897,7 +897,7 @@ var UNITS = (function () {
   if (!u) u = /^en-US$/i.test(navigator.language || '') ? UNITS_I : UNITS_M;      // na start: imperialne tylko przy ustawieniach USA
   return Object.assign({}, UNITS_M, u);
 })();
-function unitSave() { try { localStorage.setItem('pwc_units', JSON.stringify(UNITS)); } catch (e) {} }
+function unitSave() { try { localStorage.setItem('pwc_units', JSON.stringify({ sp: UNITS.sp, d: UNITS.d, p: UNITS.p, t: UNITS.t, f: UNITS.f })); } catch (e) {} }
 function unitNum(x, d) { return Number(x).toFixed(d).replace('.', ','); }
 function unitSp(kmh) { return kmh == null || isNaN(kmh) ? '—' : UNITS.sp === 'mph' ? Math.round(kmh / 1.609344) + ' mph' : Math.round(kmh) + ' km/h'; }
 function unitD(m) { return m == null || isNaN(m) ? '—' : UNITS.d === 'ft' ? Math.round(m * 3.28084) + ' ft' : Math.round(m) + ' m'; }
@@ -937,6 +937,15 @@ function unitsUi(force) {
     };
   });
 }
+// jednostki z programu kierowcy – tylko gdy ten oglądający nie wybrał swoich (raz, bez zapisu)
+function unitsFromDriver(u) {
+  var mine = null; try { mine = localStorage.getItem('pwc_units'); } catch (e) {}
+  if (mine || UNITS._drv) return;
+  UNITS._drv = 1;
+  var m = { sp: u.speed === 'mph' ? 'mph' : 'kmh', d: u.distance === 'ft' ? 'ft' : 'm', t: u.temperature === 'F' ? 'F' : 'C', f: u.fuel === 'gal' ? 'gal' : 'l',
+            p: ['bar', 'psi', 'kPa'].indexOf(u.pressure) >= 0 ? u.pressure : UNITS.p };
+  Object.assign(UNITS, m); unitsSum(); setTimeout(unitsRedraw, 0);
+}
 function unitsRedraw() {
   try { draw(); } catch (e) {}
   try { if (LAPS.length) { drawLaps(); drawSummary(); } } catch (e) {}
@@ -960,6 +969,7 @@ function render(v) {
   }
   var live = v.live, st = live ? live.state || {} : {};
   if (st.tr && window.PWC_I18N_ADD) PWC_I18N_ADD(st.tr[window.PWC_LANG]);   // tłumaczenia tekstów auta od aplikacji
+  if (st.units) unitsFromDriver(st.units);
   if (!live) pill($('st-live'), 'brak danych z gry', 'warn');
   else if (v.age > 30) pill($('st-live'), 'dane sprzed ' + v.age + ' s', 'warn');
   else pill($('st-live'), 'na żywo', 'ok');
