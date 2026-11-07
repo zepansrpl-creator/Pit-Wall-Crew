@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=2140b4a1"></script>
+<script src="i18n.js?v=8127564f"></script>
 <script src="i18n_core.js?v=89439f8d"></script>
 <style>
   :root {
@@ -198,6 +198,11 @@
   .lapfilt select { width: auto; } .lapfilt label { white-space: nowrap; }
   .pace { width: 100%; height: 170px; display: block; }
 
+  #units-btn { padding: 5px 10px; font-size: 13px; background: transparent; color: var(--head-text); border: 1px solid var(--line2); font-weight: 500; }
+  .units-pop { position: fixed; right: 12px; top: 58px; z-index: 30; width: min(380px, calc(100vw - 24px)); background: var(--bg2); color: var(--text); border: 1px solid var(--accent);
+               border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,.45); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .units-pop .ur { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; } .units-pop .ur > span { width: 120px; font-size: 13px; color: var(--muted); }
+  .units-pop button { padding: 4px 12px; border-radius: 99px; font-size: 12px; } .units-pop button.on { border-color: var(--accent); color: var(--accent); }
   /* mapa porównania okrążeń */
   :root { --c1: #7fc4e8; --c2: #f08a3c; --c3: #e58fd0; }
   html[data-theme="light"] { --c1: #1d6fb0; --c2: #c95f0a; --c3: #b0368f; }
@@ -224,6 +229,41 @@
   html[data-theme="light"] .cmp-tip { background: rgba(255,255,255,.96); }
   .cmp-tip small { font: 400 11px Inter, sans-serif; color: var(--muted); display: block; }
   .cmp-spd { width: 100%; height: 130px; display: block; margin-top: 8px; cursor: crosshair; touch-action: pan-y; }
+  .cmp-slots { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 0 0 10px; }
+  .cmp-slot { text-align: left; display: flex; flex-direction: column; gap: 2px; padding: 9px 12px; border-radius: 12px; background: var(--card2);
+              border: 1px solid var(--line); border-left-width: 4px; color: var(--text); font: 400 13px Inter, sans-serif; cursor: pointer; min-width: 0; }
+  .cmp-slot.on { border-color: var(--accent); }
+  .cmp-slot b { font: 700 17px var(--cond); }
+  .cmp-slot .st { font-size: 12px; } .cmp-slot .st.ok { color: var(--ok); } .cmp-slot .st.warn { color: var(--warn); }
+  .cmp-slot .pin { align-self: flex-start; padding: 2px 8px; font-size: 12px; margin-top: 4px; }
+  .cmp-pick { border: 1px solid var(--accent); border-radius: 14px; background: var(--bg2); margin: 0 0 12px; max-height: 520px; overflow: auto; }
+  .cmp-pick .flt { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg2); z-index: 1; }
+  .cmp-pick .flt input[type=search] { flex: 1 1 140px; }
+  .cmp-pick .grp { font: 700 13px var(--cond); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 10px 14px 4px; display: flex; gap: 8px; align-items: center; }
+  .cmp-pick .tag { font: 600 11px Inter, sans-serif; text-transform: none; letter-spacing: 0; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--line2); }
+  .cmp-pick .row2 { display: grid; grid-template-columns: 22px minmax(70px, 120px) 70px 90px 1fr 22px; gap: 8px; align-items: center; padding: 6px 14px;
+                    font-size: 13px; cursor: pointer; border: 0; width: 100%; background: transparent; color: var(--text); text-align: left; border-radius: 0; font-weight: 400; }
+  .cmp-pick .row2:hover { background: var(--row); filter: none; }
+  .cmp-pick .row2.g { color: var(--ok); font-weight: 600; }
+  .cmp-pick .row2 .bad { color: var(--bad); }
+  .cmp-pick .more { padding: 4px 14px 8px 44px; font-size: 12px; color: var(--muted); cursor: pointer; background: transparent; border: 0; text-align: left; }
+  .cmp-cond { margin: 0 0 8px; padding: 8px 12px; border-radius: 12px; font-size: 13px; }
+  .cmp-cond.warn { background: rgba(240,180,60,.1); border: 1px solid rgba(240,180,60,.4); }
+  .cmp-cond.ok { background: rgba(95,211,141,.08); border: 1px solid rgba(95,211,141,.3); }
+  .cmp-gain { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 8px; font-size: 13px; }
+  .cmp-gain button { padding: 3px 9px; border-radius: 99px; font: 600 12px var(--mono); }
+  .cmp-chart { margin-top: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 6px 0 2px; }
+  .cmp-tabs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 0 10px 4px; }
+  .cmp-tabs button { padding: 4px 12px; border-radius: 99px; font-size: 12px; }
+  .cmp-tabs button.on { border-color: var(--accent); color: var(--accent); }
+  .cmp-dhead { padding: 6px 12px 0; border-top: 1px solid var(--line); margin-top: 4px; font: 700 15px var(--cond); }
+  .cmp-main { display: grid; gap: 14px; }
+  .cmp-main.split { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: stretch; }
+  .cmp-main.split .cmp-wrap { aspect-ratio: auto !important; min-height: 380px; }
+  .cmp-main.split .cmp-corner { grid-template-columns: 1fr; margin-top: 0; }
+  @media (max-width: 1000px) { .cmp-main.split { grid-template-columns: 1fr; } .cmp-main.split .cmp-wrap { aspect-ratio: unset !important; height: 70vw; min-height: 260px; } }
+  .cmp-corner:empty { display: none; }
+  .cmp-x { float: right; padding: 4px 10px; font-weight: 700; }
   .cmp-corner { margin-top: 12px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
   .cmp-corner h3 { margin: 0 0 6px; font: 700 20px var(--cond); }
   .cmp-corner svg { width: 100%; height: 210px; display: block; }
@@ -334,6 +374,8 @@
   <span class="pill" id="st-driver">—</span>
   <span class="pill" id="st-laptop">—</span>
   <select id="feed" style="display:none" aria-label="Auto / sesja"></select>
+  <button type="button" id="units-btn" title="Jednostki" aria-label="Jednostki" onclick="unitsUi()">⚙ <span id="units-sum" data-notr></span></button>
+  <div id="units-pop" class="units-pop" style="display:none"></div>
   <button type="button" id="theme-btn" data-notr onclick="pwcTheme()" title="Jasny / ciemny" aria-label="Jasny / ciemny">☀ / ☾</button>
   <select id="langsel" data-notr aria-label="Language" onchange="PWC_SET_LANG(this.value)">
     <option value="pl">PL</option><option value="en">EN</option><option value="de">DE</option><option value="fr">FR</option><option value="es">ES</option><option value="it">IT</option><option value="da">DA</option>
@@ -644,16 +686,28 @@
   </section>
   <section id="cmp-box">
     <h2>Mapa porównania <span class="note" id="cmp-note"></span></h2>
-    <div class="lapfilt"><select id="cmp-trk" aria-label="Tor"></select><select id="cmp-s0" aria-label="Okrążenie 1"></select><select id="cmp-s1" aria-label="Okrążenie 2"></select><select id="cmp-s2" aria-label="Okrążenie 3"></select></div>
-    <p class="note" id="cmp-msg">Najlepsze okrążenia kierowców z bazy zespołu – wczytywanie…</p>
+    <div class="lapfilt"><span class="note">Tor</span><select id="cmp-trk" aria-label="Tor"></select><span class="note">Auto</span><select id="cmp-car" aria-label="Auto"></select>
+      <span style="flex:1"></span><button type="button" class="second" id="cmp-best">🟢 Najlepsze okrążenia</button><button type="button" class="second" id="cmp-link">🔗 Kopiuj link do porównania</button></div>
+    <p class="note" id="cmp-msg">Okrążenia kierowców z bazy zespołu – wczytywanie…</p>
+    <div class="cmp-slots" id="cmp-slots"></div>
+    <div class="cmp-pick" id="cmp-pick" style="display:none"></div>
     <div id="cmp-body" style="display:none">
+      <div class="cmp-cond" id="cmp-cond"></div>
+      <div class="cmp-gain" id="cmp-gain"></div>
       <div class="cmp-drv" id="cmp-drv"></div>
       <div class="cmp-tools" id="cmp-tools"></div>
-      <div class="cmp-wrap" id="cmp-wrap"><svg id="cmp-map" role="img" aria-label="Mapa toru: kolor odcinka pokazuje, kto jest tam najszybszy"></svg><div class="cmp-ov" id="cmp-ov"></div><div class="cmp-tip" id="cmp-tip"></div></div>
-      <svg class="cmp-spd" id="cmp-spd" viewBox="0 0 1000 130" preserveAspectRatio="none" role="img" aria-label="Prędkość na całym okrążeniu"></svg>
-      <p class="note">Najedź albo kliknij w dowolne miejsce toru lub wykresu: prędkość na każdym okrążeniu i strata do prowadzącego. Kółkiem myszy albo + / − przybliżasz, przeciągając przesuwasz. Kliknij zakręt, żeby zobaczyć szczegóły.</p>
+      <div class="cmp-main" id="cmp-main">
+        <div class="cmp-wrap" id="cmp-wrap"><svg id="cmp-map" role="img" aria-label="Mapa toru: kolor odcinka pokazuje, kto jest tam najszybszy"></svg><div class="cmp-ov" id="cmp-ov"></div><div class="cmp-tip" id="cmp-tip"></div></div>
+        <div class="cmp-corner" id="cmp-corner"></div>
+      </div>
+      <div class="cmp-chart">
+        <div class="cmp-tabs" id="cmp-tabs"></div>
+        <svg class="cmp-spd" id="cmp-spd" viewBox="0 0 1000 130" preserveAspectRatio="none" role="img" aria-label="Wybrany przebieg na całym okrążeniu"></svg>
+        <div class="cmp-dhead"><b>Strata czasu do najszybszego</b> <span class="note" id="cmp-dnote" data-notr></span></div>
+        <svg class="cmp-spd" id="cmp-delta" viewBox="0 0 1000 110" preserveAspectRatio="none" role="img" aria-label="Strata czasu każdego okrążenia do najszybszego wzdłuż okrążenia"></svg>
+      </div>
+      <p class="note">Najedź albo kliknij w dowolne miejsce toru lub wykresu: wartości na każdym okrążeniu i strata do prowadzącego. Kółkiem myszy albo + / − przybliżasz, przeciągając przesuwasz. Kliknij zakręt, żeby zobaczyć szczegóły.</p>
       <div id="cmp-setup" class="cmp-setup"></div>
-      <div class="cmp-corner" id="cmp-corner"></div>
     </div>
   </section>
   <section>
@@ -665,7 +719,7 @@
       <span style="flex:1"></span><button id="b-laps" class="second">Odśwież</button><button id="b-csv" class="second">Pobierz CSV</button></div>
     <svg class="pace" id="pace" role="img" aria-label="Tempo: czasy okrążeń"></svg>
     <div class="scroll"><table>
-      <thead><tr><th>Stint</th><th>Okr.</th><th>Kierowca</th><th>Czas</th><th class="hide-sm">S1</th><th class="hide-sm">S2</th><th class="hide-sm">S3</th><th>Paliwo</th><th>Energia %</th><th>Woda %</th><th>Tor °C</th><th>Opony</th><th>Uwagi</th></tr></thead>
+      <thead><tr><th>Stint</th><th>Okr.</th><th>Kierowca</th><th>Czas</th><th class="hide-sm">S1</th><th class="hide-sm">S2</th><th class="hide-sm">S3</th><th>Paliwo</th><th>Energia %</th><th>Woda %</th><th>Tor</th><th>Opony</th><th>Uwagi</th></tr></thead>
       <tbody id="laps"></tbody>
     </table></div>
   </section>
@@ -785,7 +839,7 @@ function dmgDraw(st, live) {
   var item = function (k, v, c) { return '<div><span>' + TR(k) + '</span><b' + (c ? ' style="color:' + c + '"' : '') + '>' + v + '</b></div>'; };
   var ok = 'var(--ok)';
   var loss = d.loss == null ? TR('sprawdzam (2 czyste okrążenia)') : n1(d.loss) + ' s / ' + TR('okr.');
-  var vm = d.vmax == null ? '—' : (d.vmax >= 2 ? '−' + Math.round(d.vmax) + ' km/h' : TR('bez zmian'));
+  var vm = d.vmax == null ? '—' : (d.vmax >= 2 ? '−' + unitSp(d.vmax) : TR('bez zmian'));
   // do ilu sekund naprawa się opłaca – w dół (jak inżynier głosem), żeby przerwać raczej wcześniej
   var rmax = d.repair_max == null ? null : d.repair_max >= 20 ? Math.floor(d.repair_max / 5) * 5 : Math.max(0, Math.floor(d.repair_max));
   var rep = d.repair_s ? '+' + Math.round(d.repair_s) + ' s' + (d.repair_worth != null ? ' · ' + TR(d.repair_worth ? 'opłaca się' : 'nie opłaca się') : '') :
@@ -835,6 +889,60 @@ function gapTxt(g) {
   return esc(g.name) + ' ' + n1(Math.abs(g.gap)) + ' s' + t;
 }
 // wstawia HTML tylko, gdy się zmienił (render co ~1 s: mniej pracy, rozwinięta lista na telefonie się nie zamyka)
+// ------------------------------------------------------------------ jednostki (⚙ w nagłówku; każdy oglądający ma swoje)
+var UNITS_M = { sp: 'kmh', d: 'm', p: 'bar', t: 'C', f: 'l' }, UNITS_I = { sp: 'mph', d: 'ft', p: 'psi', t: 'F', f: 'gal' };
+var UNITS = (function () {
+  var u = null;
+  try { u = JSON.parse(localStorage.getItem('pwc_units') || 'null'); } catch (e) { u = null; }
+  if (!u) u = /^en-US$/i.test(navigator.language || '') ? UNITS_I : UNITS_M;      // na start: imperialne tylko przy ustawieniach USA
+  return Object.assign({}, UNITS_M, u);
+})();
+function unitSave() { try { localStorage.setItem('pwc_units', JSON.stringify(UNITS)); } catch (e) {} }
+function unitNum(x, d) { return Number(x).toFixed(d).replace('.', ','); }
+function unitSp(kmh) { return kmh == null || isNaN(kmh) ? '—' : UNITS.sp === 'mph' ? Math.round(kmh / 1.609344) + ' mph' : Math.round(kmh) + ' km/h'; }
+function unitD(m) { return m == null || isNaN(m) ? '—' : UNITS.d === 'ft' ? Math.round(m * 3.28084) + ' ft' : Math.round(m) + ' m'; }
+function unitT(c) { return c == null || isNaN(c) ? '—' : UNITS.t === 'F' ? Math.round(c * 9 / 5 + 32) + '°F' : Math.round(c) + '°C'; }
+function unitTd(c) { return UNITS.t === 'F' ? Math.round(c * 9 / 5) + '°F' : Math.round(c) + '°C'; }   // różnica temperatur
+function unitF(l) { return l == null || isNaN(l) ? '—' : UNITS.f === 'gal' ? unitNum(l / 3.78541, 1) + ' gal' : Math.round(l) + ' l'; }
+function unitF1(l) { return l == null || isNaN(l) ? '—' : UNITS.f === 'gal' ? unitNum(l / 3.78541, 2) + ' gal' : n1(l) + ' l'; }
+function unitTn(c) { return UNITS.t === 'F' ? Math.round(c * 9 / 5 + 32) : Math.round(c); }       // sama liczba (strefy opon)
+function unitP(bar) { return bar == null || isNaN(bar) ? '—' : UNITS.p === 'psi' ? unitNum(bar * 14.5038, 1) + ' psi' : UNITS.p === 'kPa' ? Math.round(bar * 100) + ' kPa' : unitNum(bar, 2) + ' bar'; }
+// ciśnienie zapisane tekstem z gry („1.92 bar”, „27.5 psi”, „190 kPa”) – w wybranej jednostce
+function unitPTxt(s) {
+  var m = /(-?\d+(?:[.,]\d+)?)\s*(bar|psi|kpa)/i.exec(String(s || '')); if (!m) return s;
+  var v = parseFloat(m[1].replace(',', '.')), u = m[2].toLowerCase(), bar = u === 'psi' ? v / 14.5038 : u === 'kpa' ? v / 100 : v;
+  return String(s).replace(m[0], unitP(bar));
+}
+// panel jednostek w nagłówku – zmiana przerysowuje wszystkie zakładki
+var UNITS_ROWS = [['Prędkość', 'sp', [['kmh', 'km/h'], ['mph', 'mph']]], ['Odległość', 'd', [['m', 'm'], ['ft', 'ft']]],
+  ['Ciśnienie opon', 'p', [['bar', 'bar'], ['psi', 'psi'], ['kPa', 'kPa']]], ['Temperatura', 't', [['C', '°C'], ['F', '°F']]], ['Paliwo', 'f', [['l', 'l'], ['gal', 'gal (US)']]]];
+function unitsSum() { var e = $('units-sum'); if (e) e.textContent = (UNITS.sp === 'mph' ? 'mph' : 'km/h') + ' · ' + (UNITS.t === 'F' ? '°F' : '°C'); }
+function unitsUi(force) {
+  var pop = $('units-pop'), open = force != null ? force : pop.style.display === 'none';
+  pop.style.display = open ? '' : 'none';
+  if (!open) return;
+  var same = function (a) { return Object.keys(a).every(function (k) { return a[k] === UNITS[k]; }); };
+  pop.innerHTML = '<div class="ur"><b style="font:700 17px var(--cond);flex:1">' + esc(TR('Jednostki')) + '</b>' +
+    '<button type="button" class="second' + (same(UNITS_M) ? ' on' : '') + '" data-set="m">' + esc(TR('Metryczne')) + '</button>' +
+    '<button type="button" class="second' + (same(UNITS_I) ? ' on' : '') + '" data-set="i">' + esc(TR('Imperialne')) + '</button>' +
+    '<button type="button" class="second" data-x="1" aria-label="' + esc(TR('Zamknij')) + '">✕</button></div>' +
+    UNITS_ROWS.map(function (r) { return '<div class="ur"><span>' + esc(TR(r[0])) + '</span>' + r[2].map(function (o) {
+      return '<button type="button" class="second' + (UNITS[r[1]] === o[0] ? ' on' : '') + '" data-k="' + r[1] + '" data-v="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div>'; }).join('') +
+    '<div class="note" style="font-size:11px">' + esc(TR('Działa na wszystkich zakładkach pit walla · zapamiętane w tej przeglądarce.')) + '</div>';
+  pop.querySelectorAll('button').forEach(function (b) {
+    b.onclick = function () {
+      if (b.dataset.x) return unitsUi(false);
+      if (b.dataset.set) Object.assign(UNITS, b.dataset.set === 'i' ? UNITS_I : UNITS_M); else UNITS[b.dataset.k] = b.dataset.v;
+      unitSave(); unitsSum(); unitsUi(true); unitsRedraw();
+    };
+  });
+}
+function unitsRedraw() {
+  try { draw(); } catch (e) {}
+  try { if (LAPS.length) { drawLaps(); drawSummary(); } } catch (e) {}
+  try { if (CMP.L && CMP.L.length) { cmpDraw(); cmpSpeed(); cmpCornerPanel(); cmpSetup(); cmpCond(); cmpGain(); cmpSlots(); cmpPicker(); } } catch (e) {}
+}
+unitsSum();
 function setH(el, h) { if (el && el._h !== h) { el._h = h; el.innerHTML = h; } }
 function TR(s) { return window.PWC_T ? window.PWC_T(s) : s; }   // tłumaczenie kawałka tekstu przed sklejeniem
 function msgText(m) { return (m.tr && window.PWC_LANG && m.tr[window.PWC_LANG]) || m.text; }   // komunikat w języku strony
@@ -902,7 +1010,7 @@ function render(v) {
   var t = st.targets || {};
   document.body.classList.toggle('no-ve', st.ve_game === false);     // Assetto Corsa: bez energii wirtualnej
   $('ve').textContent = st.ve_per_lap != null ? n1(st.ve_per_lap) + '% / okr.' + (t.ve_per_lap ? ' (plan ' + n1(t.ve_per_lap) + '%)' : '') : '—';
-  $('fuel').textContent = st.fuel_per_lap != null ? n1(st.fuel_per_lap) + ' l / okr.' + (t.fuel_per_lap ? ' (plan ' + n1(t.fuel_per_lap) + ')' : '') : '—';
+  $('fuel').textContent = st.fuel_per_lap != null ? unitF1(st.fuel_per_lap) + ' / okr.' + (t.fuel_per_lap ? ' (plan ' + unitF1(t.fuel_per_lap) + ')' : '') : '—';
   $('plan').textContent = st.plan_text || (t.service ? 'Plan zespołu: ' + t.service : '—');
   $('pitest').textContent = st.pit_estimate_game ? n1(st.pit_estimate_game) + ' s' : '—';
   $('brakes').textContent = st.brakes_left ? st.brakes_left.join(' / ') + ' %' : '—';
@@ -966,12 +1074,12 @@ function render(v) {
     var avg = Math.round((tt[0] + tt[1] + tt[2]) / 3), opt = st.tyre_opt;
     var zones = tt.map(function (v) {
       return '<span style="display:inline-block;min-width:2.2em;padding:1px 3px;border-radius:4px;color:#fff;background:' +
-             tempColor(v, opt) + '">' + v + '</span>';
+             tempColor(v, opt) + '">' + unitTn(v) + '</span>';
     }).join(' ');
     var c = st.tyre_carcass ? st.tyre_carcass[i] : null, pr = st.tyre_press ? st.tyre_press[i] : null;
-    return '<span class="note"><b style="color:' + tempColor(avg, opt) + '">' + avg + '°C</b> ' + zones +
-           '<br>' + (c != null ? 'karkas <span style="color:' + tempColor(c, opt) + '">' + c + '°</span>' : '') +
-           (pr ? ', ' + pr + ' kPa' : '') + (opt ? ', optimum ' + opt + '°' : '') + '</span>';
+    return '<span class="note"><b style="color:' + tempColor(avg, opt) + '">' + unitT(avg) + '</b> ' + zones +
+           '<br>' + (c != null ? 'karkas <span style="color:' + tempColor(c, opt) + '">' + unitT(c) + '</span>' : '') +
+           (pr ? ', ' + unitP(pr / 100) : '') + (opt ? ', optimum ' + unitT(opt) : '') + '</span>';
   }
   var names = ['LP', 'PP', 'LT', 'PT'], html = '';
   for (var i = 0; i < 4; i++) {
@@ -989,7 +1097,7 @@ function render(v) {
   dmgDraw(st, live);
 
   var en = st.engine || null;
-  $('engine').textContent = en ? Math.round(en.water) + ' / ' + Math.round(en.oil) + ' °C' +
+  $('engine').textContent = en ? unitT(en.water) + ' / ' + unitT(en.oil) +
     (en.trend != null && Math.abs(en.trend) >= 0.3 ? ' (' + (en.trend > 0 ? '+' : '−') + n1(Math.abs(en.trend)) + '/okr.)' : '') : '—';
   $('engine').style.color = en && en.water_max_lap != null && en.water_max_lap >= en.water_warn ? 'var(--bad)' :
     (en && en.water_max_lap != null && en.water_max_lap >= en.water_warn - 3 ? 'var(--warn)' : '');
@@ -1002,7 +1110,7 @@ function render(v) {
   $('cloud').textContent = wx.cloud != null ? Math.round(wx.cloud * 100) + '%' +
     (wx.cloud_trend_10min ? ' (' + (wx.cloud_trend_10min > 0 ? '+' : '−') + Math.abs(Math.round(wx.cloud_trend_10min * 100)) + ' pkt / 10 min)' : '') : '—';
   $('cloud').style.color = wx.cloud_trend_10min >= 0.15 && wx.cloud >= 0.6 && wx.rain < 0.05 ? 'var(--warn)' : '';
-  $('ttemp').textContent = wx.track_temp != null ? Math.round(wx.track_temp) + ' °C' + (wx.track_temp_trend_h != null ? ' (' + (wx.track_temp_trend_h >= 0 ? '+' : '−') + Math.abs(Math.round(wx.track_temp_trend_h)) + ' °C/h)' : '') : '—';
+  $('ttemp').textContent = wx.track_temp != null ? unitT(wx.track_temp) + (wx.track_temp_trend_h != null ? ' (' + (wx.track_temp_trend_h >= 0 ? '+' : '−') + unitTd(Math.abs(wx.track_temp_trend_h)) + '/h)' : '') : '—';
   $('weather').textContent = wx.text || 'Bez uwag.';
 
   var f = st.fatigue || {};
@@ -1306,8 +1414,8 @@ function startTeam(code) {
   teamsAdd(code);
   $('v-login').style.display = 'none'; $('tabs').style.display = '';
   ['st-live', 'st-driver', 'st-laptop'].forEach(function (id) { $(id).style.display = ''; });
-  if (Q.get('team')) history.replaceState(null, '', location.pathname);
-  tab(lsGet('tab') || 'live');
+  if (Q.get('team')) history.replaceState(null, '', location.pathname + (/#cmp=/.test(location.hash) ? location.hash : ''));
+  tab(/#cmp=/.test(location.hash) ? 'laps' : (lsGet('tab') || 'live'));   // link do porównania okrążeń otwiera zakładkę Okrążenia
   var onErr = function (e) { pill($('st-live'), authErr(e), 'bad'); };
   T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
   T('settings').on('value', function (s) { S.teamSet = s.val() || {}; applyCar(); }, onErr);
@@ -2202,38 +2310,88 @@ $('b-laps').onclick = loadLaps;
 // Najlepsze okrążenia kierowców z bazy zespołu (tlapsi/tlaps – przebieg co 5 m: czas, prędkość, gaz, hamulec, bieg, TC;
 // engineer/analysis/teamlaps.py) na kształcie toru (tracks/<klucz>). Do 3 okrążeń: kolor odcinka = kto tam najszybszy,
 // punkty hamowania, prędkość po najechaniu, szczegóły zakrętu. Zakręty wykrywane jak w engineer/analysis/corners.py.
-var CMP = { idx: null, trk: '', sel: ['', '', ''], laps: {}, shapes: {}, z: 1, cx: 0, cy: 0, hov: -1, corner: -1, L: [], C: [], XY: null };
+var CMP = { idx: null, trk: '', car: null, sel: ['', '', ''], laps: {}, req: {}, status: {}, shapes: {}, z: 1, cx: 0, cy: 0, hov: -1, corner: -1, L: [], C: [], XY: null, ver: 0, pick: null, ch: 'v' };
 var CMP_COL = ['var(--c1)', 'var(--c2)', 'var(--c3)'], CMP_BIN = 5;
 function cmpTrackKey(n) { return String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 60) || 'tor'; }
 function cmpMsg(t) { $('cmp-msg').textContent = TR(t); $('cmp-msg').style.display = ''; }
 function cmpLoad() {
   if (!T) return;
   if (!window.DecompressionStream) { cmpMsg('Ta przeglądarka nie pokaże mapy porównania – użyj aktualnej wersji Chrome, Edge, Firefoksa albo Safari.'); return; }
-  T('tlapsi').once('value').then(function (s) { CMP.idx = s.val() || {}; cmpTracks(); })
-    .catch(function (e) { cmpMsg(authErr(e)); });
+  var opt = function (p) { return T(p).once('value').then(function (s) { return s.val() || {}; }).catch(function () { return {}; }); };
+  Promise.all([T('tlapsi').once('value').then(function (s) { return s.val() || {}; }), opt('ltracei'), opt('ltsess')]).then(function (r) {
+    CMP.idx = r[0]; CMP.lidx = r[1]; CMP.sidx = r[2]; cmpLinkIn(); cmpTracks();
+  }).catch(function (e) { cmpMsg(authErr(e)); });
 }
+// okrążenia na torze: zwarta lista sesji (ltsess – każde okrążenie), w bazie z 14 dni (ltrace), najlepsze w warunkach (tlaps),
+// reszta na dysku kierowcy (💾 – pobierana na prośbę, program kierowcy musi być włączony)
+function cmpOk(m) { return m.valid !== false && !m.pit && !m.fcy; }
 function cmpList(trk) {
-  var out = [], ds = (CMP.idx || {})[trk] || {};
-  Object.keys(ds).forEach(function (d) {
-    Object.keys(ds[d] || {}).forEach(function (b) { var m = ds[d][b]; if (m && m.lap_time) out.push({ id: d + '/' + b, m: m }); });
+  if (CMP._lc && CMP._lc.trk === trk && CMP._lc.v === CMP.ver) return CMP._lc.list;
+  var out = [], li = (CMP.lidx || {})[trk] || {}, bi = (CMP.idx || {})[trk] || {}, si = (CMP.sidx || {})[trk] || {}, seen = {};
+  var best = [];
+  Object.keys(bi).forEach(function (d) { Object.keys(bi[d] || {}).forEach(function (k) { var m = bi[d][k]; if (m && m.lap_time) best.push({ d: d, k: k, m: m }); }); });
+  var tl = function (d, t) { return best.filter(function (b) { return b.d === d && Math.abs(b.m.lap_time - t) < 0.002; })[0]; };
+  Object.keys(si).forEach(function (d) {
+    Object.keys(si[d] || {}).forEach(function (sess) {
+      var r = si[d][sess] || {};
+      String(r.laps || '').split(',').forEach(function (e) {
+        var p = e.split(':'); if (p.length < 2) return;
+        var lid = sess + '-' + p[0], f = p[2] || '', lt = (+p[1] || 0) / 1000;
+        if (!lt) return;
+        var base = li[d] && li[d][lid], b = !base && tl(d, lt), x;
+        if (base) x = { id: 'L/' + d + '/' + lid, path: 'ltrace/' + trk + '/' + d + '/' + lid, m: base, src: 'base', ix: 'ltracei/' + trk + '/' + d + '/' + lid };
+        else if (b) { x = { id: 'B/' + d + '/' + b.k, path: 'tlaps/' + trk + '/' + d + '/' + b.k, m: b.m, src: 'base', ix: 'tlapsi/' + trk + '/' + d + '/' + b.k }; b.used = 1; }
+        else x = { id: 'D/' + d + '/' + lid, src: 'disk', m: { driver: r.driver || d, lap: +p[0], lap_time: lt, valid: f.indexOf('x') < 0, pit: f.indexOf('p') >= 0,
+                   fcy: f.indexOf('f') >= 0, off: f.indexOf('o') >= 0 ? 1 : 0, car: r.car || '', track: r.track || '', kind: r.kind || '', t: r.last || r.t || 0, sess: sess } };
+        x.drv = d; x.sess = sess; x.lid = lid; x.skind = r.kind || ''; x.st = r.t || 0; x.m.car = x.m.car || r.car || ''; x.m.driver = x.m.driver || r.driver || d;
+        if (seen[x.id]) return;
+        seen[x.id] = 1; out.push(x);
+      });
+    });
   });
-  return out.sort(function (a, b) { return a.m.lap_time - b.m.lap_time; });
+  Object.keys(li).forEach(function (d) {     // w bazie, ale bez listy sesji (np. 📌 z usuniętej sesji)
+    Object.keys(li[d] || {}).forEach(function (k) {
+      var id = 'L/' + d + '/' + k, m = li[d][k]; if (seen[id] || !m || !m.lap_time) return;
+      seen[id] = 1; out.push({ id: id, path: 'ltrace/' + trk + '/' + d + '/' + k, m: m, src: 'base', ix: 'ltracei/' + trk + '/' + d + '/' + k, drv: d, sess: String(m.sess || 'x'), lid: k, skind: m.kind || '', st: m.t || 0 });
+    });
+  });
+  best.forEach(function (b) {                // najlepsze w warunkach bez listy sesji (starsze zapisy)
+    if (b.used || out.some(function (x) { return x.drv === b.d && Math.abs(x.m.lap_time - b.m.lap_time) < 0.002; })) return;
+    out.push({ id: 'B/' + b.d + '/' + b.k, path: 'tlaps/' + trk + '/' + b.d + '/' + b.k, m: b.m, src: 'base', ix: 'tlapsi/' + trk + '/' + b.d + '/' + b.k, drv: b.d, old: 1, sess: '~', st: b.m.t || 0 });
+  });
+  out.sort(function (a, b) { return a.m.lap_time - b.m.lap_time; });
+  CMP._lc = { trk: trk, v: CMP.ver, list: out };
+  return out;
 }
+function cmpCarList(trk) { return cmpList(trk).filter(function (x) { return (x.m.car || '') === (CMP.car || ''); }); }
 function cmpTracks() {
-  var trks = Object.keys(CMP.idx || {}).filter(function (k) { return cmpList(k).length; });
-  if (!trks.length) { $('cmp-body').style.display = 'none'; setH($('cmp-trk'), ''); ['cmp-s0', 'cmp-s1', 'cmp-s2'].forEach(function (i) { setH($(i), ''); });
-    return cmpMsg('Brak okrążeń do porównania. Pojawią się, gdy kierowcy zespołu przejadą czyste okrążenia z włączonym PWC.'); }
+  var all = {}; [CMP.idx, CMP.lidx, CMP.sidx].forEach(function (o) { Object.keys(o || {}).forEach(function (k) { all[k] = 1; }); });
+  var trks = Object.keys(all).filter(function (k) { return cmpList(k).length; });
+  if (!trks.length) { $('cmp-body').style.display = 'none'; setH($('cmp-trk'), ''); setH($('cmp-car'), ''); setH($('cmp-slots'), '');
+    return cmpMsg('Brak okrążeń do porównania. Pojawią się, gdy kierowcy zespołu przejadą okrążenia z włączonym PWC.'); }
   var last = function (k) { return Math.max.apply(null, cmpList(k).map(function (x) { return x.m.t || 0; })); };
   trks.sort(function (a, b) { return last(b) - last(a); });
-  if (trks.indexOf(CMP.trk) < 0) { CMP.trk = trks[0]; CMP.sel = ['', '', '']; }
-  setH($('cmp-trk'), trks.map(function (k) { return '<option value="' + esc(k) + '">' + esc(cmpList(k)[0].m.track || k) + '</option>'; }).join(''));
+  if (trks.indexOf(CMP.trk) < 0) { CMP.trk = trks[0]; CMP.sel = ['', '', '']; CMP.car = null; }
+  setH($('cmp-trk'), trks.map(function (k) { var x = cmpList(k)[0]; return '<option value="' + esc(k) + '">' + esc(x.m.track || k) + '</option>'; }).join(''));
   $('cmp-trk').value = CMP.trk;
+  cmpCars();
+}
+function cmpCars() {
+  var list = cmpList(CMP.trk), cars = [], lastCar = null, lt = -1;
+  list.forEach(function (x) { var c = x.m.car || ''; if (cars.indexOf(c) < 0) cars.push(c); if ((x.m.t || 0) > lt) { lt = x.m.t || 0; lastCar = c; } });
+  if (CMP.car == null || cars.indexOf(CMP.car) < 0) CMP.car = lastCar || '';   // na start: auto z ostatniej jazdy
+  setH($('cmp-car'), cars.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c || '—') + '</option>'; }).join(''));
+  $('cmp-car').value = CMP.car;
   cmpOptions();
 }
-function cmpLabel(m, st) {
-  return [m.driver || '?', lapTxt(m.lap_time), m.compound || '', m.temp ? Math.round(m.temp) + '°C' : '', m.fuel != null ? Math.round(m.fuel) + ' l' : '',
-          st && m.setup_h && st[m.driver] && st[m.driver][m.setup_h] ? 'setup ' + st[m.driver][m.setup_h] : '']
-    .filter(Boolean).join(' · ');
+function cmpLabel(x, st) {
+  var m = x.m, f = [];
+  if (m.valid === false) f.push(TR('nieważne'));
+  if (m.pit) f.push(TR('aleja'));
+  if (m.fcy) f.push('SC');
+  if (m.off) f.push(TR('poza torem'));
+  return [m.compound || '', m.temp ? unitT(m.temp) : '', m.fuel != null && x.src !== 'disk' ? unitF(m.fuel) : '',
+          st && m.setup_h && st[m.driver] && st[m.driver][m.setup_h] ? 'setup ' + st[m.driver][m.setup_h] : '', f.join(', ')].filter(Boolean).join(' · ');
 }
 // setupy kierowcy na tym torze: A, B, C… w kolejności pierwszego okrążenia (tylko gdy ma ich kilka)
 function cmpSetupLetters(list) {
@@ -2246,22 +2404,108 @@ function cmpSetupLetters(list) {
   Object.keys(by).forEach(function (d) { if (by[d].length < 2) return; out[d] = {}; by[d].forEach(function (h, i) { out[d][h] = String.fromCharCode(65 + i); }); });
   return out;
 }
+// najlepsze (ważne) okrążenie każdego kierowcy – od najszybszego kierowcy
+function cmpBest(list) {
+  var by = {};
+  list.forEach(function (x) { var d = x.drv || x.m.driver; if (cmpOk(x.m) && (!by[d] || x.m.lap_time < by[d].m.lap_time)) by[d] = x; });
+  return Object.keys(by).map(function (d) { return by[d]; }).sort(function (a, b) { return a.m.lap_time - b.m.lap_time; });
+}
+function cmpPickBest() {
+  var list = cmpCarList(CMP.trk), best = cmpBest(list), sel = best.slice(0, 3).map(function (x) { return x.id; });
+  if (sel.length < 2) list.forEach(function (x) { if (sel.length < 2 && cmpOk(x.m) && sel.indexOf(x.id) < 0) sel.push(x.id); });
+  CMP.sel = [sel[0] || '', sel[1] || '', sel[2] || ''];
+  cmpOptions();
+}
+function cmpDays(x) { return Math.max(0, Math.ceil(14 - (Date.now() / 1000 - (x.st || x.m.t || 0)) / 86400)); }
 function cmpOptions() {
-  var list = cmpList(CMP.trk), ids = list.map(function (x) { return x.id; });
+  var list = cmpCarList(CMP.trk), ids = list.map(function (x) { return x.id; });
+  CMP.items = {}; cmpList(CMP.trk).forEach(function (x) { CMP.items[x.id] = x; });
   CMP.sel = CMP.sel.map(function (v) { return ids.indexOf(v) >= 0 ? v : ''; });
-  if (!CMP.sel[0]) CMP.sel[0] = ids[0] || '';
-  if (!CMP.sel[1]) {
-    var d0 = (list[0] || { m: {} }).m.driver, o = list.filter(function (x) { return x.m.driver !== d0; })[0] || list[1];
-    CMP.sel[1] = o && o.id !== CMP.sel[0] ? o.id : '';
-  }
-  var letters = cmpSetupLetters(list);
-  CMP.letters = letters;
-  var opts = list.map(function (x) { return '<option value="' + esc(x.id) + '">' + esc(cmpLabel(x.m, letters)) + '</option>'; }).join('');
-  for (var i = 0; i < 3; i++) {
-    setH($('cmp-s' + i), (i ? '<option value="">' + esc(TR(i === 1 ? '— bez drugiego okrążenia —' : '— bez trzeciego okrążenia —')) + '</option>' : '') + opts);
-    $('cmp-s' + i).value = CMP.sel[i];
-  }
+  var best = cmpBest(list);
+  if (!CMP.sel[0] && !CMP.sel[1] && !CMP.sel[2]) { CMP.sel[0] = (best[0] || list[0] || {}).id || ''; if (best[1]) CMP.sel[1] = best[1].id; }
+  CMP.letters = cmpSetupLetters(list);
+  cmpSlots();
+  cmpPicker();
   cmpFetch();
+}
+function cmpSlotLine(x) {
+  var m = x.m, best = (CMP.bestIds || {})[x.id];
+  return (best ? '🟢 ' : x.src === 'disk' ? '💾 ' : '') + (m.driver || '?').split(' ')[0] + ' · ' + (x.old ? '' : TR('okr. ' + (m.lap || '?')) + ' · ') + lapTxt(m.lap_time);
+}
+function cmpSlots() {
+  var list = cmpCarList(CMP.trk), kind = { race: 'wyścig', qualify: 'kwalifikacje', practice: 'trening', warmup: 'rozgrzewka' };
+  CMP.bestIds = {}; cmpBest(list).forEach(function (x) { CMP.bestIds[x.id] = 1; });
+  setH($('cmp-slots'), [0, 1, 2].map(function (i) {
+    var x = CMP.items[CMP.sel[i]], col = CMP_COL[i];
+    if (!x) return '<button type="button" class="cmp-slot' + (CMP.pick === i ? ' on' : '') + '" data-s="' + i + '" style="border-left-color:' + col + '"><span class="note">' + esc(TR('Okrążenie ' + (i + 1))) + '</span><b>' + esc(TR(i ? '+ dodaj okrążenie' : 'wybierz okrążenie')) + '</b></button>';
+    var st = (CMP.status || {})[x.id] || '', pinned = !!x.m.pin;
+    var where = (x.old ? TR('najlepsze w warunkach') : whenTxt((x.st || x.m.t || 0) * 1000) + (x.skind ? ' · ' + TR(kind[x.skind] || x.skind) : '')) + (cmpLabel(x) ? ' · ' + cmpLabel(x, CMP.letters) : '');
+    var stTxt = st === 'wait' ? TR('Wczytywanie z komputera kierowcy…') : st === 'off' ? TR('To okrążenie jest zapisane na komputerze kierowcy (' + (x.m.driver || '').split(' ')[0] + '). Kierowca musi uruchomić Pit Wall Crew, żeby można je było porównać. Wczyta się samo.')
+      : st === 'missing' ? TR('Tego okrążenia nie ma już na komputerze kierowcy.') : pinned ? TR('📌 zachowane – zostaje w bazie') : x.src === 'disk' ? TR('💾 na komputerze kierowcy') : TR('✓ w bazie zespołu');
+    return '<div role="button" tabindex="0" class="cmp-slot' + (CMP.pick === i ? ' on' : '') + '" data-s="' + i + '" style="border-left-color:' + col + '">' +
+      '<span class="note">' + esc(TR('Okrążenie ' + (i + 1))) + '</span><b data-notr>' + esc(cmpSlotLine(x)) + '</b><span class="note" data-notr>' + esc(where) + '</span>' +
+      '<span class="st ' + (st === 'off' || st === 'missing' ? 'warn' : st ? '' : 'ok') + '">' + esc(stTxt) + '</span>' +
+      (x.src !== 'disk' || !st ? '<button type="button" class="second pin" data-pin="' + i + '">' + esc(TR(pinned ? '📌 Odepnij' : '📌 Zachowaj')) + '</button>' : '') + '</div>';
+  }).join(''));
+  $('cmp-slots').querySelectorAll('.cmp-slot').forEach(function (el) {
+    el.onclick = function (e) { if (e.target.dataset && e.target.dataset.pin != null) return; var i = +el.dataset.s; CMP.pick = CMP.pick === i ? null : i; cmpSlots(); cmpPicker(); };
+  });
+  $('cmp-slots').querySelectorAll('[data-pin]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); cmpPin(+b.dataset.pin); }; });
+}
+// lista wyboru okrążenia: najlepsze każdego kierowcy, potem sesje (14 dni w bazie, starsze 💾); sesje zwinięte
+function cmpPicker() {
+  var box = $('cmp-pick');
+  if (CMP.pick == null) { box.style.display = 'none'; setH(box, ''); return; }
+  box.style.display = '';
+  var list = cmpCarList(CMP.trk), f = CMP.flt || (CMP.flt = { drv: '', valid: false, q: '' });
+  var drivers = []; list.forEach(function (x) { var d = x.m.driver || x.drv; if (drivers.indexOf(d) < 0) drivers.push(d); });
+  var ok = function (x) { return (!f.drv || (x.m.driver || x.drv) === f.drv) && (!f.valid || cmpOk(x.m)) && (!f.q || String(x.m.lap) === f.q.trim()); };
+  var kind = { race: 'wyścig', qualify: 'kwalifikacje', practice: 'trening', warmup: 'rozgrzewka' };
+  var row = function (x, g) {
+    var m = x.m, bad = m.valid === false;
+    return '<button type="button" class="row2' + (g ? ' g' : '') + '" data-id="' + esc(x.id) + '"><span>' + (g ? '🟢' : '') + '</span><span>' + esc((m.driver || x.drv).split(' ')[0]) +
+      '</span><span class="note" data-notr>' + esc(x.old ? '' : TR('okr. ' + m.lap)) + '</span><span class="num">' + lapTxt(m.lap_time) + '</span><span data-notr class="' + (bad ? 'bad' : 'note') + '">' +
+      esc(cmpLabel(x, CMP.letters)) + '</span><span>' + (m.pin ? '📌' : x.src === 'disk' ? '💾' : '') + '</span></button>';
+  };
+  var h = '<div class="flt"><b>' + esc(TR('Okrążenie ' + (CMP.pick + 1))) + '</b><span class="note">' + esc((cmpList(CMP.trk)[0] || { m: {} }).m.track || '') + ' · ' + esc(CMP.car || '—') + '</span>' +
+    '<select id="cmp-fd" aria-label="Kierowca"><option value="">' + esc(TR('wszyscy kierowcy')) + '</option>' + drivers.map(function (d) { return '<option' + (d === f.drv ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('') + '</select>' +
+    '<label class="note" style="display:flex;gap:6px;align-items:center;white-space:nowrap"><input type="checkbox" id="cmp-fv" style="width:auto;flex:none"' + (f.valid ? ' checked' : '') + '> ' + esc(TR('tylko ważne')) + '</label>' +
+    '<input type="search" id="cmp-fq" placeholder="' + esc(TR('nr okrążenia')) + '" value="' + esc(f.q) + '" style="max-width:130px">' +
+    (CMP.pick ? '<button type="button" class="second" data-id="">' + esc(TR('— bez okrążenia —')) + '</button>' : '') + '</div>';
+  var best = cmpBest(list).filter(ok);
+  if (best.length) h += '<div class="grp">' + esc(TR('Najlepsze okrążenie każdego kierowcy na torze')) + '</div>' + best.map(function (x) { return row(x, true); }).join('');
+  var groups = {}, order = [];
+  list.forEach(function (x) { var k = x.old ? '~' : x.sess; if (!groups[k]) { groups[k] = { items: [], t: 0, kind: x.skind || x.m.kind || '' }; order.push(k); } groups[k].items.push(x); groups[k].t = Math.max(groups[k].t, x.st || x.m.t || 0); });
+  order.sort(function (a, b) { return a === '~' ? 1 : b === '~' ? -1 : groups[b].t - groups[a].t; });
+  order.forEach(function (k) {
+    var g = groups[k], its = g.items.filter(ok); if (!its.length) return;
+    var sb = {}; g.items.forEach(function (x) { var d = x.m.driver || x.drv; if (cmpOk(x.m) && (!sb[d] || x.m.lap_time < sb[d].m.lap_time)) sb[d] = x; });
+    var inBase = its.some(function (x) { return x.src !== 'disk'; }), days = cmpDays(its[0]);
+    var tag = k === '~' ? '' : inBase && days > 0 ? '<span class="tag">' + esc(TR('dni w bazie: ' + days)) + '</span>' : '<span class="tag" style="color:var(--warn)">' + esc(TR('💾 na dyskach kierowców')) + '</span>';
+    h += '<div class="grp">' + esc(k === '~' ? TR('Najlepsze w warunkach (starsze zapisy)') : whenTxt(g.t * 1000) + (g.kind ? ' · ' + TR(kind[g.kind] || g.kind) : '')) + ' ' + tag + '</div>';
+    var open = (CMP.open || {})[k] || f.drv || f.q, shown = open ? its : its.filter(function (x, i) { return sb[x.m.driver || x.drv] === x || i < 3; });
+    if (open) shown = shown.slice().sort(function (a, b) { return String(a.m.driver).localeCompare(String(b.m.driver)) || (a.m.lap || 0) - (b.m.lap || 0); });
+    h += shown.map(function (x) { return row(x, sb[x.m.driver || x.drv] === x); }).join('');
+    if (shown.length < its.length) h += '<button type="button" class="more" data-open="' + esc(k) + '">' + esc(TR('… pozostałe okrążenia: ' + (its.length - shown.length) + ' (rozwiń)')) + '</button>';
+  });
+  setH(box, h);
+  box.querySelectorAll('[data-id]').forEach(function (b) { b.onclick = function () { CMP.sel[CMP.pick] = b.dataset.id; if (!CMP.sel[0]) CMP.sel[0] = CMP.sel[1] || CMP.sel[2]; CMP.pick = null; cmpOptions(); }; });
+  box.querySelectorAll('[data-open]').forEach(function (b) { b.onclick = function () { CMP.open = CMP.open || {}; CMP.open[b.dataset.open] = 1; cmpPicker(); }; });
+  var fd = $('cmp-fd'), fv = $('cmp-fv'), fq = $('cmp-fq');
+  if (fd) fd.onchange = function () { f.drv = this.value; cmpPicker(); };
+  if (fv) fv.onchange = function () { f.valid = this.checked; cmpPicker(); };
+  if (fq) fq.oninput = function () { var v = this.value; f.q = v; clearTimeout(CMP._qt); CMP._qt = setTimeout(function () { cmpPicker(); var e = $('cmp-fq'); if (e) { e.focus(); e.setSelectionRange(v.length, v.length); } }, 300); };
+}
+// 📌 zachowaj: okrążenie zostaje w bazie bez limitu (z dysku – program kierowcy wysyła je na stałe)
+function cmpPin(i) {
+  var x = CMP.items[CMP.sel[i]]; if (!x) return;
+  var on = !x.m.pin;
+  if (x.src === 'disk') {
+    if (!on) return;
+    T('ltreq/' + x.drv).push({ trk: CMP.trk, sess: x.sess, id: x.lid, pin: true, t: Date.now() });
+    CMP.status = CMP.status || {}; CMP.status[x.id] = 'wait'; x.m.pin = true; cmpSlots(); return;
+  }
+  T(x.ix + '/pin').set(on ? true : null).then(function () { x.m.pin = on || undefined; cmpSlots(); }).catch(function (e) { alert(authErr(e)); });
 }
 function cmpUnpack(z) {
   var bin = atob(z), u = new Uint8Array(bin.length);
@@ -2273,12 +2517,41 @@ function cmpUnpack(z) {
     return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [] };
   });
 }
+function cmpSetupOf(x, r) {
+  if (r.setup) return Promise.resolve(r.setup);
+  var h = (r.meta || {}).setup_h; if (!h) return Promise.resolve(null);
+  return T('setups/' + CMP.trk + '/' + x.drv + '/' + h).once('value').then(function (s) { return s.val(); }).catch(function () { return null; });
+}
+function cmpFromRec(x, r) {
+  return cmpUnpack(r.z).then(function (L) {
+    L.m = Object.assign({}, x.m, r.meta || {}); x.m = L.m;
+    return cmpSetupOf(x, r).then(function (st) { L.setup = st; CMP.laps[x.id] = L; return L; });
+  });
+}
+// okrążenie z bazy albo – 💾 – z komputera kierowcy: prośba (ltreq), odpowiedź programu w ltmp (na godzinę)
 function cmpGetLap(id) {
-  var k = CMP.trk + '/' + id;
-  if (CMP.laps[k]) return Promise.resolve(CMP.laps[k]);
-  return T('tlaps/' + k).once('value').then(function (s) {
-    var r = s.val(); if (!r || !r.z) return null;
-    return cmpUnpack(r.z).then(function (L) { L.m = r.meta || {}; L.setup = r.setup || null; CMP.laps[k] = L; return L; });
+  var x = (CMP.items || {})[id]; if (!x) return Promise.resolve(null);
+  if (CMP.laps[id]) return Promise.resolve(CMP.laps[id]);
+  if (x.src !== 'disk') return T(x.path).once('value').then(function (s) { var r = s.val(); return r && r.z ? cmpFromRec(x, r) : null; });
+  var tp = 'ltmp/' + CMP.trk + '/' + x.drv + '/' + x.lid;
+  CMP.status = CMP.status || {};
+  return T(tp).once('value').then(function (s) {
+    var r = s.val();
+    if (r && r.z) { delete CMP.status[id]; return cmpFromRec(x, r); }
+    if (!CMP.req[id]) {
+      CMP.req[id] = 1;
+      T('ltreq/' + x.drv).push({ trk: CMP.trk, sess: x.sess, id: x.lid, t: Date.now() });
+      var ref = T(tp), done = false;
+      ref.on('value', function (s2) {
+        var r2 = s2.val(); if (!r2 || done) return;
+        if (r2.missing) { CMP.status[id] = 'missing'; cmpSlots(); return; }
+        if (r2.z) { done = true; ref.off(); delete CMP.status[id]; cmpFromRec(x, r2).then(function () { cmpSlots(); cmpFetch(); }); }
+      });
+      setTimeout(function () { if (!done && CMP.status[id] === 'wait') { CMP.status[id] = 'off'; cmpSlots(); } }, 10000);
+    }
+    if (CMP.status[id] !== 'off' && CMP.status[id] !== 'missing') CMP.status[id] = 'wait';
+    cmpSlots();
+    return null;
   });
 }
 function cmpGetShape(name) {
@@ -2290,14 +2563,26 @@ function cmpGetShape(name) {
 }
 function cmpFetch() {
   var ids = CMP.sel.slice(), trk = CMP.trk;
-  if (!ids[0]) return;
-  cmpMsg('Wczytywanie okrążeń…');
+  if (!ids.some(Boolean)) return;
   Promise.all(ids.map(function (id) { return id ? cmpGetLap(id) : null; })).then(function (laps) {
     if (trk !== CMP.trk || ids.join() !== CMP.sel.join()) return;
     var first = laps.filter(Boolean)[0];
-    if (!first) return cmpMsg('Nie udało się wczytać okrążenia.');
+    if (!first) { if (!ids.some(function (id) { return (CMP.status || {})[id]; })) cmpMsg('Nie udało się wczytać okrążenia.'); $('cmp-body').style.display = 'none'; return; }
     return cmpGetShape(first.m.track).then(function (shape) { if (trk === CMP.trk) cmpBuild(laps, shape); });
   }).catch(function (e) { cmpMsg(authErr(e)); });
+}
+// link do porównania: #cmp=tor|auto|okr1|okr2|okr3|zakręt
+function cmpLinkOut() {
+  var v = [CMP.trk, CMP.car || '', CMP.sel[0], CMP.sel[1], CMP.sel[2], CMP.corner].map(function (x) { return encodeURIComponent(x == null ? '' : x); }).join('|');
+  return location.origin + location.pathname + '?team=' + encodeURIComponent(CODE) + '#cmp=' + v;
+}
+function cmpLinkIn() {
+  var m = /#cmp=([^&]*)/.exec(location.hash || '');
+  if (!m || CMP._linked) return;
+  CMP._linked = 1;
+  var p = m[1].split('|').map(function (x) { return decodeURIComponent(x); });
+  CMP.trk = p[0]; CMP.car = p[1]; CMP.sel = [p[2] || '', p[3] || '', p[4] || '']; CMP.wantCorner = p[5] !== '' && p[5] != null ? +p[5] : -1;
+  try { history.replaceState(null, '', location.href.split('#')[0]); } catch (e) {}
 }
 // ---- obliczenia
 function cmpSmooth(v) {
@@ -2388,7 +2673,8 @@ function cmpBuild(laps, shape) {
       '<span class="note">' + (g < 0.0005 ? esc(TR('najszybszy')) : '+' + g.toFixed(3).replace('.', ',')) + '</span></span>';
   }).join(''));
   $('cmp-note').textContent = '· ' + (ref.d.m.track || '');
-  cmpDraw(); cmpSpeed(); cmpCornerPanel(); cmpSetup();
+  cmpDraw(); cmpSpeed(); cmpCornerPanel(); cmpSetup(); cmpCond(); cmpGain(); cmpSlots();
+  if (CMP.wantCorner >= 0) { var wc = CMP.wantCorner; CMP.wantCorner = -1; if (CMP.C[wc]) cmpPickCorner(wc); }
 }
 // ---- różnice w setupie (setup przy okrążeniu: engineer/analysis/teamlaps.setup_snapshot)
 var CMP_SET = {
@@ -2429,17 +2715,22 @@ function cmpSetup() {
   var t = '<div class="scroll"><table><thead><tr><th></th>' + have.map(function (l) { return '<th style="color:' + l.col + '">' + esc(l.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
     rows.map(function (r) {
       return '<tr><td><span>' + esc(TR(r.n[0])) + '</span>' + (r.n[1] ? ' <span>' + esc(TR(r.n[1])) + '</span>' : '') + '</td>' +
-        have.map(function (l) { var v = l.d.setup[r.k]; return '<td style="color:' + l.col + '">' + esc(v == null ? '—' : v) + '</td>'; }).join('') + '</tr>';
+        have.map(function (l) { var v = l.d.setup[r.k]; return '<td style="color:' + l.col + '">' + esc(v == null ? '—' : unitPTxt(v)) + '</td>'; }).join('') + '</tr>';
     }).join('') + '</tbody></table></div>';
   setH(box, h + t + miss);
 }
 // ---- rysowanie mapy
-function cmpView() { var W = CMP.box[2] / CMP.z, H = CMP.box[3] / CMP.z; return [CMP.cx - W / 2, CMP.cy - H / 2, W, H]; }
+// widok mapy w proporcjach okna mapy (obok szczegółów zakrętu okno jest wyższe – mapa wypełnia całe pole)
+function cmpBase() {
+  var b = CMP.box, el = $('cmp-wrap'), a = el && el.clientWidth && el.clientHeight ? el.clientWidth / el.clientHeight : b[2] / b[3];
+  return b[2] / b[3] > a ? [b[2], b[2] / a] : [b[3] * a, b[3]];
+}
+function cmpView() { var B = cmpBase(), W = B[0] / CMP.z, H = B[1] / CMP.z; return [CMP.cx - W / 2, CMP.cy - H / 2, W, H]; }
 function cmpClamp() {
   CMP.z = Math.max(1, Math.min(14, CMP.z));
-  var b = CMP.box, W = b[2] / CMP.z, H = b[3] / CMP.z;
-  CMP.cx = Math.max(b[0] + W / 2, Math.min(b[0] + b[2] - W / 2, CMP.cx));
-  CMP.cy = Math.max(b[1] + H / 2, Math.min(b[1] + b[3] - H / 2, CMP.cy));
+  var b = CMP.box, B = cmpBase(), W = B[0] / CMP.z, H = B[1] / CMP.z;
+  CMP.cx = W >= b[2] ? b[0] + b[2] / 2 : Math.max(b[0] + W / 2, Math.min(b[0] + b[2] - W / 2, CMP.cx));
+  CMP.cy = H >= b[3] ? b[1] + b[3] / 2 : Math.max(b[1] + H / 2, Math.min(b[1] + b[3] - H / 2, CMP.cy));
 }
 function cmpPath(a, b) { var o = []; for (var i = a; i <= b; i++) o.push(CMP.XY[i][0].toFixed(1) + ' ' + CMP.XY[i][1].toFixed(1)); return 'M' + o.join('L'); }
 function cmpShape(j, x, y, s) {
@@ -2489,8 +2780,8 @@ function cmpPan() {
     var bc = L.length > 1 && c.m[c.best] ? L[c.best].col : 'var(--line2)';
     var inner = '<b>' + c.name + '</b>';
     if (big) inner += c.m.map(function (m, j) {
-      return '<div style="color:' + L[j].col + '">' + esc(L[j].name) + ' <span>' + Math.round(m.vmin) + ' km/h</span>' +
-        (m.brake != null ? ' · <span>' + esc(TR('hamuje ' + Math.round(m.brake) + ' m')) + '</span>' : '') +
+      return '<div style="color:' + L[j].col + '">' + esc(L[j].name) + ' <span>' + unitSp(m.vmin) + '</span>' +
+        (m.brake != null ? ' · <span>' + esc(TR('hamuje ' + unitD(m.brake))) + '</span>' : '') +
         (L.length > 1 ? ' · ' + (m.dt < 0.0005 ? '<span>' + esc(TR('najlepiej')) + '</span>' : '+' + n2(m.dt)) : '') + '</div>';
     }).join('');
     else if (L.length > 1) { var w = Math.max.apply(null, c.m.map(function (m) { return m.dt; })); if (w >= 0.01) inner += ' <span style="color:var(--muted)">' + n2(w) + '</span>'; }
@@ -2498,7 +2789,7 @@ function cmpPan() {
     if (CMP.z >= 3.2) c.m.forEach(function (m, j) {
       if (m.bi == null) return;
       var qb = cmpPos(CMP.XY[m.bi][0], CMP.XY[m.bi][1], v);
-      h.push('<div class="cmp-lab cmp-chip" style="color:' + L[j].col + ';left:' + qb[0] + '%;top:' + qb[1] + '%;transform:translate(-50%,' + [-190, 80, 200][j % 3] + '%)">' + Math.round(m.brake) + ' m</div>');
+      h.push('<div class="cmp-lab cmp-chip" style="color:' + L[j].col + ';left:' + qb[0] + '%;top:' + qb[1] + '%;transform:translate(-50%,' + [-190, 80, 200][j % 3] + '%)">' + unitD(m.brake) + '</div>');
     });
   });
   $('cmp-ov').innerHTML = h.join('');
@@ -2513,7 +2804,7 @@ function cmpTools() {
   $('cmp-tools').querySelectorAll('button').forEach(function (b) {
     b.onclick = function () {
       var k = b.dataset.k;
-      if (k === 'all') { CMP.z = 1; CMP.corner = -1; cmpDraw(); cmpCornerPanel(); cmpSpeed(); }
+      if (k === 'all') { CMP.z = 1; CMP.corner = -1; cmpCornerPanel(); cmpDraw(); cmpSpeed(); }
       else if (k === 'in' || k === 'out') { CMP.z *= k === 'in' ? 1.5 : 1 / 1.5; cmpDraw(); }
       else cmpPickCorner(+k);
     };
@@ -2522,32 +2813,36 @@ function cmpTools() {
 function cmpPickCorner(i) {
   var c = CMP.C[i]; if (!c) return;
   CMP.corner = i;
+  cmpCornerPanel();          // najpierw układ „obok” – widok mapy liczony w nowych proporcjach
   if (CMP.XY) {
     var xs = [], ys = [];
     for (var j = Math.max(c.s, c.a - 36); j <= Math.min(c.e, c.a + 24); j++) { xs.push(CMP.XY[j][0]); ys.push(CMP.XY[j][1]); }
     var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
-    CMP.z = Math.max(2.4, Math.min(10, Math.min(CMP.box[2] / ((x1 - x0) * 2.2 || 1), CMP.box[3] / ((y1 - y0) * 2.2 || 1))));
+    var B = cmpBase();
+    CMP.z = Math.max(2.4, Math.min(10, Math.min(B[0] / ((x1 - x0) * 2.2 || 1), B[1] / ((y1 - y0) * 2.2 || 1))));
     CMP.cx = (x0 + x1) / 2; CMP.cy = (y0 + y1) / 2;
   }
-  cmpDraw(); cmpSpeed(); cmpCornerPanel();
+  cmpDraw(); cmpSpeed();
   var cp = $('cmp-corner'); if (cp && cp.scrollIntoView && window.innerWidth < 800) cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 // ---- najechanie: prędkość wszystkich okrążeń w punkcie
 function cmpHover(i) {
   CMP.hov = i;
   var tip = $('cmp-tip'), cur = $('cmp-cur'), L = CMP.L;
-  var sl = $('cmp-sl'); if (sl) { var x = i < 0 ? -10 : i / (CMP.n - 1) * 1000; sl.setAttribute('x1', x); sl.setAttribute('x2', x); }
+  ['cmp-sl', 'cmp-dl'].forEach(function (k) { var sl = $(k); if (sl) { var x = i < 0 ? -10 : i / (CMP.n - 1) * 1000; sl.setAttribute('x1', x); sl.setAttribute('x2', x); } });
+  var cv = $('cmp-chv'), ch = CMP.ch || 'v';
+  if (cv) cv.textContent = i < 0 ? '' : TR(CMP_CH[ch][0]) + ': ' + L.map(function (l) { var v = l.d[ch][i]; return l.name + ' ' + (ch === 'v' ? unitSp(v) : ch === 'n' ? v : Math.round(v) + '%'); }).join(' · ');
   if (i < 0 || !CMP.XY || i >= CMP.n) { if (tip) tip.style.display = 'none'; if (cur) { cur.setAttribute('cx', -1e6); cur.setAttribute('cy', -1e6); } return; }
   var p = CMP.XY[i], v = cmpView(), q = cmpPos(p[0], p[1], v);
   cur.setAttribute('cx', p[0]); cur.setAttribute('cy', p[1]);
   if (!cmpIn(q)) { tip.style.display = 'none'; return; }
   var tmin = Math.min.apply(null, L.map(function (l) { return l.d.t[i]; }));
   var cn = CMP.C.filter(function (c) { return i >= c.s && i <= c.e; })[0];
-  var h = '<small><span>' + esc(TR((i * CMP_BIN) + ' m od startu')) + '</span>' + (cn ? ' · <span>' + cn.name + '</span>' : '') + '</small>';
+  var h = '<small><span>' + esc(TR(unitD(i * CMP_BIN) + ' od startu')) + '</span>' + (cn ? ' · <span>' + cn.name + '</span>' : '') + '</small>';
   L.forEach(function (l) {
     var dt = l.d.t[i] - tmin;
     h += '<div><span style="color:' + l.col + ';display:inline-block;min-width:64px">' + esc(l.name) + '</span> <span style="display:inline-block;min-width:74px;text-align:right">' +
-      Math.round(l.d.v[i]) + ' km/h</span> <span style="display:inline-block;min-width:70px;text-align:right;color:' + (dt < 0.0005 ? 'var(--ok)' : 'var(--muted)') + '">' +
+      unitSp(l.d.v[i]) + '</span> <span style="display:inline-block;min-width:70px;text-align:right;color:' + (dt < 0.0005 ? 'var(--ok)' : 'var(--muted)') + '">' +
       (L.length < 2 ? '' : dt < 0.0005 ? esc(TR('prowadzi')) : '+' + n2(dt) + ' s') + '</span></div>';
   });
   tip.innerHTML = h;
@@ -2568,7 +2863,7 @@ function cmpNear(e) {
     var r = svg.getBoundingClientRect(), v = cmpView(), fx = (cx - r.left) / r.width, fy = (cy - r.top) / r.height;
     var px = v[0] + fx * v[2], py = v[1] + fy * v[3];
     CMP.z *= f; cmpClamp();
-    var W = CMP.box[2] / CMP.z, H = CMP.box[3] / CMP.z;
+    var v2 = cmpView(), W = v2[2], H = v2[3];
     CMP.cx = px - (fx - 0.5) * W; CMP.cy = py - (fy - 0.5) * H;
     cmpDraw();
   }
@@ -2610,48 +2905,111 @@ function cmpNear(e) {
   function spPick(e) { if (!CMP.n) return; var r = sp.getBoundingClientRect(), i = Math.round((e.clientX - r.left) / r.width * (CMP.n - 1)); if (i >= 0 && i < CMP.n && i !== CMP.hov) cmpHover(i); }
   sp.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') spPick(e); });
   sp.addEventListener('pointerdown', spPick);
-  $('cmp-trk').onchange = function () { CMP.trk = this.value; CMP.sel = ['', '', '']; CMP.hov = -1; cmpOptions(); };
-  [0, 1, 2].forEach(function (i) { $('cmp-s' + i).onchange = function () { CMP.sel[i] = this.value; if (!CMP.sel[0]) CMP.sel[0] = CMP.sel[1] || CMP.sel[2]; cmpFetch(); }; });
+  var dl = $('cmp-delta');
+  dl.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') spPick.call(dl, e); });
+  dl.addEventListener('pointerdown', function (e) { spPick.call(dl, e); });
+  $('cmp-best').onclick = cmpPickBest;
+  if (window.ResizeObserver) new ResizeObserver(function () { if (CMP.XY) { cmpClamp(); cmpPan(); } }).observe($('cmp-wrap'));
+  $('cmp-trk').onchange = function () { CMP.trk = this.value; CMP.car = null; CMP.sel = ['', '', '']; CMP.hov = -1; CMP.pick = null; cmpCars(); };
+  $('cmp-car').onchange = function () { CMP.car = this.value; CMP.sel = ['', '', '']; CMP.hov = -1; CMP.pick = null; cmpOptions(); };
+  $('cmp-link').onclick = function () {
+    var u = cmpLinkOut(), b = this, ok = function () { b.textContent = TR('✓ Link skopiowany'); setTimeout(function () { b.textContent = TR('🔗 Kopiuj link do porównania'); }, 2500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function () { prompt('', u); });
+    else prompt('', u);
+  };
 })();
 // ---- wykres prędkości na całym okrążeniu
+// przebieg na całym okrążeniu (prędkość / gaz / hamulec / bieg) i strata czasu do najszybszego
+var CMP_CH = { v: ['Prędkość'], g: ['Gaz'], b: ['Hamulec'], n: ['Bieg'] };
 function cmpSpeed() {
-  var L = CMP.L, n = CMP.n, lo = Infinity, hi = -Infinity, step = Math.max(1, Math.floor(n / 1000));
-  L.forEach(function (l) { for (var i = 0; i < n; i++) { if (l.d.v[i] < lo) lo = l.d.v[i]; if (l.d.v[i] > hi) hi = l.d.v[i]; } });
-  var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v) { return (124 - (v - lo) / ((hi - lo) || 1) * 116).toFixed(1); };
-  var h = [], c = CMP.C[CMP.corner];
-  if (c) h.push('<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>');
-  L.forEach(function (l) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + sy(l.d.v[i])); h.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'); });
+  var L = CMP.L, n = CMP.n, step = Math.max(1, Math.floor(n / 1000)), ch = CMP.ch || 'v', lo = Infinity, hi = -Infinity;
+  setH($('cmp-tabs'), Object.keys(CMP_CH).map(function (k) { return '<button type="button" class="second' + (k === ch ? ' on' : '') + '" data-ch="' + k + '">' + esc(TR(CMP_CH[k][0])) + '</button>'; }).join('') +
+    '<span style="flex:1"></span><span class="note" id="cmp-chv" data-notr></span>');
+  $('cmp-tabs').querySelectorAll('[data-ch]').forEach(function (b) { b.onclick = function () { CMP.ch = b.dataset.ch; cmpSpeed(); }; });
+  if (ch === 'g' || ch === 'b') { lo = 0; hi = 100; }
+  else L.forEach(function (l) { for (var i = 0; i < n; i++) { var v = l.d[ch][i] || 0; if (v < lo) lo = v; if (v > hi) hi = v; } });
+  var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v, j) { return (124 - ((v || 0) - lo) / ((hi - lo) || 1) * 116 - (ch === 'v' ? 0 : j * 1.5)).toFixed(1); };
+  var h = [], c = CMP.C[CMP.corner], band = c ? '<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>' : '';
+  h.push(band);
+  L.forEach(function (l, j) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + sy(l.d[ch][i], j)); h.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'); });
   h.push('<line id="cmp-sl" x1="-10" x2="-10" y1="0" y2="130" style="stroke:var(--text)" stroke-width="1" vector-effect="non-scaling-stroke"/>');
   $('cmp-spd').innerHTML = h.join('');
+  // strata czasu: rośnie – kierowca traci, opada – odrabia
+  var tmin = [], dmax = 0;
+  for (var i = 0; i < n; i++) { var mm = Infinity; L.forEach(function (l) { if (l.d.t[i] < mm) mm = l.d.t[i]; }); tmin.push(mm); L.forEach(function (l) { dmax = Math.max(dmax, l.d.t[i] - mm); }); }
+  var d = [band.replace('130', '110'), '<line x1="0" x2="1000" y1="104" y2="104" style="stroke:var(--line2)" vector-effect="non-scaling-stroke"/>'];
+  L.forEach(function (l) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + (104 - (l.d.t[i] - tmin[i]) / (dmax || 1) * 96).toFixed(1)); d.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.8" vector-effect="non-scaling-stroke"/>'); });
+  d.push('<line id="cmp-dl" x1="-10" x2="-10" y1="0" y2="110" style="stroke:var(--text)" stroke-width="1" vector-effect="non-scaling-stroke"/>');
+  $('cmp-delta').innerHTML = d.join('');
+  $('cmp-dnote').textContent = TR('linia rośnie – kierowca traci, opada – odrabia · skala do ' + n2(dmax) + ' s');
   cmpHover(CMP.hov);
+}
+// warunki porównywanych okrążeń (jak przy porównaniu z kolegą w programie: teamlaps.differences)
+function cmpCond() {
+  var L = CMP.L, box = $('cmp-cond');
+  if (L.length < 2) { box.style.display = 'none'; return; }
+  var ref = L.slice().sort(function (a, b) { return a.d.m.lap_time - b.d.m.lap_time; })[0].d.m, parts = [];
+  L.forEach(function (l) {
+    var m = l.d.m, d = [];
+    if (m === ref) return;
+    if (m.temp != null && ref.temp != null && Math.abs(m.temp - ref.temp) >= 3) d.push(TR('tor ' + unitTd(Math.abs(m.temp - ref.temp)) + (m.temp > ref.temp ? ' cieplejszy' : ' chłodniejszy')) + ' (' + unitT(m.temp) + ' / ' + unitT(ref.temp) + ')');
+    if (m.fuel != null && ref.fuel != null && Math.abs(m.fuel - ref.fuel) >= 15) d.push(TR((m.fuel > ref.fuel ? 'więcej paliwa o ' : 'mniej paliwa o ') + unitF(Math.abs(m.fuel - ref.fuel))));
+    if (m.compound && ref.compound && m.compound !== ref.compound) d.push(TR('inna mieszanka') + ' (' + m.compound + ')');
+    if (m.wear != null && ref.wear != null && Math.abs(m.wear - ref.wear) >= 0.08) d.push(TR(m.wear > ref.wear ? 'bardziej zużyte opony' : 'świeższe opony'));
+    if (Math.abs((m.wet || 0) - (ref.wet || 0)) >= 0.1) d.push(TR('inna wilgotność toru'));
+    if (m.car && ref.car && m.car !== ref.car) d.push(TR('inne auto'));
+    if (d.length) parts.push('<span><b style="color:' + l.col + '">' + esc(l.name) + '</b> – ' + esc(d.join(', ')) + '</span>');
+  });
+  box.style.display = '';
+  box.className = 'cmp-cond ' + (parts.length ? 'warn' : 'ok');
+  setH(box, parts.length ? '<b style="color:var(--warn)">' + esc(TR('⚠ Warunki się różnią')) + '</b> ' + parts.join(' · ') : esc(TR('✓ Warunki podobne')));
+}
+// gdzie najwięcej do zyskania + okrążenie idealne (najlepsze odcinki między początkami zakrętów z wybranych okrążeń)
+function cmpGain() {
+  var L = CMP.L, C = CMP.C, box = $('cmp-gain'), n = CMP.n;
+  if (L.length < 2 || !C.length) { setH(box, ''); return; }
+  var h = '<b style="font:700 16px var(--cond)">' + esc(TR('Gdzie najwięcej do zyskania')) + '</b>';
+  L.forEach(function (l, j) {
+    var its = C.map(function (c, ci) { return { ci: ci, d: c.m[j].dt }; }).filter(function (x) { return x.d >= 0.02; }).sort(function (a, b) { return b.d - a.d; }).slice(0, 3);
+    if (its.length) h += ' <span><b style="color:' + l.col + '">' + esc(l.name) + '</b> ' + its.map(function (x) { return '<button type="button" class="second" data-c="' + x.ci + '">' + C[x.ci].name + ' ' + n2(x.d) + '</button>'; }).join(' ') + '</span>';
+  });
+  var cuts = [0].concat(C.map(function (c) { return c.s; })).concat([n - 1]), ideal = 0;
+  for (var q = 0; q < cuts.length - 1; q++) { var a = cuts[q], b = cuts[q + 1]; ideal += Math.min.apply(null, L.map(function (l) { return l.d.t[b] - l.d.t[a]; })); }
+  ideal += Math.min.apply(null, L.map(function (l) { return l.d.m.lap_time - l.d.t[n - 1]; }));
+  var best = Math.min.apply(null, L.map(function (l) { return l.d.m.lap_time; }));
+  h += '<span style="flex:1"></span><span class="note">' + esc(TR('Okrążenie idealne (najlepsze zakręty z wybranych):')) + ' <b class="num" style="color:var(--t-p)">' + lapTxt(ideal) + '</b> ' +
+    esc(TR('(−' + n2(Math.max(0, best - ideal)) + ' s od najlepszego)')) + '</span>';
+  setH(box, h);
+  box.querySelectorAll('[data-c]').forEach(function (b2) { b2.onclick = function () { cmpPickCorner(+b2.dataset.c); }; });
 }
 // ---- szczegóły zakrętu
 function cmpReasons(m, r) {
   var o = [];
-  if (m.brake != null && r.brake != null && m.brake - r.brake >= 8) o.push([(m.brake - r.brake) / 8, TR('hamuje ' + Math.round(m.brake - r.brake) + ' m wcześniej')]);
-  if (m.brake != null && r.brake != null && r.brake - m.brake >= 8 && m.vmin - r.vmin < -2) o.push([(r.brake - m.brake) / 8, TR('hamuje ' + Math.round(r.brake - m.brake) + ' m później i ma mniej prędkości w środku')]);
-  if (m.vmin - r.vmin <= -3) o.push([(r.vmin - m.vmin) / 3, TR('o ' + Math.round(r.vmin - m.vmin) + ' km/h wolniej w najwolniejszym miejscu')]);
-  if (m.thr != null && r.thr != null && m.thr - r.thr >= 10) o.push([(m.thr - r.thr) / 10, TR('pełny gaz ' + Math.round(m.thr - r.thr) + ' m później')]);
-  if (m.coast - r.coast >= 15) o.push([(m.coast - r.coast) / 15, TR('o ' + Math.round(m.coast - r.coast) + ' m dłużej bez gazu i hamulca')]);
+  if (m.brake != null && r.brake != null && m.brake - r.brake >= 8) o.push([(m.brake - r.brake) / 8, TR('hamuje ' + unitD(m.brake - r.brake) + ' wcześniej')]);
+  if (m.brake != null && r.brake != null && r.brake - m.brake >= 8 && m.vmin - r.vmin < -2) o.push([(r.brake - m.brake) / 8, TR('hamuje ' + unitD(r.brake - m.brake) + ' później i ma mniej prędkości w środku')]);
+  if (m.vmin - r.vmin <= -3) o.push([(r.vmin - m.vmin) / 3, TR('o ' + unitSp(r.vmin - m.vmin) + ' wolniej w najwolniejszym miejscu')]);
+  if (m.thr != null && r.thr != null && m.thr - r.thr >= 10) o.push([(m.thr - r.thr) / 10, TR('pełny gaz ' + unitD(m.thr - r.thr) + ' później')]);
+  if (m.coast - r.coast >= 15) o.push([(m.coast - r.coast) / 15, TR('o ' + unitD(m.coast - r.coast) + ' dłużej bez gazu i hamulca')]);
   if (m.gear && r.gear && m.gear !== r.gear) o.push([0.9, TR('inny bieg w najwolniejszym miejscu: ' + m.gear + ' zamiast ' + r.gear)]);
   if (m.tc - r.tc >= 20) o.push([0.8, TR('częściej włącza się TC na wyjściu')]);
   return o.sort(function (a, b) { return b[0] - a[0]; }).slice(0, 2).map(function (x) { return x[1]; });
 }
 function cmpCornerPanel() {
   var c = CMP.C[CMP.corner], L = CMP.L, box = $('cmp-corner');
+  $('cmp-main').classList.toggle('split', !!c);
   if (!c) { setH(box, ''); return; }
   var r = c.m[c.best];
   var row = function (lab, f) { return '<tr><td>' + esc(TR(lab)) + '</td>' + c.m.map(function (m, j) { return '<td style="color:' + L[j].col + '">' + f(m) + '</td>'; }).join('') + '</tr>'; };
-  var mm = function (x, a, b) { return x == null ? '—' : esc(TR(Math.abs(Math.round(x)) + ' m ' + (x >= 0 ? a : b))); };
+  var mm = function (x, a, b) { return x == null ? '—' : esc(TR(unitD(Math.abs(x)) + ' ' + (x >= 0 ? a : b))); };
   var tab = '<table><thead><tr><th></th>' + L.map(function (l) { return '<th style="color:' + l.col + '">' + esc(l.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
     row('Czas w zakręcie', function (m) { return n2(m.time) + ' s' + (L.length > 1 ? ' <span class="note">' + (m.dt < 0.0005 ? '' : '+' + n2(m.dt)) + '</span>' : ''); }) +
     row('Początek hamowania', function (m) { return mm(m.brake, 'przed wierzchołkiem', 'za wierzchołkiem'); }) +
     row('Najmocniej na hamulcu', function (m) { return m.bp ? Math.round(m.bp) + '%' : '—'; }) +
-    row('Najmniejsza prędkość', function (m) { return Math.round(m.vmin) + ' km/h'; }) +
+    row('Najmniejsza prędkość', function (m) { return unitSp(m.vmin); }) +
     row('Bieg w najwolniejszym miejscu', function (m) { return m.gear || '—'; }) +
     row('Pełny gaz od', function (m) { return mm(m.thr, 'za wierzchołkiem', 'przed wierzchołkiem'); }) +
-    row('Bez gazu i hamulca', function (m) { return Math.round(m.coast) + ' m'; }) +
-    row('TC tnie moc', function (m) { return Math.round(m.tc) + ' m'; }) + '</tbody></table>';
+    row('Bez gazu i hamulca', function (m) { return unitD(m.coast); }) +
+    row('TC tnie moc', function (m) { return unitD(m.tc); }) + '</tbody></table>';
   var why = '';
   if (L.length > 1) why = '<ul class="cmp-why">' + c.m.map(function (m, j) {
     if (j === c.best || m.dt < 0.02) return '';
@@ -2671,9 +3029,10 @@ function cmpCornerPanel() {
     [pv, pg, pb].forEach(function (pp) { g.push('<polyline points="' + pp.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="2" vector-effect="non-scaling-stroke"/>'); });
   });
   var bestTxt = L.length > 1 ? ' <span class="note">' + esc(TR('najszybciej: ' + L[c.best].name)) + '</span>' : '';
-  setH(box, '<div><h3>' + c.name + bestTxt + '</h3><div class="scroll">' + tab + '</div>' + why + '</div>' +
+  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + c.name + bestTxt + '</h3><div class="scroll">' + tab + '</div>' + why + '</div>' +
     '<div><h3>' + esc(TR('Prędkość, gaz i hamulec')) + '</h3><svg viewBox="0 0 1000 250" preserveAspectRatio="none" role="img" aria-label="' + esc(TR('Prędkość, gaz i hamulec w zakręcie')) + '">' + g.join('') + '</svg>' +
     '<p class="note">' + esc(TR('Od góry: prędkość, gaz, hamulec. Linia przerywana: wierzchołek zakrętu.')) + '</p></div>');
+  $('cmp-x').onclick = function () { CMP.z = 1; CMP.corner = -1; cmpCornerPanel(); cmpDraw(); cmpSpeed(); };
 }
 // sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min
 function lapSessions() {
@@ -2739,7 +3098,7 @@ function drawLaps() {
     var c = lapClean(l), tt = c ? tspan(l.time, pb[bk(l) + '|' + l.who], tb[bk(l)]) : '<span class="note">' + esc(l.time_txt || lapTxt(l.time)) + '</span>';
     var secs = [0, 1, 2].map(function (i) { var x = (l.sec || [])[i]; return '<td class="hide-sm">' + (x ? (c ? tspan(x, null, sb[i], secTxt) : secTxt(x)) : '—') + '</td>'; }).join('');
     var row = '<tr><td>' + esc(l.stint) + '</td><td>' + esc(l.lap) + '</td><td>' + esc(l.who) + '</td><td>' + tt + '</td>' + secs +
-      '<td>' + (Number(l.fuel) > 0 ? n1(l.fuel) : '—') + '</td><td>' + esc(l.ve) + '</td><td>' + esc(l.wet) + '</td><td>' + esc(l.track_temp) +
+      '<td>' + (Number(l.fuel) > 0 ? unitF1(l.fuel) : '—') + '</td><td>' + esc(l.ve) + '</td><td>' + esc(l.wet) + '</td><td>' + (l.track_temp !== '' && l.track_temp != null ? esc(unitT(l.track_temp)) : '—') +
       '</td><td>' + esc(l.compound) + '</td><td class="note">' + esc(lapNotes(l).split(', ').map(TR).join(', ')) + '</td></tr>';
     return head + row;
   }).join('') || '<tr><td colspan="13" class="note">Brak okrążeń.</td></tr>');
@@ -2856,7 +3215,7 @@ function drawSession() {
   $('sum-when').textContent = '(' + whenTxt(s.start) + ')';
   $('sum-head').innerHTML = esc(TR('Okrążenia')) + ': <b>' + s.laps.length + '</b> · ' + esc(TR('czas')) + ': <b>' + esc(clockTxt(mins * 60)) + '</b>' +
     (s.bestLap ? ' · ' + esc(TR('najlepsze')) + ': <b>' + esc(lapTxt(s.bestLap.time)) + '</b> (' + esc(s.bestLap.who || '?') + ', ' + esc(TR('stint')) + ' ' + esc(s.bestLap.stint) + ')' : '') +
-    (s.total.fuel ? ' · ' + esc(TR('paliwo / okr.')) + ': <b>' + n1(s.total.fuel) + ' l</b>' : '') +
+    (s.total.fuel ? ' · ' + esc(TR('paliwo / okr.')) + ': <b>' + unitF1(s.total.fuel) + '</b>' : '') +
     (s.total.ve ? ' · ' + esc(TR('energia / okr.')) + ': <b>' + n1(s.total.ve) + '%</b>' : '');
   $('sum-drv').innerHTML = s.drivers.map(function (d) {
     return '<tr><td>' + esc(d.who) + '</td><td>' + d.laps + '</td><td>' + esc(lapTxt(d.best)) + '</td><td>' + esc(lapTxt(d.avg)) + '</td><td>' + esc(sdTxt(d.sd)) + '</td></tr>';
@@ -2868,7 +3227,7 @@ function drawSession() {
     if (x.bad) notes.push(TR('nieważne') + ' ×' + x.bad);
     if (x.hit) notes.push(TR('uderzenie') + ' ×' + x.hit);
     return '<tr><td>' + esc(x.stint == null ? '—' : x.stint) + '</td><td>' + esc(x.who) + '</td><td>' + x.laps + '</td><td>' + esc(lapTxt(x.best)) +
-      '</td><td>' + esc(lapTxt(x.avg)) + '</td><td>' + esc(sdTxt(x.sd)) + '</td><td>' + (x.fuel ? n1(x.fuel) + ' l' : '—') + '</td><td>' + (x.ve ? n1(x.ve) : '—') +
+      '</td><td>' + esc(lapTxt(x.avg)) + '</td><td>' + esc(sdTxt(x.sd)) + '</td><td>' + (x.fuel ? unitF1(x.fuel) : '—') + '</td><td>' + (x.ve ? n1(x.ve) : '—') +
       '</td><td class="note">' + esc(notes.join(', ')) + '</td></tr>';
   }).join('');
 }
