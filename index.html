@@ -2619,6 +2619,15 @@ function cmpCorners(r, n) {
   for (var k = 1; k < cs.length; k++) if (cs[k][0] <= cs[k - 1][2]) { var mid = Math.floor((cs[k - 1][1] + cs[k][1]) / 2); cs[k - 1][2] = mid; cs[k][0] = mid + 1; }
   return cs.map(function (c, k) { return { name: 'T' + (k + 1), s: c[0], a: c[1], e: c[2] }; });
 }
+// zakręty jak u inżyniera (meta.cr z programu: początek, wierzchołek, koniec w metrach) – te same numery T1… co w jeździe
+// i w raporcie; bez nich (okrążenia sprzed 0.4.3.18) – wykrywanie z najszybszego okrążenia
+function cmpCornersOf(ref, L, n) {
+  var src = [ref].concat(L).filter(function (l) { return l.d.m.cr && l.d.m.cr.length; })[0];
+  if (!src) return cmpCorners(ref.d, n);
+  var b = function (m) { return Math.max(0, Math.min(n - 1, Math.round(m / CMP_BIN))); };
+  return src.d.m.cr.map(function (c, k) { return { name: 'T' + (k + 1), s: b(c[0]), a: b(c[1]), e: b(c[2]) }; })
+    .filter(function (c) { return c.e > c.s; });
+}
 function cmpMet(L, c) {
   var s = c.s, e = Math.min(c.e, L.v.length - 1), lo = Math.max(s, c.a - 12), hi = Math.min(e, c.a + 12) + 1, mi = c.a, mv = Infinity, i;
   for (i = lo; i < hi; i++) if (L.v[i] < mv) { mv = L.v[i]; mi = i; }
@@ -2643,7 +2652,7 @@ function cmpBuild(laps, shape) {
   var ref = L.slice().sort(function (a, b) { return a.d.m.lap_time - b.d.m.lap_time; })[0];
   var len = ref.d.m.len || n * CMP_BIN;
   var trackChanged = CMP.trkDrawn !== CMP.trk;
-  CMP.L = L; CMP.n = n; CMP.C = cmpCorners(ref.d, n);
+  CMP.L = L; CMP.n = n; CMP.C = cmpCornersOf(ref, L, n); cmpSectors();
   CMP.C.forEach(function (c) { c.m = L.map(function (l) { return cmpMet(l.d, c); }); var b = Math.min.apply(null, c.m.map(function (m) { return m.time; }));
     c.best = c.m.map(function (m) { return m.time; }).indexOf(b); c.m.forEach(function (m) { m.dt = m.time - b; }); });
   CMP.XY = null;
@@ -2680,7 +2689,7 @@ function cmpBuild(laps, shape) {
   setH($('cmp-drv'), L.map(function (l) {
     var g = l.d.m.lap_time - best;
     return '<span class="d"><i style="background:' + l.col + '"></i><b>' + esc(l.name) + '</b><span class="num">' + lapTxt(l.d.m.lap_time) + '</span>' +
-      '<span class="note">' + (g < 0.0005 ? esc(TR('najszybszy')) : '+' + g.toFixed(3).replace('.', ',')) + '</span></span>';
+      '<span class="note">' + (g < 0.0005 ? esc(TR('najszybszy')) : '+' + g.toFixed(3).replace('.', ',')) + '</span>' + cmpSecTxt(l) + '</span>';
   }).join(''));
   $('cmp-note').textContent = '· ' + (ref.d.m.track || '');
   cmpDraw(); cmpSpeed(); cmpCornerPanel(); cmpSetup(); cmpCond(); cmpGain(); cmpSlots();
@@ -2749,6 +2758,31 @@ function cmpShape(j, x, y, s) {
   if (j === 1) return '<path d="M' + x + ' ' + (y - s * 1.3) + 'L' + (x + s * 1.3) + ' ' + y + 'L' + x + ' ' + (y + s * 1.3) + 'L' + (x - s * 1.3) + ' ' + y + 'Z"';
   return '<path d="M' + x + ' ' + (y - s * 1.3) + 'L' + (x + s * 1.2) + ' ' + (y + s) + 'L' + (x - s * 1.2) + ' ' + (y + s) + 'Z"';
 }
+// granice sektorów: z czasów S1 i S1+S2 okrążenia (meta.sec) – miejsce na trasie, gdzie przebieg osiąga ten czas
+function cmpSectors() {
+  var L = CMP.L, n = CMP.n, src = null;
+  L.slice().sort(function (a, b) { return a.d.m.lap_time - b.d.m.lap_time; }).forEach(function (l) {
+    var s = l.d.m.sec; if (!src && s && s.length === 2 && s[0] > 0 && s[1] > s[0] && s[1] < l.d.m.lap_time) src = l;
+  });
+  CMP.S = null;
+  if (!src) return;
+  var at = function (v) { for (var i = 0; i < n; i++) if (src.d.t[i] >= v) return i; return -1; };
+  var i1 = at(src.d.m.sec[0]), i2 = at(src.d.m.sec[1]);
+  if (!(i1 > 0 && i2 > i1 && i2 < n - 1)) return;
+  CMP.S = [i1, i2];
+  L.forEach(function (l) {   // czasy sektorów: własne z gry, a bez nich – z przebiegu na tych samych granicach
+    var s = l.d.m.sec, T = l.d.m.lap_time;
+    l.sec = s && s.length === 2 && s[1] > s[0] && s[1] < T ? [s[0], s[1] - s[0], T - s[1]] : [l.d.t[i1], l.d.t[i2] - l.d.t[i1], T - l.d.t[i2]];
+  });
+  CMP.secBest = [0, 1, 2].map(function (k) { return Math.min.apply(null, L.map(function (l) { return l.sec[k]; })); });
+}
+function cmpSecTxt(l) {
+  if (!CMP.S || !l.sec) return '';
+  return '<span class="note cmp-sec" data-notr>' + l.sec.map(function (v, k) {
+    var best = CMP.L.length > 1 && v - CMP.secBest[k] < 0.0005;
+    return 'S' + (k + 1) + ' <b class="num"' + (best ? ' style="color:var(--t-p)"' : '') + '>' + v.toFixed(3).replace('.', ',') + '</b>';
+  }).join(' · ') + '</span>';
+}
 function cmpDraw() {
   if (!CMP.XY) return cmpTools();
   cmpClamp();
@@ -2763,6 +2797,11 @@ function cmpDraw() {
   }
   var a = CMP.XY[0], b = CMP.XY[2], dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1, S = 16 * k;
   h.push('<line x1="' + (a[0] - dy / dl * S) + '" y1="' + (a[1] + dx / dl * S) + '" x2="' + (a[0] + dy / dl * S) + '" y2="' + (a[1] - dx / dl * S) + '" style="stroke:var(--text)" stroke-width="' + 4 * k + '"/>');
+  (CMP.S || []).forEach(function (i) {   // koniec sektora: kreska w poprzek toru
+    var p0 = CMP.XY[Math.max(0, i - 1)], p1 = CMP.XY[Math.min(n - 1, i + 1)], ex = p1[0] - p0[0], ey = p1[1] - p0[1], el = Math.hypot(ex, ey) || 1, q = CMP.XY[i];
+    h.push('<line class="cmp-secl" x1="' + (q[0] - ey / el * S) + '" y1="' + (q[1] + ex / el * S) + '" x2="' + (q[0] + ey / el * S) + '" y2="' + (q[1] - ex / el * S) +
+      '" style="stroke:var(--t-p)" stroke-width="' + 4 * k + '" stroke-dasharray="' + 4 * k + ' ' + 3 * k + '"/>');
+  });
   CMP.C.forEach(function (c) {
     c.m.forEach(function (m, j) {
       if (m.bi == null) return;
@@ -2801,6 +2840,10 @@ function cmpPan() {
       var qb = cmpPos(CMP.XY[m.bi][0], CMP.XY[m.bi][1], v);
       h.push('<div class="cmp-lab cmp-chip" style="color:' + L[j].col + ';left:' + qb[0] + '%;top:' + qb[1] + '%;transform:translate(-50%,' + [-190, 80, 200][j % 3] + '%)">' + unitD(m.brake) + '</div>');
     });
+  });
+  (CMP.S || []).forEach(function (i, k) {
+    var q = cmpPos(CMP.XY[i][0], CMP.XY[i][1], v);
+    if (cmpIn(q)) h.push('<div class="cmp-lab cmp-chip cmp-seclab" data-notr style="color:var(--t-p);left:' + q[0] + '%;top:' + q[1] + '%;transform:translate(12px,-50%)">S' + (k + 1) + ' | S' + (k + 2) + '</div>');
   });
   $('cmp-ov').innerHTML = h.join('');
   $('cmp-ov').querySelectorAll('.cmp-card').forEach(function (el) { el.onclick = function () { cmpPickCorner(+el.dataset.c); }; });
@@ -2941,6 +2984,7 @@ function cmpSpeed() {
   var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v, j) { return (124 - ((v || 0) - lo) / ((hi - lo) || 1) * 116 - (ch === 'v' ? 0 : j * 1.5)).toFixed(1); };
   var h = [], c = CMP.C[CMP.corner], band = c ? '<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>' : '';
   h.push(band);
+  (CMP.S || []).forEach(function (i) { h.push('<line x1="' + sx(i) + '" x2="' + sx(i) + '" y1="0" y2="130" style="stroke:var(--t-p)" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" opacity=".7"/>'); });
   L.forEach(function (l, j) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + sy(l.d[ch][i], j)); h.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'); });
   h.push('<line id="cmp-sl" x1="-10" x2="-10" y1="0" y2="130" style="stroke:var(--text)" stroke-width="1" vector-effect="non-scaling-stroke"/>');
   $('cmp-spd').innerHTML = h.join('');
@@ -2948,6 +2992,7 @@ function cmpSpeed() {
   var tmin = [], dmax = 0;
   for (var i = 0; i < n; i++) { var mm = Infinity; L.forEach(function (l) { if (l.d.t[i] < mm) mm = l.d.t[i]; }); tmin.push(mm); L.forEach(function (l) { dmax = Math.max(dmax, l.d.t[i] - mm); }); }
   var d = [band.replace('130', '110'), '<line x1="0" x2="1000" y1="104" y2="104" style="stroke:var(--line2)" vector-effect="non-scaling-stroke"/>'];
+  (CMP.S || []).forEach(function (i) { d.push('<line x1="' + sx(i) + '" x2="' + sx(i) + '" y1="0" y2="110" style="stroke:var(--t-p)" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" opacity=".7"/>'); });
   L.forEach(function (l) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + (104 - (l.d.t[i] - tmin[i]) / (dmax || 1) * 96).toFixed(1)); d.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.8" vector-effect="non-scaling-stroke"/>'); });
   d.push('<line id="cmp-dl" x1="-10" x2="-10" y1="0" y2="110" style="stroke:var(--text)" stroke-width="1" vector-effect="non-scaling-stroke"/>');
   $('cmp-delta').innerHTML = d.join('');
