@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=8127564f"></script>
+<script src="i18n.js?v=fbd83ce7"></script>
 <script src="i18n_core.js?v=89439f8d"></script>
 <style>
   :root {
@@ -2400,7 +2400,7 @@ function cmpLabel(x, st) {
   if (m.pit) f.push(TR('aleja'));
   if (m.fcy) f.push('SC');
   if (m.off) f.push(TR('poza torem'));
-  return [m.compound || '', m.temp ? unitT(m.temp) : '', m.fuel != null && x.src !== 'disk' ? unitF(m.fuel) : '',
+  return [m.compound || '', m.temp ? unitT(m.temp) : '', cmpGripTxt(m), m.fuel != null && x.src !== 'disk' ? unitF(m.fuel) : '',
           st && m.setup_h && st[m.driver] && st[m.driver][m.setup_h] ? 'setup ' + st[m.driver][m.setup_h] : '', f.join(', ')].filter(Boolean).join(' · ');
 }
 // setupy kierowcy na tym torze: A, B, C… w kolejności pierwszego okrążenia (tylko gdy ma ich kilka)
@@ -2955,6 +2955,13 @@ function cmpSpeed() {
   cmpHover(CMP.hov);
 }
 // warunki porównywanych okrążeń (jak przy porównaniu z kolegą w programie: teamlaps.differences)
+// nagumowanie toru: LMU poziom 0..4, AC przyczepność w %
+var CMP_GL = ['zielony', 'niskie', 'średnie', 'wysokie', 'nasycony'];
+function cmpGripTxt(m) {
+  if (m.gl != null && CMP_GL[m.gl]) return TR('nagumowanie: ' + CMP_GL[m.gl]);
+  if (m.grip != null) return TR('przyczepność toru') + ' ' + n1(m.grip) + '%';
+  return '';
+}
 function cmpCond() {
   var L = CMP.L, box = $('cmp-cond');
   if (L.length < 2) { box.style.display = 'none'; return; }
@@ -2967,6 +2974,8 @@ function cmpCond() {
     if (m.compound && ref.compound && m.compound !== ref.compound) d.push(TR('inna mieszanka') + ' (' + m.compound + ')');
     if (m.wear != null && ref.wear != null && Math.abs(m.wear - ref.wear) >= 0.08) d.push(TR(m.wear > ref.wear ? 'bardziej zużyte opony' : 'świeższe opony'));
     if (Math.abs((m.wet || 0) - (ref.wet || 0)) >= 0.1) d.push(TR('inna wilgotność toru'));
+    if (m.gl != null && ref.gl != null && m.gl !== ref.gl) d.push(TR('inne nagumowanie toru') + ' (' + TR(CMP_GL[m.gl]) + ' / ' + TR(CMP_GL[ref.gl]) + ')');
+    if (m.grip != null && ref.grip != null && Math.abs(m.grip - ref.grip) >= 0.5) d.push(TR((m.grip > ref.grip ? 'przyczepność toru wyższa o ' : 'przyczepność toru niższa o ') + n1(Math.abs(m.grip - ref.grip)) + '% (' + n1(m.grip) + '% / ' + n1(ref.grip) + '%)'));
     if (m.car && ref.car && m.car !== ref.car) d.push(TR('inne auto'));
     if (d.length) parts.push('<span><b style="color:' + l.col + '">' + esc(l.name) + '</b> – ' + esc(d.join(', ')) + '</span>');
   });
