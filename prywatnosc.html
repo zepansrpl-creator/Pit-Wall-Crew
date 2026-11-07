@@ -44,13 +44,13 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Co i dokąd wysyła program</h2>
 <div class="wrap"><table>
 <tr><th>Dokąd</th><th>Co</th><th>Po co</th></tr>
-<tr><td>Baza zespołu – Google Firebase (serwery w Belgii)</td><td>imię lub nick kierowcy, dane z gry (okrążenia, paliwo, opony, pozycje, nazwy kierowców z serwera), radio zespołu, plan, pamięć zespołu, klucz Groq zespołu</td><td>pit wall; widzi to tylko Twój zespół (kod i hasło), a podgląd na żywo także ten, komu zespół da link dla widzów</td></tr>
+<tr><td>Baza zespołu – Google Firebase (serwery w Belgii)</td><td>imię lub nick kierowcy, dane z gry (okrążenia, paliwo, opony, pozycje, nazwy kierowców z serwera, setup przy najlepszych okrążeniach – do wyłączenia w zakładce Zespół), radio zespołu, plan, pamięć zespołu, klucz Groq zespołu</td><td>pit wall; widzi to tylko Twój zespół (kod i hasło), a podgląd na żywo także ten, komu zespół da link dla widzów</td></tr>
 <tr><td>Groq (USA)</td><td>nagranie głosu po wciśnięciu przycisku, pytania, dane wyścigu potrzebne do odpowiedzi, zdania do przetłumaczenia</td><td>rozpoznawanie mowy, odpowiedzi AI, tłumaczenia – z kluczem Twoim lub zespołu</td></tr>
 <tr><td>Google (rozpoznawanie mowy)</td><td>to samo nagranie głosu</td><td>druga, równoległa próba rozpoznania mowy</td></tr>
 <tr><td>Microsoft (głosy Edge)</td><td>tekst, który mówi inżynier</td><td>zamiana tekstu na głos</td></tr>
 <tr><td>ntfy.sh</td><td>treść powiadomień</td><td>powiadomienia na telefon – tylko jeśli je ustawisz</td></tr>
 <tr><td>GitHub</td><td>zapytanie o nową wersję</td><td>aktualizacje</td></tr>
-<tr><td>Serwer aktualizacji autora – Cloudflare</td><td>co 10 minut, gdy program działa: losowy numer instalacji, wersja, język, tryb (solo/zespół) i czy ktoś akurat jedzie; nazwy użytych funkcji z liczbą użyć (np. „pytanie:paliwo”, „strona:raporty”) i czas uruchomienia programu – bez treści pytań, toru i wyników; zdania, których program sam nie rozpoznał, a AI albo poprawka literówek dopasowały do polecenia (bez słów z wielkiej litery, czyli imion; bez powiadomień i zgłoszeń); po wysłaniu zgłoszenia – jego początek (bez kontaktu i dziennika)</td><td>licznik, ile osób używa programu i których funkcji (przechowywany do 3 miesięcy, wyłączysz w Pomoc → Zgłoś problem); powiadomienie autora o nowym zgłoszeniu</td></tr>
+<tr><td>Serwer aktualizacji autora – Cloudflare</td><td>co 10 minut, gdy program działa: losowy numer instalacji, wersja, język, tryb (solo/zespół) i czy ktoś akurat jedzie; nazwy użytych funkcji z liczbą użyć (np. „pytanie:paliwo”, „strona:raporty”) i czas uruchomienia programu – bez treści pytań, toru i wyników; zdania, których program sam nie rozpoznał, a AI albo poprawka literówek dopasowały do polecenia (bez słów z wielkiej litery, czyli imion; bez powiadomień i zgłoszeń); pytania i polecenia, których program sam nie rozpoznał (sama treść, bez słów z wielkiej litery i długich liczb; osobny wyłącznik „Wysyłaj pytania, których inżynier nie zrozumiał”); po wysłaniu zgłoszenia – jego początek (bez kontaktu i dziennika)</td><td>licznik, ile osób używa programu i których funkcji (przechowywany do 3 miesięcy, wyłączysz w Pomoc → Zgłoś problem); powiadomienie autora o nowym zgłoszeniu</td></tr>
 <tr><td>Autor programu</td><td>zgłoszenia problemów i sugestii, kontakt (jeśli podasz), raporty awarii i dziennik – <b>tylko za Twoją zgodą</b></td><td>naprawianie błędów; kopia zgłoszeń trafia do prywatnego repozytorium autora na GitHubie</td></tr>
 </table></div>
 <p>Program nie zapisuje nagrań głosu na dysku i nigdy nie wysyła ich autorowi.</p></section>
@@ -81,7 +81,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>What the program sends and where</h2>
 <div class="wrap"><table>
 <tr><th>Where</th><th>What</th><th>Why</th></tr>
-<tr><td>Team database – Google Firebase (servers in Belgium)</td><td>driver name or nickname, game data (laps, fuel, tyres, positions, driver names from the server), team radio, plan, team memory, the team's Groq key</td><td>the pit wall; only your team can see it (code and password), and the live view also anyone your team gives the spectator link to</td></tr>
+<tr><td>Team database – Google Firebase (servers in Belgium)</td><td>driver name or nickname, game data (laps, fuel, tyres, positions, driver names from the server, setup with the best laps – can be turned off in the Team tab), team radio, plan, team memory, the team's Groq key</td><td>the pit wall; only your team can see it (code and password), and the live view also anyone your team gives the spectator link to</td></tr>
 <tr><td>Groq (USA)</td><td>your voice recording after pressing the button, questions, race data needed for answers, sentences to translate</td><td>speech recognition, AI answers, translations – with your own or the team's key</td></tr>
 <tr><td>Google (speech recognition)</td><td>the same voice recording</td><td>a second, parallel speech recognition attempt</td></tr>
 <tr><td>Microsoft (Edge voices)</td><td>the text the engineer says</td><td>text to speech</td></tr>
@@ -118,7 +118,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Was das Programm wohin sendet</h2>
 <div class="wrap"><table>
 <tr><th>Wohin</th><th>Was</th><th>Wozu</th></tr>
-<tr><td>Teamdatenbank – Google Firebase (Server in Belgien)</td><td>Name oder Nickname des Fahrers, Spieldaten (Runden, Kraftstoff, Reifen, Positionen, Fahrernamen vom Server), Teamfunk, Plan, Teamgedächtnis, Groq-Schlüssel des Teams</td><td>Boxenmauer; nur dein Team sieht sie (Code und Passwort), die Live-Ansicht auch jeder, dem das Team den Zuschauer-Link gibt</td></tr>
+<tr><td>Teamdatenbank – Google Firebase (Server in Belgien)</td><td>Name oder Nickname des Fahrers, Spieldaten (Runden, Kraftstoff, Reifen, Positionen, Fahrernamen vom Server, Setup zu den besten Runden – abschaltbar im Reiter Team), Teamfunk, Plan, Teamgedächtnis, Groq-Schlüssel des Teams</td><td>Boxenmauer; nur dein Team sieht sie (Code und Passwort), die Live-Ansicht auch jeder, dem das Team den Zuschauer-Link gibt</td></tr>
 <tr><td>Groq (USA)</td><td>deine Sprachaufnahme nach dem Tastendruck, Fragen, für Antworten nötige Renndaten, zu übersetzende Sätze</td><td>Spracherkennung, KI-Antworten, Übersetzungen – mit deinem oder dem Team-Schlüssel</td></tr>
 <tr><td>Google (Spracherkennung)</td><td>dieselbe Sprachaufnahme</td><td>ein zweiter, paralleler Erkennungsversuch</td></tr>
 <tr><td>Microsoft (Edge-Stimmen)</td><td>der Text, den der Ingenieur spricht</td><td>Sprachausgabe</td></tr>
@@ -155,7 +155,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Ce que le programme envoie et où</h2>
 <div class="wrap"><table>
 <tr><th>Où</th><th>Quoi</th><th>Pourquoi</th></tr>
-<tr><td>Base de l'équipe – Google Firebase (serveurs en Belgique)</td><td>prénom ou pseudo du pilote, données du jeu (tours, carburant, pneus, positions, noms des pilotes du serveur), radio d'équipe, plan, mémoire d'équipe, clé Groq de l'équipe</td><td>mur des stands ; seule ton équipe y a accès (code et mot de passe), et la vue en direct aussi toute personne à qui l'équipe donne le lien spectateurs</td></tr>
+<tr><td>Base de l'équipe – Google Firebase (serveurs en Belgique)</td><td>prénom ou pseudo du pilote, données du jeu (tours, carburant, pneus, positions, noms des pilotes du serveur, setup avec les meilleurs tours – désactivable dans l'onglet Équipe), radio d'équipe, plan, mémoire d'équipe, clé Groq de l'équipe</td><td>mur des stands ; seule ton équipe y a accès (code et mot de passe), et la vue en direct aussi toute personne à qui l'équipe donne le lien spectateurs</td></tr>
 <tr><td>Groq (États-Unis)</td><td>l'enregistrement de ta voix après l'appui sur le bouton, les questions, les données de course nécessaires aux réponses, les phrases à traduire</td><td>reconnaissance vocale, réponses de l'IA, traductions – avec ta clé ou celle de l'équipe</td></tr>
 <tr><td>Google (reconnaissance vocale)</td><td>le même enregistrement</td><td>une deuxième tentative de reconnaissance, en parallèle</td></tr>
 <tr><td>Microsoft (voix Edge)</td><td>le texte que dit l'ingénieur</td><td>synthèse vocale</td></tr>
@@ -192,7 +192,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Qué envía el programa y adónde</h2>
 <div class="wrap"><table>
 <tr><th>Adónde</th><th>Qué</th><th>Para qué</th></tr>
-<tr><td>Base de datos del equipo – Google Firebase (servidores en Bélgica)</td><td>nombre o apodo del piloto, datos del juego (vueltas, combustible, neumáticos, posiciones, nombres de pilotos del servidor), radio del equipo, plan, memoria del equipo, la clave Groq del equipo</td><td>el pit wall; solo lo ve tu equipo (código y contraseña), y la vista en directo también quien reciba de tu equipo el enlace de espectador</td></tr>
+<tr><td>Base de datos del equipo – Google Firebase (servidores en Bélgica)</td><td>nombre o apodo del piloto, datos del juego (vueltas, combustible, neumáticos, posiciones, nombres de pilotos del servidor, setup con las mejores vueltas – desactivable en la pestaña Equipo), radio del equipo, plan, memoria del equipo, la clave Groq del equipo</td><td>el pit wall; solo lo ve tu equipo (código y contraseña), y la vista en directo también quien reciba de tu equipo el enlace de espectador</td></tr>
 <tr><td>Groq (EE. UU.)</td><td>la grabación de tu voz tras pulsar el botón, preguntas, datos de carrera necesarios para responder, frases para traducir</td><td>reconocimiento de voz, respuestas de la IA, traducciones – con tu propia clave o la del equipo</td></tr>
 <tr><td>Google (reconocimiento de voz)</td><td>la misma grabación de voz</td><td>un segundo intento de reconocimiento de voz en paralelo</td></tr>
 <tr><td>Microsoft (voces de Edge)</td><td>el texto que dice el ingeniero</td><td>síntesis de voz</td></tr>
@@ -229,7 +229,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Cosa invia il programma e dove</h2>
 <div class="wrap"><table>
 <tr><th>Dove</th><th>Cosa</th><th>Perché</th></tr>
-<tr><td>Database della squadra – Google Firebase (server in Belgio)</td><td>nome o soprannome del pilota, dati di gioco (giri, carburante, gomme, posizioni, nomi dei piloti dal server), radio di squadra, piano, memoria della squadra, la chiave Groq della squadra</td><td>il pit wall; lo vede solo la tua squadra (codice e password), e la vista live anche chi riceve dalla squadra il link spettatore</td></tr>
+<tr><td>Database della squadra – Google Firebase (server in Belgio)</td><td>nome o soprannome del pilota, dati di gioco (giri, carburante, gomme, posizioni, nomi dei piloti dal server, setup con i giri migliori – disattivabile nella scheda Squadra), radio di squadra, piano, memoria della squadra, la chiave Groq della squadra</td><td>il pit wall; lo vede solo la tua squadra (codice e password), e la vista live anche chi riceve dalla squadra il link spettatore</td></tr>
 <tr><td>Groq (USA)</td><td>la registrazione della tua voce dopo aver premuto il pulsante, domande, dati di gara necessari per rispondere, frasi da tradurre</td><td>riconoscimento vocale, risposte dell'IA, traduzioni – con la tua chiave o con quella della squadra</td></tr>
 <tr><td>Google (riconoscimento vocale)</td><td>la stessa registrazione della voce</td><td>un secondo tentativo di riconoscimento vocale in parallelo</td></tr>
 <tr><td>Microsoft (voci di Edge)</td><td>il testo che dice l'ingegnere</td><td>sintesi vocale</td></tr>
@@ -266,7 +266,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section><h2>Hvad programmet sender og hvorhen</h2>
 <div class="wrap"><table>
 <tr><th>Hvorhen</th><th>Hvad</th><th>Hvorfor</th></tr>
-<tr><td>Holdets database – Google Firebase (servere i Belgien)</td><td>kørerens navn eller kaldenavn, spildata (omgange, brændstof, dæk, positioner, kørernavne fra serveren), holdradio, plan, holdets hukommelse, holdets Groq-nøgle</td><td>pit wall; kun dit hold kan se det (kode og adgangskode), og live-visningen også dem, dit hold giver tilskuerlinket</td></tr>
+<tr><td>Holdets database – Google Firebase (servere i Belgien)</td><td>kørerens navn eller kaldenavn, spildata (omgange, brændstof, dæk, positioner, kørernavne fra serveren, opsætning med de bedste omgange – kan slås fra under fanen Hold), holdradio, plan, holdets hukommelse, holdets Groq-nøgle</td><td>pit wall; kun dit hold kan se det (kode og adgangskode), og live-visningen også dem, dit hold giver tilskuerlinket</td></tr>
 <tr><td>Groq (USA)</td><td>optagelsen af din stemme efter tryk på knappen, spørgsmål, løbsdata der skal bruges til svar, sætninger der skal oversættes</td><td>talegenkendelse, AI-svar, oversættelser – med din egen eller holdets nøgle</td></tr>
 <tr><td>Google (talegenkendelse)</td><td>den samme stemmeoptagelse</td><td>et andet, parallelt forsøg på talegenkendelse</td></tr>
 <tr><td>Microsoft (Edge-stemmer)</td><td>den tekst, ingeniøren siger</td><td>tekst til tale</td></tr>
