@@ -104,12 +104,16 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Uruchom / Zatrzymaj</b> inżyniera.</li>
     <li><b>Patreon</b> – zaloguj się, żeby dostawać aktualizacje. Po zalogowaniu zostaje tylko „Wyloguj z Patreona”.</li>
     <li><b>Najważniejsze liczby</b>: pozycja, okrążenie, za ile zjazd, energia albo paliwo, czasy, czas do mety.</li>
+    <li><b>Sektory</b> – czasy S1–S3 ostatniego okrążenia i strata do Twojego najlepszego (w nawiasie sektor, w którym tracisz najwięcej).</li>
     <li><b>Komunikaty</b> – wszystko, co inżynier powiedział, Twoje pytania i wiadomości od zespołu. Czerwone = pilne.</li>
     <li><b>Pole pytania</b> – możesz napisać pytanie zamiast mówić.</li>
+    <li><b>Raporty z jazdy</b> – raporty po stintach i wyścigach, także bieżący stint na żywo (opis niżej, w „Podsumowanie stintu”).</li>
     <li><b>Ustawienia</b> – zespół, mikrofon, głos, ostrzeżenia, zaawansowane (rozdział niżej).</li>
     <li><b>Pomoc</b> – lista komend, opis funkcji, instrukcja (tu też <b>Pierwsze kroki</b>), zmiany w wersjach, informacje o programie i <b>Zgłoś problem</b>.</li>
-    <li><b>Pit wall</b> – to samo co przycisk 2, z każdej strony aplikacji.</li>
+    <li><b>☾ Ciemny / ☀ Jasny</b> – motyw okna. <b>Pit wall</b> – to samo co przycisk 2, z każdej strony aplikacji.</li>
   </ol>
+  <h3>Raporty z jazdy</h3>
+  <img src="img/app_reports.webp" alt="Raporty z jazdy">
 </section>
 
 <section id="ust">
@@ -259,20 +263,28 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/wall_live.webp" alt="Pit wall – na żywo, z numerami">
   <ol class="legend">
     <li><b>Stan</b>: czy dane płyną na żywo, kto jedzie, czy działa AI.</li>
-    <li><b>Wygląd</b>: ciemny motyw domyślnie, przełącznik ☀/☾ u góry. Czasy w kolorach: fioletowy – najlepszy w klasie, zielony – Twój rekord, żółty – wolniej. Pasek „Uszkodzenia” pod mapą pojawia się tylko, gdy auto jest uszkodzone (schemat auta, strata na okrążeniu, prędkość maks., ile może trwać naprawa i porada). W wyścigu na okrążenia „Do mety” pokazuje okrążenia (np. 12 / 40).</li>
-    <li><b>Założyciel zespołu</b>: ma własne hasło (podaje je przy zakładaniu zespołu albo w zakładce Zespół: „Zostań założycielem”). Tylko on usuwa i zmienia imiona kierowców oraz zmienia hasło zespołu; na pit wall wchodzi z zaznaczonym „Jestem założycielem”.</li>
-    <li><b>Kilka aut zespołu w jednym wyścigu</b>: każde auto ma osobny podgląd (lista u góry, z numerem auta); wiadomości i pytania idą do kierowcy wybranego auta. Każdy kierowca słyszy swojego inżyniera i spottera.</li>
-    <li><b>Grafik na żywo</b>: pasek stintów (kolor = kierowca, czerwone „TERAZ”). <b>Okrążenia</b>: filtry (sesja – każdy wyścig osobno; auto – gdy jedzie kilka aut zespołu, każde ma swoją tabelę; kierowca, stint, tylko czyste), wykres tempa, kolorowe czasy i sektory S1–S3. <b>Mapa porównania</b>: tor i auto, do 3 dowolnych okrążeń z listy (🟢 najlepsze ważne okrążenie kierowcy – na torze i w każdej sesji; sesje zwinięte; filtry; przycisk „🟢 Najlepsze okrążenia”). W bazie zespołu: okrążenia z 14 dni, najlepsze w warunkach (do pobicia albo 90 dni) i z 📌 (bez limitu); starsze 💾 – z dysku kierowcy, gdy jego Pit Wall Crew jest włączony. Mapa: kolor odcinka = kto najszybszy, punkty hamowania, granice i czasy sektorów, wartości po najechaniu, przybliżanie; pasek warunków (także nagumowanie toru), „gdzie najwięcej do zyskania”, okrążenie idealne, wykres prędkość / gaz / hamulec / bieg i strata czasu; kliknięcie zakrętu – mapa obok szczegółów; różnice w setupie; „🔗 Kopiuj link”. <b>⚙ Jednostki</b> w nagłówku (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Pamięć</b>: notatki jako karty z wyszukiwaniem i filtrem toru. <b>Pomoc</b>: spis treści.</li>
     <li><b>Zakładki</b>: Na żywo, Grafik i plan, Zespół, Okrążenia (na górze <b>podsumowanie sesji</b>: najlepsze i średnie okrążenie, równość, paliwo i energia na okrążenie – dla każdego kierowcy i stintu), Pamięć, Pomoc.</li>
     <li><b>Wyścig</b>: pozycja w klasie, okrążenie, czasy, czas do mety, flaga.</li>
     <li><b>Następny postój</b>: za ile okrążeń, zużycie energii i paliwa, co zrobić na postoju.</li>
     <li><b>Opony i auto</b>: zużycie i temperatury każdej opony, uszkodzenia, silnik, hamulce.</li>
     <li><b>Pogoda i tor</b>: deszcz, wilgotność, chmury, temperatura toru i uwagi inżyniera.</li>
+    <li><b>Postoje</b>: ile postojów zrobione, czas postoju (0 / 2 / 4 opony) zmierzony na Waszych postojach, ile postojów mają rywale przed i za.</li>
+    <li><b>Odstępy w klasie</b>: odstęp do auta przed i za oraz trend (o ile sekund na okrążenie rośnie albo maleje).</li>
+    <li><b>Ostatnie okrążenie</b>: czasy sektorów S1–S3 i strata do najlepszego okrążenia.</li>
+    <li><b>Poziom zmęczenia</b>: jak długo kierowca jedzie i ile okrążeń w stincie; zmęczenie ocenione po czasach okrążeń.</li>
+    <li><b>Limity toru i kary</b>: przekroczenia limitów toru i kary.</li>
+    <li><b>Plan postoju</b>: co zrobić na najbliższym postoju albo czy dojedziecie do mety bez postoju.</li>
     <li><b>Rywale w klasie</b>: odstępy, tempo, kto kogo dogoni, energia, przewidywany zjazd.</li>
+  </ol>
+  <ul>
     <li><b>Porównanie z kolegą</b>: po każdym czystym okrążeniu – w których zakrętach i o ile kolega z zespołu jest szybszy (jego najlepsze okrążenie w podobnych warunkach). W Assetto Corsa także kolega w innym aucie tej samej klasy – wtedy tylko gdzie i o ile, bez rad.</li>
     <li><b>Grafik stintów</b>: kto jedzie, kiedy zmiana, co na postoju, o ile minut grafik przesunął się względem planu.
       Gdy na dziś nie ma planu, układa się sam dla kierowcy, który jedzie – z długości wyścigu i liczby opon dostępnych w grze.</li>
-  </ol>
+    <li><b>Wygląd</b>: ciemny motyw domyślnie, przełącznik ☀/☾ u góry. Czasy w kolorach: fioletowy – najlepszy w klasie, zielony – Twój rekord, żółty – wolniej. Pasek „Uszkodzenia” pod mapą pojawia się tylko, gdy auto jest uszkodzone (schemat auta, strata na okrążeniu, prędkość maks., ile może trwać naprawa i porada). W wyścigu na okrążenia „Do mety” pokazuje okrążenia (np. 12 / 40).</li>
+    <li><b>Założyciel zespołu</b>: ma własne hasło (podaje je przy zakładaniu zespołu albo w zakładce Zespół: „Zostań założycielem”). Tylko on usuwa i zmienia imiona kierowców oraz zmienia hasło zespołu; na pit wall wchodzi z zaznaczonym „Jestem założycielem”.</li>
+    <li><b>Kilka aut zespołu w jednym wyścigu</b>: każde auto ma osobny podgląd (lista u góry, z numerem auta); wiadomości i pytania idą do kierowcy wybranego auta. Każdy kierowca słyszy swojego inżyniera i spottera.</li>
+    <li><b>Grafik na żywo</b>: pasek stintów (kolor = kierowca, czerwone „TERAZ”). <b>Okrążenia</b>: filtry (sesja – każdy wyścig osobno; auto – gdy jedzie kilka aut zespołu, każde ma swoją tabelę; kierowca, stint, tylko czyste), wykres tempa, kolorowe czasy i sektory S1–S3. <b>Mapa porównania</b>: tor i auto, do 3 dowolnych okrążeń z listy (🟢 najlepsze ważne okrążenie kierowcy – na torze i w każdej sesji; sesje zwinięte; filtry; przycisk „🟢 Najlepsze okrążenia”). W bazie zespołu: okrążenia z 14 dni, najlepsze w warunkach (do pobicia albo 90 dni) i z 📌 (bez limitu); starsze 💾 – z dysku kierowcy, gdy jego Pit Wall Crew jest włączony. Mapa: kolor odcinka = kto najszybszy, punkty hamowania, granice i czasy sektorów, wartości po najechaniu, przybliżanie; pasek warunków (także nagumowanie toru), „gdzie najwięcej do zyskania”, okrążenie idealne, wykres prędkość / gaz / hamulec / bieg i strata czasu; kliknięcie zakrętu – mapa obok szczegółów; różnice w setupie; „🔗 Kopiuj link”. <b>⚙ Jednostki</b> w nagłówku (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Pamięć</b>: notatki jako karty z wyszukiwaniem i filtrem toru. <b>Pomoc</b>: spis treści.</li>
+  </ul>
   <p>Niżej na tej stronie są też <b>mapa toru</b> z autami i <b>radio zespołu</b>:
   „Do kierowcy” (inżynier przeczyta wiadomość), „Zapytaj inżyniera” (odpowiedź głosem), „Zapytaj (tylko tekst)”, „Do pamięci”.</p>
   <h3>Na telefonie</h3>

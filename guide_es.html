@@ -97,7 +97,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="app">
   <h2>La ventana de la app</h2>
   <p>El icono <b>Pit Wall Crew</b> abre la app. El ingeniero arranca solo y empieza a hablar cuando inicias el juego y sales a pista. Cambia el tema <b>☾ Oscuro / ☀ Claro</b> abajo en la barra izquierda (al instante, sin reiniciar). Los tiempos de vuelta y de sector se colorean como en el Pit Wall: morado – mejor de la categoría, verde – tu mejor, amarillo – más lento.</p>
-  <img src="img/en/app_main.webp" alt="Ventana principal con números">
+  <img src="img/es/app_main.webp" alt="Ventana principal con números">
   <ol class="legend">
     <li><b>Estado</b>: si el ingeniero funciona, si ve el juego («Conduces» o «observas» cuando conduce un compañero), conexión con el equipo y la IA. Verde = OK.</li>
     <li><b>Abrir el Pit Wall</b> – la página del equipo en el navegador, ya conectada al equipo de la app (sin escribir contraseña).</li>
@@ -105,19 +105,23 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Iniciar / Detener</b> el ingeniero.</li>
     <li><b>Patreon</b> – inicia sesión para recibir actualizaciones. Tras iniciar sesión solo queda «Cerrar sesión de Patreon».</li>
     <li><b>Cifras clave</b>: posición, vuelta, vueltas hasta la parada, energía o combustible, tiempos de vuelta, tiempo hasta el final.</li>
+    <li><b>Sectores</b>: tiempos S1–S3 de la última vuelta y la diferencia con tu mejor vuelta (entre paréntesis, el sector en el que más pierdes).</li>
     <li><b>Mensajes</b> – todo lo que dijo el ingeniero, tus preguntas y los mensajes del equipo. Rojo = urgente.</li>
     <li><b>Campo de pregunta</b> – escribe una pregunta en lugar de hablar.</li>
+    <li><b>Informes de conducción</b>: informes tras cada stint y cada carrera, también el stint actual en directo (descripción más abajo, en «Resumen del stint»).</li>
     <li><b>Ajustes</b> – equipo, micrófono, voz, avisos (ver abajo).</li>
     <li><b>Ayuda</b> – comandos, funciones, manual (también <b>Primeros pasos</b>), cambios, acerca de e <b>Informar de un problema</b>.</li>
-    <li><b>Pit Wall</b> – igual que el botón 2, desde cualquier página de la app.</li>
+    <li><b>☾ Oscuro / ☀ Claro</b>: tema de la ventana. <b>Pit Wall</b> – igual que el botón 2, desde cualquier página de la app.</li>
   </ol>
+  <h3>Informes de conducción</h3>
+  <img src="img/es/app_reports.webp" alt="Informes de conducción">
 </section>
 
 <section id="set">
   <h2>Ajustes</h2>
   <p>Tras cada cambio haz clic en <b>Guardar y reiniciar el módulo del ingeniero</b> (abajo a la derecha).</p>
   <h3>Equipo</h3>
-  <img src="img/en/app_team.webp" alt="Ajustes del equipo">
+  <img src="img/es/app_team.webp" alt="Ajustes del equipo">
   <ul>
     <li><b>Solo</b> – corres solo: no hay que introducir nada más. El Pit Wall sigue funcionando como tu vista en directo.</li>
     <li><b>Equipo</b> – una persona hace clic en <b>Crear un equipo nuevo…</b> (nombre y contraseña) y obtiene un <b>código de equipo</b> de 6 caracteres.
@@ -129,14 +133,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Vueltas en este ordenador</b> (Avanzado) – el programa guarda cada vuelta en el disco y no borra nada por sí solo; botón <b>Eliminar vueltas de más de 180 días</b>. El pit wall toma de aquí las vueltas de más de 14 días cuando alguien las elige. Las vueltas hechas sin internet se envían cuando vuelve la conexión.</li>
   </ul>
   <h3>Micrófono y botón</h3>
-  <img src="img/en/app_mic.webp" alt="Micrófono y botón">
+  <img src="img/es/app_mic.webp" alt="Micrófono y botón">
   <ul>
     <li>Elige el micrófono y haz clic en <b>Probar 3 s</b> – di algo y comprueba que el nivel se mueve.</li>
     <li><b>Configurar: pulsa el botón…</b> y pulsa el botón del volante que usarás para hablar (vale cualquier botón, también los botones MOZA con número mayor que 32). También sirve una tecla. Si el botón no funciona en el juego, configúralo de nuevo.</li>
     <li><b>Tecla para recentrar VR</b> – con el comando «reset VR» el programa pulsa esta tecla (<b>Configurar: pulsa una tecla…</b>). Asigna la misma en el juego (LMU: Controles → «VR: Re-Center head position»). Una tecla aparte para Assetto Corsa – Ctrl+Espacio por defecto; el programa pulsa la tecla del juego en el que conduces.</li>
   </ul>
   <h3>Sonido e idioma</h3>
-  <img src="img/en/app_voice.webp" alt="Sonido e idioma">
+  <img src="img/es/app_voice.webp" alt="Sonido e idioma">
   <ul>
     <li><b>Język / Language</b> – arriba del todo, siempre también en inglés, para encontrarlo fácilmente.</li>
     <li><b>Auriculares / altavoces</b> – el dispositivo en el que oyes al ingeniero y al spotter, p. ej. auriculares mientras el juego va por los altavoces.</li>
@@ -146,7 +150,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Unidades</b> – km/h o mph, m o ft, °C o °F, l o galones, presión como en el juego / bar / psi / kPa: así habla el ingeniero, así son los informes y así muestra el pit wall los datos al principio (cada uno puede elegir las suyas en ⚙). Los grados de caída no cambian.</li>
   </ul>
   <h3>Avisos</h3>
-  <img src="img/en/app_alerts.webp" alt="Avisos">
+  <img src="img/es/app_alerts.webp" alt="Avisos">
   <p>Lo que el ingeniero dice por su cuenta: doblados por categorías más rápidas (y desde cuántos segundos), coches parados,
   banderas, coach antes de las curvas, comparación con tu mejor vuelta, comentarios tras adelantamientos, sugerencias de reglaje. El coach, las comparaciones y las sugerencias empiezan cuando tus tiempos son constantes (3 vueltas limpias con tiempos parecidos) – no mientras aprendes el circuito. Excepción: <b>Consejos de reglaje también mientras aprendo el circuito</b> (o por voz «reglaje ya») – cuando el reglaje es tan malo que cuesta hacer vueltas regulares. <b>Pausa entre sugerencias</b> – los minutos mínimos entre consejos.
   Puedes activarlos y desactivarlos todos por voz mientras conduces (p. ej. «sin coach»). Neumáticos aún demasiado fríos tras varias vueltas y caída casi al mínimo: el ingeniero aconseja más caída (LMU, AC con CSP). Al salir del garaje (libres, clasificación) el ingeniero revisa el reglaje: caída casi al mínimo, presiones o altura casi al máximo, una vez por reglaje. <b>Cuánto habla el ingeniero tras una vuelta</b> – Mucho (todo a la vez), Normal (un comentario por vuelta – por defecto) o Poco (un comentario cada 3 vueltas). <b>Consejos de reglaje con segunda opción («x o y»)</b> – desactivado: un cambio a la vez. Avisos, estrategia y respuestas: siempre al momento.</p>
@@ -155,7 +159,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   «spotter solo mi categoría» / «spotter todas las categorías».</p>
   <p>Mientras hay un coche al lado, el ingeniero se calla (aunque el spotter esté apagado) para que te concentres en la lucha – ajuste <b>Avisos → El ingeniero calla con un coche al lado</b>: solo en carrera (por defecto), siempre o nunca. <b>Golpe</b>: unos segundos después de un choque el ingeniero dice «Compruebo si te cuesta tiempo»; tras dos vueltas limpias da la pérdida por vuelta, si ha bajado la velocidad punta y si conviene reparar. Si no sabe el tiempo de reparación, dice hasta cuántos segundos compensa (p. ej. «Una reparación de hasta 45 segundos compensa, una más larga detenla») – puedes detener la reparación en el juego. También puedes decirle: «reparación 38 segundos».</p>
   <h3>Avanzado</h3>
-  <img src="img/en/app_adv.webp" alt="Avanzado">
+  <img src="img/es/app_adv.webp" alt="Avanzado">
   <p>Tiempo de cambio completo de neumáticos, arranque automático del ingeniero, accesos directos, actualizaciones y tu propia clave Groq (opcional – tu propio límite), código de tester y «Pedir al juego el pronóstico, el menú de boxes y los rivales».
   <b>Carpeta de reglajes de LMU</b> – normalmente vacía (el programa encuentra solo la carpeta del juego); «guarda el reglaje» escribe ahí el nuevo reglaje.</p>
 </section>
@@ -166,7 +170,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Ejemplos: «¿cuánto combustible?», «¿cuándo entro?», «¿qué neumáticos cambiamos?», «¿quién va delante?», «¿dónde pierdo tiempo?», «¿en qué sector pierdo más?», «¿quién está en pista?»,
   «¿qué tiempo hace?», «¿cuándo me dobla el primer hypercar?», «silencio» (silencio total hasta la siguiente pulsación), «solo lo urgente», «repite».</p>
   <p>La lista completa está en la app: <b>Ayuda → Comandos</b>.</p>
-  <img src="img/en/app_commands.webp" alt="Comandos">
+  <img src="img/es/app_commands.webp" alt="Comandos">
   <p>Una pregunta que el programa no conoce va a la IA (con clave Groq) junto con los datos de la carrera. Las preguntas sobre el propio programa
   («¿cómo quito los avisos de prototipos que llegan por detrás?», «que el spotter no diga los lados») la IA las responde a partir de este manual y de los ajustes: da el comando o el lugar en los ajustes, y si esa opción no existe lo dice y propone la más parecida.
   Un comando dicho con tus propias palabras («gomas nuevas a la derecha», «dile a Patricio que se levante») la IA lo asocia a la lista de todos los comandos (también en la demo) y la app lo ejecuta; la próxima vez la misma frase funciona al instante sin IA («olvida los comandos aprendidos» los borra). Las palabras mal reconocidas las corrige la propia app, sin internet, y los nombres de tus compañeros y de los rivales cercanos se pasan al reconocimiento de voz como pista.</p>
@@ -246,36 +250,44 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Ábrelo con el botón <b>Pit Wall</b> de la app o en
   <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
   (inicia sesión con el código y la contraseña del equipo; el móvil los recuerda). El botón de la app conecta el Pit Wall solo – al equipo al que está conectada la app, aunque el navegador estuviera conectado a otro equipo. El selector de idioma está arriba, y el botón <b>☀ / ☾</b> cambia entre aspecto claro y oscuro.</p>
-  <img src="img/en/wall_live.webp" alt="Pit Wall – en directo, con números">
+  <img src="img/es/wall_live.webp" alt="Pit Wall – en directo, con números">
   <ol class="legend">
     <li><b>Estado</b>: si los datos están en directo, quién conduce, si la IA funciona.</li>
-    <li><b>Aspecto</b>: tema oscuro por defecto, interruptor ☀/☾ arriba. Tiempos en color: morado – mejor de la categoría, verde – tu mejor, amarillo – más lento. La barra «Daños» bajo el mapa aparece solo cuando el coche está dañado (esquema del coche, pérdida por vuelta, velocidad punta, cuánto puede durar la reparación y consejo). En una carrera por vueltas «Hasta el final» muestra vueltas (p. ej. 12 / 40).</li>
-    <li><b>Fundador del equipo</b>: tiene su propia contraseña (se pone al crear el equipo, o en la pestaña Equipo: «Hacerme fundador»). Solo él puede quitar o renombrar pilotos y cambiar la contraseña del equipo; inicia sesión en el Pit Wall marcando «Soy el fundador».</li>
-    <li><b>Varios coches del equipo en una carrera</b>: cada coche tiene su vista (lista arriba, con el número del coche); los mensajes y preguntas van al piloto del coche seleccionado. Cada piloto oye a su propio ingeniero y spotter.</li>
-    <li><b>Turnos en directo</b>: una barra de stints (color = piloto, «AHORA» en rojo). <b>Vueltas</b>: filtros (sesión – cada carrera por separado; coche – cuando corren varios coches del equipo, cada uno tiene su tabla; piloto, stint, solo limpias), un gráfico de ritmo, tiempos y sectores S1–S3 en color. <b>Mapa comparativo</b>: circuito y coche, hasta 3 vueltas de la lista (🟢 mejor vuelta válida del piloto – en el circuito y en cada sesión; sesiones plegadas; filtros; botón «🟢 Mejores vueltas»). En la base del equipo: vueltas de 14 días, mejores según condiciones (hasta ser superadas o 90 días) y 📌 (sin límite); las más antiguas 💾 – del disco del piloto cuando su Pit Wall Crew está abierto. Mapa: color = quién es más rápido, puntos de frenada, límites y tiempos de sector, valores al pasar el cursor, zoom; condiciones (también la goma en la pista), «dónde ganar más», vuelta ideal, gráfico velocidad / acelerador / freno / marcha y tiempo perdido; clic en una curva – el mapa junto a los detalles; diferencias de setup; «🔗 Copiar enlace». <b>⚙ Unidades</b> en la cabecera (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Memoria</b>: notas como tarjetas con búsqueda y filtro por circuito. <b>Ayuda</b>: un índice.</li>
     <li><b>Pestañas</b>: En directo, Turnos y plan, Equipo, Vueltas (arriba un <b>resumen de la sesión</b>: mejor vuelta y media, constancia, combustible y energía por vuelta – por piloto y stint), Memoria, Ayuda.</li>
     <li><b>Carrera</b>: posición en la categoría, vuelta, tiempos de vuelta, tiempo hasta el final, bandera.</li>
     <li><b>Próxima parada</b>: en cuántas vueltas, consumo de energía y combustible, qué hacer en la parada.</li>
     <li><b>Neumáticos y coche</b>: desgaste y temperaturas de cada neumático, daños, motor, frenos.</li>
     <li><b>Tiempo y pista</b>: lluvia, humedad, nubes, temperatura de pista y las observaciones del ingeniero.</li>
+    <li><b>Paradas</b>: cuántas paradas se han hecho, el tiempo de parada (0 / 2 / 4 neumáticos) medido en vuestras propias paradas y cuántas paradas llevan los rivales de delante y de detrás.</li>
+    <li><b>Distancias en la categoría</b>: la distancia con el coche de delante y de detrás, y la tendencia (cuántos segundos por vuelta aumenta o disminuye).</li>
+    <li><b>Última vuelta</b>: los tiempos de los sectores S1–S3 y la diferencia con la mejor vuelta.</li>
+    <li><b>Nivel de fatiga</b>: cuánto tiempo lleva conduciendo el piloto y cuántas vueltas en el stint; la fatiga se evalúa a partir de los tiempos por vuelta.</li>
+    <li><b>Límites de pista y sanciones</b>: infracciones de límites de pista y sanciones.</li>
+    <li><b>Plan de parada</b>: qué hacer en la próxima parada, o si llegaréis a la meta sin parar.</li>
     <li><b>Rivales en la categoría</b>: distancias, ritmo, quién alcanza a quién, energía, parada prevista.</li>
+  </ol>
+  <ul>
     <li><b>Comparación con compañeros</b>: tras cada vuelta limpia – en qué curvas y por cuánto es más rápido un compañero (su mejor vuelta en condiciones parecidas). En Assetto Corsa también un compañero con otro coche de la misma categoría – entonces solo dónde y cuánto, sin consejos.</li>
     <li><b>Turnos de stints</b>: quién conduce, cuándo es el cambio, qué pasa en la parada, cuántos minutos se han movido los turnos respecto al plan.
       Sin plan para hoy se genera automáticamente para el piloto actual – a partir de la duración de la carrera y los neumáticos disponibles en el juego.</li>
-  </ol>
+    <li><b>Aspecto</b>: tema oscuro por defecto, interruptor ☀/☾ arriba. Tiempos en color: morado – mejor de la categoría, verde – tu mejor, amarillo – más lento. La barra «Daños» bajo el mapa aparece solo cuando el coche está dañado (esquema del coche, pérdida por vuelta, velocidad punta, cuánto puede durar la reparación y consejo). En una carrera por vueltas «Hasta el final» muestra vueltas (p. ej. 12 / 40).</li>
+    <li><b>Fundador del equipo</b>: tiene su propia contraseña (se pone al crear el equipo, o en la pestaña Equipo: «Hacerme fundador»). Solo él puede quitar o renombrar pilotos y cambiar la contraseña del equipo; inicia sesión en el Pit Wall marcando «Soy el fundador».</li>
+    <li><b>Varios coches del equipo en una carrera</b>: cada coche tiene su vista (lista arriba, con el número del coche); los mensajes y preguntas van al piloto del coche seleccionado. Cada piloto oye a su propio ingeniero y spotter.</li>
+    <li><b>Turnos en directo</b>: una barra de stints (color = piloto, «AHORA» en rojo). <b>Vueltas</b>: filtros (sesión – cada carrera por separado; coche – cuando corren varios coches del equipo, cada uno tiene su tabla; piloto, stint, solo limpias), un gráfico de ritmo, tiempos y sectores S1–S3 en color. <b>Mapa comparativo</b>: circuito y coche, hasta 3 vueltas de la lista (🟢 mejor vuelta válida del piloto – en el circuito y en cada sesión; sesiones plegadas; filtros; botón «🟢 Mejores vueltas»). En la base del equipo: vueltas de 14 días, mejores según condiciones (hasta ser superadas o 90 días) y 📌 (sin límite); las más antiguas 💾 – del disco del piloto cuando su Pit Wall Crew está abierto. Mapa: color = quién es más rápido, puntos de frenada, límites y tiempos de sector, valores al pasar el cursor, zoom; condiciones (también la goma en la pista), «dónde ganar más», vuelta ideal, gráfico velocidad / acelerador / freno / marcha y tiempo perdido; clic en una curva – el mapa junto a los detalles; diferencias de setup; «🔗 Copiar enlace». <b>⚙ Unidades</b> en la cabecera (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Memoria</b>: notas como tarjetas con búsqueda y filtro por circuito. <b>Ayuda</b>: un índice.</li>
+  </ul>
   <p>Más abajo están el <b>mapa del circuito</b> con todos los coches y la <b>radio del equipo</b>:
   «Al piloto» (el ingeniero lee el mensaje), «Preguntar al ingeniero» (respuesta por voz), «Preguntar (solo texto)», «A la memoria».</p>
   <h3>En el móvil</h3>
-  <img class="phone" src="img/en/wall_phone.webp" alt="Pit Wall en el móvil">
+  <img class="phone" src="img/es/wall_phone.webp" alt="Pit Wall en el móvil">
   <h3>Pestaña Equipo</h3>
-  <img src="img/en/wall_team.webp" alt="Pit Wall – equipo">
+  <img src="img/es/wall_team.webp" alt="Pit Wall – equipo">
   <p>Código del equipo y código QR para el muro, pilotos con temas de notificación, la clave Groq y un <b>enlace de espectador</b> –
   solo la vista en directo, sin radio y sin plan; puedes dárselo a cualquiera. Cuando hay varios coches del equipo en pista (p. ej. Assetto Corsa), el espectador elige qué coche ver en la lista de arriba (piloto – coche). La elección queda en la dirección (<code>&amp;auto=…</code>), así que puedes compartir un enlace a un coche concreto.</p>
 </section>
 
 <section id="plan">
   <h2>Turnos y plan (antes de una carrera larga, una persona)</h2>
-  <img src="img/en/wall_plan.webp" alt="Turnos y plan">
+  <img src="img/es/wall_plan.webp" alt="Turnos y plan">
   <ol>
     <li><b>Coche</b> (arriba): cuando el equipo inscribe varios coches en una carrera, <b>+ Otro coche</b> – cada uno tiene sus ajustes de carrera, plan de stints, turnos y notificaciones. La app del piloto usa el plan del coche en el que aparece su nombre.</li>
     <li><b>1. Carrera</b>: fecha y hora de salida, duración, tiempo por vuelta, neumáticos para la carrera → <b>Guardar</b>.</li>
@@ -343,7 +355,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   Mientras conduces di <b>«informa de un error: …»</b> (p. ej. «informa de un error: el spotter dijo izquierda pero no había nadie») – la app añade tu punto en el circuito, la vuelta y los últimos mensajes del ingeniero; solo «informa de un error» – el ingeniero pregunta qué ha pasado.
   Con tu consentimiento la app puede enviar automáticamente un informe cuando falla (sin grabaciones de voz, claves ni contraseñas) –
   lo activas o desactivas en la misma página. Ahí también puedes desactivar el <b>contador anónimo de usuarios</b> (un número de instalación aleatorio, la versión y el idioma – sin nombres ni datos del juego), las <b>estadísticas de uso de funciones</b> (nombres de funciones, cuántas veces y el tiempo de arranque – nunca lo que preguntaste) y las frases que la IA asoció a comandos (sin nombres – las más comunes se añaden a la app para todos). Las actualizaciones descargan solo los archivos modificados cuando tienes la versión anterior. Por separado puedes desactivar el envío de las preguntas que el ingeniero no entendió (solo el texto, sin nombres – el autor añade los comandos que faltan). Detalles: <a href="prywatnosc.html?lang=es">Privacidad</a>.</p>
-  <img src="img/en/app_feedback.webp" alt="Informar de un problema">
+  <img src="img/es/app_feedback.webp" alt="Informar de un problema">
 </section>
 
 </main>

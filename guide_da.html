@@ -97,7 +97,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 <section id="app">
   <h2>Appens vindue</h2>
   <p>Ikonet <b>Pit Wall Crew</b> åbner appen. Ingeniøren starter selv og begynder at tale, når du starter spillet og kører ud på banen. Skift tema <b>☾ Mørkt / ☀ Lyst</b> nederst i venstre bjælke (med det samme, uden genstart). Omgangs- og sektortider er farvet som på Pit Wall: lilla – bedst i klassen, grøn – din bedste, gul – langsommere.</p>
-  <img src="img/en/app_main.webp" alt="Hovedvindue med numre">
+  <img src="img/da/app_main.webp" alt="Hovedvindue med numre">
   <ol class="legend">
     <li><b>Status</b>: om ingeniøren kører, om den ser spillet (»Du kører« eller »du ser på«, når en holdkammerat kører), forbindelse til hold og AI. Grøn = OK.</li>
     <li><b>Åbn Pit Wall</b> – holdets side i browseren, allerede forbundet til appens hold (uden at skrive adgangskode).</li>
@@ -105,19 +105,23 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Start / Stop</b> ingeniøren.</li>
     <li><b>Patreon</b> – log ind for at få opdateringer. Efter login er kun »Log ud af Patreon« tilbage.</li>
     <li><b>Nøgletal</b>: placering, omgang, omgange til pitstop, energi eller brændstof, omgangstider, tid til slut.</li>
+    <li><b>Sektorer</b>: S1–S3-tider for sidste omgang og forskellen til din bedste omgang (i parentes den sektor, hvor du taber mest).</li>
     <li><b>Beskeder</b> – alt hvad ingeniøren har sagt, dine spørgsmål og holdets beskeder. Rød = akut.</li>
     <li><b>Spørgefelt</b> – skriv et spørgsmål i stedet for at tale.</li>
+    <li><b>Kørerapporter</b>: rapporter efter stints og løb, også det aktuelle stint live (beskrivelse nedenfor under »Stint-opsummering«).</li>
     <li><b>Indstillinger</b> – hold, mikrofon, stemme, advarsler (se nedenfor).</li>
     <li><b>Hjælp</b> – kommandoer, funktioner, manual (også <b>Første skridt</b>), ændringer, om programmet og <b>Rapportér et problem</b>.</li>
-    <li><b>Pit Wall</b> – som knap 2, fra alle appens sider.</li>
+    <li><b>☾ Mørk / ☀ Lys</b>: vinduestema. <b>Pit Wall</b> – som knap 2, fra alle appens sider.</li>
   </ol>
+  <h3>Kørerapporter</h3>
+  <img src="img/da/app_reports.webp" alt="Kørerapporter">
 </section>
 
 <section id="set">
   <h2>Indstillinger</h2>
   <p>Efter hver ændring klik <b>Gem og genstart ingeniørmodulet</b> (nederst til højre).</p>
   <h3>Hold</h3>
-  <img src="img/en/app_team.webp" alt="Holdindstillinger">
+  <img src="img/da/app_team.webp" alt="Holdindstillinger">
   <ul>
     <li><b>Solo</b> – du kører alene: intet andet at udfylde. Pit Wall virker stadig som din live-visning.</li>
     <li><b>Hold</b> – én person klikker <b>Opret et nyt hold…</b> (navn og adgangskode) og får en <b>holdkode</b> på 6 tegn.
@@ -129,14 +133,14 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Omgange på denne computer</b> (Avanceret) – programmet gemmer hver omgang på disken og sletter intet af sig selv; knappen <b>Slet omgange ældre end 180 dage</b>. Omgange ældre end 14 dage henter pit wall herfra, når nogen vælger dem. Omgange kørt uden internet sendes, når forbindelsen er tilbage.</li>
   </ul>
   <h3>Mikrofon og knap</h3>
-  <img src="img/en/app_mic.webp" alt="Mikrofon og knap">
+  <img src="img/da/app_mic.webp" alt="Mikrofon og knap">
   <ul>
     <li>Vælg mikrofonen og klik <b>Test 3 s</b> – sig noget og tjek, at niveauet bevæger sig.</li>
     <li><b>Indstil: tryk på knappen…</b> og tryk på den knap på rattet, du vil tale med (enhver knap virker, også MOZA-knapper med numre over 32). En tast virker også. Virker knappen ikke i spillet, så indstil den igen.</li>
     <li><b>Tast til nulstilling af VR</b> – ved kommandoen »nulstil VR« trykker programmet på denne tast (<b>Indstil: tryk på en tast…</b>). Tildel den samme i spillet (LMU: Styring → »VR: Re-Center head position«). En separat tast til Assetto Corsa – Ctrl+Mellemrum som standard; programmet trykker på tasten for det spil, du kører i.</li>
   </ul>
   <h3>Lyd og sprog</h3>
-  <img src="img/en/app_voice.webp" alt="Lyd og sprog">
+  <img src="img/da/app_voice.webp" alt="Lyd og sprog">
   <ul>
     <li><b>Język / Language</b> – helt øverst, altid også på engelsk, så det er nemt at finde.</li>
     <li><b>Hovedtelefoner / højttalere</b> – den enhed, du hører ingeniøren og spotteren på, fx hovedtelefoner mens spillet kører på højttalerne.</li>
@@ -146,7 +150,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Enheder</b> – km/h eller mph, m eller ft, °C eller °F, l eller gallon, tryk som i spillet / bar / psi / kPa: sådan taler ingeniøren, sådan er rapporterne, og sådan viser pit wall data fra start (hver kan vælge sine egne i ⚙). Camber-grader ændres ikke.</li>
   </ul>
   <h3>Advarsler</h3>
-  <img src="img/en/app_alerts.webp" alt="Advarsler">
+  <img src="img/da/app_alerts.webp" alt="Advarsler">
   <p>Det ingeniøren siger af sig selv: overhaling fra hurtigere klasser (og fra hvor mange sekunder), biler der holder stille,
   flag, coach før svingene, sammenligning med din bedste omgang, kommentarer efter overhalinger, opsætningstips. Coach, sammenligninger og tips starter, når dine omgangstider er stabile (3 rene omgange med ens tider) – ikke mens du lærer banen. Undtagelse: <b>Opsætningsråd også mens jeg lærer banen</b> (eller med stemmen »opsætning nu«) – når opsætningen er så dårlig, at jævne omgange er svære. <b>Pause mellem tips</b> – mindste antal minutter mellem tips.
   Du kan slå dem alle til og fra med stemmen under kørsel (fx »ingen coach«). Dækkene stadig for kolde efter flere omgange og camber næsten på minimum – ingeniøren foreslår mere camber (LMU, AC med CSP). Efter udkørsel fra garagen (træning, kvalifikation) tjekker ingeniøren opsætningen: camber næsten på minimum, tryk eller frihøjde næsten på maksimum – én gang pr. opsætning. <b>Hvor meget ingeniøren taler efter en omgang</b> – Meget (alt på én gang), Normal (én bemærkning pr. omgang – standard) eller Lidt (én bemærkning hver 3. omgang). <b>Opsætningsråd med en ekstra mulighed (»x eller y«)</b> – fra: én ændring ad gangen. Advarsler, strategi og svar – altid med det samme.</p>
@@ -155,7 +159,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   »spotter kun min klasse« / »spotter alle klasser«.</p>
   <p>Mens en bil er ved siden af, tier ingeniøren (også med spotteren slået fra), så du kan koncentrere dig om kampen – indstillingen <b>Advarsler → Ingeniøren tier, når en bil er ved siden af</b>: kun i løb (standard), altid eller aldrig. <b>Sammenstød</b>: et par sekunder efter et sammenstød siger ingeniøren »Jeg tjekker, om det koster dig tid«; efter to rene omgange siger han tabet pr. omgang, om topfarten er faldet, og om en reparation kan betale sig. Kender han ikke reparationstiden, siger han, op til hvor mange sekunder den kan betale sig (fx »En reparation på op til 45 sekunder kan betale sig, stop en længere«) – du kan stoppe reparationen i spillet. Du kan også sige: »reparation 38 sekunder«.</p>
   <h3>Avanceret</h3>
-  <img src="img/en/app_adv.webp" alt="Avanceret">
+  <img src="img/da/app_adv.webp" alt="Avanceret">
   <p>Tid for fuldt dækskift, automatisk start af ingeniøren, genveje, opdateringer og din egen Groq-nøgle (valgfri – din egen grænse), testerkode og »Spørg spillet om prognose, pitmenu og rivaler«.
   <b>LMU-opsætningsmappe</b> – som regel tom (programmet finder selv spillets mappe); »gem opsætningen« skriver den nye opsætning dertil.</p>
 </section>
@@ -166,7 +170,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Eksempler: »hvor meget brændstof?«, »hvornår går jeg i pit?«, »hvilke dæk skifter vi?«, »hvem er foran?«, »hvor taber jeg tid?«, »i hvilken sektor taber jeg mest?«, »hvem er på banen?«,
   »hvordan er vejret?«, »hvornår overhaler den første hypercar mig?«, »stille« (helt stille til næste tryk), »kun det vigtige«, »gentag«.</p>
   <p>Den fulde liste står i appen: <b>Hjælp → Kommandoer</b>.</p>
-  <img src="img/en/app_commands.webp" alt="Kommandoer">
+  <img src="img/da/app_commands.webp" alt="Kommandoer">
   <p>Et spørgsmål, programmet ikke kender, går til AI'en (med Groq-nøgle) sammen med løbets data. Spørgsmål om selve programmet
   (»hvordan slår jeg advarsler om prototyper bagfra fra?«, »spotteren skal ikke sige siderne«) besvarer AI'en ud fra denne manual og indstillingerne: den giver kommandoen eller stedet i indstillingerne, og findes muligheden ikke, siger den det og foreslår den nærmeste.
   En kommando sagt med dine egne ord (»nye dæk i højre side«, »skriv til Patrik, at han skal stå op«) matcher AI'en med listen over alle kommandoer (også i demoen), og appen udfører den; næste gang virker den samme sætning straks uden AI (»glem lærte kommandoer« sletter dem). Ord, som talegenkendelsen hørte forkert, retter appen selv uden internet, og navnene på dine holdkammerater og nærliggende rivaler sendes med som hint til talegenkendelsen.</p>
@@ -246,36 +250,44 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <p>Åbn den med knappen <b>Pit Wall</b> i appen eller på
   <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/">zepansrpl-creator.github.io/Pit-Wall-Crew</a>
   (log ind med holdets kode og adgangskode; telefonen husker dem). Knappen i appen logger selv Pit Wall ind – til det hold, appen er forbundet til, også hvis browseren var logget ind på et andet hold. Sprogvælgeren er øverst, og knappen <b>☀ / ☾</b> skifter mellem lyst og mørkt udseende.</p>
-  <img src="img/en/wall_live.webp" alt="Pit Wall – live, med numre">
+  <img src="img/da/wall_live.webp" alt="Pit Wall – live, med numre">
   <ol class="legend">
     <li><b>Status</b>: om data er live, hvem der kører, om AI'en virker.</li>
-    <li><b>Udseende</b>: mørkt tema som standard, ☀/☾-knap øverst. Farvede tider: lilla – bedst i klassen, grøn – din bedste, gul – langsommere. Bjælken »Skader« under kortet vises kun, når bilen er skadet (bilskitse, tab pr. omgang, topfart, hvor lang tid en reparation kan tage og råd). I et løb med fast antal omgange viser »Til slut« omgange (fx 12 / 40).</li>
-    <li><b>Holdets stifter</b>: har sin egen adgangskode (sat ved oprettelse af holdet eller på fanen Hold: »Bliv stifter«). Kun stifteren kan fjerne eller omdøbe kørere og ændre holdets adgangskode; han logger ind på Pit Wall med »Jeg er stifteren« afkrydset.</li>
-    <li><b>Flere af holdets biler i ét løb</b>: hver bil har sin egen visning (liste øverst, med bilens nummer); beskeder og spørgsmål går til køreren i den valgte bil. Hver kører hører sin egen ingeniør og spotter.</li>
-    <li><b>Live-rækkefølge</b>: en stint-bjælke (farve = kører, rødt »NU«). <b>Omgange</b>: filtre (session – hvert løb for sig; bil – når flere af holdets biler kører, får hver sin tabel; kører, stint, kun rene), en tempograf, farvede tider og sektorer S1–S3. <b>Sammenligningskort</b>: bane og bil, op til 3 omgange fra listen (🟢 kørerens bedste gyldige omgang – på banen og i hver session; sessioner foldet sammen; filtre; knappen »🟢 Bedste omgange«). I holdets database: omgange fra 14 dage, bedste under forhold (indtil slået eller 90 dage) og 📌 (uden grænse); ældre 💾 – fra kørerens disk, når hans Pit Wall Crew kører. Kort: farve = hvem der er hurtigst, bremsepunkter, sektorgrænser og -tider, værdier ved mouseover, zoom; forhold (også gummi på banen), »hvor der er mest at hente«, ideel omgang, graf for hastighed / gas / bremse / gear og tidstab; klik på et sving – kortet ved siden af svingdetaljerne; forskelle i opsætningen; »🔗 Kopiér link«. <b>⚙ Enheder</b> i toppen (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Hukommelse</b>: noter som kort med søgning og banefilter. <b>Hjælp</b>: en indholdsfortegnelse.</li>
     <li><b>Faner</b>: Live, Rækkefølge og plan, Hold, Omgange (øverst en <b>sessionsopsummering</b>: bedste og gennemsnitlige omgang, stabilitet, brændstof og energi pr. omgang – for hver kører og stint), Hukommelse, Hjælp.</li>
     <li><b>Løb</b>: placering i klassen, omgang, omgangstider, tid til slut, flag.</li>
     <li><b>Næste pitstop</b>: om hvor mange omgange, energi- og brændstofforbrug, hvad der skal ske ved pitstoppet.</li>
     <li><b>Dæk og bil</b>: slid og temperaturer på hvert dæk, skader, motor, bremser.</li>
     <li><b>Vejr og bane</b>: regn, våd bane, skyer, banetemperatur og ingeniørens bemærkninger.</li>
+    <li><b>Pitstop</b>: hvor mange pitstop der er kørt, pitstoptiden (0 / 2 / 4 dæk) målt på jeres egne pitstop, og hvor mange pitstop rivalerne foran og bagved har kørt.</li>
+    <li><b>Afstande i klassen</b>: afstanden til bilen foran og bagved samt tendensen (hvor mange sekunder pr. omgang den vokser eller skrumper).</li>
+    <li><b>Sidste omgang</b>: sektortider S1–S3 og forskellen til den bedste omgang.</li>
+    <li><b>Træthedsniveau</b>: hvor længe køreren har kørt, og hvor mange omgange i stintet; træthed vurderes ud fra omgangstiderne.</li>
+    <li><b>Banegrænser og straffe</b>: overskridelser af banegrænser og straffe.</li>
+    <li><b>Pitstopplan</b>: hvad der skal gøres ved næste pitstop, eller om I når i mål uden pitstop.</li>
     <li><b>Rivaler i klassen</b>: afstande, tempo, hvem der indhenter hvem, energi, forventet pitstop.</li>
+  </ol>
+  <ul>
     <li><b>Sammenligning med holdkammerater</b>: efter hver ren omgang – i hvilke sving og hvor meget en holdkammerat er hurtigere (hans bedste omgang under lignende forhold). I Assetto Corsa også en holdkammerat i en anden bil i samme klasse – så kun hvor og hvor meget, uden råd.</li>
     <li><b>Stint-rækkefølge</b>: hvem der kører, hvornår skiftet er, hvad der sker ved pitstoppet, hvor mange minutter rækkefølgen har flyttet sig i forhold til planen.
       Uden plan for i dag laves den automatisk for den aktuelle kører – ud fra løbets længde og de dæk, der er til rådighed i spillet.</li>
-  </ol>
+    <li><b>Udseende</b>: mørkt tema som standard, ☀/☾-knap øverst. Farvede tider: lilla – bedst i klassen, grøn – din bedste, gul – langsommere. Bjælken »Skader« under kortet vises kun, når bilen er skadet (bilskitse, tab pr. omgang, topfart, hvor lang tid en reparation kan tage og råd). I et løb med fast antal omgange viser »Til slut« omgange (fx 12 / 40).</li>
+    <li><b>Holdets stifter</b>: har sin egen adgangskode (sat ved oprettelse af holdet eller på fanen Hold: »Bliv stifter«). Kun stifteren kan fjerne eller omdøbe kørere og ændre holdets adgangskode; han logger ind på Pit Wall med »Jeg er stifteren« afkrydset.</li>
+    <li><b>Flere af holdets biler i ét løb</b>: hver bil har sin egen visning (liste øverst, med bilens nummer); beskeder og spørgsmål går til køreren i den valgte bil. Hver kører hører sin egen ingeniør og spotter.</li>
+    <li><b>Live-rækkefølge</b>: en stint-bjælke (farve = kører, rødt »NU«). <b>Omgange</b>: filtre (session – hvert løb for sig; bil – når flere af holdets biler kører, får hver sin tabel; kører, stint, kun rene), en tempograf, farvede tider og sektorer S1–S3. <b>Sammenligningskort</b>: bane og bil, op til 3 omgange fra listen (🟢 kørerens bedste gyldige omgang – på banen og i hver session; sessioner foldet sammen; filtre; knappen »🟢 Bedste omgange«). I holdets database: omgange fra 14 dage, bedste under forhold (indtil slået eller 90 dage) og 📌 (uden grænse); ældre 💾 – fra kørerens disk, når hans Pit Wall Crew kører. Kort: farve = hvem der er hurtigst, bremsepunkter, sektorgrænser og -tider, værdier ved mouseover, zoom; forhold (også gummi på banen), »hvor der er mest at hente«, ideel omgang, graf for hastighed / gas / bremse / gear og tidstab; klik på et sving – kortet ved siden af svingdetaljerne; forskelle i opsætningen; »🔗 Kopiér link«. <b>⚙ Enheder</b> i toppen (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Hukommelse</b>: noter som kort med søgning og banefilter. <b>Hjælp</b>: en indholdsfortegnelse.</li>
+  </ul>
   <p>Længere nede er <b>banekortet</b> med alle biler og <b>holdradioen</b>:
   »Til køreren« (ingeniøren læser beskeden op), »Spørg ingeniøren« (svar med stemmen), »Spørg (kun tekst)«, »Til hukommelsen«.</p>
   <h3>På telefonen</h3>
-  <img class="phone" src="img/en/wall_phone.webp" alt="Pit Wall på telefonen">
+  <img class="phone" src="img/da/wall_phone.webp" alt="Pit Wall på telefonen">
   <h3>Fanen Hold</h3>
-  <img src="img/en/wall_team.webp" alt="Pit Wall – hold">
+  <img src="img/da/wall_team.webp" alt="Pit Wall – hold">
   <p>Holdkode og QR-kode til muren, kørere med notifikationsemner, Groq-nøglen og et <b>tilskuerlink</b> –
   kun live-visningen, uden radio og uden plan; du kan give det til hvem som helst. Når flere af holdets biler er på banen (fx Assetto Corsa), vælger tilskueren, hvilken bil han vil se, i listen øverst (kører – bil). Valget står i adressen (<code>&amp;auto=…</code>), så du kan dele et link til en bestemt bil.</p>
 </section>
 
 <section id="plan">
   <h2>Rækkefølge og plan (før et langt løb, én person)</h2>
-  <img src="img/en/wall_plan.webp" alt="Rækkefølge og plan">
+  <img src="img/da/wall_plan.webp" alt="Rækkefølge og plan">
   <ol>
     <li><b>Bil</b> (øverst): når holdet stiller med flere biler i ét løb, <b>+ En bil til</b> – hver har sine egne løbsindstillinger, stint-plan, rækkefølge og notifikationer. Kørerens app bruger planen for den bil, hvor hans navn står.</li>
     <li><b>1. Løb</b>: startdato og -tid, længde, omgangstid, dæk til løbet → <b>Gem</b>.</li>
@@ -343,7 +355,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   Under kørsel sig <b>»rapportér en fejl: …«</b> (fx »rapportér en fejl: spotteren sagde venstre, men der var ingen«) – appen tilføjer dit sted på banen, omgangen og ingeniørens sidste beskeder; kun »rapportér en fejl« – ingeniøren spørger, hvad der skete.
   Med dit samtykke kan appen automatisk sende en rapport, når den går ned (ingen stemmeoptagelser, nøgler eller adgangskoder) –
   det slår du til og fra på samme side. Dér kan du også slå den <b>anonyme brugertæller</b> fra (et tilfældigt installationsnummer, version og sprog – ingen navne eller spildata), <b>statistikken over brug af funktioner</b> (funktionsnavne, antal og opstartstid – aldrig hvad du spurgte om) og de sætninger, AI'en har matchet med kommandoer (uden navne – de mest almindelige føjes til appen for alle). Opdateringer henter kun de ændrede filer, når du har den forrige version. Separat kan du slå afsendelse af spørgsmål fra, som ingeniøren ikke forstod (kun teksten, uden navne – forfatteren tilføjer manglende kommandoer). Detaljer: <a href="prywatnosc.html?lang=da">Privatliv</a>.</p>
-  <img src="img/en/app_feedback.webp" alt="Rapportér et problem">
+  <img src="img/da/app_feedback.webp" alt="Rapportér et problem">
 </section>
 
 </main>

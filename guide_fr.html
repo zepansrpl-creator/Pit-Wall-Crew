@@ -105,12 +105,16 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Démarrer / Arrêter</b> l'ingénieur.</li>
     <li><b>Patreon</b> – connecte-toi pour recevoir les mises à jour. Ensuite il ne reste que « Se déconnecter de Patreon ».</li>
     <li><b>Chiffres clés</b> : position, tour, tours avant l'arrêt, énergie ou carburant, chronos, temps jusqu'à l'arrivée.</li>
+    <li><b>Secteurs</b> : les temps S1–S3 du dernier tour et l’écart avec ton meilleur tour (entre parenthèses, le secteur où tu perds le plus).</li>
     <li><b>Messages</b> – tout ce qu'a dit l'ingénieur, tes questions et les messages de l'équipe. Rouge = urgent.</li>
     <li><b>Champ de question</b> – écris une question au lieu de parler.</li>
+    <li><b>Rapports de conduite</b> : les rapports après chaque relais et chaque course, ainsi que le relais en cours en direct (description plus bas, dans « Résumé du relais »).</li>
     <li><b>Réglages</b> – équipe, micro, voix, alertes (voir plus bas).</li>
     <li><b>Aide</b> – commandes, fonctions, mode d'emploi (aussi <b>Premiers pas</b>), changements, à propos et <b>Signaler un problème</b>.</li>
-    <li><b>Pit Wall</b> – comme le bouton 2, depuis chaque page de l'appli.</li>
+    <li><b>☾ Sombre / ☀ Clair</b> : thème de la fenêtre. <b>Pit Wall</b> – comme le bouton 2, depuis chaque page de l'appli.</li>
   </ol>
+  <h3>Rapports de conduite</h3>
+  <img src="img/fr/app_reports.webp" alt="Rapports de conduite">
 </section>
 
 <section id="set">
@@ -247,20 +251,28 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/fr/wall_live.webp" alt="Pit Wall – en direct, avec numéros">
   <ol class="legend">
     <li><b>État</b> : les données sont-elles en direct, qui conduit, l'IA fonctionne-t-elle.</li>
-    <li><b>Apparence</b> : thème sombre par défaut, bouton ☀/☾ en haut. Temps en couleur : violet – meilleur de la catégorie, vert – ton record, jaune – plus lent. La barre « Dégâts » sous la carte n’apparaît qu’en cas de dégâts (schéma de la voiture, perte au tour, vitesse max., durée maximale d’une réparation et conseil). En course limitée en tours, « Jusqu’à l’arrivée » affiche les tours (ex. 12 / 40).</li>
-    <li><b>Fondateur de l’équipe</b> : a son propre mot de passe (défini à la création de l’équipe ou dans l’onglet Équipe : « Devenir fondateur »). Lui seul peut retirer ou renommer des pilotes et changer le mot de passe de l’équipe ; il se connecte au Pit Wall en cochant « Je suis le fondateur ».</li>
-    <li><b>Plusieurs voitures de l’équipe dans une course</b> : chaque voiture a sa propre vue (liste en haut, avec le numéro) ; les messages et questions vont au pilote de la voiture choisie. Chaque pilote entend son propre ingénieur et son spotter.</li>
-    <li><b>Planning en direct</b> : barre des relais (couleur = pilote, « MAINTENANT » en rouge). <b>Tours</b> : filtres (session – chaque course séparément ; voiture – quand plusieurs voitures de l’équipe roulent, pilote, relais, tours propres), graphique de rythme, temps en couleur et secteurs S1–S3. <b>Carte comparative</b> : circuit et voiture, jusqu'à 3 tours de la liste (🟢 meilleur tour valide du pilote – sur le circuit et dans chaque session ; sessions repliées ; filtres ; bouton « 🟢 Meilleurs tours »). Dans la base de l'équipe : tours des 14 derniers jours, meilleurs selon les conditions (jusqu'à être battus ou 90 jours) et 📌 (sans limite) ; plus anciens 💾 – depuis le disque du pilote quand son Pit Wall Crew est lancé. Carte : couleur = qui est le plus rapide, points de freinage, limites et temps des secteurs, valeurs au survol, zoom ; conditions (dont la gomme sur la piste), « où gagner le plus », tour idéal, graphique vitesse / accélérateur / frein / rapport et temps perdu ; clic sur un virage – la carte à côté des détails ; différences de setup ; « 🔗 Copier le lien ». <b>⚙ Unités</b> dans l'en-tête (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Mémoire</b> : notes en cartes avec recherche et filtre par circuit. <b>Aide</b> : sommaire.</li>
     <li><b>Onglets</b> : En direct, Planning &amp; plan, Équipe, Tours (en haut un <b>résumé de la session</b> : meilleur tour et tour moyen, régularité, carburant et énergie par tour – pour chaque pilote et relais), Mémoire, Aide.</li>
     <li><b>Course</b> : position dans la catégorie, tour, chronos, temps jusqu'à l'arrivée, drapeau.</li>
     <li><b>Prochain arrêt</b> : dans combien de tours, consommation d'énergie et de carburant, ce qu'on fait à l'arrêt.</li>
     <li><b>Pneus et voiture</b> : usure et températures de chaque pneu, dégâts, moteur, freins.</li>
     <li><b>Météo et piste</b> : pluie, humidité, nuages, température de piste et remarques de l'ingénieur.</li>
+    <li><b>Arrêts</b> : le nombre d’arrêts effectués, la durée d’arrêt (0 / 2 / 4 pneus) mesurée sur vos propres arrêts et le nombre d’arrêts des concurrents devant et derrière.</li>
+    <li><b>Écarts dans la catégorie</b> : l’écart avec la voiture devant et derrière, et la tendance (de combien de secondes par tour il augmente ou diminue).</li>
+    <li><b>Dernier tour</b> : les temps des secteurs S1–S3 et l’écart avec le meilleur tour.</li>
+    <li><b>Niveau de fatigue</b> : depuis combien de temps le pilote roule et combien de tours dans le relais ; la fatigue est évaluée d’après les temps au tour.</li>
+    <li><b>Limites de piste et pénalités</b> : dépassements des limites de piste et pénalités.</li>
+    <li><b>Plan d’arrêt</b> : que faire au prochain arrêt, ou si vous rejoignez l’arrivée sans arrêt.</li>
     <li><b>Rivaux de la catégorie</b> : écarts, rythme, qui rattrape qui, énergie, arrêt prévu.</li>
+  </ol>
+  <ul>
     <li><b>Comparaison avec un coéquipier</b> : après chaque tour propre – dans quels virages et de combien un coéquipier est plus rapide (son meilleur tour dans des conditions similaires). Dans Assetto Corsa aussi un coéquipier dans une autre voiture de la même catégorie – alors seulement où et de combien, sans conseils.</li>
     <li><b>Planning des relais</b> : qui conduit, quand a lieu le changement, ce qui se passe à l'arrêt, de combien de minutes le planning a bougé par rapport au plan.
       Sans plan pour aujourd'hui, il est créé automatiquement pour le pilote en piste – d'après la durée de la course et les pneus disponibles dans le jeu.</li>
-  </ol>
+    <li><b>Apparence</b> : thème sombre par défaut, bouton ☀/☾ en haut. Temps en couleur : violet – meilleur de la catégorie, vert – ton record, jaune – plus lent. La barre « Dégâts » sous la carte n’apparaît qu’en cas de dégâts (schéma de la voiture, perte au tour, vitesse max., durée maximale d’une réparation et conseil). En course limitée en tours, « Jusqu’à l’arrivée » affiche les tours (ex. 12 / 40).</li>
+    <li><b>Fondateur de l’équipe</b> : a son propre mot de passe (défini à la création de l’équipe ou dans l’onglet Équipe : « Devenir fondateur »). Lui seul peut retirer ou renommer des pilotes et changer le mot de passe de l’équipe ; il se connecte au Pit Wall en cochant « Je suis le fondateur ».</li>
+    <li><b>Plusieurs voitures de l’équipe dans une course</b> : chaque voiture a sa propre vue (liste en haut, avec le numéro) ; les messages et questions vont au pilote de la voiture choisie. Chaque pilote entend son propre ingénieur et son spotter.</li>
+    <li><b>Planning en direct</b> : barre des relais (couleur = pilote, « MAINTENANT » en rouge). <b>Tours</b> : filtres (session – chaque course séparément ; voiture – quand plusieurs voitures de l’équipe roulent, pilote, relais, tours propres), graphique de rythme, temps en couleur et secteurs S1–S3. <b>Carte comparative</b> : circuit et voiture, jusqu'à 3 tours de la liste (🟢 meilleur tour valide du pilote – sur le circuit et dans chaque session ; sessions repliées ; filtres ; bouton « 🟢 Meilleurs tours »). Dans la base de l'équipe : tours des 14 derniers jours, meilleurs selon les conditions (jusqu'à être battus ou 90 jours) et 📌 (sans limite) ; plus anciens 💾 – depuis le disque du pilote quand son Pit Wall Crew est lancé. Carte : couleur = qui est le plus rapide, points de freinage, limites et temps des secteurs, valeurs au survol, zoom ; conditions (dont la gomme sur la piste), « où gagner le plus », tour idéal, graphique vitesse / accélérateur / frein / rapport et temps perdu ; clic sur un virage – la carte à côté des détails ; différences de setup ; « 🔗 Copier le lien ». <b>⚙ Unités</b> dans l'en-tête (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Mémoire</b> : notes en cartes avec recherche et filtre par circuit. <b>Aide</b> : sommaire.</li>
+  </ul>
   <p>Plus bas se trouvent la <b>carte du circuit</b> avec toutes les voitures et la <b>radio d'équipe</b> :
   « Au pilote » (l'ingénieur lit le message), « Demander à l'ingénieur » (réponse à la voix), « Demander (texte seul) », « En mémoire ».</p>
   <h3>Sur téléphone</h3>

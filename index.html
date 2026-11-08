@@ -883,6 +883,14 @@ function clockTxt(s) {
   var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60);
   return h + ' h ' + (m < 10 ? '0' : '') + m + ' min';
 }
+// duży napis w wąskiej karcie (dłuższy w innych językach): mniejsza czcionka, aż się zmieści
+function fitBig(el) {
+  var s = el && el.querySelector('.fit'); if (!s) return;
+  s.style.fontSize = '';
+  var fs = parseFloat(getComputedStyle(s).fontSize) || 38, w = el.clientWidth;
+  for (var i = 0; i < 12 && w > 0 && s.offsetWidth > w && fs > 20; i++) { fs -= 2; s.style.fontSize = fs + 'px'; }
+}
+window.addEventListener('resize', function () { fitBig($('stop')); });
 function gapTxt(g) {
   if (!g) return '—';
   var t = g.trend == null ? '' : ' ' + TR('(' + (g.trend > 0 ? '+' : '−') + n1(Math.abs(g.trend)) + '/okr.)');
@@ -1015,8 +1023,9 @@ function render(v) {
 
   var ns = st.next_stop_laps != null ? st.next_stop_laps : (st.laps_left != null ? Math.floor(st.laps_left) : null);
   var stopT = ns == null ? '—' : (ns <= 0 ? 'w tym okrążeniu' : 'za ' + ns + ' okr.');
-  setH($('stop'), esc(stopT) + (st.save_to_plan && ns != null ?
-    '<div class="note" style="font-size:13px;font-family:inherit">wg planu – zużycie max ' + esc(st.save_to_plan) + ' / okr.</div>' : ''));
+  setH($('stop'), '<span class="fit">' + esc(stopT) + '</span>' + (st.save_to_plan && ns != null ?
+    '<div class="note" style="font-size:13px;font-family:inherit;white-space:normal">wg planu – zużycie max ' + esc(st.save_to_plan) + ' / okr.</div>' : ''));
+  setTimeout(function () { fitBig($('stop')); }, 0);      // po tłumaczeniu: „om 15 omgange” musi się zmieścić w karcie
   var t = st.targets || {};
   document.body.classList.toggle('no-ve', st.ve_game === false);     // Assetto Corsa: bez energii wirtualnej
   $('ve').textContent = st.ve_per_lap != null ? n1(st.ve_per_lap) + '% / okr.' + (t.ve_per_lap ? ' (plan ' + n1(t.ve_per_lap) + '%)' : '') : '—';
@@ -1108,7 +1117,7 @@ function render(v) {
 
   var en = st.engine || null;
   $('engine').textContent = en ? unitT(en.water) + ' / ' + unitT(en.oil) +
-    (en.trend != null && Math.abs(en.trend) >= 0.3 ? ' (' + (en.trend > 0 ? '+' : '−') + n1(Math.abs(en.trend)) + '/okr.)' : '') : '—';
+    (en.trend != null && Math.abs(en.trend) >= 0.3 ? ' ' + TR('(' + (en.trend > 0 ? '+' : '−') + n1(Math.abs(en.trend)) + '/okr.)') : '') : '—';
   $('engine').style.color = en && en.water_max_lap != null && en.water_max_lap >= en.water_warn ? 'var(--bad)' :
     (en && en.water_max_lap != null && en.water_max_lap >= en.water_warn - 3 ? 'var(--warn)' : '');
   $('grille').textContent = en && en.grille ? (en.grille === 'otwórz' ? 'Na postoju: otwórz grill o stopień (za gorąco).' :

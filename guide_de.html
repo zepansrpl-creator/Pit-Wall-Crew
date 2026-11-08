@@ -105,12 +105,16 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li><b>Starten / Stopp</b> des Ingenieurs.</li>
     <li><b>Patreon</b> – melde dich an, um Updates zu bekommen. Danach bleibt nur „Von Patreon abmelden“.</li>
     <li><b>Wichtigste Zahlen</b>: Position, Runde, Runden bis zum Stopp, Energie oder Kraftstoff, Rundenzeiten, Zeit bis ins Ziel.</li>
+    <li><b>Sektoren</b> – S1–S3-Zeiten der letzten Runde und der Rückstand auf deine beste Runde (in Klammern der Sektor, in dem du am meisten verlierst).</li>
     <li><b>Meldungen</b> – alles, was der Ingenieur gesagt hat, deine Fragen und Nachrichten des Teams. Rot = dringend.</li>
     <li><b>Fragefeld</b> – tippe eine Frage, statt zu sprechen.</li>
+    <li><b>Fahrberichte</b> – Berichte nach Stints und Rennen, auch der laufende Stint live (Beschreibung unten, unter „Stint-Zusammenfassung“).</li>
     <li><b>Einstellungen</b> – Team, Mikrofon, Stimme, Warnungen (siehe unten).</li>
     <li><b>Hilfe</b> – Befehle, Funktionen, Anleitung (auch <b>Erste Schritte</b>), Änderungen, Über und <b>Problem melden</b>.</li>
-    <li><b>Pit Wall</b> – wie Knopf 2, von jeder Seite der App.</li>
+    <li><b>☾ Dunkel / ☀ Hell</b> – Fensterdesign. <b>Pit Wall</b> – wie Knopf 2, von jeder Seite der App.</li>
   </ol>
+  <h3>Fahrberichte</h3>
+  <img src="img/de/app_reports.webp" alt="Fahrberichte">
 </section>
 
 <section id="set">
@@ -247,20 +251,28 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
   <img src="img/de/wall_live.webp" alt="Pit Wall – live, mit Nummern">
   <ol class="legend">
     <li><b>Status</b>: ob die Daten live sind, wer fährt, ob die KI funktioniert.</li>
-    <li><b>Aussehen</b>: standardmäßig dunkel, Umschalter ☀/☾ oben. Farbige Zeiten: lila – Klassenbestzeit, grün – deine Bestzeit, gelb – langsamer. Die Leiste „Schäden“ unter der Karte erscheint nur bei Schäden (Fahrzeugskizze, Verlust pro Runde, Höchstgeschwindigkeit, wie lange eine Reparatur dauern darf und Empfehlung). Bei Rennen über Runden zeigt „Bis zum Ziel“ Runden (z. B. 12 / 40).</li>
-    <li><b>Teamgründer</b>: hat ein eigenes Passwort (beim Anlegen des Teams oder im Tab Team: „Gründer werden“). Nur er kann Fahrer entfernen oder umbenennen und das Teampasswort ändern; er meldet sich auf der Pit Wall mit „Ich bin der Gründer“ an.</li>
-    <li><b>Mehrere Teamautos in einem Rennen</b>: Jedes Auto hat eine eigene Ansicht (Liste oben, mit Startnummer); Nachrichten und Fragen gehen an den Fahrer des gewählten Autos. Jeder Fahrer hört seinen eigenen Ingenieur und Spotter.</li>
-    <li><b>Live-Zeitplan</b>: Stint-Leiste (Farbe = Fahrer, rotes „JETZT“). <b>Runden</b>: Filter (Session – jedes Rennen getrennt; Auto – wenn mehrere Teamautos fahren, jedes mit eigener Tabelle; Fahrer, Stint, nur saubere), Pace-Diagramm, farbige Zeiten und Sektoren S1–S3. <b>Vergleichskarte</b>: Strecke und Auto, bis zu 3 Runden aus der Liste (🟢 beste gültige Runde des Fahrers – auf der Strecke und in jeder Session; Sessions eingeklappt; Filter; Schaltfläche „🟢 Beste Runden“). In der Team-Datenbank: Runden aus 14 Tagen, beste unter Bedingungen (bis überboten oder 90 Tage) und 📌 (ohne Limit); ältere 💾 – von der Festplatte des Fahrers, wenn sein Pit Wall Crew läuft. Karte: Farbe = wer am schnellsten ist, Bremspunkte, Sektorgrenzen und -zeiten, Werte beim Überfahren, Zoom; Bedingungen (auch Gummi auf der Strecke), „wo am meisten zu holen ist“, ideale Runde, Diagramm Geschwindigkeit / Gas / Bremse / Gang und Zeitverlust; Klick auf eine Kurve – Karte neben den Kurvendetails; Setup-Unterschiede; „🔗 Link kopieren“. <b>⚙ Einheiten</b> in der Kopfzeile (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Gedächtnis</b>: Notizen als Karten mit Suche und Streckenfilter. <b>Hilfe</b>: Inhaltsverzeichnis.</li>
     <li><b>Tabs</b>: Live, Zeitplan &amp; Plan, Team, Runden (oben eine <b>Sitzungsübersicht</b>: beste und durchschnittliche Runde, Konstanz, Kraftstoff und Energie pro Runde – für jeden Fahrer und Stint), Gedächtnis, Hilfe.</li>
     <li><b>Rennen</b>: Position in der Klasse, Runde, Rundenzeiten, Zeit bis ins Ziel, Flagge.</li>
     <li><b>Nächster Boxenstopp</b>: in wie vielen Runden, Energie- und Kraftstoffverbrauch, was beim Stopp passiert.</li>
     <li><b>Reifen und Auto</b>: Verschleiß und Temperaturen jedes Reifens, Schäden, Motor, Bremsen.</li>
     <li><b>Wetter und Strecke</b>: Regen, Nässe, Wolken, Streckentemperatur und Hinweise des Ingenieurs.</li>
+    <li><b>Stopps</b>: wie viele Stopps gemacht sind, die Stoppzeit (0 / 2 / 4 Reifen), gemessen bei euren eigenen Stopps, und wie viele Stopps die Gegner vor und hinter euch gemacht haben.</li>
+    <li><b>Abstände in der Klasse</b>: Abstand zum Auto vor und hinter dir sowie der Trend (um wie viele Sekunden pro Runde er wächst oder schrumpft).</li>
+    <li><b>Letzte Runde</b>: Sektorzeiten S1–S3 und der Rückstand auf die beste Runde.</li>
+    <li><b>Ermüdungsgrad</b>: wie lange der Fahrer schon fährt und wie viele Runden im Stint; die Ermüdung wird anhand der Rundenzeiten beurteilt.</li>
+    <li><b>Track Limits und Strafen</b>: Track-Limit-Verstöße und Strafen.</li>
+    <li><b>Stoppplan</b>: was beim nächsten Stopp zu tun ist oder ob ihr ohne Stopp ins Ziel kommt.</li>
     <li><b>Gegner in der Klasse</b>: Abstände, Tempo, wer wen einholt, Energie, voraussichtlicher Stopp.</li>
+  </ol>
+  <ul>
     <li><b>Vergleich mit Teamkollegen</b>: nach jeder sauberen Runde – in welchen Kurven und um wie viel ein Teamkollege schneller ist (seine beste Runde unter ähnlichen Bedingungen). In Assetto Corsa auch ein Kollege in einem anderen Auto derselben Klasse – dann nur wo und um wie viel, ohne Ratschläge.</li>
     <li><b>Stintplan</b>: wer fährt, wann gewechselt wird, was beim Stopp passiert, um wie viele Minuten sich der Zeitplan gegenüber dem Plan verschoben hat.
       Ohne Plan für heute wird er automatisch für den aktuellen Fahrer erstellt – aus der Renndauer und den im Spiel verfügbaren Reifen.</li>
-  </ol>
+    <li><b>Aussehen</b>: standardmäßig dunkel, Umschalter ☀/☾ oben. Farbige Zeiten: lila – Klassenbestzeit, grün – deine Bestzeit, gelb – langsamer. Die Leiste „Schäden“ unter der Karte erscheint nur bei Schäden (Fahrzeugskizze, Verlust pro Runde, Höchstgeschwindigkeit, wie lange eine Reparatur dauern darf und Empfehlung). Bei Rennen über Runden zeigt „Bis zum Ziel“ Runden (z. B. 12 / 40).</li>
+    <li><b>Teamgründer</b>: hat ein eigenes Passwort (beim Anlegen des Teams oder im Tab Team: „Gründer werden“). Nur er kann Fahrer entfernen oder umbenennen und das Teampasswort ändern; er meldet sich auf der Pit Wall mit „Ich bin der Gründer“ an.</li>
+    <li><b>Mehrere Teamautos in einem Rennen</b>: Jedes Auto hat eine eigene Ansicht (Liste oben, mit Startnummer); Nachrichten und Fragen gehen an den Fahrer des gewählten Autos. Jeder Fahrer hört seinen eigenen Ingenieur und Spotter.</li>
+    <li><b>Live-Zeitplan</b>: Stint-Leiste (Farbe = Fahrer, rotes „JETZT“). <b>Runden</b>: Filter (Session – jedes Rennen getrennt; Auto – wenn mehrere Teamautos fahren, jedes mit eigener Tabelle; Fahrer, Stint, nur saubere), Pace-Diagramm, farbige Zeiten und Sektoren S1–S3. <b>Vergleichskarte</b>: Strecke und Auto, bis zu 3 Runden aus der Liste (🟢 beste gültige Runde des Fahrers – auf der Strecke und in jeder Session; Sessions eingeklappt; Filter; Schaltfläche „🟢 Beste Runden“). In der Team-Datenbank: Runden aus 14 Tagen, beste unter Bedingungen (bis überboten oder 90 Tage) und 📌 (ohne Limit); ältere 💾 – von der Festplatte des Fahrers, wenn sein Pit Wall Crew läuft. Karte: Farbe = wer am schnellsten ist, Bremspunkte, Sektorgrenzen und -zeiten, Werte beim Überfahren, Zoom; Bedingungen (auch Gummi auf der Strecke), „wo am meisten zu holen ist“, ideale Runde, Diagramm Geschwindigkeit / Gas / Bremse / Gang und Zeitverlust; Klick auf eine Kurve – Karte neben den Kurvendetails; Setup-Unterschiede; „🔗 Link kopieren“. <b>⚙ Einheiten</b> in der Kopfzeile (km/h–mph, m–ft, bar–psi–kPa, °C–°F, l–gal). <b>Gedächtnis</b>: Notizen als Karten mit Suche und Streckenfilter. <b>Hilfe</b>: Inhaltsverzeichnis.</li>
+  </ul>
   <p>Weiter unten sind die <b>Streckenkarte</b> mit allen Autos und der <b>Teamfunk</b>:
   „An den Fahrer“ (der Ingenieur liest die Nachricht vor), „Ingenieur fragen“ (Antwort per Stimme), „Fragen (nur Text)“, „Ins Gedächtnis“.</p>
   <h3>Auf dem Handy</h3>
