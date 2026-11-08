@@ -1544,7 +1544,10 @@ function startObs(tok) {
   OBS_TOK = tok; S.obs = {};
   OBS_SEL = Q.get('auto') || lsGet('obs_auto') || '';
   var base = 'obs/' + tok, bad = function (e) { pill($('st-live'), authErr(e), 'bad'); };
-  db.ref(base + '/team').on('value', function (s) { if (!s.val()) pill($('st-live'), 'zły link', 'bad'); }, bad);
+  // kod zespołu (obs/…/team) nie jest publiczny – zły link poznajemy po tym, że nic pod nim nie ma
+  var seen = {}, empty = function (k) { return function (s) { seen[k] = !!s.val();
+    if (Object.keys(seen).length === 3 && !seen.tracks && !seen.feeds && !seen.grafik) pill($('st-live'), 'zły link', 'bad'); }; };
+  ['tracks', 'feeds', 'grafik'].forEach(function (k) { db.ref(base + '/' + k).once('value').then(empty(k)).catch(function () {}); });
   db.ref(base + '/grafik').on('value', function (s) { S.obs.grafik = s.val(); drawObs(); }, bad);
   db.ref(base + '/tracks').on('value', function (s) { S.obs.tracks = s.val(); drawObs(); }, bad);
   db.ref(base + '/feeds').on('value', function (s) { S.obs.feeds = s.val() || {}; obsPick(); drawObs(); }, bad);
@@ -2131,11 +2134,15 @@ $('b-tsv').onclick = function () {
 
 // ------------------------------------------------------------------ zespół: kierowcy, kod, QR
 // ------------------------------------------------------------------ założyciel
-function makeOwner(code, opass, name) {     // konto założyciela; po utworzeniu strona jest zalogowana jako założyciel
-  return firebase.auth().createUserWithEmailAndPassword(ownerEmail(code), opass).then(function () {
-    IS_OWNER = true;
-    return db.ref('teams/' + code + '/owner').set({ name: name || '', t: now() });
-  });
+// Konto założyciela zakłada się w osobnym połączeniu, a wpis „owner” z jego numerem konta (uid) zapisuje konto zespołu –
+// reguły bazy uznają założyciela tylko z tym numerem (samo konto <kod>.owner@… założone przez obcego nic nie daje).
+// Potem strona loguje się jako założyciel.
+function makeOwner(code, opass, name) {
+  var app = firebase.initializeApp(FB_CONFIG, 'own' + now()), done = function () { return app.delete().catch(function () {}); };
+  return app.auth().createUserWithEmailAndPassword(ownerEmail(code), opass).then(function (c) {
+    return db.ref('teams/' + code + '/owner').set({ name: name || '', t: now(), uid: c.user.uid });
+  }).then(function () { return firebase.auth().signInWithEmailAndPassword(ownerEmail(code), opass); })
+    .then(function () { IS_OWNER = true; return done(); }, function (e) { return done().then(function () { throw e; }); });
 }
 function ownerBox() {
   var el = $('owner-box'); if (!el) return;

@@ -2,17 +2,83 @@
   "rules": {
     "teams": {
       "$code": {
-        ".read": "auth != null && auth.token.email == $code + '@pitwallcrew.team'",
-        ".write": "auth != null && auth.token.email == $code + '@pitwallcrew.team'",
-        "msgs": { ".indexOn": ["t"] },
-        "laps": { ".indexOn": ["t"] },
-        "memory": { ".indexOn": ["t"] }
+        ".read": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))))",
+        "$node": {
+          ".write": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists())))) && $node != 'settings' && $node != 'owner'"
+        },
+        "msgs": {
+          ".write": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))))",
+          ".indexOn": [
+            "t"
+          ]
+        },
+        "laps": {
+          ".write": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))))",
+          ".indexOn": [
+            "t"
+          ]
+        },
+        "memory": {
+          ".write": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))))",
+          ".indexOn": [
+            "t"
+          ]
+        },
+        "owner": {
+          ".write": "auth != null && ((auth.token.email == $code + '@pitwallcrew.team' && !data.exists() && newData.child('uid').isString()) || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))))"
+        },
+        "settings": {
+          "$k": {
+            ".write": "auth != null && (auth.token.email == $code + '@pitwallcrew.team' || (auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists())))) && $k != 'drivers'"
+          },
+          "drivers": {
+            ".write": "auth != null && ((auth.token.email == $code + '.owner@pitwallcrew.team' && (root.child('teams/' + $code + '/owner/uid').val() == auth.uid || (root.child('teams/' + $code + '/owner').exists() && !root.child('teams/' + $code + '/owner/uid').exists()))) || (auth.token.email == $code + '@pitwallcrew.team' && !root.child('teams/' + $code + '/owner').exists()))",
+            "$i": {
+              ".write": "auth != null && auth.token.email == $code + '@pitwallcrew.team' && root.child('teams/' + $code + '/owner').exists() && !data.exists() && newData.exists()"
+            }
+          }
+        }
       }
     },
     "obs": {
       "$tok": {
-        ".read": true,
-        ".write": "auth != null && auth.token.email.endsWith('@pitwallcrew.team') && (!data.exists() || data.child('team').val() + '@pitwallcrew.team' == auth.token.email)"
+        ".write": "auth != null && auth.token.email.endsWith('@pitwallcrew.team') && (!data.exists() || data.child('team').val() + '@pitwallcrew.team' == auth.token.email || data.child('team').val() + '.owner@pitwallcrew.team' == auth.token.email)",
+        "live": {
+          ".read": true
+        },
+        "feeds": {
+          ".read": true
+        },
+        "tracks": {
+          ".read": true
+        },
+        "grafik": {
+          ".read": true
+        },
+        "pw": {
+          "$id": {
+            ".read": true
+          }
+        }
+      }
+    },
+    "feedback": {
+      ".read": "auth != null && auth.token.email == 'pwc-admin@pitwallcrew.team'",
+      "$id": {
+        ".write": "!data.exists()",
+        ".validate": "newData.hasChildren(['t', 'text']) && newData.child('t').isNumber() && newData.child('text').isString() && newData.child('text').val().length <= 3000 && newData.child('text').val().length >= 5 && (!newData.child('log').exists() || (newData.child('log').isString() && newData.child('log').val().length <= 20000))",
+        "$other": {
+          ".validate": "newData.isString() ? newData.val().length <= 200 : (newData.isNumber() || newData.isBoolean())"
+        },
+        "t": {
+          ".validate": true
+        },
+        "text": {
+          ".validate": true
+        },
+        "log": {
+          ".validate": true
+        }
       }
     }
   }
