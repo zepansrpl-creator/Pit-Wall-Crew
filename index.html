@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=fbd83ce7"></script>
+<script src="i18n.js?v=ac88dbd5"></script>
 <script src="i18n_core.js?v=89439f8d"></script>
 <style>
   :root {
@@ -137,6 +137,8 @@
   .grid2 label { display: grid; gap: 5px; font-size: 12px; color: var(--muted); }
   .grid2 input { flex: none; width: 100%; }
   .grid2 select { width: 100%; min-width: 0; }
+  .grid2 label.chk { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .grid2 label.chk input { width: 18px; height: 18px; flex: none; }
   table.edit input { padding: 6px 8px; width: 100%; min-width: 0; font-family: var(--mono); font-size: 13px; }
   table.edit td { padding: 4px 3px; }
   table.plan td { white-space: nowrap; font-family: var(--mono); font-size: 13px; }
@@ -183,6 +185,19 @@
   .big.gold { color: var(--gold); }
   /* grafik: pasek stintów z „TERAZ” */
   .tline { position: relative; height: 92px; margin: 6px 0 4px; }
+  /* dostępność kierowców: godziny wyścigu */
+  table.avail { width: auto; border-collapse: separate; border-spacing: 2px; font-size: 12px; }
+  table.avail td, table.avail th { padding: 0; border: 0; }
+  table.avail th { font-weight: 500; color: var(--muted); padding: 2px 0; white-space: nowrap; text-align: center; text-transform: none; letter-spacing: 0; }
+  table.avail th.dn { text-align: left; color: var(--text); font-weight: 600; padding-right: 10px; }
+  .avail button.h { width: 30px; height: 26px; min-height: 0; padding: 0; border-radius: 5px; border: 1px solid var(--line2); background: rgba(95,211,141,.28); cursor: pointer; }
+  .avail button.h.ask { background: rgba(240,180,60,.45); }
+  .avail button.h.no { background: repeating-linear-gradient(45deg, rgba(255,107,91,.55) 0 5px, rgba(255,107,91,.25) 5px 10px); }
+  .avail button.h.day0 { border-left: 3px solid var(--muted); }
+  .alegend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; font-size: 13px; color: var(--muted); margin: 6px 0; }
+  .alegend i { display: inline-block; width: 16px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 5px; border: 1px solid var(--line2); }
+  td.dconf-no select { outline: 2px solid var(--bad); }
+  td.dconf-ask select { outline: 2px solid var(--warn); }
   .tline .bars { position: absolute; left: 0; right: 0; top: 22px; height: 42px; }
   .tline .st { position: absolute; top: 0; height: 42px; border-radius: 6px; color: #10140f; font: 700 12px Inter, sans-serif;
                display: flex; flex-direction: column; justify-content: center; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; }
@@ -579,12 +594,19 @@
     <div class="btnrow"><button id="b-set">Zapisz</button><span id="set-ok" class="ok-txt"></span></div>
   </section>
   <section>
+    <h2>Dostępność kierowców</h2>
+    <div class="alegend"><span><i style="background:rgba(95,211,141,.28)"></i>dostępny</span><span><i style="background:rgba(240,180,60,.45)"></i>awaryjnie</span><span><i style="background:rgba(255,107,91,.5)"></i>niedostępny</span></div>
+    <div class="scroll" id="avail-box"></div>
+    <p class="note">Kliknij godzinę, żeby zmienić: dostępny → awaryjnie → niedostępny. Godziny w Twojej strefie czasowej. Każdy kierowca może zaznaczyć swoje godziny na swoim telefonie albo komputerze. „Rozpisz plan automatycznie” bierze to pod uwagę, a w planie kierowca w niedostępnej godzinie ma czerwoną ramkę.</p>
+  </section>
+  <section>
     <h2>2. Plan stintów</h2>
     <details id="gen-box" class="gen">
       <summary>Rozpisz plan automatycznie</summary>
       <div class="grid2" style="margin-top:10px">
         <label>Okrążeń w stincie<input id="g-laps" inputmode="numeric" value="11"></label>
         <label>Kierowcy po kolei (z zakładki Zespół)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
+        <label class="chk" style="grid-column:span 2"><input type="checkbox" id="g-avail" checked> Uwzględnij dostępność kierowców</label>
         <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
         <label>Opony<select id="g-tyres">
           <option value="opt" selected>optymalnie w limicie opon (równe zużycie)</option>
@@ -1230,7 +1252,72 @@ function applyCar(force) {
   S.planGrafik = c ? (c.grafik || {}) : S.mainGrafik;
   carSel();
   if (force) PLAN_DIRTY = false;
-  editSettings(); editDrivers(); groqInfo(); editPlan(); draw();
+  editSettings(); editDrivers(); groqInfo(); editPlan(); drawAvail(); draw();
+}
+// ---- dostępność kierowców: godziny (pełne godziny od startu wyścigu), klucz = numer godziny od 1970 (UTC) – ta sama
+// godzina dla kierowców w różnych strefach czasowych; wartość „ask” (awaryjnie) albo „no” (niedostępny), brak = dostępny
+function availData() { return CAR ? ((S.cars[CAR] || {}).avail || {}) : (S.mainAvail || {}); }
+function availOf(name, a, b) {      // najgorszy stan kierowcy w czasie [a, b): '' / 'ask' / 'no'
+  var d = availData()[wearKey(name)] || {}, worst = '';
+  if (!a || !b) return '';
+  for (var h = Math.floor(a / 3600000); h * 3600000 < b; h++) {
+    var v = d[String(h)];
+    if (v === 'no') return 'no';
+    if (v === 'ask') worst = 'ask';
+  }
+  return worst;
+}
+function assignAvail(rows, order, rep) {
+  // kierowcy po kolei, ale pomijamy tych, którzy w godzinach stintu są niedostępni (osoby „awaryjnie” dopiero, gdy nikt inny nie może);
+  // zwraca liczbę stintów, w których nikt nie jest dostępny
+  var k = 0, prev = null, inRow = 0, noFree = 0;
+  rows.forEach(function (r) {
+    if (r._after) return;
+    var pick = null;
+    if (prev && inRow < rep && availOf(prev, r._start, r._end) === '') pick = prev;
+    for (var pass = 0; !pick && pass < 2; pass++) {
+      for (var j = 0; j < order.length; j++) {
+        var c = order[(k + j) % order.length], a = availOf(c, r._start, r._end);
+        if (c === prev && order.length > 1 && inRow >= rep) continue;
+        if (a === '' || (pass === 1 && a === 'ask')) { pick = c; k = (k + j + 1) % order.length; break; }
+      }
+    }
+    if (!pick) { noFree++; pick = order[k % order.length]; k = (k + 1) % order.length; }
+    inRow = pick === prev ? inRow + 1 : 1; prev = pick; r.driver = pick;
+  });
+  return noFree;
+}
+function drawAvail() {
+  var box = $('avail-box'); if (!box) return;
+  var s = S.settings || {}, st = s.raceStartMs, hrs = Math.ceil(s.raceHours || 0), drv = drvNames();
+  if (!st || !hrs) { setH(box, '<p class="note">' + esc(TR('Najpierw uzupełnij w „1. Wyścig” start i długość wyścigu (i zapisz).')) + '</p>'); return; }
+  if (!drv.length) { setH(box, '<p class="note">' + esc(TR('Dodaj kierowców w zakładce Zespół.')) + '</p>'); return; }
+  var h0 = Math.floor(st / 3600000), cols = [];
+  for (var i = 0; i < hrs + (st % 3600000 ? 1 : 0); i++) cols.push(h0 + i);
+  var data = availData(), lab = { '': TR('dostępny'), ask: TR('awaryjnie'), no: TR('niedostępny') };
+  var head = '<tr><th></th>' + cols.map(function (h) {
+    var d = new Date(h * 3600000); return '<th>' + (d.getHours() < 10 ? '0' : '') + d.getHours() + '</th>'; }).join('') + '</tr>';
+  var body = drv.map(function (n) {
+    var dk = wearKey(n), m = data[dk] || {};
+    return '<tr><th class="dn">' + esc(n) + '</th>' + cols.map(function (h) {
+      var v = m[String(h)] || '', d = new Date(h * 3600000);
+      return '<td><button type="button" class="h ' + v + (d.getHours() === 0 ? ' day0' : '') + '" data-d="' + esc(dk) + '" data-h="' + h + '" title="' +
+        esc(n + ', ' + d.toLocaleDateString() + ' ' + hhmm(h * 3600000) + ': ' + lab[v]) + '" aria-label="' + esc(n + ' ' + hhmm(h * 3600000) + ': ' + lab[v]) + '"></button></td>';
+    }).join('') + '</tr>';
+  }).join('');
+  setH(box, '<table class="avail">' + head + body + '</table>');
+  box.querySelectorAll('button.h').forEach(function (b) {
+    b.onclick = function () {
+      var cur = b.classList.contains('no') ? 'no' : b.classList.contains('ask') ? 'ask' : '';
+      var nx = cur === '' ? 'ask' : cur === 'ask' ? 'no' : '';
+      b.classList.remove('ask', 'no'); if (nx) b.classList.add(nx);
+      var obj = CAR ? (S.cars[CAR] = S.cars[CAR] || {}) : S, key = CAR ? 'avail' : 'mainAvail';
+      obj[key] = obj[key] || {}; obj[key][b.dataset.d] = obj[key][b.dataset.d] || {};
+      if (nx) obj[key][b.dataset.d][b.dataset.h] = nx; else delete obj[key][b.dataset.d][b.dataset.h];
+      PT('avail/' + b.dataset.d + '/' + b.dataset.h).set(nx || null).catch(function () {});
+      refreshTimes();
+    };
+  });
 }
 function carSel() {
   var sel = $('car-sel'); if (!sel) return;
@@ -1438,6 +1525,7 @@ function startTeam(code) {
   var onErr = function (e) { pill($('st-live'), authErr(e), 'bad'); };
   T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
   T('settings').on('value', function (s) { S.teamSet = s.val() || {}; applyCar(); }, onErr);
+  T('avail').on('value', function (s) { S.mainAvail = s.val() || {}; if (!CAR) { drawAvail(); refreshTimes(); } }, function () {});
   T('plan').on('value', function (s) { S.mainPlan = s.val() || []; if (!CAR) { S.plan = S.mainPlan; editPlan(); } }, onErr);
   T('grafik').on('value', function (s) { S.mainGrafik = S.grafik = s.val() || {}; if (!CAR) S.planGrafik = S.mainGrafik; draw(); });
   T('owner').on('value', function (s) { S.owner = s.val(); ownerBox(); editDrivers(); });
@@ -1910,6 +1998,9 @@ function refreshTimes() {   // po każdej zmianie w tabeli: przelicz godziny bez
       td.textContent = v; td.style.background = v === '' ? '' : v >= 75 ? 'rgba(80,200,120,.25)' : v >= 65 ? 'rgba(230,200,60,.28)' : 'rgba(240,120,60,.35)';
     }
     c[13].textContent = r._left == null ? '' : r._left;
+    var av = r.driver && !r._after ? availOf(r.driver, r._start, r._end) : '';
+    c[1].className = av ? 'dconf-' + av : '';
+    c[1].title = av === 'no' ? TR('{a} jest wtedy niedostępny').replace('{a}', r.driver) : av === 'ask' ? TR('{a}: tylko awaryjnie').replace('{a}', r.driver) : '';
   });
   tyreSummary(info);
 }
@@ -1966,6 +2057,7 @@ $('b-gen').onclick = function () {
   sv.startWear = startWear(); S.settings.startWear = sv.startWear;
   for (var i = 0; i < n; i++) rows.push({ n: i + 1, laps: laps, offsetMin: 0, driver: order[Math.floor(i / rep) % order.length], stopS: st[0], tyreL: false, tyreR: false });
   planTimes(rows);
+  var noFree = $('g-avail').checked && Object.keys(availData()).length ? assignAvail(rows, order, rep) : 0;
   rows.forEach(function (r) {
     if (r._final || r._after) return;
     var L = false, R = false;
@@ -1993,7 +2085,8 @@ $('b-gen').onclick = function () {
   PLAN_DIRTY = true;
   editPlan(rows);
   $('gen-ok').textContent = 'Rozpisano ' + rows.length + ' stintów (' + hours + ' h, okrążenie ' + lapFmt(lap) + ')' +
-    (cut ? ', zmniejszone zmiany opon na końcu, żeby zmieścić się w ' + budget + ' oponach' : '') + '. Sprawdź tabelę i kliknij „Zapisz plan”.';
+    (cut ? ', zmniejszone zmiany opon na końcu, żeby zmieścić się w ' + budget + ' oponach' : '') +
+    (noFree ? ', ' + TR('w {0} stintach nikt nie jest dostępny – czerwone ramki').replace('{0}', noFree) : '') + '. Sprawdź tabelę i kliknij „Zapisz plan”.';
 };
 function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) i porównanie z planem
   var st = (S.live || {}).state || {}, pt = st.pit_times, el = $('pit-meas');
@@ -2149,7 +2242,9 @@ $('b-tsv').onclick = function () {
 function makeOwner(code, opass, name) {
   var app = firebase.initializeApp(FB_CONFIG, 'own' + now()), done = function () { return app.delete().catch(function () {}); };
   return app.auth().createUserWithEmailAndPassword(ownerEmail(code), opass).then(function (c) {
-    return db.ref('teams/' + code + '/owner').set({ name: name || '', t: now(), uid: c.user.uid });
+    // wpis się nie zapisał – usuń świeże konto, inaczej kolejna próba trafi na „konto już istnieje”
+    return db.ref('teams/' + code + '/owner').set({ name: name || '', t: now(), uid: c.user.uid })
+      .catch(function (e) { return c.user.delete().catch(function () {}).then(function () { throw e; }); });
   }).then(function () { return firebase.auth().signInWithEmailAndPassword(ownerEmail(code), opass); })
     .then(function () { IS_OWNER = true; return done(); }, function (e) { return done().then(function () { throw e; }); });
 }
@@ -2641,7 +2736,7 @@ function cmpCornersOf(ref, L, n) {
   var src = [ref].concat(L).filter(function (l) { return l.d.m.cr && l.d.m.cr.length; })[0];
   if (!src) return cmpCorners(ref.d, n);
   var b = function (m) { return Math.max(0, Math.min(n - 1, Math.round(m / CMP_BIN))); };
-  return src.d.m.cr.map(function (c, k) { return { name: 'T' + (k + 1), s: b(c[0]), a: b(c[1]), e: b(c[2]) }; })
+  return src.d.m.cr.map(function (c, k) { return { name: c[3] || ('T' + (k + 1)), s: b(c[0]), a: b(c[1]), e: b(c[2]) }; })
     .filter(function (c) { return c.e > c.s; });
 }
 function cmpMet(L, c) {
@@ -2696,6 +2791,7 @@ function cmpBuild(laps, shape) {
   }
   CMP.trkDrawn = CMP.trk;
   if (CMP.corner >= CMP.C.length) CMP.corner = -1;
+  if (CMP.corner < 0 || CMP.corner + (CMP.span || 0) >= CMP.C.length) CMP.span = 0;
   if (CMP.hov < 0 || CMP.hov >= n) CMP.hov = -1;
   $('cmp-msg').style.display = shape ? 'none' : '';
   if (!shape) cmpMsg('Kształt toru pojawi się po pierwszej jeździe na tym torze z włączonym PWC (zbiera się z położenia aut). Wykres prędkości i zakręty działają już teraz.');
@@ -2881,18 +2977,21 @@ function cmpTools() {
 }
 function cmpPickCorner(i) {
   var c = CMP.C[i]; if (!c) return;
-  CMP.corner = i;
+  CMP.corner = i; CMP.span = 0;
   cmpCornerPanel();          // najpierw układ „obok” – widok mapy liczony w nowych proporcjach
+  cmpZoom(Math.max(c.s, c.a - 36), Math.min(c.e, c.a + 24));
+  cmpDraw(); cmpSpeed();
+  var cp = $('cmp-corner'); if (cp && cp.scrollIntoView && window.innerWidth < 800) cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function cmpZoom(j0, j1) {
   if (CMP.XY) {
     var xs = [], ys = [];
-    for (var j = Math.max(c.s, c.a - 36); j <= Math.min(c.e, c.a + 24); j++) { xs.push(CMP.XY[j][0]); ys.push(CMP.XY[j][1]); }
+    for (var j = j0; j <= j1; j++) { xs.push(CMP.XY[j][0]); ys.push(CMP.XY[j][1]); }
     var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
     var B = cmpBase();
     CMP.z = Math.max(2.4, Math.min(10, Math.min(B[0] / ((x1 - x0) * 2.2 || 1), B[1] / ((y1 - y0) * 2.2 || 1))));
     CMP.cx = (x0 + x1) / 2; CMP.cy = (y0 + y1) / 2;
   }
-  cmpDraw(); cmpSpeed();
-  var cp = $('cmp-corner'); if (cp && cp.scrollIntoView && window.innerWidth < 800) cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 // ---- najechanie: prędkość wszystkich okrążeń w punkcie
 function cmpHover(i) {
@@ -2998,7 +3097,7 @@ function cmpSpeed() {
   if (ch === 'g' || ch === 'b') { lo = 0; hi = 100; }
   else L.forEach(function (l) { for (var i = 0; i < n; i++) { var v = l.d[ch][i] || 0; if (v < lo) lo = v; if (v > hi) hi = v; } });
   var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v, j) { return (124 - ((v || 0) - lo) / ((hi - lo) || 1) * 116 - (ch === 'v' ? 0 : j * 1.5)).toFixed(1); };
-  var h = [], c = CMP.C[CMP.corner], band = c ? '<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>' : '';
+  var h = [], c = cmpSel(), band = c ? '<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>' : '';
   h.push(band);
   (CMP.S || []).forEach(function (i) { h.push('<line x1="' + sx(i) + '" x2="' + sx(i) + '" y1="0" y2="130" style="stroke:var(--t-p)" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" opacity=".7"/>'); });
   L.forEach(function (l, j) { var a = []; for (var i = 0; i < n; i += step) a.push(sx(i) + ',' + sy(l.d[ch][i], j)); h.push('<polyline points="' + a.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'); });
@@ -3074,10 +3173,70 @@ function cmpReasons(m, r) {
   if (m.tc - r.tc >= 20) o.push([0.8, TR('częściej włącza się TC na wyjściu')]);
   return o.sort(function (a, b) { return b[0] - a[0]; }).slice(0, 2).map(function (x) { return x[1]; });
 }
+// zaznaczony zakręt albo sekcja kolejnych zakrętów (T2 + T3 …) – porównanie całej sekcji z kolegą
+function cmpSel() {
+  var c = CMP.C[CMP.corner], k = CMP.span || 0;
+  if (!c || !k) return c;
+  var parts = CMP.C.slice(CMP.corner, CMP.corner + k + 1), last = parts[parts.length - 1];
+  var sec = { name: parts[0].name + '–' + last.name, s: parts[0].s, a: parts[0].a, e: last.e, parts: parts };
+  sec.m = CMP.L.map(function (l) { var t = l.d.t, e = Math.min(sec.e, t.length - 1); return { time: t[e] - t[sec.s] }; });
+  var b = Math.min.apply(null, sec.m.map(function (m) { return m.time; }));
+  sec.best = sec.m.map(function (m) { return m.time; }).indexOf(b); sec.m.forEach(function (m) { m.dt = m.time - b; });
+  return sec;
+}
+function cmpSpan(d) {           // d: +1 – dołącz następny, -1 – odłącz ostatni, 'prev' – dołącz poprzedni
+  if (d === 'prev') { if (CMP.corner > 0) { CMP.corner--; CMP.span = (CMP.span || 0) + 1; } }
+  else CMP.span = Math.max(0, Math.min(CMP.C.length - 1 - CMP.corner, (CMP.span || 0) + d));
+  cmpCornerPanel();
+  var c = cmpSel();
+  if (c) cmpZoom(Math.max(c.s, c.a - 36), c.parts ? c.e : Math.min(c.e, c.a + 24));
+  cmpDraw(); cmpSpeed();
+}
+function cmpSectionPanel(c) {
+  var L = CMP.L, box = $('cmp-corner');
+  var row = function (lab, f) { return '<tr><td>' + esc(lab) + '</td>' + L.map(function (l, j) { return '<td style="color:' + l.col + '">' + f(j) + '</td>'; }).join('') + '</tr>'; };
+  var dt = function (x) { return L.length > 1 ? ' <span class="note">' + (x < 0.0005 ? '' : '+' + n2(x)) + '</span>' : ''; };
+  var tab = '<table><thead><tr><th></th>' + L.map(function (l) { return '<th style="color:' + l.col + '">' + esc(l.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    row(TR('Czas w sekcji'), function (j) { return n2(c.m[j].time) + ' s' + dt(c.m[j].dt); }) +
+    c.parts.map(function (p) {
+      return row(p.name + ' – ' + TR('czas'), function (j) { return n2(p.m[j].time) + ' s' + dt(p.m[j].dt); }) +
+        row(p.name + ' – ' + TR('najmniejsza prędkość'), function (j) { return unitSp(p.m[j].vmin); });
+    }).join('') + '</tbody></table>';
+  var why = '';
+  if (L.length > 1) why = '<ul class="cmp-why">' + c.m.map(function (m, j) {
+    if (j === c.best || m.dt < 0.02) return '';
+    var per = c.parts.map(function (p) { var x = p.m[j].time - p.m[c.best].time; return Math.abs(x) >= 0.02 ? p.name + ' ' + (x > 0 ? '+' : '−') + n2(Math.abs(x)) : ''; }).filter(Boolean);
+    return '<li><b style="color:' + L[j].col + '">' + esc(L[j].name) + '</b> <span>' + esc(TR('traci ' + n2(m.dt) + ' s')) + '</span>' +
+      (per.length ? ': ' + esc(per.join(', ')) : '') + '</li>';
+  }).join('') + '</ul>';
+  var a = Math.max(0, c.s - 6), b = Math.min(CMP.n - 1, c.e + 6), lo = Infinity, hi = -Infinity;
+  L.forEach(function (l) { for (var i = a; i <= b; i++) { lo = Math.min(lo, l.d.v[i]); hi = Math.max(hi, l.d.v[i]); } });
+  var sx = function (i) { return ((i - a) / ((b - a) || 1) * 1000).toFixed(1); };
+  var g = c.parts.map(function (p) { var ax = sx(p.a); return '<line x1="' + ax + '" x2="' + ax + '" y1="0" y2="250" style="stroke:var(--line2)" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>' +
+    '<text x="' + ax + '" y="12" font-size="11" style="fill:var(--muted)">' + esc(p.name) + '</text>'; });
+  L.forEach(function (l) {
+    var pv = [], pg = [], pb = [];
+    for (var i = a; i <= b; i++) { pv.push(sx(i) + ',' + (126 - (l.d.v[i] - lo) / ((hi - lo) || 1) * 106).toFixed(1)); pg.push(sx(i) + ',' + (182 - l.d.g[i] * 0.3).toFixed(1)); pb.push(sx(i) + ',' + (240 - l.d.b[i] * 0.3).toFixed(1)); }
+    [pv, pg, pb].forEach(function (pp) { g.push('<polyline points="' + pp.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="2" vector-effect="non-scaling-stroke"/>'); });
+  });
+  var bestTxt = L.length > 1 ? ' <span class="note">' + esc(TR('najszybciej: ' + L[c.best].name)) + '</span>' : '';
+  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + esc(TR('Sekcja') + ' ' + c.name) + bestTxt + '</h3>' +
+    cmpSpanBtns() + '<div class="scroll">' + tab + '</div>' + why + '</div>' +
+    '<div><h3>' + esc(TR('Prędkość, gaz i hamulec')) + '</h3><svg viewBox="0 0 1000 250" preserveAspectRatio="none" role="img" aria-label="' + esc(TR('Prędkość, gaz i hamulec w sekcji')) + '">' + g.join('') + '</svg>' +
+    '<p class="note">' + esc(TR('Od góry: prędkość, gaz, hamulec. Linie przerywane: wierzchołki zakrętów.')) + '</p></div>');
+}
+function cmpSpanBtns() {
+  var k = CMP.span || 0, prev = CMP.C[CMP.corner - 1], next = CMP.C[CMP.corner + k + 1], last = CMP.C[CMP.corner + k], h = [];
+  if (prev) h.push('<button type="button" class="second" data-sp="prev">+ ' + esc(prev.name) + '</button>');
+  if (next) h.push('<button type="button" class="second" data-sp="1">+ ' + esc(next.name) + '</button>');
+  if (k > 0) h.push('<button type="button" class="second" data-sp="-1">− ' + esc(last.name) + '</button>');
+  return h.length ? '<p class="note cmp-span">' + esc(TR('Sekcja zakrętów:')) + ' ' + h.join(' ') + '</p>' : '';
+}
 function cmpCornerPanel() {
-  var c = CMP.C[CMP.corner], L = CMP.L, box = $('cmp-corner');
+  var c = cmpSel(), L = CMP.L, box = $('cmp-corner');
   $('cmp-main').classList.toggle('split', !!c);
   if (!c) { setH(box, ''); return; }
+  if (c.parts) { cmpSectionPanel(c); cmpSpanWire(); return; }
   var r = c.m[c.best];
   var row = function (lab, f) { return '<tr><td>' + esc(TR(lab)) + '</td>' + c.m.map(function (m, j) { return '<td style="color:' + L[j].col + '">' + f(m) + '</td>'; }).join('') + '</tr>'; };
   var mm = function (x, a, b) { return x == null ? '—' : esc(TR(unitD(Math.abs(x)) + ' ' + (x >= 0 ? a : b))); };
@@ -3109,10 +3268,14 @@ function cmpCornerPanel() {
     [pv, pg, pb].forEach(function (pp) { g.push('<polyline points="' + pp.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="2" vector-effect="non-scaling-stroke"/>'); });
   });
   var bestTxt = L.length > 1 ? ' <span class="note">' + esc(TR('najszybciej: ' + L[c.best].name)) + '</span>' : '';
-  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + c.name + bestTxt + '</h3><div class="scroll">' + tab + '</div>' + why + '</div>' +
+  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + c.name + bestTxt + '</h3>' + cmpSpanBtns() + '<div class="scroll">' + tab + '</div>' + why + '</div>' +
     '<div><h3>' + esc(TR('Prędkość, gaz i hamulec')) + '</h3><svg viewBox="0 0 1000 250" preserveAspectRatio="none" role="img" aria-label="' + esc(TR('Prędkość, gaz i hamulec w zakręcie')) + '">' + g.join('') + '</svg>' +
     '<p class="note">' + esc(TR('Od góry: prędkość, gaz, hamulec. Linia przerywana: wierzchołek zakrętu.')) + '</p></div>');
-  $('cmp-x').onclick = function () { CMP.z = 1; CMP.corner = -1; cmpCornerPanel(); cmpDraw(); cmpSpeed(); };
+  cmpSpanWire();
+}
+function cmpSpanWire() {
+  $('cmp-x').onclick = function () { CMP.z = 1; CMP.corner = -1; CMP.span = 0; cmpCornerPanel(); cmpDraw(); cmpSpeed(); };
+  $('cmp-corner').querySelectorAll('[data-sp]').forEach(function (b) { b.onclick = function () { var v = b.dataset.sp; cmpSpan(v === 'prev' ? 'prev' : +v); }; });
 }
 // sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min
 function lapSessions() {
