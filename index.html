@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=ac88dbd5"></script>
+<script src="i18n.js?v=18f76b2b"></script>
 <script src="i18n_core.js?v=89439f8d"></script>
 <style>
   :root {
@@ -23,7 +23,7 @@
     --row: rgba(255,255,255,.05); --tyre-bg: rgba(0,0,0,.2); --bar: #20342b; --map-track: #22362d; --map-line: #3f5d4f;
     --r: 18px; --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
     --cond: "Saira Condensed", "Arial Narrow", Inter, sans-serif;
-    --t-p: #c38bff; --t-g: #5fd38d; --t-y: #f0c43c; --rowme: #1b2c24; --gold: #d9a227; --flag: #f0c43c;
+    --t-p: #c38bff; --t-g: #5fd38d; --t-y: #f0c43c; --t-l: 66%; --rowme: #1b2c24; --gold: #d9a227; --flag: #f0c43c;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -64,7 +64,7 @@
   .page { padding: 18px 20px 48px; max-width: 1600px; margin: 0 auto; display: grid; gap: 14px; }
   section { background: var(--card); border: 1px solid var(--line); border-radius: var(--r);
             padding: 16px 18px; min-width: 0; }
-  section h2 { font: 700 15px/1.2 var(--cond); color: var(--muted); margin: 0 0 8px; letter-spacing: .08em; text-transform: uppercase; }
+  section h2 { font: 700 18px/1.2 var(--cond); color: var(--text); margin: 0 0 10px; letter-spacing: .02em; }
   section h2 .note { font-family: Inter, sans-serif; font-size: 12px; font-weight: 400; color: var(--dim); text-transform: none; letter-spacing: 0; }
   .wide { grid-column: 1 / -1; }
   .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); align-items: stretch; }
@@ -89,6 +89,9 @@
   .tyre { border: 1px solid var(--line); border-radius: 14px; padding: 8px; text-align: center; background: var(--tyre-bg); }
   .tyre b { display: block; font: 700 25px/1.2 var(--cond); }
   .tyre > .note:first-child { font-weight: 700; letter-spacing: .08em; font-size: 11px; }
+  .tyre .tc { color: hsl(var(--h) 62% var(--t-l)); }
+  .tyre .tz { display: inline-block; min-width: 2.3em; padding: 1px 3px; border-radius: 5px; font-weight: 600; color: hsl(var(--h) 62% var(--t-l));
+              background: hsl(var(--h) 60% 45% / .16); border: 1px solid hsl(var(--h) 60% 45% / .4); }
   .bar { height: 6px; background: var(--bar); border-radius: 99px; overflow: hidden; margin: 10px 0 8px; }
   .bar i { display: block; height: 100%; background: var(--ok); border-radius: 99px; transition: width .6s; }
 
@@ -122,7 +125,8 @@
   button.second:hover { background: var(--line); filter: none; }
 
   @media (max-width: 560px) {
-    header { padding: 10px 12px; } .tabs { margin-left: 0; width: 100%; overflow-x: auto; flex-wrap: nowrap; order: 9; }
+    header { padding: 10px 12px; } .tabs { margin-left: 0; width: 100%; flex-wrap: wrap; gap: 0 2px; order: 9; } .tabs button { padding: 6px 9px; }
+    .grid2 { grid-template-columns: minmax(0, 1fr); } .grid2 > label { grid-column: auto !important; min-width: 0; }
     main, .page { padding: 12px 12px 36px; } .big { font-size: 36px; }
     .hide-sm { display: none; } td, th { font-size: 12px; padding: 6px 4px; }
   }
@@ -199,11 +203,17 @@
   td.dconf-no select { outline: 2px solid var(--bad); }
   td.dconf-ask select { outline: 2px solid var(--warn); }
   .tline .bars { position: absolute; left: 0; right: 0; top: 22px; height: 42px; }
+  .tline .st i { font-style: normal; }
   .tline .st { position: absolute; top: 0; height: 42px; border-radius: 6px; color: #10140f; font: 700 12px Inter, sans-serif;
                display: flex; flex-direction: column; justify-content: center; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; }
   .tline .st span:last-child { font-weight: 500; font-size: 11px; }
+  .tline .st { container-type: inline-size; } .tline .st .s { display: none; }
+  @container (max-width: 74px) { .tline .st .f { display: none; } .tline .st .s { display: inline; } .tline .st span:last-child { font-size: 10px; } }
+  @container (max-width: 40px) { .tline .st span:last-child { display: none; } }
   .tline .st.done { opacity: .45; } .tline .st.now { outline: 2px solid var(--text); outline-offset: 1px; }
-  .tline .now-line { position: absolute; top: 14px; width: 3px; height: 58px; background: #ff3b30; border-radius: 2px; box-shadow: 0 0 10px #ff3b30; }
+  .tline .now-line { position: absolute; top: 14px; width: 3px; height: 58px; border-radius: 2px;
+                     background: linear-gradient(#ff3b30 0 8px, transparent 8px 50px, #ff3b30 50px); }
+  .tline .st.now { z-index: 1; }
   .tline .now-tag { position: absolute; top: 0; transform: translateX(-50%); background: #ff3b30; color: #fff; font: 800 10px Inter, sans-serif;
                     letter-spacing: .08em; padding: 1px 6px; border-radius: 4px; }
   .tline .tick { position: absolute; top: 70px; font: 500 11px var(--mono); color: var(--dim); }
@@ -335,17 +345,18 @@
     --bg: #f3f1ec; --bg2: #ebe8e1; --card: #ffffff; --card2: #f7f5f0; --line: #dcd7cc; --line2: #cfc9bc;
     --text: #1c2420; --muted: #5f6b64; --dim: #8a948e; --ok: #1f8a4c; --warn: #b86f00; --bad: #c8322a;
     --accent: #0f5c3a; --on-accent: #ffffff; --blue: #1d5fa8; --violet: #6b4fc2; --big: #1c2420; --me: #0f5c3a; --me-text: #ffffff;
-    --head-bg: #0f3d2a; --head-text: #f3f1ec; --glow: transparent; --t-p: #7a2fd0; --t-g: #137a3e; --t-y: #8a6400; --rowme: #f6efd9; --gold: #9a6b00; --flag: #f0c43c; --row: #ece8df; --tyre-bg: #f7f5f0; --bar: #e7e2d7; --r: 6px; --map-track: #d9d4c8; --map-line: #b3ad9e;
+    --head-bg: #0f3d2a; --head-text: #f3f1ec; --glow: transparent; --t-p: #7a2fd0; --t-g: #137a3e; --t-y: #8a6400; --t-l: 30%; --rowme: #f6efd9; --gold: #9a6b00; --flag: #f0c43c; --row: #ece8df; --tyre-bg: #f7f5f0; --bar: #e7e2d7; --r: 6px; --map-track: #d9d4c8; --map-line: #b3ad9e;
   }
   html[data-theme="light"] header { border-bottom: 3px solid #e3a21a; backdrop-filter: none; }
   html[data-theme="light"] header .pill { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); color: #e6ebe7; }
   html[data-theme="light"] header .pill.ok::before { background: #5fd38d; box-shadow: 0 0 0 3px rgba(95,211,141,.25); }
   html[data-theme="light"] header .pill.warn::before { background: #f0b43c; }
   html[data-theme="light"] header select { background: #0b2e1f; color: #fff; border-color: rgba(255,255,255,.25); }
-  html[data-theme="light"] .tabs button { color: #cfe0d6; border-radius: 6px; border-bottom: 0; }
-  html[data-theme="light"] .tabs button.on { background: #e3a21a; color: #1c2420; }
+  html[data-theme="light"] .tabs button { color: #cfe0d6; }
+  html[data-theme="light"] .tabs button:hover { color: #fff; }
+  html[data-theme="light"] .tabs button.on { color: #fff; border-bottom-color: #e3a21a; }
   html[data-theme="light"] section { box-shadow: 0 1px 2px rgba(0,0,0,.06); }
-  html[data-theme="light"] section h2 { color: var(--muted); font-weight: 700; }
+  html[data-theme="light"] section h2 { color: var(--text); font-weight: 700; }
   html[data-theme="light"] section h2::before { display: none; }
   html[data-theme="light"] .advice { background: #fbf4e3; border-color: #ecd39b; }
   html[data-theme="light"] tr.cur td { background: rgba(15,92,58,.08); }
@@ -458,11 +469,11 @@
     <p class="note">Trend: ile sekund na okrążenie odstęp rośnie (+) lub maleje (−).</p>
   </section>
   <section class="c2 r1">
-    <h2>Następny postój</h2>
+    <h2>Następny pitstop</h2>
     <div class="big gold" id="stop">—</div>
     <div class="row" id="ve-row"><span>Zużycie energii</span><span class="num" id="ve">—</span></div>
     <div class="row"><span>Zużycie paliwa</span><span class="num" id="fuel">—</span></div>
-    <div class="row"><span>Postój wg gry (menu boksu)</span><span class="num" id="pitest">—</span></div>
+    <div class="row"><span>Pitstop wg gry (menu boksu)</span><span class="num" id="pitest">—</span></div>
   </section>
   <section class="c2 r2">
     <h2>Ostatnie okrążenie</h2>
@@ -503,9 +514,9 @@
     <div class="note" id="fsnote">—</div>
   </section>
   <section class="c6 r1" id="stopsbox">
-    <h2>Postoje</h2>
+    <h2>Pitstopy</h2>
     <div class="row"><span>Zrobione</span><span class="num" id="st-stops">—</span></div>
-    <div class="row"><span>Postój (0 / 2 / 4 opony)</span><span class="num" id="st-pittimes">—</span></div>
+    <div class="row"><span>Pitstop (0 / 2 / 4 opony)</span><span class="num" id="st-pittimes">—</span></div>
     <div class="row"><span>Rywale przed / za</span><span class="num" id="st-rstops">—</span></div>
     <div class="note" id="st-stopnote"></div>
   </section>
@@ -516,12 +527,12 @@
     <div class="note" id="limnote"></div>
   </section>
   </div>
-  <div class="planbar wide"><span class="pb-h">Plan postoju</span><span id="plan">—</span></div>
+  <div class="planbar wide"><span class="pb-h">Plan pitstopu</span><span id="plan">—</span></div>
   <section class="wide">
     <h2>Rywale w klasie <span class="note">· lider klasy + 4 przed i 4 za · „zjazd za” i opony to szacunek</span>
       <span class="tleg"><b class="t-p">■</b> najlepszy w klasie <b class="t-g">■</b> rekord osobisty <b class="t-y">■</b> wolniej</span></h2>
     <div class="scroll"><table id="riv-t">
-      <thead><tr><th>Poz.</th><th>Kierowca</th><th>Odstęp</th><th>Ostatnie</th><th class="hide-sm">S1</th><th class="hide-sm">S2</th><th class="hide-sm">S3</th><th>Tempo</th><th class="hide-sm">Dogoni / dogonisz</th><th>Energia</th><th>Zjazd za</th><th class="hide-sm">Postoje</th><th>Opony</th></tr></thead>
+      <thead><tr><th>Poz.</th><th>Kierowca</th><th>Odstęp</th><th>Ostatnie</th><th class="hide-sm">S1</th><th class="hide-sm">S2</th><th class="hide-sm">S3</th><th>Tempo</th><th class="hide-sm">Dogoni / dogonisz</th><th>Energia</th><th>Zjazd za</th><th class="hide-sm">Pitstopy</th><th>Opony</th></tr></thead>
       <tbody id="rivals"></tbody>
     </table></div>
   </section>
@@ -549,7 +560,7 @@
   <section class="wide">
     <h2>Grafik stintów <span class="note" id="src"></span></h2>
     <table>
-      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th class="hide-sm">Zjazd</th><th class="hide-sm">Okr.</th><th>Na postoju</th><th>vs plan</th></tr></thead>
+      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th class="hide-sm">Zjazd</th><th class="hide-sm">Okr.</th><th>Na pitstopie</th><th>vs plan</th></tr></thead>
       <tbody id="grafik"></tbody>
     </table>
   </section>
@@ -579,7 +590,7 @@
     <div class="tleg2" id="tleg"></div>
     <div class="tline" id="tline" style="display:none"></div>
     <div class="scroll"><table>
-      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th>Zjazd</th><th>Okr.</th><th>Na postoju</th><th>vs plan</th></tr></thead>
+      <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th>Zjazd</th><th>Okr.</th><th>Na pitstopie</th><th>vs plan</th></tr></thead>
       <tbody id="grafik2"></tbody>
     </table></div>
     <p class="note" id="g2-more" style="display:none"><a href="#" id="g2-all"></a></p>
@@ -607,7 +618,7 @@
         <label>Okrążeń w stincie<input id="g-laps" inputmode="numeric" value="11"></label>
         <label>Kierowcy po kolei (z zakładki Zespół)<input id="g-order" placeholder="np. Maciej, Patryk, Amadeusz"></label>
         <label class="chk" style="grid-column:span 2"><input type="checkbox" id="g-avail" checked> Uwzględnij dostępność kierowców</label>
-        <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co postój)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
+        <label>Ile stintów z rzędu jeden kierowca<select id="g-rep"><option value="1">1 (zmiana co pitstop)</option><option value="2">2 (podwójne stinty)</option><option value="3">3</option></select></label>
         <label>Opony<select id="g-tyres">
           <option value="opt" selected>optymalnie w limicie opon (równe zużycie)</option>
           <option value="mix">w dzień 4 co 2 stinty, w nocy jedna strona</option>
@@ -617,8 +628,8 @@
         <label>Zużycie na okrążenie (%): LP / PP / LT / PT<span class="pair"><input id="g-w0" inputmode="decimal"><input id="g-w1" inputmode="decimal"><input id="g-w2" inputmode="decimal"><input id="g-w3" inputmode="decimal"></span></label>
         <label>W nocy zużycie mniejsze o (%)<input id="g-nw" inputmode="numeric" value="15"></label>
         <label>Opony na start zużyte (%)<input id="g-qw" inputmode="decimal" value="0" title="Komplet po kwalifikacjach bywa lekko zużyty – np. 3–5%. 0 = nowe opony na start"></label>
-        <label style="grid-column:span 2">Pomiary: tor i auto / kierowca<span class="pair"><select id="g-msrc" aria-label="Tor i auto" style="width:auto;flex:2 1 0;min-width:0"><option value="">–</option></select><select id="g-mdrv" aria-label="Kierowca" style="width:auto;flex:1 1 0;min-width:0"><option value="">wszyscy</option></select><button class="second mini" id="b-wmeas" type="button" title="Zużycie opon i czasy postoju zmierzone przez programy kierowców (zapisują się same, także w treningu)">Wczytaj</button></span></label>
-        <label>Postój (s): bez opon / 2 opony / 4 opony<span class="pair"><input id="g-s0" inputmode="numeric" value="60"><input id="g-s2" inputmode="numeric" value="65"><input id="g-s4" inputmode="numeric" value="72"></span></label>
+        <label style="grid-column:span 2">Pomiary: tor i auto / kierowca<span class="pair"><select id="g-msrc" aria-label="Tor i auto" style="width:auto;flex:2 1 0;min-width:0"><option value="">–</option></select><select id="g-mdrv" aria-label="Kierowca" style="width:auto;flex:1 1 0;min-width:0"><option value="">wszyscy</option></select><button class="second" id="b-wmeas" type="button" title="Zużycie opon i czasy pitstopu zmierzone przez programy kierowców (zapisują się same, także w treningu)">Wczytaj</button></span></label>
+        <label>Pitstop (s): bez opon / 2 opony / 4 opony<span class="pair"><input id="g-s0" inputmode="numeric" value="60"><input id="g-s2" inputmode="numeric" value="65"><input id="g-s4" inputmode="numeric" value="72"></span></label>
       </div>
       <div class="btnrow"><button id="b-gen" class="second">Rozpisz plan</button><span id="gen-ok" class="note"></span></div>
     </details>
@@ -626,10 +637,10 @@
     <div id="pit-meas" class="note" style="display:none"></div>
     <div class="scroll"><table class="edit plan">
       <thead><tr><th>Stint</th><th>Kierowca</th><th title="Ile okrążeń ma trwać stint">Okr.</th><th>Start</th><th>Zjazd</th><th>Pora</th>
-        <th title="Zmiana lewych opon (LP + LT) na postoju po tym stincie">Lewe</th><th title="Zmiana prawych opon (PP + PT)">Prawe</th>
-        <th title="Ile trwa postój po tym stincie">Postój (s)</th>
+        <th title="Zmiana lewych opon (LP + LT) na pitstopie po tym stincie">Lewe</th><th title="Zmiana prawych opon (PP + PT)">Prawe</th>
+        <th title="Ile trwa pitstop po tym stincie">Pitstop (s)</th>
         <th title="Bieżnik na koniec stintu (%): lewa przednia">LP</th><th title="prawa przednia">PP</th><th title="lewa tylna">LT</th><th title="prawa tylna">PT</th>
-        <th title="Ile nowych opon zostanie po tym postoju">Zostało</th>
+        <th title="Ile nowych opon zostanie po tym pitstopie">Zostało</th>
         <th title="Jeśli stint ma zacząć się później (np. po naprawie) – o ile minut">Przesun. (min)</th><th></th></tr></thead>
       <tbody id="plan-rows"></tbody>
     </table></div>
@@ -643,7 +654,7 @@
       <textarea id="tsv" placeholder="11	0	Maciej	13:30	…"></textarea>
       <div class="btnrow"><button id="b-tsv" class="second">Wczytaj</button><span id="tsv-ok" class="note"></span></div>
     </details>
-    <p class="note">Godziny w tabeli liczą się z planu (start wyścigu i czas okrążenia). Grafik na górze przelicza się co minutę z prawdziwego tempa. Kierowca dostaje powiadomienie na telefon przed swoją zmianą (zakładka Zespół → 📱) – dlatego wybierasz go z listy. Inżynier na postoju zmienia opony według planu, chyba że któraś nie dojedzie do końca następnego stintu.</p>
+    <p class="note">Godziny w tabeli liczą się z planu (start wyścigu i czas okrążenia). Grafik na górze przelicza się co minutę z prawdziwego tempa. Kierowca dostaje powiadomienie na telefon przed swoją zmianą (zakładka Zespół → 📱) – dlatego wybierasz go z listy. Inżynier na pitstopie zmienia opony według planu, chyba że któraś nie dojedzie do końca następnego stintu.</p>
   </section>
 </div></div>
 
@@ -869,7 +880,7 @@ function dmgDraw(st, live) {
   var adv;
   if (heavy) adv = '⚠ ' + TR('Zjedź jak najszybciej – naprawa i opony.');
   else if (d.loss != null && d.loss < 0.15) adv = TR('Nie naprawiaj – uszkodzenie nie kosztuje czasu.');
-  else if (d.repair_worth === true) adv = TR('Napraw na najbliższym postoju') + (d.stop_in ? ' (' + TR('za') + ' ' + d.stop_in + ' ' + TR('okr.') + ')' : '') + '.';
+  else if (d.repair_worth === true) adv = TR('Napraw na najbliższym pitstopie') + (d.stop_in ? ' (' + TR('za') + ' ' + d.stop_in + ' ' + TR('okr.') + ')' : '') + '.';
   else if (d.repair_worth === false) adv = TR('Nie naprawiaj – naprawa trwa dłużej, niż tracisz do mety.');
   else if (rmax != null) adv = rmax >= 5 ? TR('Naprawa do') + ' ' + rmax + ' s ' + TR('się opłaca, dłuższą przerwij.') : TR('Naprawa się nie opłaca.');
   else adv = TR('Sprawdzam, czy przez to tracisz – po dwóch czystych okrążeniach.');
@@ -1086,7 +1097,7 @@ function render(v) {
       var dv = r.ve - mine.ve;
       if (Math.abs(dv) >= 1) veTxt += ' <span class="note">(' + (dv > 0 ? '+' : '−') + Math.round(Math.abs(dv)) + ')</span>';
     }
-    var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (postój ' + r.tyres.stop + ')' : 'bez zmiany (postój ' + r.tyres.stop + ')') : '—';
+    var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (pitstop ' + r.tyres.stop + ')' : 'bez zmiany (pitstop ' + r.tyres.stop + ')') : '—';
     if (r.comp) ty = '<b>' + esc(r.comp) + '</b>' + (ty === '—' ? '' : ' ' + ty);     // mieszanka (LMU, Assetto Corsa)
     var sec = r.sec || [], bs = r.bsec || [];
     var secs = [0, 1, 2].map(function (i) { return '<td class="hide-sm">' + (sec[i] ? tspan(sec[i], bs[i], cb['s' + (i + 1)], secTxt) : '—') + '</td>'; }).join('');
@@ -1107,19 +1118,18 @@ function render(v) {
     var o = opt || 90, span = 25;                     // ±25°C od optimum = pełny niebieski / czerwony
     var x = Math.max(-1, Math.min(1, (t - o) / span));
     var hue = x < 0 ? 120 + (-x) * 100 : 120 - x * 120; // 220 niebieski, 120 zielony, 0 czerwony
-    return 'hsl(' + Math.round(hue) + ',75%,48%)';
+    return Math.round(hue);
   }
   function tyreTemp(st, i) {
     var tt = st.tyre_temps ? st.tyre_temps[i] : null;
     if (!tt) return '';
     var avg = Math.round((tt[0] + tt[1] + tt[2]) / 3), opt = st.tyre_opt;
     var zones = tt.map(function (v) {
-      return '<span style="display:inline-block;min-width:2.2em;padding:1px 3px;border-radius:4px;color:#fff;background:' +
-             tempColor(v, opt) + '">' + unitTn(v) + '</span>';
+      return '<span class="tz" style="--h:' + tempColor(v, opt) + '">' + unitTn(v) + '</span>';
     }).join(' ');
     var c = st.tyre_carcass ? st.tyre_carcass[i] : null, pr = st.tyre_press ? st.tyre_press[i] : null;
-    return '<span class="note"><b style="color:' + tempColor(avg, opt) + '">' + unitT(avg) + '</b> ' + zones +
-           '<br>' + (c != null ? 'karkas <span style="color:' + tempColor(c, opt) + '">' + unitT(c) + '</span>' : '') +
+    return '<span class="note"><b class="tc" style="--h:' + tempColor(avg, opt) + '">' + unitT(avg) + '</b> ' + zones +
+           '<br>' + (c != null ? 'karkas <span class="tc" style="--h:' + tempColor(c, opt) + '">' + unitT(c) + '</span>' : '') +
            (pr ? ', ' + unitP(pr / 100) : '') + (opt ? ', optimum ' + unitT(opt) : '') + '</span>';
   }
   var names = ['LP', 'PP', 'LT', 'PT'], html = '';
@@ -1142,8 +1152,8 @@ function render(v) {
     (en.trend != null && Math.abs(en.trend) >= 0.3 ? ' ' + TR('(' + (en.trend > 0 ? '+' : '−') + n1(Math.abs(en.trend)) + '/okr.)') : '') : '—';
   $('engine').style.color = en && en.water_max_lap != null && en.water_max_lap >= en.water_warn ? 'var(--bad)' :
     (en && en.water_max_lap != null && en.water_max_lap >= en.water_warn - 3 ? 'var(--warn)' : '');
-  $('grille').textContent = en && en.grille ? (en.grille === 'otwórz' ? 'Na postoju: otwórz grill o stopień (za gorąco).' :
-    'Na postoju: można przymknąć grill o stopień (silnik chłodny).') : '';
+  $('grille').textContent = en && en.grille ? (en.grille === 'otwórz' ? 'Na pitstopie: otwórz grill o stopień (za gorąco).' :
+    'Na pitstopie: można przymknąć grill o stopień (silnik chłodny).') : '';
 
   var wx = st.weather || {};
   $('wet').textContent = wx.rain != null ? Math.round(wx.rain * 100) + '% / ' + Math.round(wx.wetness * 100) + '%' : '—';
@@ -1162,13 +1172,13 @@ function render(v) {
 
   var fs = st.fair_share;                 // LMU Fair Share: każdy kierowca min. 50% / liczba kierowców okrążeń zespołu
   $('fsbox').style.display = fs && fs.rows ? '' : 'none';
-  $('stopsbox').style.display = fs && fs.rows ? 'none' : '';      // bez fair share (AC, solo): postoje
+  $('stopsbox').style.display = fs && fs.rows ? 'none' : '';      // bez fair share (AC, solo): pitstopy
   var pt = st.pit_times;
   $('st-stops').textContent = st.pit_stops != null ? st.pit_stops : '—';
   $('st-pittimes').textContent = pt ? pt['0'] + ' / ' + pt['2'] + ' / ' + pt['4'] + ' s' : '—';
   var mi = rt.map(function (x) { return !!x.me; }).indexOf(true), ra = mi > 0 ? rt[mi - 1] : null, rb = mi >= 0 && mi < rt.length - 1 ? rt[mi + 1] : null;
   $('st-rstops').textContent = (ra && !(ra.leader && ra.gap_hidden > 0) ? ra.stops : '—') + ' / ' + (rb ? rb.stops : '—');
-  $('st-stopnote').textContent = TR(pt ? 'Czas razem z przejazdem aleją, zmierzony na Twoich postojach.' : 'Czasy pojawią się po pierwszym postoju.');
+  $('st-stopnote').textContent = TR(pt ? 'Czas razem z przejazdem aleją, zmierzony na Twoich pitstopach.' : 'Czasy pojawią się po pierwszym pitstopie.');
   if (fs && fs.rows) {
     setH($('fsrows'), fs.rows.map(function (r) {
       return '<div class="row"><span>' + esc(r.driver) + '</span><span class="num"' + (r.missing ? ' style="color:var(--bad)"' : '') + '>' +
@@ -1766,7 +1776,7 @@ function drawTimeline(rows) {
   var h = '<div class="bars">' + st.map(function (x, i) {
     var cls = 'st' + (ci >= 0 && i < ci ? ' done' : '') + (i === ci ? ' now' : '');
     return '<div class="' + cls + '" style="left:' + pct(x.a) + ';width:calc(' + ((x.b - x.a) / span * 100).toFixed(3) + '% - 3px);background:' + col(x.r.driver || '—') +
-      '" title="' + esc(x.r.n + '. ' + (x.r.driver || '') + ' ' + x.r.start + '–' + x.r.end) + '"><span>' + esc(x.r.n + '. ' + (x.r.driver || '—')) + '</span><span>' + esc(x.r.start) + '</span></div>';
+      '" title="' + esc(x.r.n + '. ' + (x.r.driver || '') + ' ' + x.r.start + '–' + x.r.end) + '"><span><i class="f">' + esc(x.r.n + '. ' + (x.r.driver || '—')) + '</i><i class="s">' + esc(x.r.n + '. ' + (x.r.driver || '—').slice(0, 1)) + '</i></span><span>' + esc(x.r.start) + '</span></div>';
   }).join('') + '</div>';
   var hrs = span / 60, stepH = hrs > 16 ? 4 : hrs > 6 ? 2 : 1;
   for (var k = 0; k <= hrs; k += stepH) h += '<div class="tick" style="left:' + pct(t0 + k * 60) + '">' + k + ' h</div>';
@@ -1791,7 +1801,7 @@ var ADV_FIELDS = [
   ['pitCallS', 'Wezwanie do boksu (s przed wjazdem)'], ['stintCorr', 'Korekta numeru stintu (+1 / −1)'],
   ['wear', 'Plan zużycia opon LP,PP,LT,PT (% / okr.)', 'list'],
   ['rainSlickK', 'Deszcz: strata slicków (współczynnik)'], ['rainWetBase', 'Deszcz: strata deszczówek (bazowa)'],
-  ['rainPitCost', 'Deszcz: koszt postoju na zmianę opon (s)']
+  ['rainPitCost', 'Deszcz: koszt pitstopu na zmianę opon (s)']
 ];
 function lapFmt(s) { if (!s) return ''; var m = Math.floor(s / 60), r = s - m * 60; return m + ':' + (r < 10 ? '0' : '') + (Math.round(r * 10) / 10).toString().replace('.', ','); }
 function lapParse(t) { t = String(t || '').trim().replace(',', '.'); var m = t.match(/^(\d+):(\d+(?:\.\d+)?)$/); return m ? +m[1] * 60 + +m[2] : num(t); }
@@ -1871,7 +1881,7 @@ function serviceOf(r, fin) {
   var t = r.tyreL && r.tyreR ? ' + 4 opony' : r.tyreL ? ' + lewe opony' : r.tyreR ? ' + prawe opony' : '';
   return 'Tankowanie' + t;
 }
-function legacyTyres(r) {   // stare plany: opony tylko w opisie „Na postoju”
+function legacyTyres(r) {   // stare plany: opony tylko w opisie „Na pitstopie”
   if (r.tyreL != null || r.tyreR != null) return r;
   var sv = String(r.service || '').toLowerCase();
   r.tyreL = /4 opony|komplet|lewe/.test(sv); r.tyreR = /4 opony|komplet|prawe/.test(sv);
@@ -1978,7 +1988,7 @@ function rowsFromTable() {
   return out;
 }
 function tyreSummary(info) {
-  var b = (S.settings || {}).tyreBudget, txt = 'Opony: 4 na start + ' + (info.used - 4) + ' na postojach = ' + info.used;
+  var b = (S.settings || {}).tyreBudget, txt = 'Opony: 4 na start + ' + (info.used - 4) + ' na pitstopach = ' + info.used;
   if (b) txt += ' z ' + b + (info.used > b ? ' – za dużo o ' + (info.used - b) + '!' : info.used < b ? ' (zapas ' + (b - info.used) + ')' : ' ✓');
   else txt += ' (wpisz w „1. Wyścig”, ile opon macie na wyścig)';
   $('tyre-sum').textContent = txt;
@@ -2024,7 +2034,7 @@ function editPlan(rows) {
   $('plan-rows').querySelectorAll('input, select').forEach(function (el) {
     el.addEventListener(el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input', function () {
       PLAN_DIRTY = true;
-      if (el.type === 'checkbox') {   // czas postoju z liczby zmienianych opon
+      if (el.type === 'checkbox') {   // czas pitstopu z liczby zmienianych opon
         var tr = el.closest('tr'), n = (tr.querySelector('[data-k=tyreL]').checked ? 2 : 0) + (tr.querySelector('[data-k=tyreR]').checked ? 2 : 0);
         var st = stopTimes(); tr.querySelector('[data-k=stopS]').value = n === 4 ? st[2] : n === 2 ? st[1] : st[0];
       }
@@ -2088,13 +2098,13 @@ $('b-gen').onclick = function () {
     (cut ? ', zmniejszone zmiany opon na końcu, żeby zmieścić się w ' + budget + ' oponach' : '') +
     (noFree ? ', ' + TR('w {0} stintach nikt nie jest dostępny – czerwone ramki').replace('{0}', noFree) : '') + '. Sprawdź tabelę i kliknij „Zapisz plan”.';
 };
-function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) i porównanie z planem
+function pitMeas() {   // zmierzone czasy pitstopu z wyścigu (program kierowcy) i porównanie z planem
   var st = (S.live || {}).state || {}, pt = st.pit_times, el = $('pit-meas');
   if (!pt && !st.pit_check) { el.style.display = 'none'; return; }
   el.style.display = '';
   var h = '';
   if (st.pit_check) h += '<div>' + esc(st.pit_check) + '</div>';
-  if (pt) h += '<div>' + esc(TR('Zmierzony cały postój (stanie w boksie + aleja ok. ' + Math.round(pt.lane || 0) + ' s, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
+  if (pt) h += '<div>' + esc(TR('Zmierzony cały pitstop (stanie w boksie + aleja ok. ' + Math.round(pt.lane || 0) + ' s, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
     ' s, 4 opony ' + pt['4'] + ' s. Grafik na żywo już z nich korzysta.')) + ' <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
   if (el.innerHTML !== h) {
     el.innerHTML = h;
@@ -2107,7 +2117,7 @@ function pitMeas() {   // zmierzone czasy postoju z wyścigu (program kierowcy) 
         tr.querySelector('[data-k=stopS]').value = pt[String(n)];
       });
       PT('settings').update({ stopBase: pt['0'], stop2: pt['2'], stop4: pt['4'] }).catch(function () {});
-      PLAN_DIRTY = true; refreshTimes(); flash('plan-ok', 'Czasy postoju zmienione – kliknij „Zapisz plan”.');
+      PLAN_DIRTY = true; refreshTimes(); flash('plan-ok', 'Czasy pitstopu zmienione – kliknij „Zapisz plan”.');
     };
   }
 }
@@ -2116,7 +2126,7 @@ function wearKey(s) {
   s = String(s || '').replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, function (c) { return en[pl.indexOf(c)]; });
   return s.replace(/[^A-Za-z0-9_-]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 50) || 'x';
 }
-// pomiary z programów kierowców: zużycie opon (po każdym czystym okrążeniu, także w treningu) i czasy postoju
+// pomiary z programów kierowców: zużycie opon (po każdym czystym okrążeniu, także w treningu) i czasy pitstopu
 var MEAS = null;
 function measLatest(list) { return Math.max.apply(null, [0].concat(list.map(function (x) { return (x && x.t) || 0; }))); }
 function measOf(key, drv) {
@@ -2155,7 +2165,7 @@ function loadMeas(cb) {
 }
 $('g-msrc').onchange = measDrivers;
 function median(a) { a = a.slice().sort(function (x, y) { return x - y; }); return a.length ? (a.length % 2 ? a[(a.length - 1) / 2] : (a[a.length / 2 - 1] + a[a.length / 2]) / 2) : null; }
-function pitFromMeas(list) {   // cały postój dla 0 / 2 / 4 opon: zmierzony z tyloma oponami, a gdy takiego nie było – oszacowany z innych
+function pitFromMeas(list) {   // cały pitstop dla 0 / 2 / 4 opon: zmierzony z tyloma oponami, a gdy takiego nie było – oszacowany z innych
   var out = {};
   ['0', '2', '4'].forEach(function (n) {
     var direct = list.filter(function (x) { return String(x.tyres) === n && x.loss_s; }).map(function (x) { return +x.loss_s; });
@@ -2167,7 +2177,7 @@ function pitFromMeas(list) {   // cały postój dla 0 / 2 / 4 opon: zmierzony z 
 }
 function applyMeas() {
   var key = $('g-msrc').value, drv = $('g-mdrv').value;
-  if (!key) { alert(TR('Nie ma jeszcze pomiarów. Program kierowcy zapisuje zużycie opon sam po 3 czystych okrążeniach stintu, a czas postoju po każdym postoju (także w treningu) – pojeździjcie tym autem na tym torze.')); return; }
+  if (!key) { alert(TR('Nie ma jeszcze pomiarów. Program kierowcy zapisuje zużycie opon sam po 3 czystych okrążeniach stintu, a czas pitstopu po każdym pitstopie (także w treningu) – pojeździjcie tym autem na tym torze.')); return; }
   var m = measOf(key, drv), parts = [], smp = m.wear;
   var avg = function (list) {
     var w = [0, 0, 0, 0], n = 0;
@@ -2193,7 +2203,7 @@ function applyMeas() {
     if (pt['0']) $('g-s0').value = pt['0'];
     if (pt['2']) $('g-s2').value = pt['2'];
     if (pt['4']) $('g-s4').value = pt['4'];
-    parts.push(TR('cały postój: bez opon {0} s, 2 opony {1} s, 4 opony {2} s ({3} post.)').replace('{0}', pt['0'] || '—').replace('{1}', pt['2'] || '—')
+    parts.push(TR('cały pitstop: bez opon {0} s, 2 opony {1} s, 4 opony {2} s ({3} pit.)').replace('{0}', pt['0'] || '—').replace('{1}', pt['2'] || '—')
       .replace('{2}', pt['4'] || '—').replace('{3}', m.pit.length));
   }
   var src = $('g-msrc').selectedOptions[0], name = src ? src.textContent.replace(/\s*\(.*$/, '') : key;
