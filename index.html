@@ -1087,7 +1087,7 @@ function render(v) {
       if (Math.abs(dv) >= 1) veTxt += ' <span class="note">(' + (dv > 0 ? '+' : '−') + Math.round(Math.abs(dv)) + ')</span>';
     }
     var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (postój ' + r.tyres.stop + ')' : 'bez zmiany (postój ' + r.tyres.stop + ')') : '—';
-    if (r.comp) ty = '<b>' + esc(r.comp) + '</b>' + (ty === '—' ? '' : ' ' + ty);     // mieszanka (Assetto Corsa)
+    if (r.comp) ty = '<b>' + esc(r.comp) + '</b>' + (ty === '—' ? '' : ' ' + ty);     // mieszanka (LMU, Assetto Corsa)
     var sec = r.sec || [], bs = r.bsec || [];
     var secs = [0, 1, 2].map(function (i) { return '<td class="hide-sm">' + (sec[i] ? tspan(sec[i], bs[i], cb['s' + (i + 1)], secTxt) : '—') + '</td>'; }).join('');
     var row = '<tr class="' + (r.me ? 'cur' : '') + (r.leader ? ' leader' : '') + '"><td>P' + r.pos + '</td><td title="' + esc(tip) + '">' + esc(r.name) + (r.leader ? '<span class="ldr">' + TR('LIDER') + '</span>' : '') +
@@ -3277,14 +3277,19 @@ function cmpSpanWire() {
   $('cmp-x').onclick = function () { CMP.z = 1; CMP.corner = -1; CMP.span = 0; cmpCornerPanel(); cmpDraw(); cmpSpeed(); };
   $('cmp-corner').querySelectorAll('[data-sp]').forEach(function (b) { b.onclick = function () { var v = b.dataset.sp; cmpSpan(v === 'prev' ? 'prev' : +v); }; });
 }
+// to samo auto jedzie dalej: następny numer okrążenia w ciągu kilku minut – ta sama sesja, choć numer sesji z programu
+// się zmienił (program do 0.4.3.24 w AC zakładał nową sesję prawie co okrążenie – 08.11, Lister Storm GT)
+function lapCont(cur, l) {
+  return cur.lastLap > 0 && +l.lap === cur.lastLap + 1 && l.t - cur.end < 10 * 60e3 && (!cur.kind || !l.kind || cur.kind === l.kind);
+}
 // sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min
 function lapSessions() {
   var ls = LAPS.filter(function (l) { return l && l.t; }).slice().sort(function (a, b) { return a.t - b.t; }), out = [], cur = null;
   ls.forEach(function (l) {
-    if (!cur || (l.sess && cur.sess && l.sess !== cur.sess) || (!(l.sess && cur.sess) && l.t - cur.end > SESSION_GAP_MS)) {
+    if (!cur || (l.sess && cur.sess && l.sess !== cur.sess && !lapCont(cur, l)) || (!(l.sess && cur.sess) && l.t - cur.end > SESSION_GAP_MS)) {
       cur = { id: 's' + out.length, sess: l.sess || '', start: l.t, end: l.t, kind: l.kind || '', laps: [] }; out.push(cur); }
     if (!cur.sess && l.sess) cur.sess = l.sess;
-    cur.end = l.t; cur.laps.push(l); l._s = cur.id;
+    cur.end = l.t; cur.laps.push(l); l._s = cur.id; cur.lastLap = +l.lap || 0;
   });
   return out.reverse();
 }
@@ -3411,10 +3416,10 @@ function lapSummary(laps) {
   ls.forEach(function (l) {
     var k = carK(l), cur = curs[k];
     // nowa sesja: inny numer sesji z programu (każdy wyścig osobno, także jeden po drugim) albo długa przerwa
-    if (!cur || l.t - cur.end > SESSION_GAP_MS || (l.sess && cur.sess && l.sess !== cur.sess)) {
+    if (!cur || l.t - cur.end > SESSION_GAP_MS || (l.sess && cur.sess && l.sess !== cur.sess && !lapCont(cur, l))) {
       cur = curs[k] = { start: l.t, end: l.t, laps: [], car: k, sess: l.sess || '' }; sessions.push(cur); }
     if (!cur.sess && l.sess) cur.sess = l.sess;
-    cur.laps.push(l); cur.end = l.t;
+    cur.laps.push(l); cur.end = l.t; cur.lastLap = +l.lap || 0;
   });
   sessions.sort(function (a, b) { return a.start - b.start; });
   sessions.forEach(function (s) {
