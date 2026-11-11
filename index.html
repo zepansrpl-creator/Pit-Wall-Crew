@@ -2689,7 +2689,7 @@ function cmpGetShape(name) {
   var k = cmpTrackKey(name);
   if (CMP.shapes.hasOwnProperty(k)) return Promise.resolve(CMP.shapes[k]);
   return T('tracks/' + k).once('value').then(function (s) { return s.val() || T('tracks/' + k + '_ac').once('value').then(function (s2) { return s2.val(); }); })
-    .then(function (r) { CMP.shapes[k] = r && r.points && r.points.length >= 50 ? r.points : null; return CMP.shapes[k]; })
+    .then(function (r) { CMP.shapes[k] = r && r.hd && r.hd.length >= 100 ? r.hd : (r && r.points && r.points.length >= 50 ? r.points : null); return CMP.shapes[k]; })
     .catch(function () { return null; });
 }
 function cmpFetch() {
@@ -3550,7 +3550,8 @@ function mapData(live) {
   $('map-box').style.display = MAP.pts ? '' : 'none';
 }
 function mapSetTrack(rec) {
-  var p = (rec.points || []).map(function (q) { return [q[0], -q[1]]; });
+  var src = rec.hd && rec.hd.length >= 100 ? rec.hd : (rec.points || []);   // dokładny kształt (co 4 m), gdy jest
+  var p = src.map(function (q) { return [q[0], -q[1]]; });
   if (p.length < 50) return;
   MAP.raw = p; MAP.name = rec.track || '';
   mapBuild();
