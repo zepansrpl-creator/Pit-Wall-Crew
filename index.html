@@ -1531,7 +1531,8 @@ function startTeam(code) {
   $('v-login').style.display = 'none'; $('tabs').style.display = '';
   ['st-live', 'st-driver', 'st-laptop'].forEach(function (id) { $(id).style.display = ''; });
   if (Q.get('team')) history.replaceState(null, '', location.pathname + (/#cmp=/.test(location.hash) ? location.hash : ''));
-  tab(/#cmp=/.test(location.hash) ? 'laps' : (lsGet('tab') || 'live'));   // link do porównania okrążeń otwiera zakładkę Okrążenia
+  // link do porównania okrążeń albo „Porównaj na pit wallu” z raportu w programie (?tab=laps) – zakładka Okrążenia
+  tab(/#cmp=/.test(location.hash) || Q.get('tab') === 'laps' ? 'laps' : (lsGet('tab') || 'live'));
   var onErr = function (e) { pill($('st-live'), authErr(e), 'bad'); };
   T('meta').on('value', function (s) { S.meta = s.val() || {}; teamInfo(); draw(); }, onErr);
   T('settings').on('value', function (s) { S.teamSet = s.val() || {}; applyCar(); }, onErr);
