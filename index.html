@@ -12,8 +12,8 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=65469857"></script>
-<script src="i18n_core.js?v=89439f8d"></script>
+<script src="i18n.js?v=936861c1"></script>
+<script src="i18n_core.js?v=f7332401"></script>
 <style>
   :root {
     --bg: #0c1411; --bg2: #101a16; --card: #13201b; --card2: #172720; --line: #22362d; --line2: #2c4439;
@@ -823,6 +823,10 @@
 <script>
 function $(id) { return document.getElementById(id); }
 function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+// tekst z tłumaczeniem wklejany w HTML – zawsze przez esc (słownik dopisuje też program kierowcy: PWC_I18N_ADD w i18n_core.js).
+// Dane z bazy (stan auta, grafik, mapa) też zawsze przez esc: zapisuje je program każdego kierowcy, a pod własnym linkiem
+// dla obserwatorów – każdy, więc „liczba” może być tekstem. Pilnuje tego tests/test_pitwall_dane_jako_tekst.py.
+function TH(s) { return esc(TR(s)); }
 function n1(x) { return x == null ? '—' : Number(x).toFixed(1).replace('.', ','); }
 function n2(x) { return x == null ? '—' : Number(x).toFixed(2).replace('.', ','); }
 function lapTxt(s) {
@@ -869,7 +873,7 @@ function dmgDraw(st, live) {
   var lvl = heavy ? 'POWAŻNE' : (mz >= 2 || st.damage >= 3 || sbad.length) ? 'ŚREDNIE' : 'LEKKIE';
   var col = lvl === 'POWAŻNE' ? '#ff6b5b' : lvl === 'ŚREDNIE' ? '#ff9f43' : '#f0c43c';
   var zt = z.map(function (v, i) { return v ? DMG_ZONES[i] : ''; }).filter(Boolean);
-  var item = function (k, v, c) { return '<div><span>' + TR(k) + '</span><b' + (c ? ' style="color:' + c + '"' : '') + '>' + v + '</b></div>'; };
+  var item = function (k, v, c) { return '<div><span>' + TH(k) + '</span><b' + (c ? ' style="color:' + c + '"' : '') + '>' + esc(v) + '</b></div>'; };   // v: zwykły tekst
   var ok = 'var(--ok)';
   var loss = d.loss == null ? TR('sprawdzam (2 czyste okrążenia)') : n1(d.loss) + ' s / ' + TR('okr.');
   var vm = d.vmax == null ? '—' : (d.vmax >= 2 ? '−' + unitSp(d.vmax) : TR('bez zmian'));
@@ -885,28 +889,28 @@ function dmgDraw(st, live) {
   else if (rmax != null) adv = rmax >= 5 ? TR('Naprawa do') + ' ' + rmax + ' s ' + TR('się opłaca, dłuższą przerwij.') : TR('Naprawa się nie opłaca.');
   else adv = TR('Sprawdzam, czy przez to tracisz – po dwóch czystych okrążeniach.');
   box.style.setProperty('--dmgc', col);
-  setH(box, '<div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0">' + TR('Uszkodzenia') + '</h2><span class="lvl">' + TR(lvl) + '</span>' +
-    (d.lap ? '<span class="note">' + TR('okr.') + ' ' + d.lap + '</span>' : '') + '</div>' + dmgCar(z, susp, d.detached) +
-    '<div class="kv">' + item('Nadwozie', zt.length ? esc(zt.map(TR).join(', ')) + (d.detached ? ' – ' + TR('odpadły części') : '') : TR('bez uszkodzeń'), zt.length ? col : ok) +
+  setH(box, '<div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0">' + TH('Uszkodzenia') + '</h2><span class="lvl">' + TH(lvl) + '</span>' +
+    (d.lap ? '<span class="note">' + esc(TR('okr.') + ' ' + d.lap) + '</span>' : '') + '</div>' + dmgCar(z, susp, d.detached) +
+    '<div class="kv">' + item('Nadwozie', zt.length ? zt.map(TR).join(', ') + (d.detached ? ' – ' + TR('odpadły części') : '') : TR('bez uszkodzeń'), zt.length ? col : ok) +
     item('Zawieszenie', sbad.length ? sbad.join(', ') : (susp.length ? TR('sprawne') : '—'), sbad.length ? col : (susp.length ? ok : '')) +
     item('Opony', flats.length ? TR('przebita') + ' ' + flats.join(', ') : off.length ? TR('odpadło koło') + ' ' + off.join(', ') : TR('bez uszkodzeń'), flats.length || off.length ? '#ff6b5b' : ok) +
     item('Strata', loss, d.loss != null && d.loss >= 0.15 ? col : '') + item('Prędkość maks.', vm, d.vmax >= 2 ? col : '') + item('Naprawa', rep) + '</div>' +
-    '<div class="adv">' + adv + '</div>');
+    '<div class="adv">' + esc(adv) + '</div>');
   box.classList.remove('off');
 }
 // obok mapy: żółta flaga i auta blisko nas
 function mapSide(st, rt) {
   var el = $('map-side'); if (!el) return;
   var yl = (st.yellow || []).map(function (y, i) { return y ? i + 1 : 0; }).filter(Boolean), h = '';
-  if (yl.length) h += '<div class="yflag"><b>⚑ ' + TR('Żółta flaga') + ' – ' + (yl.length > 1 ? TR('sektory') + ' ' : TR('sektor') + ' ') + yl.join(', ') + '</b></div>';
+  if (yl.length) h += '<div class="yflag"><b>⚑ ' + TH('Żółta flaga') + ' – ' + (yl.length > 1 ? TH('sektory') + ' ' : TH('sektor') + ' ') + yl.join(', ') + '</b></div>';
   var mi = rt.map(function (x) { return !!x.me; }).indexOf(true);
   if (mi >= 0) {
-    h += '<div class="note" style="letter-spacing:.06em">' + TR('W KLASIE BLISKO NAS') + '</div>';
+    h += '<div class="note" style="letter-spacing:.06em">' + TH('W KLASIE BLISKO NAS') + '</div>';
     rt.slice(Math.max(0, mi - 2), mi + 3).forEach(function (r) {
       if (r.leader && !r.me) return;
-      h += '<div class="row"><span>P' + r.pos + ' ' + esc(r.me ? TR('My') : r.name) + '</span><span class="num">' + (r.me ? '—' : r.gap == null ? '—' : (r.gap > 0 ? '+' : '−') + n1(Math.abs(r.gap)) + ' s') + '</span></div>';
+      h += '<div class="row"><span>P' + esc(r.pos) + ' ' + esc(r.me ? TR('My') : r.name) + '</span><span class="num">' + (r.me ? '—' : r.gap == null ? '—' : (r.gap > 0 ? '+' : '−') + n1(Math.abs(r.gap)) + ' s') + '</span></div>';
     });
-    var L = rt[0]; if (L && L.leader) h += '<div class="row"><span>P1 ' + esc(L.name) + ' (' + TR('lider') + ')</span><span class="num">' + (L.gap == null ? '—' : '+' + n1(Math.abs(L.gap)) + ' s') + '</span></div>';
+    var L = rt[0]; if (L && L.leader) h += '<div class="row"><span>P1 ' + esc(L.name) + ' (' + TH('lider') + ')</span><span class="num">' + (L.gap == null ? '—' : '+' + n1(Math.abs(L.gap)) + ' s') + '</span></div>';
   }
   setH(el, h);
 }
@@ -927,7 +931,7 @@ window.addEventListener('resize', function () { fitBig($('stop')); });
 function gapTxt(g) {
   if (!g) return '—';
   var t = g.trend == null ? '' : ' ' + TR('(' + (g.trend > 0 ? '+' : '−') + n1(Math.abs(g.trend)) + '/okr.)');
-  return esc(g.name) + ' ' + n1(Math.abs(g.gap)) + ' s' + t;
+  return esc(g.name) + ' ' + n1(Math.abs(g.gap)) + ' s' + esc(t);
 }
 // wstawia HTML tylko, gdy się zmienił (render co ~1 s: mniej pracy, rozwinięta lista na telefonie się nie zamyka)
 // ------------------------------------------------------------------ jednostki (⚙ w nagłówku; każdy oglądający ma swoje)
@@ -1019,7 +1023,7 @@ function render(v) {
   var gk = !!((S.settings || {}).groqKey);   // AI i rozpoznawanie mowy: Groq (klucz zespołu, zakładka Zespół)
   pill($('st-laptop'), gk ? 'AI: Groq ✓' : 'AI: brak klucza Groq', gk ? 'ok' : 'warn');
 
-  setH($('pos'), st.pos_class ? 'P' + st.pos_class + ' / ' + st.n_class + (st.cls ? ' <span style="font-size:18px;color:var(--muted);overflow-wrap:anywhere">' + esc(st.cls) + '</span>' : '') : '—');
+  setH($('pos'), st.pos_class ? 'P' + esc(st.pos_class) + ' / ' + esc(st.n_class) + (st.cls ? ' <span style="font-size:18px;color:var(--muted);overflow-wrap:anywhere">' + esc(st.cls) + '</span>' : '') : '—');
   $('lap').textContent = st.laps_done != null ? String(st.laps_done + 1) : '—';
   var cb = st.class_best || {};
   setH($('laptimes'), tspan(st.last_lap, st.best_lap, cb.lap));
@@ -1027,9 +1031,9 @@ function render(v) {
   setH($('bestlap'), st.best_lap > 0 ? tspan(st.best_lap, st.best_lap, cb.lap) : '—');
   setH($('classbest'), cb.lap > 0 ? tspan(cb.lap, cb.lap, cb.lap) : '—');
   var fc = $('flagchip'), yl = (st.yellow || []).map(function (y, i) { return y ? i + 1 : 0; }).filter(Boolean);
-  if (st.phase === 'stopped') { fc.className = 'flagchip red'; setH(fc, '<span>⚑ ' + TR('Czerwona flaga') + '</span><span>' + TR('wyścig wstrzymany') + '</span>'); }
-  else if (st.phase === 'fcy') { fc.className = 'flagchip sc'; setH(fc, '<span>⚑ Safety car</span><span>' + TR('neutralizacja') + '</span>'); }
-  else if (yl.length) { fc.className = 'flagchip'; setH(fc, '<span>⚑ ' + TR('Żółta flaga') + '</span><span>' + TR(yl.length > 1 ? 'sektory' : 'sektor') + ' ' + yl.join(', ') + '</span>'); }
+  if (st.phase === 'stopped') { fc.className = 'flagchip red'; setH(fc, '<span>⚑ ' + TH('Czerwona flaga') + '</span><span>' + TH('wyścig wstrzymany') + '</span>'); }
+  else if (st.phase === 'fcy') { fc.className = 'flagchip sc'; setH(fc, '<span>⚑ Safety car</span><span>' + TH('neutralizacja') + '</span>'); }
+  else if (yl.length) { fc.className = 'flagchip'; setH(fc, '<span>⚑ ' + TH('Żółta flaga') + '</span><span>' + TH(yl.length > 1 ? 'sektory' : 'sektor') + ' ' + yl.join(', ') + '</span>'); }
   else fc.className = 'flagchip off';
   fc.style.display = fc.className.indexOf('off') >= 0 || !live ? 'none' : '';
   var sl = st.sec_last, sb = st.sec_best || [];
@@ -1039,11 +1043,11 @@ function render(v) {
   if (sl && st.best_lap > 0 && st.last_lap > 0) {
     var dl = st.last_lap - st.best_lap, worst = -1, wi = 0;
     if (sb.length) sl.forEach(function (x, i) { var d = x - (sb[i] || x); if (d > worst) { worst = d; wi = i; } });
-    setH($('secdelta'), dl <= 0.0005 ? '<span class="t-g">' + TR('rekord') + '</span>' : '<span class="t-y">+' + dl.toFixed(2).replace('.', ',') + ' s' + (worst > 0.05 ? ' (S' + (wi + 1) + ')' : '') + '</span>');
+    setH($('secdelta'), dl <= 0.0005 ? '<span class="t-g">' + TH('rekord') + '</span>' : '<span class="t-y">+' + dl.toFixed(2).replace('.', ',') + ' s' + (worst > 0.05 ? ' (S' + (wi + 1) + ')' : '') + '</span>');
   } else setH($('secdelta'), '—');
   $('stintlaps').textContent = st.stint_laps != null ? st.stint_laps : '—';
   $('tl').textContent = st.tl_steps != null ? st.tl_steps : '—';
-  setH($('pen'), st.penalties ? '<span style="color:var(--bad)">' + st.penalties + '</span>' : (live ? TR('brak') : '—'));
+  setH($('pen'), st.penalties ? '<span style="color:var(--bad)">' + esc(st.penalties) + '</span>' : (live ? TH('brak') : '—'));
   $('limnote').textContent = st.tl_steps ? TR('Uważaj na limity toru – kroki rosną za każde przekroczenie.') : '';
   // wyścig na okrążenia: okrążenia do mety (i czas, jeśli gra też go podaje)
   if (st.max_laps) $('remain').textContent = (st.laps_to_finish != null ? Math.ceil(st.laps_to_finish) : '—') + ' / ' + st.max_laps + ' ' + TR('okr.') +
@@ -1078,7 +1082,7 @@ function render(v) {
 
   var rt = st.rivals_table || [];
   setH($('rivals'), rt.map(function (r) {
-    var gap = r.me ? '—' : (r.gap == null ? (r.laps > 0 ? '+' + r.laps + ' okr.' : (r.laps < 0 ? r.laps + ' okr.' : '—'))
+    var gap = r.me ? '—' : (r.gap == null ? (r.laps > 0 ? '+' + esc(r.laps) + ' okr.' : (r.laps < 0 ? esc(r.laps) + ' okr.' : '—'))
                                          : (r.gap > 0 ? '+' : '−') + n1(Math.abs(r.gap)) + ' s');
     var pit = r.in_pits ? '<b style="color:var(--warn)">w boksie</b>' :
               (r.pit_in == null ? '—' : (r.pit_in < 1 ? 'teraz' : '~' + Math.round(r.pit_in) + ' okr.'));
@@ -1097,16 +1101,16 @@ function render(v) {
       var dv = r.ve - mine.ve;
       if (Math.abs(dv) >= 1) veTxt += ' <span class="note">(' + (dv > 0 ? '+' : '−') + Math.round(Math.abs(dv)) + ')</span>';
     }
-    var ty = r.tyres ? (r.tyres.n ? '~' + r.tyres.n + ' (pitstop ' + r.tyres.stop + ')' : 'bez zmiany (pitstop ' + r.tyres.stop + ')') : '—';
+    var ty = r.tyres ? (r.tyres.n ? '~' + esc(r.tyres.n) + ' (pitstop ' + esc(r.tyres.stop) + ')' : 'bez zmiany (pitstop ' + esc(r.tyres.stop) + ')') : '—';
     if (r.comp) ty = '<b>' + esc(r.comp) + '</b>' + (ty === '—' ? '' : ' ' + ty);     // mieszanka (LMU, Assetto Corsa)
     var sec = r.sec || [], bs = r.bsec || [];
     var secs = [0, 1, 2].map(function (i) { return '<td class="hide-sm">' + (sec[i] ? tspan(sec[i], bs[i], cb['s' + (i + 1)], secTxt) : '—') + '</td>'; }).join('');
-    var row = '<tr class="' + (r.me ? 'cur' : '') + (r.leader ? ' leader' : '') + '"><td>P' + r.pos + '</td><td title="' + esc(tip) + '">' + esc(r.name) + (r.leader ? '<span class="ldr">' + TR('LIDER') + '</span>' : '') +
+    var row = '<tr class="' + (r.me ? 'cur' : '') + (r.leader ? ' leader' : '') + '"><td>P' + esc(r.pos) + '</td><td title="' + esc(tip) + '">' + esc(r.name) + (r.leader ? '<span class="ldr">' + TH('LIDER') + '</span>' : '') +
            (who.length > 1 ? ' <span class="note">(' + who.length + ' kier.)</span>' : '') + '</td><td>' + gap +
            '</td><td>' + (r.last ? tspan(r.last, r.best, cb.lap) : '—') + '</td>' + secs + '<td>' + pace + '</td><td class="hide-sm">' + catchTxt +
-           '</td><td>' + veTxt + '</td><td>' + pit + '</td><td class="hide-sm">' + (r.stops || 0) +
+           '</td><td>' + veTxt + '</td><td>' + pit + '</td><td class="hide-sm">' + esc(r.stops || 0) +
            '</td><td>' + ty + '</td></tr>';
-    if (r.leader && r.gap_hidden > 0) row += '<tr class="gapn"><td colspan="13">· · ·  ' + (r.gap_hidden === 1 ? 'P2' : 'P2–P' + (r.gap_hidden + 1)) + ' ' + TR('poza widokiem') + '  · · ·</td></tr>';
+    if (r.leader && r.gap_hidden > 0) row += '<tr class="gapn"><td colspan="13">· · ·  ' + (r.gap_hidden === 1 ? 'P2' : 'P2–P' + (r.gap_hidden + 1)) + ' ' + TH('poza widokiem') + '  · · ·</td></tr>';
     return row;
   }).join('') || '<tr><td colspan="13" class="note">Brak danych o rywalach (tylko w wyścigu, z inżynierem w nowej wersji).</td></tr>');
 
@@ -1143,8 +1147,8 @@ function render(v) {
   setH($('tyres'), html);
   $('compound').textContent = st.compound || '—';
   var dl2 = st.damage >= 8 || st.flat ? 'poważne' : st.damage >= 3 ? 'średnie' : 'lekkie';
-  setH($('damage'), st.damage ? '<span style="color:var(--' + (dl2 === 'lekkie' ? 'warn' : 'bad') + ')">' + TR(dl2) + '</span> ' + (st.dmg ? '<a href="#dmgbox" class="note" style="white-space:nowrap">' + TR('szczegóły pod mapą') + ' ↓</a>' :
-      '<span class="note">' + esc(TR(st.damage_text || '')) + (st.damage_loss ? ' · ' + n1(st.damage_loss) + ' s/' + TR('okr.') : '') + '</span>') : (live ? TR('brak') : '—'));
+  setH($('damage'), st.damage ? '<span style="color:var(--' + (dl2 === 'lekkie' ? 'warn' : 'bad') + ')">' + TH(dl2) + '</span> ' + (st.dmg ? '<a href="#dmgbox" class="note" style="white-space:nowrap">' + TH('szczegóły pod mapą') + ' ↓</a>' :
+      '<span class="note">' + esc(TR(st.damage_text || '')) + (st.damage_loss ? ' · ' + n1(st.damage_loss) + ' s/' + TH('okr.') : '') + '</span>') : (live ? TH('brak') : '—'));
   dmgDraw(st, live);
 
   var en = st.engine || null;
@@ -1182,7 +1186,7 @@ function render(v) {
   if (fs && fs.rows) {
     setH($('fsrows'), fs.rows.map(function (r) {
       return '<div class="row"><span>' + esc(r.driver) + '</span><span class="num"' + (r.missing ? ' style="color:var(--bad)"' : '') + '>' +
-        r.laps + ' okr.' + (r.missing ? ' · brakuje ' + r.missing : ' ✓') + '</span></div>';
+        esc(r.laps) + ' okr.' + (r.missing ? ' · brakuje ' + esc(r.missing) : ' ✓') + '</span></div>';
     }).join(''));
     $('fsnote').textContent = 'Wymagane ' + (Math.round(fs.share * 1000) / 10).toString().replace('.', ',') + '% okrążeń zespołu. Na mecie (ok. ' +
       fs.final + ' okr.) po ' + fs.rows[0].need_end + ' okr.';
@@ -1299,7 +1303,7 @@ function assignAvail(rows, order, rep) {
 }
 function drawAvail() {
   var box = $('avail-box'); if (!box) return;
-  var s = S.settings || {}, st = s.raceStartMs, hrs = Math.ceil(s.raceHours || 0), drv = drvNames();
+  var s = S.settings || {}, st = s.raceStartMs, hrs = Math.min(MAX_RACE_H, Math.ceil(s.raceHours || 0)), drv = drvNames();
   if (!st || !hrs) { setH(box, '<p class="note">' + esc(TR('Najpierw uzupełnij w „1. Wyścig” start i długość wyścigu (i zapisz).')) + '</p>'); return; }
   if (!drv.length) { setH(box, '<p class="note">' + esc(TR('Dodaj kierowców w zakładce Zespół.')) + '</p>'); return; }
   var h0 = Math.floor(st / 3600000), cols = [];
@@ -1310,7 +1314,8 @@ function drawAvail() {
   var body = drv.map(function (n) {
     var dk = wearKey(n), m = data[dk] || {};
     return '<tr><th class="dn">' + esc(n) + '</th>' + cols.map(function (h) {
-      var v = m[String(h)] || '', d = new Date(h * 3600000);
+      var v = m[String(h)], d = new Date(h * 3600000);
+      v = v === 'no' || v === 'ask' ? v : '';        // z bazy tylko znane stany (wartość idzie do klasy pola)
       return '<td><button type="button" class="h ' + v + (d.getHours() === 0 ? ' day0' : '') + '" data-d="' + esc(dk) + '" data-h="' + h + '" title="' +
         esc(n + ', ' + d.toLocaleDateString() + ' ' + hhmm(h * 3600000) + ': ' + lab[v]) + '" aria-label="' + esc(n + ' ' + hhmm(h * 3600000) + ': ' + lab[v]) + '"></button></td>';
     }).join('') + '</tr>';
@@ -1344,7 +1349,7 @@ function rnd(n) { var s = ''; var a = new Uint32Array(n); crypto.getRandomValues
 function lsGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
 function lsSet(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
 function flash(id, txt) { var el = $(id); el.textContent = txt; setTimeout(function () { el.textContent = ''; }, 3000); }
-function num(x) { if (x == null || x === '') return null; var v = parseFloat(String(x).replace(',', '.').replace(/\s/g, '')); return isNaN(v) ? null : v; }
+function num(x) { if (x == null || x === '') return null; var v = parseFloat(String(x).replace(',', '.').replace(/\s/g, '')); return isFinite(v) ? v : null; }   // bez NaN i nieskończoności
 function stamp() { var d = new Date(), p = function (x) { return (x < 10 ? '0' : '') + x; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
 function hhmm(t) { var d = new Date(t); return (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(); }
 function authErr(e) {
@@ -1419,7 +1424,7 @@ function boot() {
     }
     IS_OWNER = !!(u && /\.owner@/.test(u.email || ''));
     if (u && /@pitwallcrew\.team$/.test(u.email || '')) startTeam(codeOf(u.email));
-    else showLogin();
+    else { if (STARTED) SIGNED_OUT = true; showLogin(); }
   });
 }
 
@@ -1520,10 +1525,12 @@ $('f-new').onsubmit = function () {
 };
 
 // ------------------------------------------------------------------ zespół
-var STARTED = '';
+var STARTED = '', SIGNED_OUT = false;
 function startTeam(code) {
   // ten sam zespół drugi raz (np. po zostaniu założycielem logowanie zmienia konto) – bez podwójnych subskrypcji
-  if (STARTED === code) { ownerBox(); editDrivers(); return; }
+  // Po wylogowaniu (np. w innej karcie) baza zamyka nasłuch danych, a strona pokazuje logowanie: po ponownym
+  // zalogowaniu do tego samego zespołu startuje od nowa (wcześniej zostawał ekran logowania mimo zalogowania).
+  if (STARTED === code) { if (SIGNED_OUT) { location.reload(); return; } ownerBox(); editDrivers(); return; }
   if (STARTED) { location.reload(); return; }   // w innej karcie zalogowano inny zespół – ta karta przechodzi na niego
   STARTED = code;
   CODE = code; T = function (p) { return db.ref('teams/' + code + (p ? '/' + p : '')); };
@@ -1737,9 +1744,9 @@ function planToday(st) {     // jak team/planning.py plan_today(): start najwyż
 }
 function grafikRows(rows) {
   return (rows || []).map(function (s) {
-    var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + s.delta + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + s.delta + ' min</span>' : '0');
-    return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + s.n + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
-           '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + (s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
+    var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + esc(s.delta) + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + esc(s.delta) + ' min</span>' : '0');
+    return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + esc(s.n) + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
+           '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + esc(s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
   }).join('');
 }
 var G2_ALL = false;
@@ -1750,7 +1757,7 @@ function drawGrafik2(g) {     // grafik auta wybranego w „Grafik i plan”
     var a = ci < 0 ? 0 : Math.max(0, Math.min(ci - 2, rows.length - 5));
     shown = rows.slice(a, a + 5);
   }
-  setH($('grafik2'), grafikRows(shown) || '<tr><td colspan="7" class="note">' + TR('Grafik pojawi się po zapisaniu planu – liczy go program Pit Wall Crew u kogokolwiek z zespołu.') + '</td></tr>');
+  setH($('grafik2'), grafikRows(shown) || '<tr><td colspan="7" class="note">' + TH('Grafik pojawi się po zapisaniu planu – liczy go program Pit Wall Crew u kogokolwiek z zespołu.') + '</td></tr>');
   $('g2-more').style.display = rows.length > 7 ? '' : 'none';
   $('g2-all').textContent = G2_ALL ? TR('Pokaż mniej') : TR('Pokaż wszystkie stinty') + ' (' + rows.length + ')';
   drawTimeline(rows);
@@ -1792,6 +1799,7 @@ function drawTimeline(rows) {
     (ci >= 0 ? '<span><b style="color:#ff3b30">|</b> ' + esc(TR('teraz')) + '</span>' : ''));
 }
 
+var MAX_RACE_H = 100, MAX_STINTS = 300;      // granice rozsądku: dłuższy wyścig / więcej stintów to pomyłka we wpisanych liczbach
 var SET_FIELDS = [
   ['raceStartMs', 'Start wyścigu (data i godzina, czas polski)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
   ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30'],
@@ -1841,6 +1849,8 @@ $('b-set').onclick = function () {
     else if (f[2] === 'list') { var a = raw.split(/[;,]\s*|\s+/).map(num).filter(function (x) { return x != null; }); upd[f[0]] = a.length === 4 ? a : null; }
     else upd[f[0]] = num(raw);
   });
+  // długość wyścigu poza zakresem to pomyłka: tabela dostępności i grafik liczą się godzina po godzinie (także w programie)
+  if (upd.raceHours != null && !(upd.raceHours > 0 && upd.raceHours <= MAX_RACE_H)) { alert('Długość wyścigu: wpisz liczbę godzin – najwyżej ' + MAX_RACE_H + '.'); return; }
   if (!upd.raceStartMs) { alert('Wpisz datę i godzinę startu wyścigu – bez niej nie będzie grafiku ani powiadomień.'); }
   Promise.all([PT('settings').update(upd), T('meta/name').set($('s-name').value.trim() || CODE.toUpperCase())])
     .then(function () { flash('set-ok', 'Zapisano.'); }).catch(function (e) { alert(authErr(e)); });
@@ -2053,16 +2063,20 @@ function readPlan() {
 }
 $('b-gen').onclick = function () {
   var s = S.settings || {}, laps = num($('g-laps').value);
-  var lap = lapParse(($('s-lapTime') || {}).value) || s.lapTime, hours = num(($('s-raceHours') || {}).value) || s.raceHours;
+  // czas okrążenia i długość wyścigu: wpisane w „1. Wyścig” (także niezapisane), a gdy pole puste – zapisane
+  var given = function (id, parse, saved) { var raw = String(($(id) || {}).value || '').trim(); return raw ? parse(raw) : saved; };
+  var lap = given('s-lapTime', lapParse, s.lapTime), hours = given('s-raceHours', num, s.raceHours);
   var order = $('g-order').value.split(/[,;]+/).map(function (x) { return x.trim(); }).filter(Boolean);
   var rep = +$('g-rep').value || 1, mode = $('g-tyres').value, st = stopTimes();
-  if (!laps || !lap || !hours || !s.raceStartMs) { alert('Uzupełnij w „1. Wyścig” start, długość wyścigu i czas okrążenia (i zapisz), oraz liczbę okrążeń w stincie.'); return; }
+  if (!(laps > 0) || !(lap > 0) || !(hours > 0) || !s.raceStartMs) { alert('Uzupełnij w „1. Wyścig” start, długość wyścigu i czas okrążenia (i zapisz), oraz liczbę okrążeń w stincie.'); return; }
   if (!order.length) { alert('Wpisz kierowców po kolei, np. Maciej, Patryk, Amadeusz.'); return; }
   var drv = drvNames();
   order = order.map(function (o) { return ktoMatch(o, drv) || o; });
+  // liczba stintów z wpisanych liczb – zanim cokolwiek rozpiszemy (ujemne okrążenia dawały dzielenie przez zero i pętlę bez końca)
+  var n = Math.ceil(hours * 3600 / (laps * lap + st[0])) + 1, rows = [], nightK = 0, dayK = 0, sideK = 0;
+  if (!(n >= 1 && n <= MAX_STINTS)) { alert('Za dużo stintów – sprawdź liczbę okrążeń w stincie, czas okrążenia i długość wyścigu.'); return; }
   var sv = { nightFrom: $('g-n1').value.trim(), nightTo: $('g-n2').value.trim(), stopBase: st[0], stop2: st[1], stop4: st[2] };
   S.settings = Object.assign({}, s, sv);
-  var n = Math.ceil(hours * 3600 / (laps * lap + st[0])) + 1, rows = [], nightK = 0, dayK = 0, sideK = 0;
   var NIGHT = [[1, 0], [0, 1], [1, 0], [0, 0], [1, 1]];
   var wr = wearRates(); sv.wear = wr; sv.nightWear = num($('g-nw').value) || 0; S.settings.wear = wr; S.settings.nightWear = sv.nightWear;
   sv.startWear = startWear(); S.settings.startWear = sv.startWear;
@@ -2263,21 +2277,21 @@ function ownerBox() {
   var el = $('owner-box'); if (!el) return;
   var o = S.owner, h;
   if (!o) {
-    h = '<p class="note"><b>' + TR('Założyciel zespołu') + '</b> – ' + TR('zespół nie ma jeszcze założyciela. Założyciel ma własne hasło i tylko on może usuwać kierowców i zmieniać hasło zespołu. Zostaje nim pierwsza osoba, która ustawi hasło założyciela.') + '</p>' +
+    h = '<p class="note"><b>' + TH('Założyciel zespołu') + '</b> – ' + TH('zespół nie ma jeszcze założyciela. Założyciel ma własne hasło i tylko on może usuwać kierowców i zmieniać hasło zespołu. Zostaje nim pierwsza osoba, która ustawi hasło założyciela.') + '</p>' +
       '<form class="stack" id="f-owner" onsubmit="return false" style="max-width:420px"><input id="o-name" placeholder="' + esc(TR('Twoje imię')) + '" value="' + esc(KTO || '') + '">' +
       '<input id="o-p1" type="password" autocomplete="new-password" placeholder="' + esc(TR('Hasło założyciela (min. 6 znaków)')) + '">' +
       '<input id="o-p2" type="password" autocomplete="new-password" placeholder="' + esc(TR('Powtórz hasło założyciela')) + '">' +
-      '<button type="submit" class="second">' + TR('Zostań założycielem') + '</button><div class="err" id="o-err"></div></form>';
+      '<button type="submit" class="second">' + TH('Zostań założycielem') + '</button><div class="err" id="o-err"></div></form>';
   } else if (!IS_OWNER) {
-    h = '<p class="note"><b>' + TR('Założyciel zespołu') + ':</b> ' + esc(o.name || '—') + '. ' + TR('Usuwać kierowców i zmieniać hasło zespołu może tylko on – loguje się na tej stronie z zaznaczonym „Jestem założycielem”.') + '</p>';
+    h = '<p class="note"><b>' + TH('Założyciel zespołu') + ':</b> ' + esc(o.name || '—') + '. ' + TH('Usuwać kierowców i zmieniać hasło zespołu może tylko on – loguje się na tej stronie z zaznaczonym „Jestem założycielem”.') + '</p>';
   } else {
-    h = '<p class="note"><b>' + TR('Jesteś zalogowany jako założyciel') + '</b> (' + esc(o.name || '') + '). ' + TR('Możesz usuwać kierowców i zmienić hasło zespołu.') + '</p>' +
-      '<details><summary class="note">' + TR('Zmień hasło zespołu') + '</summary><form class="stack" id="f-tpass" onsubmit="return false" style="max-width:420px;margin-top:8px">' +
+    h = '<p class="note"><b>' + TH('Jesteś zalogowany jako założyciel') + '</b> (' + esc(o.name || '') + '). ' + TH('Możesz usuwać kierowców i zmienić hasło zespołu.') + '</p>' +
+      '<details><summary class="note">' + TH('Zmień hasło zespołu') + '</summary><form class="stack" id="f-tpass" onsubmit="return false" style="max-width:420px;margin-top:8px">' +
       '<input id="tp-old" type="password" autocomplete="current-password" placeholder="' + esc(TR('Obecne hasło zespołu')) + '">' +
       '<input id="tp-new" type="password" autocomplete="new-password" placeholder="' + esc(TR('Nowe hasło zespołu (min. 6 znaków)')) + '">' +
-      '<button type="submit" class="second">' + TR('Zmień hasło zespołu') + '</button><div class="err" id="tp-err"></div>' +
-      '<p class="note" style="margin:0">' + TR('Nowe hasło podaj kolegom prywatnie – każdy wpisuje je w programie (Zespół → hasło → Zapisz). Kto go nie dostanie, nie wejdzie do zespołu.') + '</p></form>' +
-      '<p class="note">' + TR('Nie pamiętasz obecnego hasła zespołu?') + ' <button type="button" class="second" id="b-pwreq">' + TR('Poproś autora o nowe hasło') + '</button> <span id="pwreq-ok" class="ok-txt"></span></p></details>';
+      '<button type="submit" class="second">' + TH('Zmień hasło zespołu') + '</button><div class="err" id="tp-err"></div>' +
+      '<p class="note" style="margin:0">' + TH('Nowe hasło podaj kolegom prywatnie – każdy wpisuje je w programie (Zespół → hasło → Zapisz). Kto go nie dostanie, nie wejdzie do zespołu.') + '</p></form>' +
+      '<p class="note">' + TH('Nie pamiętasz obecnego hasła zespołu?') + ' <button type="button" class="second" id="b-pwreq">' + TH('Poproś autora o nowe hasło') + '</button> <span id="pwreq-ok" class="ok-txt"></span></p></details>';
   }
   setH(el, h);
   var f = $('f-owner');
@@ -2451,7 +2465,8 @@ function cmpLoad() {
   if (!window.DecompressionStream) { cmpMsg('Ta przeglądarka nie pokaże mapy porównania – użyj aktualnej wersji Chrome, Edge, Firefoksa albo Safari.'); return; }
   var opt = function (p) { return T(p).once('value').then(function (s) { return s.val() || {}; }).catch(function () { return {}; }); };
   Promise.all([T('tlapsi').once('value').then(function (s) { return s.val() || {}; }), opt('ltracei'), opt('ltsess')]).then(function (r) {
-    CMP.idx = r[0]; CMP.lidx = r[1]; CMP.sidx = r[2]; cmpLinkIn(); cmpTracks();
+    CMP.idx = r[0]; CMP.lidx = r[1]; CMP.sidx = r[2]; CMP.ver++;      // nowe indeksy = lista okrążeń (cmpList) od nowa
+    cmpLinkIn(); cmpTracks();
   }).catch(function (e) { cmpMsg(authErr(e)); });
 }
 // okrążenia na torze: zwarta lista sesji (ltsess – każde okrążenie), w bazie z 14 dni (ltrace), najlepsze w warunkach (tlaps),
@@ -2950,7 +2965,7 @@ function cmpPan() {
     if (!cmpIn(q)) return;
     var below = p[1] > mid, tr = below ? 'translate(-50%,14px)' : 'translate(-50%,calc(-100% - 14px))';
     var bc = L.length > 1 && c.m[c.best] ? L[c.best].col : 'var(--line2)';
-    var inner = '<b>' + c.name + '</b>';
+    var inner = '<b>' + esc(c.name) + '</b>';
     if (big) inner += c.m.map(function (m, j) {
       return '<div style="color:' + L[j].col + '">' + esc(L[j].name) + ' <span>' + unitSp(m.vmin) + '</span>' +
         (m.brake != null ? ' · <span>' + esc(TR('hamuje ' + unitD(m.brake))) + '</span>' : '') +
@@ -2974,7 +2989,7 @@ function cmpPan() {
 }
 function cmpTools() {
   var h = ['<button type="button" class="second" data-k="all">' + esc(TR('Cały tor')) + '</button>'];
-  CMP.C.forEach(function (c, i) { h.push('<button type="button" class="second' + (i === CMP.corner ? ' on' : '') + '" data-k="' + i + '">' + c.name + '</button>'); });
+  CMP.C.forEach(function (c, i) { h.push('<button type="button" class="second' + (i === CMP.corner ? ' on' : '') + '" data-k="' + i + '">' + esc(c.name) + '</button>'); });
   if (CMP.XY) h.push('<button type="button" class="second" data-k="in" aria-label="' + esc(TR('Przybliż')) + '">+</button><button type="button" class="second" data-k="out" aria-label="' + esc(TR('Oddal')) + '">−</button>');
   setH($('cmp-tools'), h.join(''));
   $('cmp-tools').querySelectorAll('button').forEach(function (b) {
@@ -3017,7 +3032,7 @@ function cmpHover(i) {
   if (!cmpIn(q)) { tip.style.display = 'none'; return; }
   var tmin = Math.min.apply(null, L.map(function (l) { return l.d.t[i]; }));
   var cn = CMP.C.filter(function (c) { return i >= c.s && i <= c.e; })[0];
-  var h = '<small><span>' + esc(TR(unitD(i * CMP_BIN) + ' od startu')) + '</span>' + (cn ? ' · <span>' + cn.name + '</span>' : '') + '</small>';
+  var h = '<small><span>' + esc(TR(unitD(i * CMP_BIN) + ' od startu')) + '</span>' + (cn ? ' · <span>' + esc(cn.name) + '</span>' : '') + '</small>';
   L.forEach(function (l) {
     var dt = l.d.t[i] - tmin;
     h += '<div><span style="color:' + l.col + ';display:inline-block;min-width:64px">' + esc(l.name) + '</span> <span style="display:inline-block;min-width:74px;text-align:right">' +
@@ -3161,7 +3176,7 @@ function cmpGain() {
   var h = '<b style="font:700 16px var(--cond)">' + esc(TR('Gdzie najwięcej do zyskania')) + '</b>';
   L.forEach(function (l, j) {
     var its = C.map(function (c, ci) { return { ci: ci, d: c.m[j].dt }; }).filter(function (x) { return x.d >= 0.02; }).sort(function (a, b) { return b.d - a.d; }).slice(0, 3);
-    if (its.length) h += ' <span><b style="color:' + l.col + '">' + esc(l.name) + '</b> ' + its.map(function (x) { return '<button type="button" class="second" data-c="' + x.ci + '">' + C[x.ci].name + ' ' + n2(x.d) + '</button>'; }).join(' ') + '</span>';
+    if (its.length) h += ' <span><b style="color:' + l.col + '">' + esc(l.name) + '</b> ' + its.map(function (x) { return '<button type="button" class="second" data-c="' + x.ci + '">' + esc(C[x.ci].name) + ' ' + n2(x.d) + '</button>'; }).join(' ') + '</span>';
   });
   var cuts = [0].concat(C.map(function (c) { return c.s; })).concat([n - 1]), ideal = 0;
   for (var q = 0; q < cuts.length - 1; q++) { var a = cuts[q], b = cuts[q + 1]; ideal += Math.min.apply(null, L.map(function (l) { return l.d.t[b] - l.d.t[a]; })); }
@@ -3256,7 +3271,7 @@ function cmpCornerPanel() {
     row('Początek hamowania', function (m) { return mm(m.brake, 'przed wierzchołkiem', 'za wierzchołkiem'); }) +
     row('Najmocniej na hamulcu', function (m) { return m.bp ? Math.round(m.bp) + '%' : '—'; }) +
     row('Najmniejsza prędkość', function (m) { return unitSp(m.vmin); }) +
-    row('Bieg w najwolniejszym miejscu', function (m) { return m.gear || '—'; }) +
+    row('Bieg w najwolniejszym miejscu', function (m) { return esc(m.gear || '—'); }) +
     row('Pełny gaz od', function (m) { return mm(m.thr, 'za wierzchołkiem', 'przed wierzchołkiem'); }) +
     row('Bez gazu i hamulca', function (m) { return unitD(m.coast); }) +
     row('TC tnie moc', function (m) { return unitD(m.tc); }) + '</tbody></table>';
@@ -3279,7 +3294,7 @@ function cmpCornerPanel() {
     [pv, pg, pb].forEach(function (pp) { g.push('<polyline points="' + pp.join(' ') + '" fill="none" style="stroke:' + l.col + '" stroke-width="2" vector-effect="non-scaling-stroke"/>'); });
   });
   var bestTxt = L.length > 1 ? ' <span class="note">' + esc(TR('najszybciej: ' + L[c.best].name)) + '</span>' : '';
-  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + c.name + bestTxt + '</h3>' + cmpSpanBtns() + '<div class="scroll">' + tab + '</div>' + why + '</div>' +
+  setH(box, '<div><button type="button" class="second cmp-x" id="cmp-x" aria-label="' + esc(TR('Zamknij szczegóły zakrętu')) + '">✕</button><h3>' + esc(c.name) + bestTxt + '</h3>' + cmpSpanBtns() + '<div class="scroll">' + tab + '</div>' + why + '</div>' +
     '<div><h3>' + esc(TR('Prędkość, gaz i hamulec')) + '</h3><svg viewBox="0 0 1000 250" preserveAspectRatio="none" role="img" aria-label="' + esc(TR('Prędkość, gaz i hamulec w zakręcie')) + '">' + g.join('') + '</svg>' +
     '<p class="note">' + esc(TR('Od góry: prędkość, gaz, hamulec. Linia przerywana: wierzchołek zakrętu.')) + '</p></div>');
   cmpSpanWire();
@@ -3293,27 +3308,30 @@ function cmpSpanWire() {
 function lapCont(cur, l) {
   return cur.lastLap > 0 && +l.lap === cur.lastLap + 1 && l.t - cur.end < 10 * 60e3 && (!cur.kind || !l.kind || cur.kind === l.kind);
 }
-// sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min
+// sesja okrążenia: numer z programu (każdy wyścig osobno), u starszych okrążeń – przerwa ponad 45 min.
+// Osobno każde auto zespołu (jak w podsumowaniu sesji): dwa auta jadące naraz mają swoje numery sesji i okrążeń –
+// liczone razem mieszały się w jedną sesję. Pierwsza na liście jest sesja z ostatnim okrążeniem.
 function lapSessions() {
-  var ls = LAPS.filter(function (l) { return l && l.t; }).slice().sort(function (a, b) { return a.t - b.t; }), out = [], cur = null;
+  var ls = LAPS.filter(function (l) { return l && l.t; }).slice().sort(function (a, b) { return a.t - b.t; }), out = [], curs = {};
   ls.forEach(function (l) {
+    var k = carK(l), cur = curs[k];
     if (!cur || (l.sess && cur.sess && l.sess !== cur.sess && !lapCont(cur, l)) || (!(l.sess && cur.sess) && l.t - cur.end > SESSION_GAP_MS)) {
-      cur = { id: 's' + out.length, sess: l.sess || '', start: l.t, end: l.t, kind: l.kind || '', laps: [] }; out.push(cur); }
+      cur = curs[k] = { id: 's' + out.length, car: k, sess: l.sess || '', start: l.t, end: l.t, kind: l.kind || '', laps: [] }; out.push(cur); }
     if (!cur.sess && l.sess) cur.sess = l.sess;
     cur.end = l.t; cur.laps.push(l); l._s = cur.id; cur.lastLap = +l.lap || 0;
   });
-  return out.reverse();
+  return out.sort(function (a, b) { return b.end - a.end; });
 }
 function lapFilters() {
   var drv = [], sts = [], cars = [];
   var ss = lapSessions(), sel = $('lf-sess'), sv0 = sel.value;
+  LAPS.forEach(function (l) { var c = carK(l); if (c && cars.indexOf(c) < 0) cars.push(c); });
   var kindTxt = { race: 'wyścig', qualify: 'kwalifikacje', practice: 'trening', warmup: 'rozgrzewka' };
   setH(sel, '<option value="">' + esc(TR('wszystkie sesje')) + '</option>' + ss.map(function (s) {
     return '<option value="' + s.id + '">' + esc(whenTxt(s.start) + ' – ' + whenTxt(s.end).slice(-5) + (s.kind ? ' · ' + TR(kindTxt[s.kind] || s.kind) : '') +
-      ' · ' + s.laps.length + ' ' + TR('okr.')) + '</option>'; }).join(''));
+      ' · ' + s.laps.length + ' ' + TR('okr.') + (cars.length > 1 && s.car ? ' · ' + s.car : '')) + '</option>'; }).join(''));   // kilka aut: czyja sesja
   if (!sel.dataset.init && ss.length) { sv0 = ss[0].id; sel.dataset.init = '1'; }      // na start: ostatnia sesja
   sel.value = ss.some(function (s) { return s.id === sv0; }) ? sv0 : '';
-  LAPS.forEach(function (l) { var c = carK(l); if (c && cars.indexOf(c) < 0) cars.push(c); });
   var cs = $('lf-car'), cv = cs.value;
   if (!cs.dataset.init && cars.length > 1) {      // na start: auto z ostatniego okrążenia, żeby okrążenia aut się nie mieszały
     cv = carK(LAPS.slice().sort(function (a, b) { return (b.t || 0) - (a.t || 0); })[0] || {}); cs.dataset.init = '1'; }
@@ -3631,7 +3649,7 @@ function mapTick() {
     }
     if (me) html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + (r + 6 * k) + '" fill="none" style="stroke:var(--me)" stroke-width="' + (4 * k) + '"/>';
     html += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="' + r + '" fill="' + col + '"' + (me ? ' style="fill:var(--me);stroke:var(--card)"' : ' style="stroke:var(--card)"') + ' opacity="' + op + '" stroke-width="' + (2 * k) + '"/>';
-    if (own) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="#111"' + (me ? ' style="fill:var(--me-text)"' : '') + ' opacity="' + op + '">' + c[2] + '</text>';
+    if (own) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="#111"' + (me ? ' style="fill:var(--me-text)"' : '') + ' opacity="' + op + '">' + esc(c[2]) + '</text>';
     if (hyperLead) html += '<text x="' + xy[0] + '" y="' + (xy[1] + 4.5 * k) + '" font-size="' + (13 * k) + '" text-anchor="middle" font-weight="700" fill="#111" opacity="' + op + '">1</text>';
   });
   var g = $('map-cars'); if (g) g.innerHTML = html;

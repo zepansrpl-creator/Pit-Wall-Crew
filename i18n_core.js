@@ -66,7 +66,8 @@
     var added = false;
     Object.keys(m).forEach(function (h) {
       var e = m[h];
-      if (!e || LIVE[h] || typeof e[0] !== 'string' || typeof e[1] !== 'string') return;
+      // tłumaczenie od programu to zwykły tekst: ze znakiem „<” nie wchodzi do słownika (słownik służy też TR() na stronie)
+      if (!e || LIVE[h] || typeof e[0] !== 'string' || typeof e[1] !== 'string' || e[1].indexOf('<') >= 0) return;
       LIVE[h] = 1; D[e[0]] = e[1]; delete MISS[e[0]]; added = true;
     });
     if (added) setTimeout(function () { walk(document.body); }, 0);
