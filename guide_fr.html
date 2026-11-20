@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">C'est quoi</a><a href="#inst">Installation</a><a href="#app">L'appli</a><a href="#set">Réglages</a>
-  <a href="#talk">Parler</a><a href="#ac">Assetto Corsa</a><a href="#ai">IA (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Planning &amp; plan</a>
+  <a href="#talk">Parler</a><a href="#ac">Assetto Corsa</a><a href="#ai">IA (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Planning &amp; plan</a>
   <a href="#phone">Notifications</a><a href="#race">Course longue</a><a href="#help">Problèmes</a>
 </nav>
 <main>
@@ -227,6 +227,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>C'est prêt quand la page <b>Ingénieur</b> affiche <b>IA : Groq</b> en vert.</li>
   </ol>
   <p>N'envoie jamais la clé dans un chat – colle-la toi-même.</p>
+</section>
+
+<section id="obs">
+  <h2>Overlay OBS (pour les streamers)</h2>
+  <p>Le programme fournit lui-même un overlay de stream : barre avec position, tour et écarts, carte avec les données après ta question ou une commande du chat YouTube, citation radio de l'ingénieur et duel après « surveille … ». Tout à la troisième personne, avec le nom – comme à la TV.</p>
+  <ol>
+    <li>Application → <b>Overlay OBS</b> → <b>Activer l'overlay OBS</b> → <b>Enregistrer et redémarrer l'ingénieur</b>.</li>
+    <li>OBS : <b>Sources → + → Navigateur</b>, adresse <code>http://127.0.0.1:8735/</code>, largeur et hauteur comme la résolution de base d'OBS (p. ex. 1920×1080, ou 2560×1080 en 21:9) (bouton <b>Copier</b> dans l'application). <b>Aperçu ↗</b> montre l'overlay avec des données d'exemple – avant de rouler.</li>
+    <li>Quand tu poses une question à l'ingénieur (p. ex. « comment sont les pneus ? »), une carte sur ce sujet apparaît pendant environ 12 s, avec la réponse citée dessous.</li>
+    <li>Les spectateurs écrivent <code>!pwc</code> et un mot dans le chat : pneus, carburant, tours, écart, météo, arrêt, dégâts, session, limites, aide – en 7 langues. Leur propre question (<code>!pwc va-t-il rattraper son rival ?</code>) va à l'IA si elle est activée – au plus une toutes les 30 s (ta limite Groq). Une personne peut demander toutes les 5 minutes (réglable) ; toi et les modérateurs sans limite. Toutes les 10 minutes (réglable, 0 – jamais), la liste des commandes s'affiche un instant à l'écran. La barre cache le rétroviseur virtuel ? Règle <b>Barre depuis le haut</b>. Le champ <b>État</b> indique si le chat fonctionne (p. ex. « la clé n'a pas accès à YouTube Data API v3 ») et montre les dernières commandes.</li>
+    <li>Description pour les spectateurs (page en 7 langues) – colle le lien dans la description du stream : <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=fr">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (bouton <b>Copier</b> dans l'application).</li>
+  </ol>
+  <h3>Clé Google pour le chat YouTube (une fois, 5 minutes)</h3>
+  <ol>
+    <li>Va sur <a href="https://console.cloud.google.com">console.cloud.google.com</a> (compte Google) et crée un projet (p. ex. <code>PWC</code>).</li>
+    <li><b>API et services → Bibliothèque</b> → <b>YouTube Data API v3</b> → <b>Activer</b>.</li>
+    <li><b>Identifiants → Créer des identifiants → Clé API</b>. Le mieux : <b>restreindre la clé</b> à YouTube Data API v3 tout de suite.</li>
+    <li>Application → <b>Overlay OBS</b> : colle la clé dans <b>Clé Google</b> et le lien du stream (ou de la chaîne <code>@nom</code>) → enregistre.</li>
+    <li>La limite gratuite de Google suffit pour environ 4 heures de chat par jour (lecture toutes les 8 s).</li>
+  </ol>
+  <p>Le programme ne lit que les messages qui commencent par <code>!pwc</code> ; le pseudo du spectateur s'affiche à côté de la carte. N'envoie la clé à personne dans un chat – colle-la toi-même.</p>
 </section>
 
 <section id="patreon">

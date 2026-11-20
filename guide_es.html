@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">Qué es</a><a href="#inst">Instalación</a><a href="#app">La app</a><a href="#set">Ajustes</a>
-  <a href="#talk">Hablar</a><a href="#ac">Assetto Corsa</a><a href="#ai">IA (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Turnos y plan</a>
+  <a href="#talk">Hablar</a><a href="#ac">Assetto Corsa</a><a href="#ai">IA (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Turnos y plan</a>
   <a href="#phone">Notificaciones</a><a href="#race">Carrera larga</a><a href="#help">Problemas</a>
 </nav>
 <main>
@@ -229,6 +229,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Listo cuando la página <b>Ingeniero</b> muestra <b>IA: Groq</b> en verde.</li>
   </ol>
   <p>Nunca envíes la clave por chat – pégala tú mismo.</p>
+</section>
+
+<section id="obs">
+  <h2>Superposición OBS (para streamers)</h2>
+  <p>El programa sirve por sí mismo una superposición para el directo: barra con posición, vuelta y distancias, tarjeta con datos del coche tras tu pregunta o un comando del chat de YouTube, cita de radio del ingeniero y un duelo tras «vigila a …». Todo en tercera persona, con el apellido – como en TV.</p>
+  <ol>
+    <li>Aplicación → <b>Superposición OBS</b> → <b>Activar la superposición OBS</b> → <b>Guardar y reiniciar el ingeniero</b>.</li>
+    <li>OBS: <b>Fuentes → + → Navegador</b>, dirección <code>http://127.0.0.1:8735/</code>, ancho y alto como la resolución base de OBS (p. ej. 1920×1080, o 2560×1080 en 21:9) (botón <b>Copiar</b> en la aplicación). <b>Vista previa ↗</b> muestra la superposición con datos de ejemplo – antes de correr.</li>
+    <li>Cuando preguntas al ingeniero (p. ej. «¿cómo van los neumáticos?»), aparece una tarjeta de ese tema unos 12 s, con la respuesta citada debajo.</li>
+    <li>Los espectadores escriben <code>!pwc</code> y una palabra en el chat: neumáticos, combustible, vueltas, distancia, clima, parada, daños, sesión, límites, ayuda – en 7 idiomas. Su propia pregunta (<code>!pwc ¿alcanzará al rival?</code>) va a la IA si la tienes activada – como máximo una cada 30 s (tu límite de Groq). Cada persona puede preguntar una vez cada 5 minutos (ajustable); tú y los moderadores sin límite. Cada 10 minutos (ajustable, 0 – nunca) la lista de comandos aparece un momento en pantalla. ¿La barra tapa el retrovisor virtual? Ajusta <b>Barra desde arriba</b>. El campo <b>Estado</b> indica si el chat funciona (p. ej. «la clave no tiene acceso a YouTube Data API v3») y muestra los últimos comandos.</li>
+    <li>Descripción para espectadores (página en 7 idiomas) – pega el enlace en la descripción del directo: <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=es">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (botón <b>Copiar</b> en la aplicación).</li>
+  </ol>
+  <h3>Clave de Google para el chat de YouTube (una vez, 5 minutos)</h3>
+  <ol>
+    <li>Entra en <a href="https://console.cloud.google.com">console.cloud.google.com</a> (cuenta de Google) y crea un proyecto (p. ej. <code>PWC</code>).</li>
+    <li><b>APIs y servicios → Biblioteca</b> → <b>YouTube Data API v3</b> → <b>Habilitar</b>.</li>
+    <li><b>Credenciales → Crear credenciales → Clave de API</b>. Mejor <b>restringir la clave</b> a YouTube Data API v3 enseguida.</li>
+    <li>Aplicación → <b>Superposición OBS</b>: pega la clave en <b>Clave de Google</b> y el enlace del directo (o del canal <code>@nombre</code>) → guarda.</li>
+    <li>El límite gratuito de Google da para unas 4 horas de chat al día (lectura cada 8 s).</li>
+  </ol>
+  <p>El programa solo lee los mensajes que empiezan por <code>!pwc</code>; junto a la tarjeta se ve el nick del espectador. No envíes la clave a nadie por chat – pégala tú.</p>
 </section>
 
 <section id="patreon">

@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">Hvad er det</a><a href="#inst">Installation</a><a href="#app">Appen</a><a href="#set">Indstillinger</a>
-  <a href="#talk">Tal</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Rækkefølge og plan</a>
+  <a href="#talk">Tal</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Rækkefølge og plan</a>
   <a href="#phone">Notifikationer</a><a href="#race">Langt løb</a><a href="#help">Problemer</a>
 </nav>
 <main>
@@ -229,6 +229,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Færdig, når siden <b>Ingeniør</b> viser <b>AI: Groq</b> i grønt.</li>
   </ol>
   <p>Send aldrig nøglen i en chat – indsæt den selv.</p>
+</section>
+
+<section id="obs">
+  <h2>OBS-overlay (til streamere)</h2>
+  <p>Programmet leverer selv et overlay til streamen: bjælke med position, omgang og afstande, kort med bildata efter dit spørgsmål eller en seerkommando fra YouTube-chatten, ingeniørens radiocitat og en duel efter „hold øje med …“. Alt i tredje person med efternavn – som i TV.</p>
+  <ol>
+    <li>App → <b>OBS-overlay</b> → <b>Slå OBS-overlay til</b> → <b>Gem og genstart ingeniøren</b>.</li>
+    <li>OBS: <b>Kilder → + → Browser</b>, adresse <code>http://127.0.0.1:8735/</code>, bredde og højde som OBS' basisopløsning (f.eks. 1920×1080 eller 2560×1080 ved 21:9) (knappen <b>Kopiér</b> i appen). <b>Forhåndsvisning ↗</b> viser overlayet med eksempeldata – før du kører.</li>
+    <li>Når du spørger ingeniøren (f.eks. „hvordan er dækkene?“), glider et kort om emnet ind i ca. 12 s med et citat af svaret nedenunder.</li>
+    <li>Seerne skriver <code>!pwc</code> og et ord i chatten: dæk, brændstof, omgange, afstand, vejr, pitstop, skade, session, grænser, hjælp – på 7 sprog. Deres eget spørgsmål (<code>!pwc indhenter han rivalen?</code>) går til AI, hvis det er slået til – højst ét pr. 30 s (din Groq-grænse). Hver person kan spørge én gang hvert 5. minut (kan ændres); du og moderatorer uden grænse. Hvert 10. minut (kan ændres, 0 – aldrig) vises kommandolisten et øjeblik på skærmen. Dækker bjælken det virtuelle spejl? Indstil <b>Bjælke fra toppen</b>. Feltet <b>Status</b> viser, om chatten virker (f.eks. „nøglen har ikke adgang til YouTube Data API v3“), og de seneste seerkommandoer.</li>
+    <li>Beskrivelse til seerne (side på 7 sprog) – indsæt linket i streambeskrivelsen: <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=da">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (knappen <b>Kopiér</b> i appen).</li>
+  </ol>
+  <h3>Google-nøgle til YouTube-chatten (én gang, 5 minutter)</h3>
+  <ol>
+    <li>Gå til <a href="https://console.cloud.google.com">console.cloud.google.com</a> (Google-konto) og opret et projekt (f.eks. <code>PWC</code>).</li>
+    <li><b>API'er og tjenester → Bibliotek</b> → <b>YouTube Data API v3</b> → <b>Aktivér</b>.</li>
+    <li><b>Loginoplysninger → Opret loginoplysninger → API-nøgle</b>. Bedst at <b>begrænse nøglen</b> til YouTube Data API v3 med det samme.</li>
+    <li>App → <b>OBS-overlay</b>: indsæt nøglen i <b>Google-nøgle</b> og linket til streamen (eller kanalen <code>@navn</code>) → gem.</li>
+    <li>Googles gratis grænse rækker til ca. 4 timers chat om dagen (læsning hvert 8. sekund).</li>
+  </ol>
+  <p>Programmet læser kun beskeder, der starter med <code>!pwc</code>; seerens kaldenavn vises ved kortet. Send ikke nøglen til nogen i en chat – indsæt den selv.</p>
 </section>
 
 <section id="patreon">

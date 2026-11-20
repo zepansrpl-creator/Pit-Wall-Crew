@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#co">Co to jest</a><a href="#inst">Instalacja</a><a href="#app">Aplikacja</a><a href="#ust">Ustawienia</a>
-  <a href="#mowa">Rozmowa</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
+  <a href="#mowa">Rozmowa</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#sciana">Pit wall</a><a href="#plan">Grafik i plan</a>
   <a href="#tel">Powiadomienia</a><a href="#wyscig">Długi wyścig</a><a href="#problemy">Problemy</a>
 </nav>
 <main>
@@ -239,6 +239,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Gotowe, gdy na stronie <b>Inżynier</b> jest zielone <b>AI: Groq</b>.</li>
   </ol>
   <p>Klucza nikomu nie wysyłaj na czacie – wklej go sam.</p>
+</section>
+
+<section id="obs">
+  <h2>Nakładka OBS (dla streamerów)</h2>
+  <p>Program sam podaje nakładkę na transmisję: pasek z pozycją, okrążeniem i odstępami, karta z danymi auta po Twoim pytaniu albo komendzie widza z czatu YouTube, cytat radia inżyniera i pojedynek po „pilnuj …”. Wszystko w trzeciej osobie, z nazwiskiem – jak relacja w TV.</p>
+  <ol>
+    <li>Aplikacja → <b>Nakładka OBS</b> → <b>Włącz nakładkę OBS</b> → <b>Zapisz i uruchom ponownie moduł inżyniera</b>.</li>
+    <li>OBS: <b>Źródła → + → Przeglądarka</b>, adres <code>http://127.0.0.1:8735/</code>, szerokość i wysokość jak rozdzielczość bazowa w OBS (np. 1920×1080 albo 2560×1080 przy 21:9) (przycisk <b>Kopiuj</b> w aplikacji). Przycisk <b>Podgląd ↗</b> pokazuje nakładkę z przykładowymi danymi – przed jazdą.</li>
+    <li>Gdy pytasz inżyniera (np. „jak opony?”), na transmisji wysuwa się karta tego tematu na ok. 12 s, a pod nią cytat odpowiedzi.</li>
+    <li>Widzowie piszą na czacie <code>!pwc</code> i słowo: opony, paliwo, czasy, rywale, pogoda, pitstop, uszkodzenia, sesja, limity, pomoc – w 7 językach. Własne pytanie (<code>!pwc czy dogoni rywala?</code>) idzie do AI, gdy masz to włączone – najwyżej jedno na 30 s (Twój limit Groqa). Jedna osoba może pytać raz na 5 minut (do zmiany); Ty i moderatorzy – bez limitu. Co 10 minut (do zmiany, 0 – nigdy) lista komend sama pokazuje się na chwilę na ekranie. Pasek zasłania lusterko wirtualne? Ustaw <b>Pasek od góry</b>. Pole <b>Stan</b> mówi, czy czat działa (np. „klucz bez dostępu do YouTube Data API v3”) i pokazuje ostatnie komendy widzów.</li>
+    <li>Opis dla widzów (strona w 7 językach) – wklej link do opisu transmisji: <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=pl">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (przycisk <b>Kopiuj</b> w aplikacji).</li>
+  </ol>
+  <h3>Klucz Google do czatu YouTube (raz, 5 minut)</h3>
+  <ol>
+    <li>Wejdź na <a href="https://console.cloud.google.com">console.cloud.google.com</a> (konto Google) i utwórz projekt (np. <code>PWC</code>).</li>
+    <li><b>Interfejsy API i usługi → Biblioteka</b> → <b>YouTube Data API v3</b> → <b>Włącz</b>.</li>
+    <li><b>Dane logowania → Utwórz dane logowania → Klucz API</b>. Najlepiej od razu <b>Ogranicz klucz</b> do YouTube Data API v3.</li>
+    <li>Aplikacja → <b>Nakładka OBS</b>: wklej klucz w <b>Klucz Google</b> i link do transmisji (albo kanału <code>@nazwa</code>) → zapisz.</li>
+    <li>Darmowy limit Google to ok. 4 godziny czytania czatu dziennie (odczyt co 8 s).</li>
+  </ol>
+  <p>Program czyta z czatu tylko wiadomości zaczynające się od <code>!pwc</code>; przy karcie widać nick widza. Klucza nie wysyłaj nikomu na czacie – wklej go sam.</p>
 </section>
 
 <section id="patreon">

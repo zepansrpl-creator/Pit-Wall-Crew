@@ -1,0 +1,176 @@
+<!doctype html>
+<!-- Pit Wall Crew – komendy dla widzów transmisji (nakładka OBS). Link do opisu transmisji: widzowie.html?lang=pl
+     Teksty w 7 językach w tym pliku; przełącznik języka u góry. Komendy muszą zgadzać się z engineer/nakladka/karty.py
+     (pilnuje tests/test_nakladka_obs.py). -->
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pit Wall Crew – !pwc</title>
+<style>
+:root{--bg:#0c1411;--card:#13201b;--line:#2c4439;--text:#efe9da;--muted:#9fb0a6;--acc:#d9a227;--ok:#5fd38d}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Inter,sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:32px;margin:6px 0 4px;letter-spacing:.5px}h1 b{color:var(--acc)}
+h2{font-size:20px;margin:30px 0 10px;color:var(--acc);letter-spacing:.5px}
+.sub{color:var(--muted);margin:0 0 18px}
+.langs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.langs button{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 12px;
+  font:inherit;font-size:14px;cursor:pointer}
+.langs button.on{color:var(--bg);background:var(--acc);border-color:var(--acc);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:12px 0}
+code{font-family:ui-monospace,"JetBrains Mono",Consolas,monospace;color:var(--acc);background:rgba(217,162,39,.1);
+  padding:2px 7px;border-radius:6px;white-space:nowrap}
+table{width:100%;border-collapse:collapse}td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}td:first-child{width:38%}
+ul{padding-left:22px;margin:6px 0}li{margin:5px 0}
+.ex{color:var(--ok)}
+footer{color:var(--muted);font-size:14px;margin-top:36px}
+</style>
+</head>
+<body>
+<main>
+  <div class="langs" id="langs"></div>
+  <h1>PIT WALL <b>CREW</b> · !pwc</h1>
+  <p class="sub" id="sub"></p>
+  <div class="card" id="how"></div>
+  <h2 id="h_cmd"></h2>
+  <div class="card"><table id="cmds"></table></div>
+  <h2 id="h_ask"></h2>
+  <div class="card" id="ask"></div>
+  <h2 id="h_rules"></h2>
+  <div class="card"><ul id="rules"></ul></div>
+  <footer id="foot"></footer>
+</main>
+<script>
+var L = {
+pl: {name: "PL", title: "Komendy dla widzów", sub: "Ten kierowca jeździ z inżynierem wyścigowym Pit Wall Crew. Na czacie transmisji możesz go zapytać o dane auta – odpowiedź pojawi się na ekranie.",
+  how: "Napisz na czacie <code>!pwc</code> i jedno słowo z listy, np. <code>!pwc opony</code>. Po chwili na transmisji wysunie się karta z danymi na ok. 12 sekund, podpisana Twoim nickiem.",
+  h_cmd: "Komendy", h_ask: "Własne pytanie", h_rules: "Zasady",
+  cmds: [["opony", "stan opon: zużycie, temperatury, ciśnienia"], ["paliwo", "paliwo, na ile okrążeń starczy, kiedy zjazd"],
+         ["czasy", "ostatnie i najlepsze okrążenie, sektory"], ["rywale", "pozycja w klasie i odstępy do aut obok"],
+         ["pogoda", "temperatura toru i powietrza, deszcz"], ["pitstop", "plan pitstopu"],
+         ["uszkodzenia", "stan auta i silnika"], ["sesja", "sesja, czas do końca, okrążenie"], ["limity", "limity toru: punkty i kary każdego kierowcy auta"], ["pomoc", "lista komend na ekranie"]],
+  ask: "Możesz też zapytać własnymi słowami, np. <code class=\"ex\">!pwc czy dogoni rywala przed metą?</code> albo <code class=\"ex\">!pwc jak mu idzie?</code> – odpowiada AI na podstawie danych z auta, krótko, na ekranie (gdy streamer ma to włączone).",
+  rules: ["Jedna osoba może pytać raz na kilka minut (zwykle 5) – żeby każdy miał szansę.",
+          "Gdy przyjdzie kilka pytań naraz, karty pokazują się po kolei.",
+          "Komendy działają w 7 językach – możesz pisać po swojemu, np. <code>!pwc tyres</code>.",
+          "Na ekranie widać tylko Twój nick przy karcie. Program czyta z czatu wyłącznie wiadomości zaczynające się od <code>!pwc</code>.",
+          "Dane pochodzą z gry na żywo; kierowca nie widzi nakładki."],
+  foot: "Pit Wall Crew – głosowy inżynier wyścigowy dla Le Mans Ultimate i Assetto Corsy."},
+en: {name: "EN", title: "Commands for viewers", sub: "This driver races with the Pit Wall Crew race engineer. Ask about the car in the stream chat – the answer shows up on screen.",
+  how: "Type <code>!pwc</code> and one word from the list in the chat, e.g. <code>!pwc tyres</code>. A card with the data slides onto the stream for about 12 seconds, signed with your nickname.",
+  h_cmd: "Commands", h_ask: "Your own question", h_rules: "Rules",
+  cmds: [["tyres", "tyre state: wear, temperatures, pressures"], ["fuel", "fuel, how many laps it lasts, when the stop is"],
+         ["laps", "last and best lap, sectors"], ["gaps", "class position and gaps to nearby cars"],
+         ["weather", "track and air temperature, rain"], ["pitstop", "pit stop plan"],
+         ["damage", "car and engine condition"], ["session", "session, time left, lap"], ["limits", "track limits: points and penalties of each driver of the car"], ["help", "list of commands on screen"]],
+  ask: "You can also ask in your own words, e.g. <code class=\"ex\">!pwc will he catch the rival before the finish?</code> or <code class=\"ex\">!pwc how is he doing?</code> – AI answers briefly from the car data, on screen (when the streamer has it on).",
+  rules: ["One person can ask once every few minutes (usually 5) – so everyone gets a turn.",
+          "If several questions arrive at once, the cards are shown one after another.",
+          "Commands work in 7 languages – write in yours, e.g. <code>!pwc reifen</code>.",
+          "Only your nickname is shown next to the card. The app reads only chat messages starting with <code>!pwc</code>.",
+          "Data comes live from the game; the driver doesn't see the overlay."],
+  foot: "Pit Wall Crew – voice race engineer for Le Mans Ultimate and Assetto Corsa."},
+de: {name: "DE", title: "Befehle für Zuschauer", sub: "Dieser Fahrer fährt mit dem Renningenieur Pit Wall Crew. Frag im Stream-Chat nach dem Auto – die Antwort erscheint auf dem Bildschirm.",
+  how: "Schreib <code>!pwc</code> und ein Wort aus der Liste in den Chat, z. B. <code>!pwc reifen</code>. Eine Karte mit den Daten erscheint für etwa 12 Sekunden im Stream, mit deinem Nicknamen.",
+  h_cmd: "Befehle", h_ask: "Eigene Frage", h_rules: "Regeln",
+  cmds: [["reifen", "Reifen: Verschleiß, Temperaturen, Drücke"], ["sprit", "Kraftstoff, wie viele Runden er reicht, wann der Stopp ist"],
+         ["runden", "letzte und beste Runde, Sektoren"], ["abstand", "Position in der Klasse und Abstände"],
+         ["wetter", "Strecken- und Lufttemperatur, Regen"], ["boxenstopp", "Plan für den Boxenstopp"],
+         ["schaden", "Zustand von Auto und Motor"], ["session", "Session, Restzeit, Runde"], ["limits", "Track Limits: Punkte und Strafen jedes Fahrers des Autos"], ["hilfe", "Befehlsliste auf dem Bildschirm"]],
+  ask: "Du kannst auch frei fragen, z. B. <code class=\"ex\">!pwc holt er den Gegner vor dem Ziel ein?</code> oder <code class=\"ex\">!pwc wie läuft es?</code> – die KI antwortet kurz aus den Daten des Autos (wenn der Streamer es eingeschaltet hat).",
+  rules: ["Jede Person kann alle paar Minuten fragen (meist 5) – damit jeder drankommt.",
+          "Kommen mehrere Fragen gleichzeitig, erscheinen die Karten nacheinander.",
+          "Befehle funktionieren in 7 Sprachen – z. B. auch <code>!pwc tyres</code>.",
+          "Neben der Karte steht nur dein Nickname. Das Programm liest nur Nachrichten, die mit <code>!pwc</code> beginnen.",
+          "Die Daten kommen live aus dem Spiel; der Fahrer sieht das Overlay nicht."],
+  foot: "Pit Wall Crew – Sprach-Renningenieur für Le Mans Ultimate und Assetto Corsa."},
+fr: {name: "FR", title: "Commandes pour les spectateurs", sub: "Ce pilote roule avec l'ingénieur de course Pit Wall Crew. Pose une question sur la voiture dans le chat du stream – la réponse s'affiche à l'écran.",
+  how: "Écris <code>!pwc</code> et un mot de la liste dans le chat, p. ex. <code>!pwc pneus</code>. Une carte avec les données apparaît sur le stream pendant environ 12 secondes, avec ton pseudo.",
+  h_cmd: "Commandes", h_ask: "Ta propre question", h_rules: "Règles",
+  cmds: [["pneus", "état des pneus : usure, températures, pressions"], ["carburant", "carburant, pour combien de tours, quand l'arrêt"],
+         ["tours", "dernier et meilleur tour, secteurs"], ["écart", "position dans la catégorie et écarts"],
+         ["météo", "température de la piste et de l'air, pluie"], ["arrêt", "plan de l'arrêt"],
+         ["dégâts", "état de la voiture et du moteur"], ["session", "session, temps restant, tour"], ["limites", "limites de piste : points et pénalités de chaque pilote de la voiture"], ["aide", "liste des commandes à l'écran"]],
+  ask: "Tu peux aussi poser ta question librement, p. ex. <code class=\"ex\">!pwc va-t-il rattraper son rival avant l'arrivée ?</code> – l'IA répond brièvement à partir des données de la voiture (si le streamer l'a activée).",
+  rules: ["Chaque personne peut poser une question toutes les quelques minutes (en général 5) – pour que chacun ait son tour.",
+          "Si plusieurs questions arrivent en même temps, les cartes s'affichent l'une après l'autre.",
+          "Les commandes marchent en 7 langues – p. ex. aussi <code>!pwc tyres</code>.",
+          "Seul ton pseudo s'affiche à côté de la carte. Le programme ne lit que les messages qui commencent par <code>!pwc</code>.",
+          "Les données viennent du jeu en direct ; le pilote ne voit pas l'overlay."],
+  foot: "Pit Wall Crew – ingénieur de course vocal pour Le Mans Ultimate et Assetto Corsa."},
+es: {name: "ES", title: "Comandos para los espectadores", sub: "Este piloto corre con el ingeniero de carrera Pit Wall Crew. Pregunta por el coche en el chat del directo – la respuesta aparece en pantalla.",
+  how: "Escribe <code>!pwc</code> y una palabra de la lista en el chat, p. ej. <code>!pwc neumáticos</code>. Una tarjeta con los datos aparece en el directo unos 12 segundos, con tu nick.",
+  h_cmd: "Comandos", h_ask: "Tu propia pregunta", h_rules: "Reglas",
+  cmds: [["neumáticos", "neumáticos: desgaste, temperaturas, presiones"], ["combustible", "combustible, para cuántas vueltas, cuándo para"],
+         ["vueltas", "última y mejor vuelta, sectores"], ["distancia", "posición en la clase y distancias"],
+         ["clima", "temperatura de pista y aire, lluvia"], ["parada", "plan de la parada"],
+         ["daños", "estado del coche y del motor"], ["sesión", "sesión, tiempo restante, vuelta"], ["límites", "límites de pista: puntos y sanciones de cada piloto del coche"], ["ayuda", "lista de comandos en pantalla"]],
+  ask: "También puedes preguntar con tus palabras, p. ej. <code class=\"ex\">!pwc ¿alcanzará al rival antes de la meta?</code> – la IA responde brevemente con los datos del coche (si el streamer la tiene activada).",
+  rules: ["Cada persona puede preguntar una vez cada pocos minutos (normalmente 5) – para que todos tengan turno.",
+          "Si llegan varias preguntas a la vez, las tarjetas salen una tras otra.",
+          "Los comandos funcionan en 7 idiomas – p. ej. también <code>!pwc tyres</code>.",
+          "Junto a la tarjeta solo se ve tu nick. El programa solo lee los mensajes que empiezan por <code>!pwc</code>.",
+          "Los datos vienen del juego en directo; el piloto no ve la superposición."],
+  foot: "Pit Wall Crew – ingeniero de carrera por voz para Le Mans Ultimate y Assetto Corsa."},
+it: {name: "IT", title: "Comandi per gli spettatori", sub: "Questo pilota corre con l'ingegnere di pista Pit Wall Crew. Chiedi dell'auto nella chat della diretta – la risposta compare sullo schermo.",
+  how: "Scrivi <code>!pwc</code> e una parola dell'elenco in chat, es. <code>!pwc gomme</code>. Una scheda con i dati compare nella diretta per circa 12 secondi, con il tuo nick.",
+  h_cmd: "Comandi", h_ask: "La tua domanda", h_rules: "Regole",
+  cmds: [["gomme", "gomme: usura, temperature, pressioni"], ["carburante", "carburante, per quanti giri basta, quando il pit"],
+         ["giri", "ultimo e miglior giro, settori"], ["distacco", "posizione nella classe e distacchi"],
+         ["meteo", "temperatura pista e aria, pioggia"], ["sosta", "piano della sosta"],
+         ["danni", "stato di auto e motore"], ["sessione", "sessione, tempo rimasto, giro"], ["limiti", "limiti della pista: punti e penalità di ogni pilota dell'auto"], ["aiuto", "elenco dei comandi sullo schermo"]],
+  ask: "Puoi anche chiedere con parole tue, es. <code class=\"ex\">!pwc riuscirà a prendere il rivale prima del traguardo?</code> – l'IA risponde in breve dai dati dell'auto (se lo streamer l'ha attivata).",
+  rules: ["Ogni persona può chiedere una volta ogni pochi minuti (di solito 5) – così tocca a tutti.",
+          "Se arrivano più domande insieme, le schede compaiono una dopo l'altra.",
+          "I comandi funzionano in 7 lingue – es. anche <code>!pwc tyres</code>.",
+          "Accanto alla scheda si vede solo il tuo nick. Il programma legge solo i messaggi che iniziano con <code>!pwc</code>.",
+          "I dati arrivano dal gioco in diretta; il pilota non vede l'overlay."],
+  foot: "Pit Wall Crew – ingegnere di pista vocale per Le Mans Ultimate e Assetto Corsa."},
+da: {name: "DA", title: "Kommandoer for seere", sub: "Denne kører kører med raceingeniøren Pit Wall Crew. Spørg om bilen i streamens chat – svaret vises på skærmen.",
+  how: "Skriv <code>!pwc</code> og et ord fra listen i chatten, f.eks. <code>!pwc dæk</code>. Et kort med data glider ind i streamen i ca. 12 sekunder med dit kaldenavn.",
+  h_cmd: "Kommandoer", h_ask: "Dit eget spørgsmål", h_rules: "Regler",
+  cmds: [["dæk", "dæk: slid, temperaturer, tryk"], ["brændstof", "brændstof, hvor mange omgange det rækker, hvornår pitstop"],
+         ["omgange", "seneste og bedste omgang, sektorer"], ["afstand", "position i klassen og afstande"],
+         ["vejr", "bane- og lufttemperatur, regn"], ["pitstop", "plan for pitstop"],
+         ["skade", "bilens og motorens tilstand"], ["session", "session, tid tilbage, omgang"], ["grænser", "baneafgrænsning: point og straffe for hver kører i bilen"], ["hjælp", "liste over kommandoer på skærmen"]],
+  ask: "Du kan også spørge med dine egne ord, f.eks. <code class=\"ex\">!pwc indhenter han rivalen før målstregen?</code> – AI svarer kort ud fra bilens data (hvis streameren har slået det til).",
+  rules: ["Hver person kan spørge én gang hvert par minutter (normalt 5) – så alle får en tur.",
+          "Kommer flere spørgsmål på én gang, vises kortene efter hinanden.",
+          "Kommandoerne virker på 7 sprog – f.eks. også <code>!pwc tyres</code>.",
+          "Kun dit kaldenavn vises ved kortet. Programmet læser kun beskeder, der starter med <code>!pwc</code>.",
+          "Data kommer direkte fra spillet; køreren kan ikke se overlayet."],
+  foot: "Pit Wall Crew – raceingeniør med stemme til Le Mans Ultimate og Assetto Corsa."}
+};
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) {
+  return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]; }); }
+function pick() {
+  var q = (new URLSearchParams(location.search).get('lang') || '').toLowerCase();
+  if (L[q]) return q;
+  try { var s = localStorage.getItem('pwc_lang'); if (L[s]) return s; } catch (e) {}
+  var n = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return L[n] ? n : 'en';
+}
+function show(lg) {
+  var t = L[lg];
+  document.documentElement.lang = lg;
+  document.title = 'Pit Wall Crew – ' + t.title;
+  document.getElementById('sub').textContent = t.sub;
+  document.getElementById('how').innerHTML = t.how;            // teksty stałe z tego pliku (nie z czatu)
+  ['h_cmd', 'h_ask', 'h_rules', 'foot'].forEach(function (k) { document.getElementById(k).textContent = t[k]; });
+  document.getElementById('cmds').innerHTML = t.cmds.map(function (c) {
+    return '<tr><td><code>!pwc ' + esc(c[0]) + '</code></td><td>' + esc(c[1]) + '</td></tr>'; }).join('');
+  document.getElementById('ask').innerHTML = t.ask;
+  document.getElementById('rules').innerHTML = t.rules.map(function (r) { return '<li>' + r + '</li>'; }).join('');
+  document.getElementById('langs').innerHTML = Object.keys(L).map(function (k) {
+    return '<button type="button" data-l="' + k + '" class="' + (k === lg ? 'on' : '') + '">' + L[k].name + '</button>'; }).join('');
+  try { localStorage.setItem('pwc_lang', lg); } catch (e) {}
+  var u = new URL(location.href); u.searchParams.set('lang', lg); history.replaceState(null, '', u);
+}
+document.getElementById('langs').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (b) show(b.getAttribute('data-l')); });
+show(pick());
+</script>
+</body>
+</html>

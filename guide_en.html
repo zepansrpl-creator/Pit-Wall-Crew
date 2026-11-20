@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">What it is</a><a href="#inst">Installation</a><a href="#app">The app</a><a href="#set">Settings</a>
-  <a href="#talk">Talking</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Schedule &amp; plan</a>
+  <a href="#talk">Talking</a><a href="#ac">Assetto Corsa</a><a href="#ai">AI (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Schedule &amp; plan</a>
   <a href="#phone">Notifications</a><a href="#race">Long race</a><a href="#help">Problems</a>
 </nav>
 <main>
@@ -229,6 +229,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Done when the <b>Engineer</b> page shows a green <b>AI: Groq</b>.</li>
   </ol>
   <p>Never send the key in a chat – paste it yourself.</p>
+</section>
+
+<section id="obs">
+  <h2>OBS overlay (for streamers)</h2>
+  <p>The app serves a stream overlay itself: a bar with position, lap and gaps, a card with car data after your question or a viewer command from the YouTube chat, the engineer's radio quote and a duel after “watch …”. All in the third person, by surname – like a TV broadcast.</p>
+  <ol>
+    <li>App → <b>OBS overlay</b> → <b>Turn on the OBS overlay</b> → <b>Save and restart the engineer module</b>.</li>
+    <li>OBS: <b>Sources → + → Browser</b>, address <code>http://127.0.0.1:8735/</code>, width and height as the OBS base resolution (e.g. 1920×1080, or 2560×1080 for 21:9) (<b>Copy</b> button in the app). <b>Preview ↗</b> shows the overlay with sample data – before you drive.</li>
+    <li>When you ask the engineer (e.g. “how are the tyres?”), a card on that topic slides onto the stream for about 12 s, with a quote of the answer below.</li>
+    <li>Viewers type <code>!pwc</code> and a word in the chat: tyres, fuel, laps, gaps, weather, pitstop, damage, session, limits, help – in 7 languages. Their own question (<code>!pwc will he catch the rival?</code>) goes to the AI if you have it on – at most one per 30 s (your Groq limit). One person can ask once every 5 minutes (adjustable); you and moderators have no limit. Every 10 minutes (adjustable, 0 – never) the command list shows on screen for a moment. Bar covering the virtual mirror? Set <b>Bar from the top</b>. The <b>Status</b> field says whether the chat works (e.g. “the key has no access to YouTube Data API v3”) and shows the latest viewer commands.</li>
+    <li>Description for viewers (page in 7 languages) – paste the link into your stream description: <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=en">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (<b>Copy</b> button in the app).</li>
+  </ol>
+  <h3>Google key for the YouTube chat (once, 5 minutes)</h3>
+  <ol>
+    <li>Go to <a href="https://console.cloud.google.com">console.cloud.google.com</a> (Google account) and create a project (e.g. <code>PWC</code>).</li>
+    <li><b>APIs &amp; Services → Library</b> → <b>YouTube Data API v3</b> → <b>Enable</b>.</li>
+    <li><b>Credentials → Create credentials → API key</b>. Best <b>restrict the key</b> to YouTube Data API v3 right away.</li>
+    <li>App → <b>OBS overlay</b>: paste the key into <b>Google key</b> and the stream link (or channel <code>@name</code>) → save.</li>
+    <li>Google's free limit is about 4 hours of chat reading a day (read every 8 s).</li>
+  </ol>
+  <p>The app reads only chat messages starting with <code>!pwc</code>; the viewer's nickname is shown next to the card. Don't send the key to anyone in a chat – paste it yourself.</p>
 </section>
 
 <section id="patreon">

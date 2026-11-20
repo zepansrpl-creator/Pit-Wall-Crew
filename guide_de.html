@@ -43,7 +43,7 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
 </header>
 <nav class="toc">
   <a href="#what">Was ist das</a><a href="#inst">Installation</a><a href="#app">Die App</a><a href="#set">Einstellungen</a>
-  <a href="#talk">Sprechen</a><a href="#ac">Assetto Corsa</a><a href="#ai">KI (Groq)</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Zeitplan &amp; Plan</a>
+  <a href="#talk">Sprechen</a><a href="#ac">Assetto Corsa</a><a href="#ai">KI (Groq)</a><a href="#obs">OBS</a><a href="#patreon">Patreon</a><a href="#wall">Pit Wall</a><a href="#plan">Zeitplan &amp; Plan</a>
   <a href="#phone">Benachrichtigungen</a><a href="#race">Langes Rennen</a><a href="#help">Probleme</a>
 </nav>
 <main>
@@ -227,6 +227,27 @@ footer { text-align:center; color:var(--muted); padding:20px 16px 40px; font-siz
     <li>Fertig, wenn auf der Seite <b>Renningenieur</b> ein grünes <b>KI: Groq</b> steht.</li>
   </ol>
   <p>Schick den Schlüssel nie in einem Chat – füge ihn selbst ein.</p>
+</section>
+
+<section id="obs">
+  <h2>OBS-Overlay (für Streamer)</h2>
+  <p>Das Programm liefert selbst ein Stream-Overlay: Leiste mit Position, Runde und Abständen, Karte mit Autodaten nach deiner Frage oder einem Zuschauerbefehl aus dem YouTube-Chat, Funkzitat des Ingenieurs und ein Duell nach „beobachte …“. Alles in der dritten Person, mit Nachnamen – wie im TV.</p>
+  <ol>
+    <li>App → <b>OBS-Overlay</b> → <b>OBS-Overlay einschalten</b> → <b>Speichern und Ingenieur neu starten</b>.</li>
+    <li>OBS: <b>Quellen → + → Browser</b>, Adresse <code>http://127.0.0.1:8735/</code>, Breite und Höhe wie die Basisauflösung in OBS (z. B. 1920×1080 oder 2560×1080 bei 21:9) (Knopf <b>Kopieren</b> in der App). <b>Vorschau ↗</b> zeigt das Overlay mit Beispieldaten – vor der Fahrt.</li>
+    <li>Wenn du den Ingenieur fragst (z. B. „wie sind die Reifen?“), erscheint für etwa 12 s eine Karte zu diesem Thema, darunter das Zitat der Antwort.</li>
+    <li>Zuschauer schreiben <code>!pwc</code> und ein Wort in den Chat: reifen, sprit, runden, abstand, wetter, boxenstopp, schaden, session, limits, hilfe – in 7 Sprachen. Eigene Fragen (<code>!pwc holt er den Gegner ein?</code>) gehen an die KI, wenn eingeschaltet – höchstens eine pro 30 s (dein Groq-Limit). Eine Person kann alle 5 Minuten fragen (einstellbar); du und Moderatoren ohne Limit. Alle 10 Minuten (einstellbar, 0 – nie) erscheint die Befehlsliste kurz auf dem Bildschirm. Verdeckt die Leiste den virtuellen Spiegel? Stell <b>Leiste von oben</b> ein. Das Feld <b>Status</b> zeigt, ob der Chat läuft (z. B. „der Schlüssel hat keinen Zugriff auf YouTube Data API v3“), und die letzten Zuschauerbefehle.</li>
+    <li>Beschreibung für Zuschauer (Seite in 7 Sprachen) – Link in die Stream-Beschreibung einfügen: <a href="https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html?lang=de">https://zepansrpl-creator.github.io/Pit-Wall-Crew/widzowie.html</a> (Knopf <b>Kopieren</b> in der App).</li>
+  </ol>
+  <h3>Google-Schlüssel für den YouTube-Chat (einmal, 5 Minuten)</h3>
+  <ol>
+    <li>Öffne <a href="https://console.cloud.google.com">console.cloud.google.com</a> (Google-Konto) und erstelle ein Projekt (z. B. <code>PWC</code>).</li>
+    <li><b>APIs &amp; Dienste → Bibliothek</b> → <b>YouTube Data API v3</b> → <b>Aktivieren</b>.</li>
+    <li><b>Anmeldedaten → Anmeldedaten erstellen → API-Schlüssel</b>. Am besten den Schlüssel gleich auf YouTube Data API v3 <b>beschränken</b>.</li>
+    <li>App → <b>OBS-Overlay</b>: Schlüssel in <b>Google-Schlüssel</b> und Stream-Link (oder Kanal <code>@name</code>) einfügen → speichern.</li>
+    <li>Das kostenlose Google-Limit reicht für etwa 4 Stunden Chat pro Tag (Abruf alle 8 s).</li>
+  </ol>
+  <p>Das Programm liest nur Chatnachrichten, die mit <code>!pwc</code> beginnen; neben der Karte steht der Nickname. Schick den Schlüssel niemandem im Chat – füge ihn selbst ein.</p>
 </section>
 
 <section id="patreon">

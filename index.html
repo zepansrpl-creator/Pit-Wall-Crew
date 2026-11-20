@@ -1893,6 +1893,14 @@ function isNight(ms, s) {
   return a <= b ? (x >= a && x < b) : (x >= a || x < b);
 }
 function drvNames() { return ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean); }
+// kierowcy do wyboru w planie: z zakładki Zespół, z pola „Kierowcy po kolei” i z samego planu (Maciej 20.11.2026:
+// Patryk jeździł stinty 5–6, a w stincie 3 nie dało się go wybrać – nie był zapisany w zakładce Zespół)
+function planDrvNames(rows) {
+  var out = [];
+  drvNames().concat(($('g-order').value || '').split(/[,;]+/), (rows || []).map(function (r) { return r && r.driver; }))
+    .forEach(function (n) { n = String(n || '').trim(); if (n && out.indexOf(n) < 0) out.push(n); });
+  return out;
+}
 function tyreN(r) { return (r.tyreL ? 2 : 0) + (r.tyreR ? 2 : 0); }
 function serviceOf(r, fin) {
   if (fin) return 'META';
@@ -2036,7 +2044,7 @@ function planRows() { var r = S.plan; return (Array.isArray(r) ? r : Object.valu
 function editPlan(rows) {
   if (!rows && (PLAN_DIRTY || (document.activeElement && $('plan-rows').contains(document.activeElement)))) { refreshTimes(); return; }
   rows = rows || planRows();
-  var drv = drvNames();
+  var drv = planDrvNames(rows);
   $('plan-rows').innerHTML = rows.map(function (r) {
     var keep = { lapsActual: r.lapsActual || 0 };
     var names = drv.slice(); if (r.driver && names.indexOf(r.driver) < 0) names.push(r.driver);
