@@ -14,7 +14,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" integrity="sha384-TnlRYaR4JYz/lpaGuaiU61PjNberSA4vjLjtF+oRC/IkohkJqnWxw5EmDSOt1vA1" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" integrity="sha384-1/m+A1jVWbD3yiK3/vtFvm1+LjK1WLpSoDY+Kaxppwn/yP9BVSgdHTNQVOjrzUO5" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous"></script>
-<script src="i18n.js?v=1129b718"></script>
+<script src="i18n.js?v=d541443b"></script>
 <script src="i18n_core.js?v=f7332401"></script>
 <style>
   :root {
@@ -718,6 +718,7 @@
       <tbody id="sum-st"></tbody>
     </table></div>
     <p class="note">Średnie i konsystencja z czystych okrążeń: bez alei, safety cara, nieważnych i wolniejszych o ponad 7% od najlepszego. Konsystencja = typowe odchylenie od średniej.</p>
+    <div id="sum-pos"></div>
   </section>
   <section id="cmp-box">
     <h2>Mapa porównania <span class="note" id="cmp-note"></span></h2>
@@ -3512,6 +3513,51 @@ function drawSummary() {
   sel.value = keep && +keep < SUMS.length ? keep : '0';
   drawSession();
 }
+// pozycja w klasie na każdym okrążeniu (Maciej 20.11.2026) – kolor = kierowca; dane z bazy to tekst: tylko liczby
+function posChart(laps) {
+  var pts = (laps || []).map(function (l) { return { lap: Number(l.lap), pos: Number(l.pos), n: Number(l.pos_n), who: String(l.who || '?') }; })
+    .filter(function (p) { return isFinite(p.lap) && isFinite(p.pos) && p.pos >= 1 && p.pos < 1000 && p.lap >= 0; })
+    .sort(function (a, b) { return a.lap - b.lap; });
+  if (pts.length < 2) return '';
+  // oś: każda pozycja od P1 do liczby aut w klasie (Maciej 20.11.2026: „dokładnie co do 1 pozycji”, „ile aut w klasie”)
+  var cls = Math.max.apply(null, pts.map(function (p) { return isFinite(p.n) && p.n < 1000 ? p.n : 0; }));
+  var maxP = Math.max(cls, Math.max.apply(null, pts.map(function (p) { return p.pos; })));
+  var row = 16, W = 640, L = 34, R = 10, T = 10, B = 24, Hh = T + B + (maxP - 1) * row;
+  var l0 = pts[0].lap, l1 = pts[pts.length - 1].lap;
+  var x = function (l) { return L + (l1 > l0 ? (l - l0) / (l1 - l0) : 0.5) * (W - L - R); };
+  var y = function (p) { return T + (p - 1) * row; };
+  var who = [], segs = [];
+  pts.forEach(function (p) {
+    if (who.indexOf(p.who) < 0) who.push(p.who);
+    var last = segs[segs.length - 1];
+    if (!last || last.who !== p.who) { segs.push({ who: p.who, pts: (last ? [last.pts[last.pts.length - 1]] : []).concat([p]) }); }
+    else last.pts.push(p);
+  });
+  var col = function (w) { return CMP_COL[who.indexOf(w) % CMP_COL.length]; };
+  var grid = '';
+  for (var g = 1; g <= maxP; g++) {
+    grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--line)" stroke-width="' + (g % 5 ? 0.5 : 1) + '"/>' +
+      '<text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" font-size="10" text-anchor="end" fill="var(--muted)">P' + g + '</text>';
+  }
+  var lines = segs.map(function (s) {
+    return '<polyline fill="none" stroke-width="2.5" stroke="' + col(s.who) + '" points="' +
+      s.pts.map(function (p) { return x(p.lap).toFixed(1) + ',' + y(p.pos).toFixed(1); }).join(' ') + '"/>';
+  }).join('');
+  var dots = pts.map(function (p) {
+    return '<circle cx="' + x(p.lap).toFixed(1) + '" cy="' + y(p.pos).toFixed(1) + '" r="' + (pts.length > 60 ? 1.8 : 3) + '" fill="' + col(p.who) + '"><title>' +
+      TH('okr. {0}').replace('{0}', p.lap) + ': P' + p.pos + ' · ' + esc(p.who) + '</title></circle>';
+  }).join('');
+  var best = pts.reduce(function (a, p) { return p.pos < a.pos ? p : a; }, pts[0]);
+  var axis = '<text x="' + L + '" y="' + (Hh - 6) + '" font-size="11" fill="var(--muted)">' + TH('okr. {0}').replace('{0}', l0) + '</text>' +
+    '<text x="' + (W - R) + '" y="' + (Hh - 6) + '" font-size="11" text-anchor="end" fill="var(--muted)">' + TH('okr. {0}').replace('{0}', l1) + '</text>';
+  var leg = who.map(function (w) { return '<span style="margin-right:12px"><i style="display:inline-block;width:14px;height:3px;vertical-align:middle;background:' +
+    col(w) + '"></i> ' + esc(w) + '</span>'; }).join('');
+  return '<h3 style="margin:14px 0 4px">' + TH('Pozycja w klasie na każdym okrążeniu') + '</h3><p class="note" style="margin:0 0 6px">' +
+    TH('Start P{0} → koniec P{1} · najlepsza P{2} (okr. {3})').replace('{0}', pts[0].pos).replace('{1}', pts[pts.length - 1].pos)
+      .replace('{2}', best.pos).replace('{3}', best.lap) + (cls ? ' · ' + TH('{0} aut w klasie').replace('{0}', cls) : '') + '</p>' +
+    '<svg viewBox="0 0 ' + W + ' ' + Hh + '" style="width:100%;max-width:760px;height:auto" role="img" aria-label="' + TH('Pozycja w klasie na każdym okrążeniu') + '">' +
+    grid + lines + dots + axis + '</svg><div class="note">' + leg + '</div>';
+}
 function drawSession() {
   var s = SUMS[+$('sum-sel').value || 0];
   if (!s) return;
@@ -3534,6 +3580,7 @@ function drawSession() {
       '</td><td>' + esc(lapTxt(x.avg)) + '</td><td>' + esc(sdTxt(x.sd)) + '</td><td>' + (x.fuel ? unitF1(x.fuel) : '—') + '</td><td>' + (x.ve ? n1(x.ve) : '—') +
       '</td><td class="note">' + esc(notes.join(', ')) + '</td></tr>';
   }).join('');
+  setH($('sum-pos'), posChart(s.laps));
 }
 $('sum-sel').onchange = drawSession;
 $('b-csv').onclick = function () {
