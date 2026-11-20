@@ -8,11 +8,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#0c1411">
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="i18n.js?v=936861c1"></script>
+<!-- CR-22 (przegląd kolegi): biblioteki z CDN z sumą kontrolną (integrity) – podmieniony plik przeglądarka odrzuci.
+     Nowa wersja biblioteki = nowa suma: curl -s <adres> | openssl dgst -sha384 -binary | base64 -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" integrity="sha384-AQ3POAMqIhwS81FrUH95ekxqBZHeP5tG2JfEL3+7GuTtfRLWnrRh32UxwzM+//A9" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" integrity="sha384-TnlRYaR4JYz/lpaGuaiU61PjNberSA4vjLjtF+oRC/IkohkJqnWxw5EmDSOt1vA1" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" integrity="sha384-1/m+A1jVWbD3yiK3/vtFvm1+LjK1WLpSoDY+Kaxppwn/yP9BVSgdHTNQVOjrzUO5" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous"></script>
+<script src="i18n.js?v=1129b718"></script>
 <script src="i18n_core.js?v=f7332401"></script>
 <style>
   :root {
@@ -785,7 +787,7 @@
     <h2>Grafik stintów (jedna osoba, przed wyścigiem)</h2>
     <ol class="steps">
       <li>Zakładka <b>Zespół</b>: dodaj kierowców (<b>+ kierowca</b>, imię) i <b>Zapisz kierowców</b>. Temat powiadomień utworzy się sam.</li>
-      <li>Zakładka <b>Grafik i plan</b> → <b>1. Wyścig</b>: data i godzina startu (czas polski), długość wyścigu, czas okrążenia (np. 3:58) → <b>Zapisz</b>.</li>
+      <li>Zakładka <b>Grafik i plan</b> → <b>1. Wyścig</b>: data i godzina startu (Twój czas lokalny), długość wyścigu, czas okrążenia (np. 3:58) → <b>Zapisz</b>.</li>
       <li><b>2. Szybki plan</b>: ile okrążeń w stincie, kierowcy po kolei, podwójne stinty, opony → <b>Rozpisz plan</b>.</li>
       <li><b>3. Plan stintów</b>: popraw, jeśli trzeba (np. kto jedzie start), i <b>Zapisz plan</b>.</li>
       <li>W wyścigu grafik przelicza się sam z prawdziwego tempa. Gdy numery stintów się rozjadą (np. kara drive-through), w „Strategia” wpisz korektę numeru stintu (+1 albo −1).</li>
@@ -1249,12 +1251,15 @@ var S = { meta: {}, settings: {}, plan: [], grafik: {}, feeds: {}, live: null, m
 // kilka aut zespołu w jednym wyścigu: osobny plan i grafik (cars/<id>); CAR – auto wybrane w „Grafik i plan”
 var CAR = '';
 function PT(p) { return CAR ? T('cars/' + CAR + '/' + p) : T(p); }
-function carOf(who) {      // auto, w którego planie jest ten kierowca ('' – główne)
-  var k = Object.keys(S.cars || {});
-  for (var i = 0; i < k.length; i++) {
-    var pl = (S.cars[k[i]] || {}).plan, rows = Array.isArray(pl) ? pl : Object.values(pl || {});
-    if (rows.some(function (r) { return r && r.driver && ktoMatch(who, [r.driver]); })) return k[i];
-  }
+function carOf(who) {      // auto, w którego planie jest ten kierowca ('' – główne); dopasowanie po wszystkich autach naraz (CR-15)
+  var all = [], main = S.mainPlan || [];
+  (Array.isArray(main) ? main : Object.values(main)).forEach(function (r) { if (r && r.driver) all.push(['', r.driver]); });
+  Object.keys(S.cars || {}).forEach(function (id) {
+    var pl = (S.cars[id] || {}).plan, rows = Array.isArray(pl) ? pl : Object.values(pl || {});
+    rows.forEach(function (r) { if (r && r.driver) all.push([id, r.driver]); });
+  });
+  var m = ktoMatch(who, all.map(function (x) { return x[1]; }));
+  for (var i = 0; m && i < all.length; i++) if (all[i][1] === m) return all[i][0];
   return '';
 }
 function carSettings(id) { var c = id && S.cars[id]; return c ? Object.assign({}, S.teamSet, c.settings || {}) : S.teamSet; }
@@ -1701,13 +1706,15 @@ $('feed').onchange = function () { if (TRYB === 'widz') return obsChoose(this.va
 $('kto').onchange = function () { who(); };
 function who() { var v = $('kto').value || 'zespół'; KTO = v; lsSet('kto', v); return v; }
 function ktoFold(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ł/g, 'l').trim(); }
-function ktoMatch(name, list) {   // „Maciej” = „Maciej Szczepaniak” na liście kierowców
-  var a = ktoFold(name); if (!a) return '';
-  for (var i = 0; i < list.length; i++) {
-    var b = ktoFold(list[i]);
-    if (a === b || b.split(' ')[0] === a.split(' ')[0]) return list[i];
-  }
-  return '';
+// CR-15 (przegląd kolegi): najpierw to samo imię i nazwisko; samo imię („Maciej” = „Maciej Szczepaniak”) tylko gdy
+// jedna strona to samo imię i pasuje do jednej osoby – „Jan Nowak” nie trafia w „Jan Kowalski”, „Jan” przy dwóch Janach – w nikogo
+function ktoSame(a, b) { return a === b || ((a.indexOf(' ') < 0 || b.indexOf(' ') < 0) && a.split(' ')[0] === b.split(' ')[0]); }
+function ktoMatch(name, list) {
+  var a = ktoFold(name).replace(/\s+/g, ' '); if (!a) return '';
+  for (var i = 0; i < list.length; i++) if (ktoFold(list[i]).replace(/\s+/g, ' ') === a) return list[i];
+  var hit = [], seen = {};
+  list.forEach(function (x) { var b = ktoFold(x).replace(/\s+/g, ' '); if (b && !seen[b] && ktoSame(a, b)) { seen[b] = 1; hit.push(x); } });
+  return hit.length === 1 ? hit[0] : '';
 }
 function teamMessage(frm, text, kind, silent) {
   var feed = curFeed() || 'race', t = now(), delivered = '', p = Promise.resolve();
@@ -1801,7 +1808,7 @@ function drawTimeline(rows) {
 
 var MAX_RACE_H = 100, MAX_STINTS = 300;      // granice rozsądku: dłuższy wyścig / więcej stintów to pomyłka we wpisanych liczbach
 var SET_FIELDS = [
-  ['raceStartMs', 'Start wyścigu (data i godzina, czas polski)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
+  ['raceStartMs', 'Start wyścigu (data i godzina, Twój czas lokalny)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
   ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30'],
   ['tyreBudget', 'Opon na wyścig (sztuk, z kompletem na start)', 'num', 'np. 58']
 ];
@@ -2348,7 +2355,7 @@ function editDrivers(rows) {
   $('drivers').innerHTML = rows.map(function (d) {
     var old = lock && d.name;
     return '<tr><td><input data-k="name" value="' + esc(d.name || '') + '" placeholder="Imię"' + (old ? ' readonly title="' + esc(TR('Zmienić albo usunąć może tylko założyciel zespołu')) + '"' : '') +
-      '></td><td><input data-k="topic" value="' + esc(d.topic || '') +
+      '></td><td><input data-k="topic" value="' + esc(d.topic || '') + (old && d.topic ? '" readonly title="' + esc(TR('Zmienić albo usunąć może tylko założyciel zespołu')) : '') +
       '" placeholder="utworzy się sam"></td><td><button class="second" data-phone title="Jak dostawać powiadomienia na telefon">📱</button></td>' +
       '<td><button class="second" data-test>Test</button></td><td>' + (old ? '' : '<button class="second" data-del>×</button>') + '</td></tr>';
   }).join('');
@@ -2434,7 +2441,17 @@ function speakNew(list) {
 voiceBtn();
 $('b-adddrv').onclick = function () { var r = readDrivers(); r.push({ name: '', topic: 'pwc-' + rnd(6) }); editDrivers(r); };
 $('b-drv').onclick = function () {
-  T('settings/drivers').set(readDrivers()).then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; $('kto').removeAttribute('data-sig'); draw(); })
+  var rows = readDrivers(), job;
+  if (S.owner && !IS_OWNER) {
+    // CR-02 (przegląd kolegi): w zespole z założycielem zwykły członek może tylko dopisać nowego kierowcę pod wolnym
+    // numerem (reguły bazy: drivers/$i, gdy go nie ma) – zapis całej listy baza odrzucała
+    var cur = (S.settings || {}).drivers || [], have = {}, next = 0;
+    Object.keys(cur).forEach(function (k) { var d = cur[k]; if (d && d.name) have[d.name] = 1; if (+k >= next) next = +k + 1; });
+    job = rows.filter(function (d) { return !have[d.name]; }).reduce(function (p, d) {
+      return p.then(function () { return T('settings/drivers/' + (next++)).set(d); });
+    }, Promise.resolve());
+  } else job = T('settings/drivers').set(rows);
+  job.then(function () { flash('drv-ok', 'Zapisano.'); $('kto').innerHTML = ''; $('kto').removeAttribute('data-sig'); draw(); })
     .catch(function (e) { alert(authErr(e)); });
 };
 
@@ -2596,6 +2613,8 @@ function cmpSlots() {
   }).join(''));
   $('cmp-slots').querySelectorAll('.cmp-slot').forEach(function (el) {
     el.onclick = function (e) { if (e.target.dataset && e.target.dataset.pin != null) return; var i = +el.dataset.s; CMP.pick = CMP.pick === i ? null : i; cmpSlots(); cmpPicker(); };
+    // CR-18: wypełnione miejsce otwiera też klawiatura (Enter / spacja), jak przycisk
+    el.onkeydown = function (e) { if (e.target === el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); el.click(); } };
   });
   $('cmp-slots').querySelectorAll('[data-pin]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); cmpPin(+b.dataset.pin); }; });
 }
@@ -3512,11 +3531,16 @@ $('sum-sel').onchange = drawSession;
 $('b-csv').onclick = function () {
   var cols = ['veh', 'stint', 'lap', 'who', 'time', 'time_txt', 'fuel', 've', 'wet', 'track_temp', 'compound', 'notes'];
   var csv = cols.join(';') + '\n' + LAPS.map(function (l) {
-    return cols.map(function (c) { var v = l[c] == null ? '' : String(l[c]); if (typeof l[c] === 'number') v = v.replace('.', ','); return '"' + v.replace(/"/g, '""') + '"'; }).join(';');
+    return cols.map(function (c) {
+      var v = l[c] == null ? '' : String(l[c]);
+      if (typeof l[c] === 'number') v = v.replace('.', ',');
+      else if (/^[=+\-@\t\r]/.test(v)) v = "'" + v;        // CR-17: tekst z bazy nie staje się formułą arkusza
+      return '"' + v.replace(/"/g, '""') + '"';
+    }).join(';');
   }).join('\n');
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
-  a.download = 'okrazenia_' + CODE + '.csv'; a.click();
+  var a = document.createElement('a'), url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
+  a.href = url; a.download = 'okrazenia_' + CODE + '.csv'; a.click();
+  setTimeout(function () { URL.revokeObjectURL(url); }, 10000);   // CR-19: plik w pamięci przeglądarki tylko na czas pobrania
 };
 
 // ------------------------------------------------------------------ pamięć
@@ -3559,14 +3583,19 @@ function mapData(live) {
     MAP.key = m.key; MAP.pts = null;
     var src = TRYB === 'widz' ? ((S.obs && S.obs.tracks) || {})[m.key] : null;
     if (src) mapSetTrack(src);
-    else if (T && MAP.loading !== m.key) {
-      MAP.loading = m.key;
-      T('tracks/' + m.key).once('value').then(function (s) { if (s.val()) mapSetTrack(s.val()); });
-    }
+    else mapFetch(m.key);
   } else if (!MAP.pts && TRYB === 'widz') {
     var src2 = ((S.obs && S.obs.tracks) || {})[m.key]; if (src2) mapSetTrack(src2);
-  }
+  } else if (!MAP.pts) mapFetch(m.key);           // CR-06: kształtu nie było albo odczyt się nie udał – ponów co 30 s
   $('map-box').style.display = MAP.pts ? '' : 'none';
+}
+// Kształt toru z bazy. CR-07: odpowiedź dla toru, który już nie jest pokazany, nie podmienia mapy; CR-06: po błędzie albo
+// braku kształtu kolejna próba najwcześniej po 30 s (program kierowcy zapisuje kształt po pierwszym pełnym okrążeniu).
+function mapFetch(key) {
+  if (!T || MAP.loading === key || (MAP.tried === key && now() - (MAP.triedAt || 0) < 30000)) return;
+  MAP.loading = key; MAP.tried = key; MAP.triedAt = now();
+  T('tracks/' + key).once('value').then(function (s) { if (MAP.key === key && s.val()) mapSetTrack(s.val()); }, function () {})
+    .then(function () { if (MAP.loading === key) MAP.loading = null; });
 }
 function mapSetTrack(rec) {
   var src = rec.hd && rec.hd.length >= 100 ? rec.hd : (rec.points || []);   // dokładny kształt (co 4 m), gdy jest
