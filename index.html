@@ -14,7 +14,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" integrity="sha384-TnlRYaR4JYz/lpaGuaiU61PjNberSA4vjLjtF+oRC/IkohkJqnWxw5EmDSOt1vA1" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" integrity="sha384-1/m+A1jVWbD3yiK3/vtFvm1+LjK1WLpSoDY+Kaxppwn/yP9BVSgdHTNQVOjrzUO5" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous"></script>
-<script src="i18n.js?v=d541443b"></script>
+<script src="i18n.js?v=81272de1"></script>
 <script src="i18n_core.js?v=f7332401"></script>
 <style>
   :root {
@@ -87,6 +87,7 @@
             border: 1px solid rgba(217,162,39,.3); font-size: 14px; }
 
   /* opony */
+  .drift { color: var(--warn); margin: 2px 0 8px; }
   .tyres { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
   .tyre { border: 1px solid var(--line); border-radius: 14px; padding: 8px; text-align: center; background: var(--tyre-bg); }
   .tyre b { display: block; font: 700 25px/1.2 var(--cond); }
@@ -561,6 +562,7 @@
   </section>
   <section class="wide">
     <h2>Grafik stintów <span class="note" id="src"></span></h2>
+    <p class="note drift" id="drift" style="display:none"></p>
     <table>
       <thead><tr><th>Stint</th><th>Kierowca</th><th>Start</th><th class="hide-sm">Zjazd</th><th class="hide-sm">Okr.</th><th>Na pitstopie</th><th>vs plan</th></tr></thead>
       <tbody id="grafik"></tbody>
@@ -589,6 +591,7 @@
   </section>
   <section>
     <h2>Grafik na żywo <span class="note" id="src2"></span></h2>
+    <p class="note drift" id="drift2" style="display:none"></p>
     <div class="tleg2" id="tleg"></div>
     <div class="tline" id="tline" style="display:none"></div>
     <div class="scroll"><table>
@@ -1106,6 +1109,11 @@ function render(v) {
     }
     var ty = r.tyres ? (r.tyres.n ? '~' + esc(r.tyres.n) + ' (pitstop ' + esc(r.tyres.stop) + ')' : 'bez zmiany (pitstop ' + esc(r.tyres.stop) + ')') : '—';
     if (r.comp) ty = '<b>' + esc(r.comp) + '</b>' + (ty === '—' ? '' : ' ' + ty);     // mieszanka (LMU, Assetto Corsa)
+    // wiek opon: okrążenia od pewnej zmiany (albo startu); „~” – od postoju, gdy nie wiemy, czy zmieniał opony
+    if (r.tyre_age && r.tyre_age.laps != null)
+      ty += (ty === '—' ? '' : ' · ') + '<span title="' + TH('okrążenia na tych oponach') + '">' + (r.tyre_age.sure ? '' : '~') +
+            TH(r.tyre_age.laps + ' okr.') + '</span>';
+    if (ty.indexOf('—') === 0 && ty.length > 1) ty = ty.slice(1);
     var sec = r.sec || [], bs = r.bsec || [];
     var secs = [0, 1, 2].map(function (i) { return '<td class="hide-sm">' + (sec[i] ? tspan(sec[i], bs[i], cb['s' + (i + 1)], secTxt) : '—') + '</td>'; }).join('');
     var row = '<tr class="' + (r.me ? 'cur' : '') + (r.leader ? ' leader' : '') + '"><td>P' + esc(r.pos) + '</td><td title="' + esc(tip) + '">' + esc(r.name) + (r.leader ? '<span class="ldr">' + TH('LIDER') + '</span>' : '') +
@@ -1196,6 +1204,7 @@ function render(v) {
   }
 
   $('src').textContent = '(' + (v.zrodlo || '') + (v.raceEnd ? ', meta ok. ' + v.raceEnd : '') + ')';
+  setDrift($('drift'), st.plan_drift);
   setH($('grafik'), grafikRows(v.grafik) || (v.noPlan
     ? '<tr><td colspan="7" class="note">Na dziś nie ma wyścigu w „Grafik i plan”. Gdy kierowca wyjedzie w wyścigu, grafik i strategia ułożą się same – z długości wyścigu i liczby opon odczytanych z gry.</td></tr>'
     : '<tr><td colspan="7" class="note">Uzupełnij datę wyścigu i plan w zakładce „Grafik i plan”. Grafik przelicza co minutę program Pit Wall Crew (wystarczy, że jest włączony u kogokolwiek z zespołu).</td></tr>'));
@@ -1753,12 +1762,26 @@ function planToday(st) {     // jak team/planning.py plan_today(): start najwyż
 function grafikRows(rows) {
   return (rows || []).map(function (s) {
     var d = s.delta == null ? '' : (s.delta > 0 ? '<span class="delta-pos">+' + esc(s.delta) + ' min</span>' : s.delta < 0 ? '<span class="delta-neg">' + esc(s.delta) + ' min</span>' : '0');
-    return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + esc(s.n) + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) +
-           '</td><td class="hide-sm">' + esc(s.end) + '</td><td class="hide-sm">' + esc(s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
+    var sim = function (x) { return x ? '<small class="note"> · ' + TH(x + ' w grze') + '</small>' : ''; };   // godzina na torze
+    return '<tr class="' + (s.current ? 'cur' : '') + '"><td>' + esc(s.n) + '</td><td>' + esc(s.driver || '—') + '</td><td>' + esc(s.start) + sim(s.sim) +
+           '</td><td class="hide-sm">' + esc(s.end) + sim(s.sim_end) + '</td><td class="hide-sm">' + esc(s.laps || '') + '</td><td>' + esc(s.service) + '</td><td>' + d + '</td></tr>';
   }).join('');
 }
+// plan zespołu „nieaktualny” (propozycja 3, 21.11.2026): od którego okrążenia zużycie / tempo odbiega od planu i o ile
+function driftHtml(pd) {
+  if (!pd || !pd.items || !pd.items.length) return '';
+  var parts = pd.items.map(function (x) {
+    if (x.what === 'lap') return TH((x.diff > 0 ? 'tempo wolniejsze o ' : 'tempo szybsze o ') + n1(Math.abs(x.diff)) + ' s / okr.');
+    var w = x.what === 've' ? 'energia ' : 'paliwo ';
+    return TH(w + (x.rel > 0 ? '+' : '−') + Math.round(Math.abs(x.rel)) + '% ' + (x.rel > 0 ? 'ponad plan' : 'poniżej planu'));
+  });
+  return '⚠ <b>' + TH('Plan nieaktualny od okrążenia ' + pd.since_lap) + '</b>: ' + parts.join(', ') + ' · ' +
+         TH(pd.conf === 'high' ? 'pewność: duża' : 'pewność: średnia');
+}
+function setDrift(el, pd) { var h = driftHtml(pd); setH(el, h); if (el) el.style.display = h ? '' : 'none'; }
 var G2_ALL = false;
 function drawGrafik2(g) {     // grafik auta wybranego w „Grafik i plan”
+  setDrift($('drift2'), ((S.live || {}).state || {}).plan_drift);
   $('src2').textContent = '(' + (g.source || 'brak') + (g.raceEnd ? ', meta ok. ' + g.raceEnd : '') + (g.t ? ', przeliczony ' + hhmm(g.t) : '') + ')';
   var rows = g.rows || [], ci = rows.map(function (r) { return !!r.current; }).indexOf(true), shown = rows;
   if (!G2_ALL && rows.length > 7) {            // 2 przed i 2 po obecnym stincie (albo pierwsze 5)
@@ -1809,7 +1832,9 @@ function drawTimeline(rows) {
 
 var MAX_RACE_H = 100, MAX_STINTS = 300;      // granice rozsądku: dłuższy wyścig / więcej stintów to pomyłka we wpisanych liczbach
 var SET_FIELDS = [
-  ['raceStartMs', 'Start wyścigu (data i godzina, Twój czas lokalny)', 'dt'], ['raceHours', 'Długość wyścigu (godziny)'],
+  ['raceStartMs', 'Start wyścigu (data i godzina, Twój czas lokalny)', 'dt'],
+  ['simStart', 'Start wyścigu w grze (godzina na torze, np. 15:00)', 'hm'], ['simRate', 'Przyspieszenie czasu w grze (×1, ×2 …)', 'num', '1'],
+  ['raceHours', 'Długość wyścigu (godziny)'],
   ['lapTime', 'Czas okrążenia (np. 3:58)', 'lap'], ['notifyMin', 'Powiadomienie przed zmianą (minut)', 'num', '30'],
   ['tyreBudget', 'Opon na wyścig (sztuk, z kompletem na start)', 'num', 'np. 58']
 ];
@@ -1826,6 +1851,8 @@ function dtLocal(ms) { if (!ms) return ''; var d = new Date(ms - new Date(ms).ge
 function fieldHtml(f, s) {
   var v = s[f[0]];
   if (f[2] === 'dt') return '<label>' + f[1] + '<input type="datetime-local" id="s-' + f[0] + '" value="' + dtLocal(v) + '"></label>';
+  if (f[2] === 'hm') { var g = gameSimHm();        // LMU podaje godzinę startu sesji w grze – podpowiedź, gdy pole puste
+    return '<label>' + f[1] + '<input id="s-' + f[0] + '" value="' + esc(v || '') + '" placeholder="' + esc(g ? TR('z gry: ') + g : '15:00') + '"></label>'; }
   if (f[2] === 'lap') return '<label>' + f[1] + '<input id="s-' + f[0] + '" value="' + esc(lapFmt(v)) + '" placeholder="3:58"></label>';
   if (f[2] === 'list') v = (v || []).join(', ');
   return '<label>' + f[1] + '<input id="s-' + f[0] + '" inputmode="decimal" placeholder="' + (f[3] || '') + '" value="' + esc(v == null ? '' : String(v).replace('.', ',')) + '"></label>';
@@ -1854,6 +1881,8 @@ $('b-set').onclick = function () {
     var raw = $('s-' + f[0]).value;
     if (f[2] === 'dt') upd[f[0]] = raw ? new Date(raw).getTime() : null;
     else if (f[2] === 'lap') upd[f[0]] = lapParse(raw);
+    else if (f[2] === 'hm') { var mm = hm(raw.trim().replace('.', ':')); upd[f[0]] = mm == null ? null : (mm / 60 < 10 ? '0' : '') + Math.floor(mm / 60) + ':' + (mm % 60 < 10 ? '0' : '') + mm % 60;
+      if (raw.trim() && mm == null) { alert(TR('Godzina w grze: wpisz jak 15:00.')); throw new Error('hm'); } }
     else if (f[2] === 'list') { var a = raw.split(/[;,]\s*|\s+/).map(num).filter(function (x) { return x != null; }); upd[f[0]] = a.length === 4 ? a : null; }
     else upd[f[0]] = num(raw);
   });
@@ -1872,7 +1901,7 @@ $('car-add').onclick = function () {
   var n = prompt(TR('Nazwa auta (np. numer i kierowcy):'), TR('Auto') + ' ' + (Object.keys(S.cars || {}).length + 2));
   if (!n) return;
   var id = rnd(6), base = {};
-  ['raceStartMs', 'raceHours', 'lapTime', 'notifyMin', 'tyreBudget'].forEach(function (k) { if (S.teamSet[k] != null) base[k] = S.teamSet[k]; });
+  ['raceStartMs', 'simStart', 'simRate', 'raceHours', 'lapTime', 'notifyMin', 'tyreBudget'].forEach(function (k) { if (S.teamSet[k] != null) base[k] = S.teamSet[k]; });
   T('cars/' + id).set({ name: n.trim().slice(0, 40), settings: base, plan: [] }).then(function () {
     CAR = id; S.cars[id] = { name: n.trim().slice(0, 40), settings: base, plan: [] }; applyCar(true); $('gen-box').open = true;
   }).catch(function (e) { alert(authErr(e)); });
@@ -1888,9 +1917,22 @@ $('car-del').onclick = function () {
   T('cars/' + id).remove().then(function () { applyCar(true); }).catch(function (e) { alert(authErr(e)); });
 };
 function hm(t) { var m = String(t || '').match(/^(\d{1,2}):(\d{2})$/); return m ? +m[1] * 60 + +m[2] : null; }
+// godzina w grze (na torze): „Start wyścigu w grze” z „1. Wyścig” albo z gry (LMU), przyspieszenie czasu (Maciej 21.11.2026)
+function gameSimHm() {
+  var v = (((S.live || {}).state) || {}).sim_start_s;
+  if (v == null || !(v >= 0 && v < 86400)) return '';
+  var m = Math.floor(v / 60); return (m < 600 ? '0' : '') + Math.floor(m / 60) + ':' + (m % 60 < 10 ? '0' : '') + m % 60;
+}
+function simMin(ms, s) {
+  var m0 = hm(s.simStart); if (m0 == null) m0 = hm(gameSimHm()); if (m0 == null || !s.raceStartMs || !ms) return null;
+  var r = +s.simRate > 0 && +s.simRate <= 60 ? +s.simRate : 1;
+  return ((Math.round(m0 + (ms - s.raceStartMs) / 60000 * r) % 1440) + 1440) % 1440;
+}
+function simHm(ms, s) { var m = simMin(ms, s); return m == null ? '' : (m < 600 ? '0' : '') + Math.floor(m / 60) + ':' + (m % 60 < 10 ? '0' : '') + m % 60; }
 function isNight(ms, s) {
   var a = hm(s.nightFrom || '18:45'), b = hm(s.nightTo || '03:15'); if (a == null || b == null) return false;
-  var d = new Date(ms), x = d.getHours() * 60 + d.getMinutes();
+  var d = new Date(ms), x = simMin(ms, s);          // noc liczona z godziny w grze, gdy ją znamy
+  if (x == null) x = d.getHours() * 60 + d.getMinutes();
   return a <= b ? (x >= a && x < b) : (x >= a || x < b);
 }
 function drvNames() { return ((S.settings || {}).drivers || []).map(function (d) { return d && d.name; }).filter(Boolean); }
@@ -2028,7 +2070,7 @@ function refreshTimes() {   // po każdej zmianie w tabeli: przelicz godziny bez
     c[0].textContent = r.n;
     c[3].textContent = r._start ? hhmm(r._start) : '';
     c[4].textContent = r._final ? 'META (' + r._lapsFin + ' okr.)' : (r._end ? hhmm(r._end) : '');
-    c[5].textContent = r._start ? (r._night ? 'noc' : 'dzień') : '';
+    c[5].textContent = r._start ? TR(r._night ? 'noc' : 'dzień') + (simHm(r._start, S.settings || {}) ? ' · ' + TR(simHm(r._start, S.settings || {}) + ' w grze') : '') : '';
     tr.className = (r._night ? 'night ' : '') + (r._after ? 'after ' : '') + (r._final ? 'final' : '');
     for (var k = 0; k < 4; k++) {
       var td = c[9 + k], v = r._tread ? Math.round(r._tread[k]) : '';
@@ -2689,8 +2731,38 @@ function cmpUnpack(z) {
   return new Response(st).text().then(function (txt) {
     var d = JSON.parse(txt), t = [], acc = 0;
     d.t.forEach(function (x) { acc += x; t.push(acc / 1000); });
-    return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [] };
+    return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [], x: d.x || null, z: d.z || null };
   });
+}
+// Okrążenia z programu sprzed 0.4.4.15: czas odcinków z danych wyników gry (5 razy na sekundę) – stoi przez kilka
+// odcinków i skacze o 0,2 s, więc strata wychodziła 0,20 / 0,40 s, a w wielu miejscach „obaj prowadzą”. Takie
+// okrążenie odtwarzamy z prędkości (5 m / prędkość), przeskalowane do czasu okrążenia z gry; dokładnych nie ruszamy.
+// linia jazdy kierowcy: położenie auta co 5 m (program od 0.4.4.15; decymetry, różnicowo) -> [[x, z] w metrach]
+function cmpLineOf(d) {
+  if (!d || !d.x || !d.z || d.x.length !== d.z.length || d.x.length < 2) return null;
+  var out = [], ax = 0, az = 0;
+  for (var i = 0; i < d.x.length; i++) { ax += +d.x[i] || 0; az += +d.z[i] || 0; out.push([ax / 10, az / 10]); }
+  return out;
+}
+// o ile metrów linia b jest szerzej (+, dalej od środka łuku) albo ciaśniej (−) od linii a w odcinku i; prosta – null
+function cmpWide(a, b, i) {
+  var n = Math.min(a.length, b.length), k = 4;
+  if (i < k || i >= n - k) return null;
+  var p0 = a[i - k], p1 = a[i], p2 = a[i + k], tx = p2[0] - p0[0], ty = p2[1] - p0[1], tl = Math.hypot(tx, ty) || 1;
+  var cr = (p1[0] - p0[0]) * (p2[1] - p1[1]) - (p1[1] - p0[1]) * (p2[0] - p1[0]);
+  if (Math.abs(cr) / (tl * tl) < 0.002) return null;
+  var lx = -ty / tl, ly = tx / tl, off = (b[i][0] - p1[0]) * lx + (b[i][1] - p1[1]) * ly;
+  return cr > 0 ? -off : off;
+}
+function cmpTimeFix(t, v, lapTime) {
+  var n = t.length, same = 0, i;
+  if (n < 20 || !v || v.length < n) return t;
+  for (i = 1; i < n; i++) if (t[i] === t[i - 1]) same++;
+  if (same < n * 0.3) return t;
+  var out = [0], acc = 0;
+  for (i = 0; i < n; i++) { acc += CMP_BIN / Math.max(3, (+v[i] || 0) / 3.6); if (i < n - 1) out.push(acc); }
+  var k = lapTime > 0 ? lapTime / acc : (t[n - 1] > 0 ? t[n - 1] / out[n - 1] : 1);
+  return out.map(function (x) { return x * k; });
 }
 function cmpSetupOf(x, r) {
   if (r.setup) return Promise.resolve(r.setup);
@@ -2700,6 +2772,7 @@ function cmpSetupOf(x, r) {
 function cmpFromRec(x, r) {
   return cmpUnpack(r.z).then(function (L) {
     L.m = Object.assign({}, x.m, r.meta || {}); x.m = L.m;
+    L.t = cmpTimeFix(L.t, L.v, +L.m.lap_time || 0);
     return cmpSetupOf(x, r).then(function (st) { L.setup = st; CMP.laps[x.id] = L; return L; });
   });
 }
@@ -2834,6 +2907,10 @@ function cmpBuild(laps, shape) {
     CMP.box = [x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad];
     CMP.u = Math.max(CMP.box[2], CMP.box[3]) / 1000;
     CMP.P = p;
+    L.forEach(function (l) {      // linia jazdy każdego kierowcy w układzie mapy (to samo przesunięcie i obrót)
+      var ln = cmpLineOf(l.d);
+      l.P = ln ? ln.slice(0, n).map(function (q) { var a = q[0] - mx, b = -q[1] - my; return [a * cr - b * sr, a * sr + b * cr]; }) : null;
+    });
     var N = p.length;
     CMP.XY = [];
     for (var i = 0; i < n; i++) {
@@ -2954,13 +3031,20 @@ function cmpDraw() {
   cmpClamp();
   var L = CMP.L, n = CMP.n, k = Math.pow(CMP.z, -0.65) * CMP.u, svg = $('cmp-map'), h = [];
   var trk = 'M' + CMP.P.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('L') + 'Z';
-  h.push('<path d="' + trk + '" fill="none" style="stroke:var(--map-track)" stroke-width="' + 22 * k + '" stroke-linejoin="round"/>');
+  // przybliżona mapa (wybrany zakręt): prawdziwa linia jazdy każdego kierowcy; tor nie węższy niż ok. 14 m
+  var lines = CMP.z >= 3 && L.some(function (l) { return l.P; });
+  h.push('<path d="' + trk + '" fill="none" style="stroke:var(--map-track)" stroke-width="' + (lines ? Math.max(22 * k, 14) : 22 * k) + '" stroke-linejoin="round"/>');
   for (var i0 = 0; i0 < n - 1; i0 += 10) {
     var i1 = Math.min(n - 1, i0 + 10), ts = L.map(function (l) { return l.d.t[i1] - l.d.t[i0]; });
     var o = ts.slice().sort(function (a, b) { return a - b; }), gap = L.length > 1 ? o[1] - o[0] : 0, bi = ts.indexOf(o[0]);
     var col = gap < 0.004 ? 'var(--map-line)' : L[bi].col, op = gap < 0.004 ? 1 : Math.min(1, 0.5 + gap * 12);
-    h.push('<path d="' + cmpPath(i0, i1) + '" fill="none" style="stroke:' + col + '" stroke-width="' + 10 * k + '" stroke-linecap="round" stroke-linejoin="round" opacity="' + op.toFixed(2) + '"/>');
+    h.push('<path d="' + cmpPath(i0, i1) + '" fill="none" style="stroke:' + col + '" stroke-width="' + 10 * k + '" stroke-linecap="round" stroke-linejoin="round" opacity="' + (lines ? op * 0.3 : op).toFixed(2) + '"/>');
   }
+  if (lines) L.forEach(function (l) {
+    if (!l.P) return;
+    h.push('<polyline points="' + l.P.map(function (q) { return q[0].toFixed(2) + ',' + q[1].toFixed(2); }).join(' ') + '" fill="none" style="stroke:' + l.col +
+      '" stroke-width="2.4" vector-effect="non-scaling-stroke" stroke-linejoin="round" opacity=".95"/>');
+  });
   var a = CMP.XY[0], b = CMP.XY[2], dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1, S = 16 * k;
   h.push('<line x1="' + (a[0] - dy / dl * S) + '" y1="' + (a[1] + dx / dl * S) + '" x2="' + (a[0] + dy / dl * S) + '" y2="' + (a[1] - dx / dl * S) + '" style="stroke:var(--text)" stroke-width="' + 4 * k + '"/>');
   (CMP.S || []).forEach(function (i) {   // koniec sektora: kreska w poprzek toru
@@ -3059,18 +3143,25 @@ function cmpHover(i) {
   cur.setAttribute('cx', p[0]); cur.setAttribute('cy', p[1]);
   if (!cmpIn(q)) { tip.style.display = 'none'; return; }
   var tmin = Math.min.apply(null, L.map(function (l) { return l.d.t[i]; }));
+  var rl = L.slice().sort(function (a, b) { return a.d.m.lap_time - b.d.m.lap_time; }).filter(function (l) { return l.P; })[0];
   var cn = CMP.C.filter(function (c) { return i >= c.s && i <= c.e; })[0];
   var h = '<small><span>' + esc(TR(unitD(i * CMP_BIN) + ' od startu')) + '</span>' + (cn ? ' · <span>' + esc(cn.name) + '</span>' : '') + '</small>';
   L.forEach(function (l) {
     var dt = l.d.t[i] - tmin;
     h += '<div><span style="color:' + l.col + ';display:inline-block;min-width:64px">' + esc(l.name) + '</span> <span style="display:inline-block;min-width:74px;text-align:right">' +
       unitSp(l.d.v[i]) + '</span> <span style="display:inline-block;min-width:70px;text-align:right;color:' + (dt < 0.0005 ? 'var(--ok)' : 'var(--muted)') + '">' +
-      (L.length < 2 ? '' : dt < 0.0005 ? esc(TR('prowadzi')) : '+' + n2(dt) + ' s') + '</span></div>';
+      (L.length < 2 ? '' : dt < 0.0005 ? esc(TR('prowadzi')) : '+' + n2(dt) + ' s') + '</span>' + cmpWideTxt(rl, l, i) + '</div>';
   });
   tip.innerHTML = h;
   tip.style.display = 'block';
   tip.style.left = q[0] + '%'; tip.style.top = q[1] + '%';
   tip.style.transform = 'translate(' + (q[0] > 55 ? 'calc(-100% - 14px)' : '14px') + ',' + (q[1] > 70 ? '-100%' : q[1] < 30 ? '0' : '-50%') + ')';
+}
+function cmpWideTxt(rl, l, i) {
+  if (!rl || !l.P || l === rl || CMP.z < 3) return '';
+  var w = cmpWide(rl.P, l.P, i);
+  if (w == null || Math.abs(w) < 0.3) return '';
+  return ' <span style="color:var(--muted)">' + esc(TR(n1(Math.abs(w)) + (w > 0 ? ' m szerzej' : ' m ciaśniej'))) + '</span>';
 }
 function cmpNear(e) {
   var r = $('cmp-map').getBoundingClientRect(), v = cmpView();
@@ -3522,7 +3613,24 @@ function posChart(laps) {
   // oś: każda pozycja od P1 do liczby aut w klasie (Maciej 20.11.2026: „dokładnie co do 1 pozycji”, „ile aut w klasie”)
   var cls = Math.max.apply(null, pts.map(function (p) { return isFinite(p.n) && p.n < 1000 ? p.n : 0; }));
   var maxP = Math.max(cls, Math.max.apply(null, pts.map(function (p) { return p.pos; })));
-  var row = 16, W = 640, L = 34, R = 10, T = 10, B = 24, Hh = T + B + (maxP - 1) * row;
+  // inne auta klasy (Maciej 20.11.2026: „inne auta z wyścigu i kierowców z nazwiskami, czytelnie”): cienkie, wyciszone
+  // linie, na końcu każdej – miejsce, numer i nazwisko (każda pozycja ma swój wiersz, więc napisy się nie nakładają)
+  var cars = {}, meId = null;
+  (laps || []).forEach(function (l) {
+    var lap = Number(l.lap), my = Number(l.pos);
+    if (!isFinite(lap) || !Array.isArray(l.cls)) return;
+    l.cls.forEach(function (c) {
+      if (!Array.isArray(c)) return;
+      var id = String(c[0]), pos = Number(c[1]);
+      if (!isFinite(pos) || pos < 1 || pos >= 1000) return;
+      var o = cars[id] || (cars[id] = { pts: [], num: '', name: '' });
+      o.pts.push([lap, pos]); o.num = String(c[2] || ''); o.name = String(c[3] || '');
+      if (c[4] === 1 || (meId === null && pos === my)) meId = id;
+      if (pos > maxP) maxP = pos;
+    });
+  });
+  var ids = Object.keys(cars), withCls = ids.length > 1;
+  var row = 16, W = withCls ? 800 : 640, L = 34, R = withCls ? 170 : 10, T = 10, B = 24, Hh = T + B + (maxP - 1) * row;
   var l0 = pts[0].lap, l1 = pts[pts.length - 1].lap;
   var x = function (l) { return L + (l1 > l0 ? (l - l0) / (l1 - l0) : 0.5) * (W - L - R); };
   var y = function (p) { return T + (p - 1) * row; };
@@ -3539,6 +3647,17 @@ function posChart(laps) {
     grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--line)" stroke-width="' + (g % 5 ? 0.5 : 1) + '"/>' +
       '<text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" font-size="10" text-anchor="end" fill="var(--muted)">P' + g + '</text>';
   }
+  var others = '', tags = '';
+  ids.forEach(function (id) {
+    var o = cars[id]; o.pts.sort(function (a, b) { return a[0] - b[0]; });
+    var lastP = o.pts[o.pts.length - 1][1], me = id === meId, label = 'P' + lastP + ' ' + esc((o.num + ' ' + o.name).trim());
+    if (!me && o.pts.length > 1) {
+      others += '<polyline fill="none" stroke="var(--dim)" stroke-width="1.2" opacity="0.7" points="' +
+        o.pts.map(function (q) { return x(q[0]).toFixed(1) + ',' + y(q[1]).toFixed(1); }).join(' ') + '"><title>' + label + '</title></polyline>';
+    }
+    tags += '<text x="' + (W - R + 8) + '" y="' + (y(lastP) + 4) + '" font-size="10"' +
+      (me ? ' font-weight="700" fill="var(--text)"' : ' fill="var(--muted)"') + '>' + label + '</text>';
+  });
   var lines = segs.map(function (s) {
     return '<polyline fill="none" stroke-width="2.5" stroke="' + col(s.who) + '" points="' +
       s.pts.map(function (p) { return x(p.lap).toFixed(1) + ',' + y(p.pos).toFixed(1); }).join(' ') + '"/>';
@@ -3555,8 +3674,8 @@ function posChart(laps) {
   return '<h3 style="margin:14px 0 4px">' + TH('Pozycja w klasie na każdym okrążeniu') + '</h3><p class="note" style="margin:0 0 6px">' +
     TH('Start P{0} → koniec P{1} · najlepsza P{2} (okr. {3})').replace('{0}', pts[0].pos).replace('{1}', pts[pts.length - 1].pos)
       .replace('{2}', best.pos).replace('{3}', best.lap) + (cls ? ' · ' + TH('{0} aut w klasie').replace('{0}', cls) : '') + '</p>' +
-    '<svg viewBox="0 0 ' + W + ' ' + Hh + '" style="width:100%;max-width:760px;height:auto" role="img" aria-label="' + TH('Pozycja w klasie na każdym okrążeniu') + '">' +
-    grid + lines + dots + axis + '</svg><div class="note">' + leg + '</div>';
+    '<svg viewBox="0 0 ' + W + ' ' + Hh + '" style="width:100%;max-width:' + (withCls ? 940 : 760) + 'px;height:auto" role="img" aria-label="' + TH('Pozycja w klasie na każdym okrążeniu') + '">' +
+    grid + others + lines + dots + tags + axis + '</svg><div class="note">' + leg + '</div>';
 }
 function drawSession() {
   var s = SUMS[+$('sum-sel').value || 0];
