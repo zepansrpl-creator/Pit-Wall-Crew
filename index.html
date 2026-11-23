@@ -1104,7 +1104,7 @@ function render(v) {
     }
     var who = (r.drivers || []).filter(function (x) { return x.pace; });
     var tip = who.map(function (x) { return x.name + ' ' + lapTxt(x.pace) + ' ' + TR('(' + x.laps + ' okr.)'); }).join('\n');
-    var catchTxt = r.catch ? (r.gap > 0 ? 'dogoni Cię za ~' : 'dogonisz za ~') + Math.round(r.catch) + ' okr.' : '—';
+    var catchTxt = r.catch ? (r.pos > (mine.pos || 0) ? 'dogoni Cię za ~' : 'dogonisz za ~') + Math.round(r.catch) + ' okr.' : '—';
     var veTxt = r.ve == null ? '—' : Math.round(r.ve) + '%';
     if (r.ve != null && mine.ve != null && !r.me) {
       var dv = r.ve - mine.ve;
@@ -2864,12 +2864,40 @@ function cmpGetLap(id) {
     return null;
   });
 }
-function cmpGetShape(name) {
+// Ten sam tor bywa w bazie dwa razy: z Le Mans Ultimate (tracks/<klucz>) i z Assetto Corsy (tracks/<klucz>_ac – inny świat
+// gry, inna szykana). Bierzemy kształt, na którym leży linia jazdy okrążenia; bez linii – z gry okrążenia (Maciej
+// 23.11.2026: „rozjazd między liniami przejazdu a mapą toru” – AC Monza na kształcie z LMU).
+function cmpPickShape(shapes, line, line2, game) {
+  var ok = [0, 1].filter(function (i) { return shapes[i] && shapes[i].length; });
+  if (ok.length < 2) return ok.length ? ok[0] : -1;
+  var ln = line || line2;
+  if (ln && ln.length > 5) {
+    var fit = function (sh) {
+      var st = Math.max(1, Math.floor(sh.length / 400)), sl = Math.max(1, Math.floor(ln.length / 40)), sum = 0, n = 0;
+      for (var i = 0; i < ln.length; i += sl) {
+        var best = Infinity;
+        for (var j = 0; j < sh.length; j += st) { var dx = sh[j][0] - ln[i][0], dy = sh[j][1] - ln[i][1], d2 = dx * dx + dy * dy; if (d2 < best) best = d2; }
+        sum += best; n++;
+      }
+      return sum / (n || 1);
+    };
+    return fit(shapes[1]) < fit(shapes[0]) ? 1 : 0;
+  }
+  return game === 'ac' ? 1 : 0;
+}
+function cmpGetShape(name, lap) {
   var k = cmpTrackKey(name);
-  if (CMP.shapes.hasOwnProperty(k)) return Promise.resolve(CMP.shapes[k]);
-  return T('tracks/' + k).once('value').then(function (s) { return s.val() || T('tracks/' + k + '_ac').once('value').then(function (s2) { return s2.val(); }); })
-    .then(function (r) { CMP.shapes[k] = r && r.hd && r.hd.length >= 100 ? r.hd : (r && r.points && r.points.length >= 50 ? r.points : null); return CMP.shapes[k]; })
-    .catch(function () { return null; });
+  var pick = function (pair) {
+    var i = cmpPickShape(pair, lap ? cmpLineOf(lap) : null, null, lap && lap.m ? lap.m.game : '');
+    return i < 0 ? null : pair[i];
+  };
+  if (CMP.shapes.hasOwnProperty(k)) return Promise.resolve(pick(CMP.shapes[k]));
+  var one = function (p) {
+    return T(p).once('value').then(function (s) { var r = s.val();
+      return r && r.hd && r.hd.length >= 100 ? r.hd : (r && r.points && r.points.length >= 50 ? r.points : null); })
+      .catch(function () { return null; });
+  };
+  return Promise.all([one('tracks/' + k), one('tracks/' + k + '_ac')]).then(function (pair) { CMP.shapes[k] = pair; return pick(pair); });
 }
 function cmpFetch() {
   var ids = CMP.sel.slice(), trk = CMP.trk;
@@ -2878,7 +2906,7 @@ function cmpFetch() {
     if (trk !== CMP.trk || ids.join() !== CMP.sel.join()) return;
     var first = laps.filter(Boolean)[0];
     if (!first) { if (!ids.some(function (id) { return (CMP.status || {})[id]; })) cmpMsg('Nie udało się wczytać okrążenia.'); $('cmp-body').style.display = 'none'; return; }
-    return cmpGetShape(first.m.track).then(function (shape) { if (trk === CMP.trk) cmpBuild(laps, shape); });
+    return cmpGetShape(first.m.track, first).then(function (shape) { if (trk === CMP.trk) cmpBuild(laps, shape); });
   }).catch(function (e) { cmpMsg(authErr(e)); });
 }
 // link do porównania: #cmp=tor|auto|okr1|okr2|okr3|zakręt
@@ -3677,19 +3705,27 @@ function posChart(laps) {
   var maxP = Math.max(cls, Math.max.apply(null, pts.map(function (p) { return p.pos; })));
   // inne auta klasy (Maciej 20.11.2026: „inne auta z wyścigu i kierowców z nazwiskami, czytelnie”): cienkie, wyciszone
   // linie, na końcu każdej – miejsce, numer i nazwisko (każda pozycja ma swój wiersz, więc napisy się nie nakładają)
-  var cars = {}, meId = null;
+  // auto = numer w grze + nazwisko: na serwerze publicznym miejsce po kimś, kto wyszedł, zajmuje nowy kierowca
+  // (Maciej 23.11.2026: „wykres się rozjechał z nazwiskami”). Napisy na końcu – tylko auta z ostatniego okrążenia
+  // z listą klasy, na ich miejscu z tego okrążenia; nasz – na końcu naszej linii.
+  var cars = {}, meId = null, flagged = (laps || []).some(function (l) {
+    return Array.isArray(l.cls) && l.cls.some(function (c) { return Array.isArray(c) && c[4] === 1; }); });
+  var endLap = -Infinity, endPos = {};
   (laps || []).forEach(function (l) {
     var lap = Number(l.lap), my = Number(l.pos);
     if (!isFinite(lap) || !Array.isArray(l.cls)) return;
+    var here = {};
     l.cls.forEach(function (c) {
       if (!Array.isArray(c)) return;
-      var id = String(c[0]), pos = Number(c[1]);
+      var pos = Number(c[1]), num = String(c[2] || ''), name = String(c[3] || ''), id = String(c[0]) + '|' + name;
       if (!isFinite(pos) || pos < 1 || pos >= 1000) return;
-      var o = cars[id] || (cars[id] = { pts: [], num: '', name: '' });
-      o.pts.push([lap, pos]); o.num = String(c[2] || ''); o.name = String(c[3] || '');
-      if (c[4] === 1 || (meId === null && pos === my)) meId = id;
+      var o = cars[id] || (cars[id] = { pts: [], num: num, name: name });
+      o.pts.push([lap, pos]); o.num = num;
+      if (flagged ? c[4] === 1 : (meId === null && pos === my)) meId = id;
       if (pos > maxP) maxP = pos;
+      here[id] = pos;
     });
+    if (lap >= endLap) { endLap = lap; endPos = here; }
   });
   var ids = Object.keys(cars), withCls = ids.length > 1;
   var row = 16, W = withCls ? 800 : 640, L = 34, R = withCls ? 170 : 10, T = 10, B = 24, Hh = T + B + (maxP - 1) * row;
@@ -3709,17 +3745,26 @@ function posChart(laps) {
     grid += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--line)" stroke-width="' + (g % 5 ? 0.5 : 1) + '"/>' +
       '<text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" font-size="10" text-anchor="end" fill="var(--muted)">P' + g + '</text>';
   }
-  var others = '', tags = '';
+  var others = '', tagList = [], myEnd = pts[pts.length - 1].pos;
   ids.forEach(function (id) {
     var o = cars[id]; o.pts.sort(function (a, b) { return a[0] - b[0]; });
-    var lastP = o.pts[o.pts.length - 1][1], me = id === meId, label = 'P' + lastP + ' ' + esc((o.num + ' ' + o.name).trim());
+    var me = id === meId, nm = esc((o.num + ' ' + o.name).trim()), lastP = o.pts[o.pts.length - 1][1];
     if (!me && o.pts.length > 1) {
       others += '<polyline fill="none" stroke="var(--dim)" stroke-width="1.2" opacity="0.7" points="' +
-        o.pts.map(function (q) { return x(q[0]).toFixed(1) + ',' + y(q[1]).toFixed(1); }).join(' ') + '"><title>' + label + '</title></polyline>';
+        o.pts.map(function (q) { return x(q[0]).toFixed(1) + ',' + y(q[1]).toFixed(1); }).join(' ') + '"><title>P' + lastP + ' ' + nm + '</title></polyline>';
     }
-    tags += '<text x="' + (W - R + 8) + '" y="' + (y(lastP) + 4) + '" font-size="10"' +
-      (me ? ' font-weight="700" fill="var(--text)"' : ' fill="var(--muted)"') + '>' + label + '</text>';
+    var endP = me ? myEnd : endPos[id];
+    if (endP != null) tagList.push({ p: endP, me: me, txt: 'P' + endP + ' ' + nm });
   });
+  // każdy napis w swoim wierszu, nawet gdy dane gry się nie zgadzają (dwa auta na tym samym miejscu)
+  tagList.sort(function (a, b) { return a.p - b.p || (b.me - a.me); });
+  var tags = '', lastY = -Infinity;
+  tagList.forEach(function (g) {
+    var ty = Math.max(y(g.p) + 4, lastY + 12); lastY = ty;
+    tags += '<text x="' + (W - R + 8) + '" y="' + ty + '" font-size="10"' +
+      (g.me ? ' font-weight="700" fill="var(--text)"' : ' fill="var(--muted)"') + '>' + g.txt + '</text>';
+  });
+  if (lastY + 6 > Hh - B) Hh = lastY + 6 + B;
   var lines = segs.map(function (s) {
     return '<polyline fill="none" stroke-width="2.5" stroke="' + col(s.who) + '" points="' +
       s.pts.map(function (p) { return x(p.lap).toFixed(1) + ',' + y(p.pos).toFixed(1); }).join(' ') + '"/>';
