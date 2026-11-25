@@ -14,7 +14,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" integrity="sha384-TnlRYaR4JYz/lpaGuaiU61PjNberSA4vjLjtF+oRC/IkohkJqnWxw5EmDSOt1vA1" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js" integrity="sha384-1/m+A1jVWbD3yiK3/vtFvm1+LjK1WLpSoDY+Kaxppwn/yP9BVSgdHTNQVOjrzUO5" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous"></script>
-<script src="i18n.js?v=bbde4f95"></script>
+<script src="i18n.js?v=1bc128eb"></script>
 <script src="i18n_core.js?v=f7332401"></script>
 <style>
   :root {
@@ -412,7 +412,7 @@
   </select>
 </header>
 <div id="lang-note" class="note" style="display:none;margin:8px 16px;padding:8px 12px;border:1px solid var(--line, #333);border-radius:10px">
-  Tłumaczenia na inne języki mogą zawierać błędy językowe. Autor prosi o zgłoszenie każdego z nich (Pomoc → Zgłoś problem).
+  Tłumaczenia na inne języki mogą zawierać błędy językowe. Autor prosi o zgłoszenie każdego z nich (Pomoc → Pomoc techniczna).
   <button type="button" class="second" onclick="this.parentNode.style.display='none';try{localStorage.setItem('pwc_lang_note','1')}catch(e){}" style="margin-left:8px">OK</button>
 </div>
 
@@ -721,7 +721,7 @@
       <thead><tr><th>Stint</th><th>Kierowca</th><th>Okr.</th><th>Najlepsze</th><th>Średnie</th><th>Konsystencja</th><th>Paliwo / okr.</th><th>Energia % / okr.</th><th>Uwagi</th></tr></thead>
       <tbody id="sum-st"></tbody>
     </table></div>
-    <p class="note">Średnie i konsystencja z czystych okrążeń: bez alei, safety cara, nieważnych i wolniejszych o ponad 7% od najlepszego. Konsystencja = typowe odchylenie od średniej.</p>
+    <p class="note">Średnie i konsystencja z czystych okrążeń: bez pitlane, safety cara, nieważnych i wolniejszych o ponad 7% od najlepszego. Konsystencja = typowe odchylenie od średniej.</p>
     <div id="sum-pos"></div>
   </section>
   <section id="cmp-box">
@@ -1062,7 +1062,7 @@ function render(v) {
   if (st.max_laps) $('remain').textContent = (st.laps_to_finish != null ? Math.ceil(st.laps_to_finish) : '—') + ' / ' + st.max_laps + ' ' + TR('okr.') +
       (st.time_remaining != null && st.time_remaining < 360000 ? ' · ' + clockTxt(st.time_remaining) : '');
   else $('remain').textContent = clockTxt(st.time_remaining);
-  $('phase').textContent = st.in_pits ? 'w alei serwisowej' : ({ fcy: 'safety car', green: 'zielona', stopped: 'wyścig wstrzymany',
+  $('phase').textContent = st.in_pits ? 'w pitlane' : ({ fcy: 'safety car', green: 'zielona', stopped: 'wyścig wstrzymany',
     over: 'koniec sesji', paused: 'pauza', before: 'przed startem' }[st.phase] || st.phase || '—');
   setH($('ahead'), gapTxt(st.ahead));
   setH($('behind'), gapTxt(st.behind));
@@ -1186,7 +1186,9 @@ function render(v) {
   $('mins').textContent = f.minutes != null ? f.minutes + ' min' : '—';
   $('fatbar').style.width = (f.score || 0) + '%';
   $('fatbar').style.background = f.score >= 60 ? 'var(--bad)' : f.score >= 35 ? 'var(--warn)' : 'var(--ok)';
-  $('fatigue').textContent = f.text || '—';
+  // zmęczenie w wyścigu: podpowiedź zmiany kierowcy (propozycja 9, 25.11.2026)
+  $('fatigue').textContent = (f.text || '—') + (f.change ? ' ' + TR('Zaplanujcie zmianę kierowcy na najbliższym pitstopie.') : '');
+  $('fatigue').style.color = f.change ? 'var(--warn)' : '';
 
   var fs = st.fair_share;                 // LMU Fair Share: każdy kierowca min. 50% / liczba kierowców okrążeń zespołu
   $('fsbox').style.display = fs && fs.rows ? '' : 'none';
@@ -1196,7 +1198,7 @@ function render(v) {
   $('st-pittimes').textContent = pt ? pt['0'] + ' / ' + pt['2'] + ' / ' + pt['4'] + ' s' : '—';
   var mi = rt.map(function (x) { return !!x.me; }).indexOf(true), ra = mi > 0 ? rt[mi - 1] : null, rb = mi >= 0 && mi < rt.length - 1 ? rt[mi + 1] : null;
   $('st-rstops').textContent = (ra && !(ra.leader && ra.gap_hidden > 0) ? ra.stops : '—') + ' / ' + (rb ? rb.stops : '—');
-  $('st-stopnote').textContent = TR(pt ? 'Czas razem z przejazdem aleją, zmierzony na Twoich pitstopach.' : 'Czasy pojawią się po pierwszym pitstopie.');
+  $('st-stopnote').textContent = TR(pt ? 'Czas razem z przejazdem przez pitlane, zmierzony na Twoich pitstopach.' : 'Czasy pojawią się po pierwszym pitstopie.');
   if (fs && fs.rows) {
     setH($('fsrows'), fs.rows.map(function (r) {
       return '<div class="row"><span>' + esc(r.driver) + '</span><span class="num"' + (r.missing ? ' style="color:var(--bad)"' : '') + '>' +
@@ -2231,7 +2233,7 @@ function pitMeas() {   // zmierzone czasy pitstopu z wyścigu (program kierowcy)
   el.style.display = '';
   var h = '';
   if (st.pit_check) h += '<div>' + esc(st.pit_check) + '</div>';
-  if (pt) h += '<div>' + esc(TR('Zmierzony cały pitstop (stanie w boksie + aleja ok. ' + Math.round(pt.lane || 0) + ' s, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
+  if (pt) h += '<div>' + esc(TR('Zmierzony cały pitstop (stanie w boksie + pitlane ok. ' + Math.round(pt.lane || 0) + ' s, energia ' + Math.round(pt.ve || 0) + '%): bez opon ' + pt['0'] + ' s, 2 opony ' + pt['2'] +
     ' s, 4 opony ' + pt['4'] + ' s. Grafik na żywo już z nich korzysta.')) + ' <button class="second mini" id="b-usepit" type="button">Użyj zmierzonych w planie</button></div>';
   if (el.innerHTML !== h) {
     el.innerHTML = h;
@@ -2432,7 +2434,7 @@ function ownerBox() {
   var r = $('b-pwreq');
   if (r) r.onclick = function () {
     T('owner/pwReq').set(now()).then(function () {
-      flash('pwreq-ok', TR('Zapisane. Teraz w programie: Pomoc → Zgłoś problem – napisz kod zespołu i że prosisz o nowe hasło.'));
+      flash('pwreq-ok', TR('Zapisane. Teraz w programie: Pomoc → Pomoc techniczna – napisz kod zespołu i że prosisz o nowe hasło.'));
     }).catch(function (e) { alert(authErr(e)); });
   };
 }
@@ -2658,7 +2660,7 @@ function cmpCars() {
 function cmpLabel(x, st) {
   var m = x.m, f = [];
   if (m.valid === false) f.push(TR('nieważne'));
-  if (m.pit) f.push(TR('aleja'));
+  if (m.pit) f.push(TR('pitlane'));
   if (m.fcy) f.push('SC');
   if (m.off) f.push(TR('poza torem'));
   return [m.compound || '', m.temp ? unitT(m.temp) : '', cmpGripTxt(m), m.fuel != null && x.src !== 'disk' ? unitF(m.fuel) : '',
@@ -2787,7 +2789,7 @@ function cmpUnpack(z) {
   return new Response(st).text().then(function (txt) {
     var d = JSON.parse(txt), t = [], acc = 0;
     d.t.forEach(function (x) { acc += x; t.push(acc / 1000); });
-    return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [], x: d.x || null, z: d.z || null };
+    return { t: t, v: d.v, g: d.g, b: d.b, n: d.n || [], c: d.c || [], s: d.s || null, x: d.x || null, z: d.z || null };
   });
 }
 // Okrążenia z programu sprzed 0.4.4.15: czas odcinków z danych wyników gry (5 razy na sekundę) – stoi przez kilka
@@ -3227,7 +3229,7 @@ function cmpHover(i) {
   var tip = $('cmp-tip'), cur = $('cmp-cur'), L = CMP.L;
   ['cmp-sl', 'cmp-dl'].forEach(function (k) { var sl = $(k); if (sl) { var x = i < 0 ? -10 : i / (CMP.n - 1) * 1000; sl.setAttribute('x1', x); sl.setAttribute('x2', x); } });
   var cv = $('cmp-chv'), ch = CMP.ch || 'v';
-  if (cv) cv.textContent = i < 0 ? '' : TR(CMP_CH[ch][0]) + ': ' + L.map(function (l) { var v = l.d[ch][i]; return l.name + ' ' + (ch === 'v' ? unitSp(v) : ch === 'n' ? v : Math.round(v) + '%'); }).join(' · ');
+  if (cv) cv.textContent = i < 0 ? '' : TR(CMP_CH[ch][0]) + ': ' + L.map(function (l) { var v = l.d[ch][i]; return l.name + ' ' + (ch === 'v' ? unitSp(v) : ch === 'n' ? v : Math.round(+v || 0) + '%'); }).join(' · ');
   if (i < 0 || !CMP.XY || i >= CMP.n) { if (tip) tip.style.display = 'none'; if (cur) { cur.setAttribute('cx', -1e6); cur.setAttribute('cy', -1e6); } return; }
   var p = CMP.XY[i], v = cmpView(), q = cmpPos(p[0], p[1], v);
   cur.setAttribute('cx', p[0]); cur.setAttribute('cy', p[1]);
@@ -3323,13 +3325,18 @@ function cmpNear(e) {
 })();
 // ---- wykres prędkości na całym okrążeniu
 // przebieg na całym okrążeniu (prędkość / gaz / hamulec / bieg) i strata czasu do najszybszego
-var CMP_CH = { v: ['Prędkość'], g: ['Gaz'], b: ['Hamulec'], n: ['Bieg'] };
+var CMP_CH = { v: ['Prędkość'], g: ['Gaz'], b: ['Hamulec'], n: ['Bieg'], s: ['Kierownica'] };
+// kierownica: tylko gdy wszystkie porównywane okrążenia ją mają (program od 21.11.2026; −100..100 % skrętu)
+function cmpHasSteer() { return CMP.L.length > 0 && CMP.L.every(function (l) { return l.d.s && l.d.s.length >= CMP.n; }); }
 function cmpSpeed() {
+  if (CMP.ch === 's' && !cmpHasSteer()) CMP.ch = 'v';
   var L = CMP.L, n = CMP.n, step = Math.max(1, Math.floor(n / 1000)), ch = CMP.ch || 'v', lo = Infinity, hi = -Infinity;
-  setH($('cmp-tabs'), Object.keys(CMP_CH).map(function (k) { return '<button type="button" class="second' + (k === ch ? ' on' : '') + '" data-ch="' + k + '">' + esc(TR(CMP_CH[k][0])) + '</button>'; }).join('') +
+  setH($('cmp-tabs'), Object.keys(CMP_CH).filter(function (k) { return k !== 's' || cmpHasSteer(); }).map(function (k) { return '<button type="button" class="second' + (k === ch ? ' on' : '') + '" data-ch="' + k + '">' + esc(TR(CMP_CH[k][0])) + '</button>'; }).join('') +
     '<span style="flex:1"></span><span class="note" id="cmp-chv" data-notr></span>');
   $('cmp-tabs').querySelectorAll('[data-ch]').forEach(function (b) { b.onclick = function () { CMP.ch = b.dataset.ch; cmpSpeed(); }; });
   if (ch === 'g' || ch === 'b') { lo = 0; hi = 100; }
+  else if (ch === 's') {        // kierownica: skala symetryczna do największego skrętu (auta mają różny zakres kierownicy)
+    var sm = 1; L.forEach(function (l) { for (var i = 0; i < n; i++) sm = Math.max(sm, Math.abs(+l.d.s[i] || 0)); }); lo = -sm; hi = sm; }
   else L.forEach(function (l) { for (var i = 0; i < n; i++) { var v = l.d[ch][i] || 0; if (v < lo) lo = v; if (v > hi) hi = v; } });
   var sx = function (i) { return (i / (n - 1) * 1000).toFixed(1); }, sy = function (v, j) { return (124 - ((v || 0) - lo) / ((hi - lo) || 1) * 116 - (ch === 'v' ? 0 : j * 1.5)).toFixed(1); };
   var h = [], c = cmpSel(), band = c ? '<rect x="' + sx(c.s) + '" y="0" width="' + (sx(c.e) - sx(c.s)) + '" height="130" style="fill:var(--accent)" opacity=".12"/>' : '';
@@ -3634,7 +3641,7 @@ function mateCmp(mc) {
 var SESSION_GAP_MS = 45 * 60e3;     // przerwa dłuższa niż 45 min = nowa sesja
 function carK(l) { return String(l.veh || ''); }      // auto (wpis w grze z numerem) – kilka aut zespołu w jednym wyścigu
 function lapNotes(l) { return String(l.notes || ''); }
-function lapClean(l) { return l.time > 0 && !/aleja|FCY|SC|nieważne/.test(lapNotes(l)); }
+function lapClean(l) { return l.time > 0 && !/aleja|pitlane|FCY|SC|nieważne/.test(lapNotes(l)); }
 function lapStats(list, best) {
   var all = list.filter(function (l) { return l.time > 0; });
   var clean = list.filter(function (l) { return lapClean(l) && (!best || l.time <= best * 1.07); });
@@ -3943,7 +3950,7 @@ function mapNewSample(m) {
       if (meas > 0 && meas < 0.05 && !c[3]) v = s.v ? s.v * 0.7 + meas * 0.3 : meas;
     }
     var off = s ? mapWrap(shown - c[0]) : 0;
-    if (Math.abs(off) > 0.08) off = 0;                    // duży skok (aleja, powrót do boksu) – bez przesuwania
+    if (Math.abs(off) > 0.08) off = 0;                    // duży skok (pitlane, powrót do boksu) – bez przesuwania
     MAPCAR[id] = { f0: c[0], t0: t, v: v, off: off };
   });
   Object.keys(MAPCAR).forEach(function (id) { if (!seen[id]) delete MAPCAR[id]; });
@@ -3975,7 +3982,7 @@ function mapTick() {
     return '<span><i style="background:' + (i === 0 ? MAP_COLORS[0] : MAP_COLORS[i % MAP_COLORS.length]) + '"></i>' + esc(c) + (i === 0 ? ' (nasza klasa, numer = pozycja)' : '') + '</span>';
   }).join('') + '<span><i style="background:var(--me)"></i>my</span>' +
     ((m.cls || []).some(function (c) { return /hyper/i.test(c); }) ? '<span><i style="background:transparent;border:2px solid #ffd34d"></i>lider Hypercar</span>' : '') +
-    '<span class="note">półprzezroczyste = w alei</span>';
+    '<span class="note">półprzezroczyste = w pitlane</span>';
 }
 setInterval(mapTick, 100);
 window.addEventListener('resize', function () {

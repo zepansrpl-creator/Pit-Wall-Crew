@@ -25,7 +25,9 @@ table{width:100%;border-collapse:collapse}td{padding:9px 6px;border-bottom:1px s
 tr:last-child td{border-bottom:0}td:first-child{width:38%}
 ul{padding-left:22px;margin:6px 0}li{margin:5px 0}
 .ex{color:var(--ok)}
-footer{color:var(--muted);font-size:14px;margin-top:36px}
+footer{color:var(--muted);font-size:14px;margin-top:20px}
+.pat{margin-top:30px;text-align:center}.pat a{color:var(--acc);font-weight:700;text-decoration:none}
+.pat a::after{content:" · patreon.com/frmods ↗";color:var(--muted);font-weight:400}.pat a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -40,6 +42,7 @@ footer{color:var(--muted);font-size:14px;margin-top:36px}
   <div class="card" id="ask"></div>
   <h2 id="h_rules"></h2>
   <div class="card"><ul id="rules"></ul></div>
+  <div class="card pat"><a id="pat" href="https://www.patreon.com/frmods" target="_blank" rel="noopener"></a></div>
   <footer id="foot"></footer>
 </main>
 <script>
@@ -57,7 +60,7 @@ pl: {name: "PL", title: "Komendy dla widzów", sub: "Ten kierowca jeździ z inż
           "Komendy działają w 7 językach – możesz pisać po swojemu, np. <code>!pwc tyres</code>.",
           "Na ekranie widać tylko Twój nick przy karcie. Program czyta z czatu wyłącznie wiadomości zaczynające się od <code>!pwc</code>.",
           "Dane pochodzą z gry na żywo; kierowca nie widzi nakładki."],
-  foot: "Pit Wall Crew – głosowy inżynier wyścigowy dla Le Mans Ultimate i Assetto Corsy."},
+  foot: "Pit Wall Crew – głosowy inżynier wyścigowy dla Le Mans Ultimate i Assetto Corsy.", pat: "Wesprzyj Pit Wall Crew i pobierz program na Patreonie"},
 en: {name: "EN", title: "Commands for viewers", sub: "This driver races with the Pit Wall Crew race engineer. Ask about the car in the stream chat – the answer shows up on screen.",
   how: "Type <code>!pwc</code> and one word from the list in the chat, e.g. <code>!pwc tyres</code>. A card with the data slides onto the stream for about 12 seconds, signed with your nickname.",
   h_cmd: "Commands", h_ask: "Your own question", h_rules: "Rules",
@@ -71,7 +74,7 @@ en: {name: "EN", title: "Commands for viewers", sub: "This driver races with the
           "Commands work in 7 languages – write in yours, e.g. <code>!pwc reifen</code>.",
           "Only your nickname is shown next to the card. The app reads only chat messages starting with <code>!pwc</code>.",
           "Data comes live from the game; the driver doesn't see the overlay."],
-  foot: "Pit Wall Crew – voice race engineer for Le Mans Ultimate and Assetto Corsa."},
+  foot: "Pit Wall Crew – voice race engineer for Le Mans Ultimate and Assetto Corsa.", pat: "Support Pit Wall Crew and get the app on Patreon"},
 de: {name: "DE", title: "Befehle für Zuschauer", sub: "Dieser Fahrer fährt mit dem Renningenieur Pit Wall Crew. Frag im Stream-Chat nach dem Auto – die Antwort erscheint auf dem Bildschirm.",
   how: "Schreib <code>!pwc</code> und ein Wort aus der Liste in den Chat, z. B. <code>!pwc reifen</code>. Eine Karte mit den Daten erscheint für etwa 12 Sekunden im Stream, mit deinem Nicknamen.",
   h_cmd: "Befehle", h_ask: "Eigene Frage", h_rules: "Regeln",
@@ -85,7 +88,7 @@ de: {name: "DE", title: "Befehle für Zuschauer", sub: "Dieser Fahrer fährt mit
           "Befehle funktionieren in 7 Sprachen – z. B. auch <code>!pwc tyres</code>.",
           "Neben der Karte steht nur dein Nickname. Das Programm liest nur Nachrichten, die mit <code>!pwc</code> beginnen.",
           "Die Daten kommen live aus dem Spiel; der Fahrer sieht das Overlay nicht."],
-  foot: "Pit Wall Crew – Sprach-Renningenieur für Le Mans Ultimate und Assetto Corsa."},
+  foot: "Pit Wall Crew – Sprach-Renningenieur für Le Mans Ultimate und Assetto Corsa.", pat: "Unterstütze Pit Wall Crew und hol dir das Programm auf Patreon"},
 fr: {name: "FR", title: "Commandes pour les spectateurs", sub: "Ce pilote roule avec l'ingénieur de course Pit Wall Crew. Pose une question sur la voiture dans le chat du stream – la réponse s'affiche à l'écran.",
   how: "Écris <code>!pwc</code> et un mot de la liste dans le chat, p. ex. <code>!pwc pneus</code>. Une carte avec les données apparaît sur le stream pendant environ 12 secondes, avec ton pseudo.",
   h_cmd: "Commandes", h_ask: "Ta propre question", h_rules: "Règles",
@@ -99,7 +102,7 @@ fr: {name: "FR", title: "Commandes pour les spectateurs", sub: "Ce pilote roule 
           "Les commandes marchent en 7 langues – p. ex. aussi <code>!pwc tyres</code>.",
           "Seul ton pseudo s'affiche à côté de la carte. Le programme ne lit que les messages qui commencent par <code>!pwc</code>.",
           "Les données viennent du jeu en direct ; le pilote ne voit pas l'overlay."],
-  foot: "Pit Wall Crew – ingénieur de course vocal pour Le Mans Ultimate et Assetto Corsa."},
+  foot: "Pit Wall Crew – ingénieur de course vocal pour Le Mans Ultimate et Assetto Corsa.", pat: "Soutiens Pit Wall Crew et télécharge le programme sur Patreon"},
 es: {name: "ES", title: "Comandos para los espectadores", sub: "Este piloto corre con el ingeniero de carrera Pit Wall Crew. Pregunta por el coche en el chat del directo – la respuesta aparece en pantalla.",
   how: "Escribe <code>!pwc</code> y una palabra de la lista en el chat, p. ej. <code>!pwc neumáticos</code>. Una tarjeta con los datos aparece en el directo unos 12 segundos, con tu nick.",
   h_cmd: "Comandos", h_ask: "Tu propia pregunta", h_rules: "Reglas",
@@ -113,7 +116,7 @@ es: {name: "ES", title: "Comandos para los espectadores", sub: "Este piloto corr
           "Los comandos funcionan en 7 idiomas – p. ej. también <code>!pwc tyres</code>.",
           "Junto a la tarjeta solo se ve tu nick. El programa solo lee los mensajes que empiezan por <code>!pwc</code>.",
           "Los datos vienen del juego en directo; el piloto no ve la superposición."],
-  foot: "Pit Wall Crew – ingeniero de carrera por voz para Le Mans Ultimate y Assetto Corsa."},
+  foot: "Pit Wall Crew – ingeniero de carrera por voz para Le Mans Ultimate y Assetto Corsa.", pat: "Apoya Pit Wall Crew y consigue el programa en Patreon"},
 it: {name: "IT", title: "Comandi per gli spettatori", sub: "Questo pilota corre con l'ingegnere di pista Pit Wall Crew. Chiedi dell'auto nella chat della diretta – la risposta compare sullo schermo.",
   how: "Scrivi <code>!pwc</code> e una parola dell'elenco in chat, es. <code>!pwc gomme</code>. Una scheda con i dati compare nella diretta per circa 12 secondi, con il tuo nick.",
   h_cmd: "Comandi", h_ask: "La tua domanda", h_rules: "Regole",
@@ -127,7 +130,7 @@ it: {name: "IT", title: "Comandi per gli spettatori", sub: "Questo pilota corre 
           "I comandi funzionano in 7 lingue – es. anche <code>!pwc tyres</code>.",
           "Accanto alla scheda si vede solo il tuo nick. Il programma legge solo i messaggi che iniziano con <code>!pwc</code>.",
           "I dati arrivano dal gioco in diretta; il pilota non vede l'overlay."],
-  foot: "Pit Wall Crew – ingegnere di pista vocale per Le Mans Ultimate e Assetto Corsa."},
+  foot: "Pit Wall Crew – ingegnere di pista vocale per Le Mans Ultimate e Assetto Corsa.", pat: "Sostieni Pit Wall Crew e scarica il programma su Patreon"},
 da: {name: "DA", title: "Kommandoer for seere", sub: "Denne kører kører med raceingeniøren Pit Wall Crew. Spørg om bilen i streamens chat – svaret vises på skærmen.",
   how: "Skriv <code>!pwc</code> og et ord fra listen i chatten, f.eks. <code>!pwc dæk</code>. Et kort med data glider ind i streamen i ca. 12 sekunder med dit kaldenavn.",
   h_cmd: "Kommandoer", h_ask: "Dit eget spørgsmål", h_rules: "Regler",
@@ -141,7 +144,7 @@ da: {name: "DA", title: "Kommandoer for seere", sub: "Denne kører kører med ra
           "Kommandoerne virker på 7 sprog – f.eks. også <code>!pwc tyres</code>.",
           "Kun dit kaldenavn vises ved kortet. Programmet læser kun beskeder, der starter med <code>!pwc</code>.",
           "Data kommer direkte fra spillet; køreren kan ikke se overlayet."],
-  foot: "Pit Wall Crew – raceingeniør med stemme til Le Mans Ultimate og Assetto Corsa."}
+  foot: "Pit Wall Crew – raceingeniør med stemme til Le Mans Ultimate og Assetto Corsa.", pat: "Støt Pit Wall Crew og hent programmet på Patreon"}
 };
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) {
   return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]; }); }
@@ -158,7 +161,7 @@ function show(lg) {
   document.title = 'Pit Wall Crew – ' + t.title;
   document.getElementById('sub').textContent = t.sub;
   document.getElementById('how').innerHTML = t.how;            // teksty stałe z tego pliku (nie z czatu)
-  ['h_cmd', 'h_ask', 'h_rules', 'foot'].forEach(function (k) { document.getElementById(k).textContent = t[k]; });
+  ['h_cmd', 'h_ask', 'h_rules', 'foot', 'pat'].forEach(function (k) { document.getElementById(k).textContent = t[k]; });
   document.getElementById('cmds').innerHTML = t.cmds.map(function (c) {
     return '<tr><td><code>!pwc ' + esc(c[0]) + '</code></td><td>' + esc(c[1]) + '</td></tr>'; }).join('');
   document.getElementById('ask').innerHTML = t.ask;
